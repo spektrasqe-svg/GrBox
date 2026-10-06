@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Сборка с нуля — SECRET BOX®</title>
+<meta name="description" content="Конфигуратор Secret Box по чертежам rev.3: модули A/B/C, улучшения, живой чертёж, вес и смета.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;800;900&family=Manrope:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#141416;--ink-2:#1B1B1E;--ink-3:#232327;
+  --cream:#E8DCC8;--cream-2:#CDBFA6;--paper:#F1EBE0;--brass:#C79A5B;--choco:#5A3A2E;
+  --line:rgba(232,220,200,.14);--line-strong:rgba(232,220,200,.32);
+  --disp:'Unbounded',sans-serif;--body:'Manrope',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+::selection{background:var(--brass);color:var(--ink)}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--cream);font-family:var(--body);font-size:16px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.noise{position:fixed;inset:0;pointer-events:none;z-index:200;opacity:.055;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{width:min(1280px,92vw);margin:0 auto;position:relative;z-index:2}
+.tag{display:inline-flex;align-items:center;gap:10px;font-family:var(--body);font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--brass)}
+.tag::before{content:"";width:36px;height:1px;background:var(--brass)}
+h1,h2,h3{font-family:var(--disp);letter-spacing:-.01em}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:background .35s,border-color .35s;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(20,20,22,.86);backdrop-filter:blur(14px);border-color:var(--line)}
+nav .wrap{display:flex;align-items:center;gap:36px;height:74px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .mark{width:34px;height:34px;border:1.5px solid var(--cream);border-radius:8px;display:grid;place-items:center;font-family:var(--disp);font-weight:900;font-size:15px;transition:transform .4s}
+.brand:hover .mark{transform:rotate(-8deg)}
+.brand b{font-family:var(--disp);font-weight:800;font-size:15px;letter-spacing:.22em}
+.brand sup{font-size:8px;letter-spacing:0;opacity:.7}
+nav .links{display:flex;gap:30px;margin-left:22px}
+nav .links a{font-size:11.5px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--cream-2);position:relative;padding:6px 0;transition:color .25s}
+nav .links a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--brass);transition:width .3s}
+nav .links a:hover,nav .links a.here{color:var(--cream)}
+nav .links a:hover::after,nav .links a.here::after{width:100%}
+.nav-cta{margin-left:auto;display:inline-flex;align-items:center;gap:10px;border:1px solid var(--brass);border-radius:100px;padding:11px 22px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:var(--brass);transition:all .3s}
+.nav-cta:hover{background:var(--brass);color:var(--ink)}
+
+.phead{padding:140px 0 18px}
+.phead h1{font-weight:800;font-size:clamp(36px,5.4vw,68px);line-height:.98;margin:18px 0 18px}
+.phead p{max-width:660px;color:var(--cream-2);font-size:16px;line-height:1.8}
+.phead em{font-style:normal;color:var(--cream);border-bottom:1px solid var(--brass);padding-bottom:1px}
+
+/* ===== СБОРЩИК ===== */
+.builder{display:grid;grid-template-columns:1.1fr .9fr;gap:34px;align-items:start;padding-bottom:80px}
+.step{border:1px solid var(--line);border-radius:14px;background:var(--ink-2);padding:30px 32px;margin-bottom:22px}
+.step .s-num{font-family:var(--disp);font-size:10.5px;letter-spacing:.32em;color:var(--brass)}
+.step h2{font-weight:800;font-size:22px;margin:12px 0 6px}
+.step .s-sub{color:var(--cream-2);font-size:13px;line-height:1.7;margin-bottom:20px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.opts.one{grid-template-columns:1fr}
+.opt{
+  position:relative;border:1px solid var(--line);border-radius:10px;background:var(--ink-3);
+  padding:16px 18px;cursor:pointer;transition:all .25s;display:block;
+}
+.opt:hover{border-color:var(--line-strong)}
+.opt.on{border-color:var(--brass);background:rgba(199,154,91,.08)}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .o-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.opt b{font-family:var(--disp);font-weight:700;font-size:13.5px;letter-spacing:.04em}
+.opt .o-price{font-family:var(--disp);font-size:11.5px;color:var(--brass);white-space:nowrap}
+.opt .o-dims{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin:7px 0 6px}
+.opt p{font-size:12px;line-height:1.65;color:var(--cream-2)}
+.opt .o-check{position:absolute;top:14px;right:16px;width:16px;height:16px;border:1px solid var(--line-strong);border-radius:4px;display:none}
+.swatches{display:flex;gap:12px;flex-wrap:wrap}
+.sw{border:1px solid var(--line);border-radius:100px;padding:10px 18px;display:flex;align-items:center;gap:10px;cursor:pointer;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--cream-2);transition:all .25s}
+.sw i{width:15px;height:15px;border-radius:50%;border:1px solid var(--line-strong)}
+.sw.on{border-color:var(--brass);color:var(--cream)}
+.sw:hover{border-color:var(--line-strong)}
+.slider-row{margin-top:18px;display:flex;align-items:center;gap:18px}
+.slider-row label{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--cream-2);white-space:nowrap}
+.slider-row input[type=range]{flex:1;accent-color:var(--brass)}
+.slider-row b{font-family:var(--disp);font-size:14px;color:var(--brass);min-width:86px;text-align:right}
+.canon{font-size:11px;color:var(--cream-2);margin-top:8px}
+.canon u{text-decoration:none;color:var(--brass)}
+
+/* правая панель */
+.b-right{position:sticky;top:94px}
+.panel{border:1px solid var(--line);border-radius:14px;background:var(--ink-2);overflow:hidden}
+.panel-top{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 22px;border-bottom:1px solid var(--line)}
+.panel-top .t-num{font-family:var(--disp);font-size:10.5px;letter-spacing:.3em;color:var(--brass)}
+.vbar{display:flex;gap:7px}
+.vbtn{background:transparent;border:1px solid var(--line-strong);color:var(--cream-2);border-radius:100px;padding:7px 14px;font-family:var(--body);font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:all .25s}
+.vbtn:hover{color:var(--cream)}
+.vbtn.active{background:var(--brass);border-color:var(--brass);color:var(--ink)}
+.dwg-paper{background:#E7DECE;padding:8px}
+.dwg-paper svg{width:100%;height:auto;display:block}
+.spec{padding:22px 24px}
+.spec .row{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:13px}
+.spec .row:last-child{border-bottom:none}
+.spec .row span{color:var(--cream-2)}
+.spec .row b{font-family:var(--disp);font-weight:700;font-size:14px;text-align:right}
+.spec .grp{font-family:var(--disp);font-size:9.5px;letter-spacing:.3em;color:var(--brass);padding-top:16px}
+.total{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--line-strong);margin-top:14px;padding-top:16px}
+.total span{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--cream-2)}
+.total b{font-family:var(--disp);font-weight:800;font-size:26px}
+.verdict{margin-top:14px;border-radius:8px;padding:12px 15px;font-size:12.5px;line-height:1.6;border:1px solid var(--line-strong);background:var(--ink-3)}
+.verdict.ok{border-color:rgba(122,168,116,.55);color:#B9D4B2}
+.verdict.warn{border-color:rgba(199,154,91,.55);color:#E3C48E}
+.verdict.bad{border-color:rgba(198,106,92,.55);color:#E0A196}
+.pbtns{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:10px;border-radius:100px;padding:13px 24px;font-family:var(--body);font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;transition:all .3s;border:1px solid var(--line-strong);background:transparent;color:var(--cream)}
+.btn svg{width:15px;height:15px}
+.btn:hover{transform:translateY(-2px)}
+.btn-solid{background:var(--cream);color:var(--ink);border-color:var(--cream)}
+.btn-solid:hover{background:var(--brass);border-color:var(--brass)}
+
+.est-note{border:1px solid var(--line);border-radius:14px;background:var(--ink-2);padding:26px 30px;margin:0 0 80px;display:flex;gap:26px;align-items:flex-start;flex-wrap:wrap}
+.est-note .t-num{font-family:var(--disp);font-size:10.5px;letter-spacing:.3em;color:var(--brass);white-space:nowrap}
+.est-note p{font-size:13px;line-height:1.8;color:var(--cream-2);flex:1;min-width:280px}
+.est-note a{color:var(--brass);border-bottom:1px solid var(--brass)}
+
+footer{border-top:1px solid var(--line);padding:54px 0 40px}
+.foot-top{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;margin-bottom:44px}
+.foot-brand{font-family:var(--disp);font-weight:900;font-size:34px;line-height:.95;letter-spacing:.04em}
+.foot-cols{display:flex;gap:70px;flex-wrap:wrap}
+.foot-col h5{font-family:var(--body);font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--brass);margin-bottom:16px}
+.foot-col a{display:block;font-size:13.5px;color:var(--cream-2);margin-bottom:9px;transition:color .25s}
+.foot-col a:hover{color:var(--cream)}
+.foot-bottom{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:22px;font-size:11.5px;letter-spacing:.08em;color:var(--cream-2)}
+
+@media(max-width:1000px){.builder{grid-template-columns:1fr}.b-right{position:static}}
+@media(max-width:900px){nav .links{display:none}}
+@media(max-width:640px){.opts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="noise"></div>
+
+<nav id="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark">S</span><b>SECRET BOX<sup>®</sup></b></a>
+    <div class="links">
+      <a href="index.html#models">Модели</a>
+      <a href="index.html#flat">Разбор</a>
+      <a href="index.html#3d">3D</a>
+      <a href="calculators.html">Калькуляторы</a>
+      <a href="growpedia.html">Гровпедия</a>
+    </div>
+    <a class="nav-cta" href="builder.html">Сборка с нуля</a>
+  </div>
+</nav>
+
+<div class="wrap phead">
+  <div class="tag">Конфигуратор</div>
+  <h1>Соберите бокс с нуля</h1>
+  <p>От каркаса по чертежам rev.3 до последнего уплотнителя. Выбирайте <em>модули, начинку и улучшения</em> — чертёж, вес и смета пересчитываются на лету.</p>
+</div>
+
+<div class="wrap builder">
+  <div class="b-left">
+
+    <div class="step">
+      <div class="s-num">01 · КОРПУС</div>
+      <h2>Модули и фасад</h2>
+      <p class="s-sub">Геометрия из чертежей: 18 + 400 + 18 + 796 + 18 = 1250 мм по ширине, 2060 по высоте. Модуль A — всегда на всю ширину, B и C — по вашему выбору.</p>
+      <div class="opts one" id="mods">
+        <label class="opt" data-key="a">
+          <input type="checkbox" checked>
+          <div class="o-top"><b>A · AIR / NOISE</b><span class="o-price">+20 000 ₽</span></div>
+          <div class="o-dims">1250 × 300 мм · верх</div>
+          <p>Весь шумный тракт: угольный фильтр SF 4" → вентилятор на виброподвесах → глушитель → пленум → решётка 400×300. Сервис сверху.</p>
+        </label>
+        <label class="opt" data-key="b">
+          <input type="checkbox" checked>
+          <div class="o-top"><b>B · TECH COLUMN</b><span class="o-price">+24 000 ₽</span></div>
+          <div class="o-dims">400 × 1700 мм</div>
+          <p>Бак 20 л с краном, сервисный ящик, секрет-бокс с увлажнителем, съёмная DIN-панель GGS, резервный бак. Фронтальный сервис.</p>
+        </label>
+        <label class="opt" data-key="c">
+          <input type="checkbox" checked>
+          <div class="o-top"><b>C · GROW CHAMBER</b><span class="o-price">+28 000 ₽</span></div>
+          <div class="o-dims" id="cDims">796 × 1700 мм</div>
+          <p>EVA-поддон с датчиком протечки, выкатная платформа Tandem 500, SCROG V-рамка 700×500, роликовые подвесы под свет.</p>
+        </label>
+      </div>
+      <div class="slider-row">
+        <label>Ширина C</label>
+        <input type="range" id="cWidth" min="600" max="1200" step="20" value="796">
+        <b id="cWidthVal">796 мм</b>
+      </div>
+      <p class="canon">Канон чертежей — <u>796 мм</u> (2 растения 15 л). Шире 1000 — под 3 растения и SE5000, это уже другой вес и тепло.</p>
+
+      <div class="s-num" style="margin-top:26px">ОТДЕЛКА ФАСАДА</div>
+      <div class="swatches" id="finish" style="margin-top:12px">
+        <button class="sw on" data-f="choco" data-price="25000"><i style="background:#5A3A2E"></i>Шоколад · +25 000</button>
+        <button class="sw" data-f="champ" data-price="10000"><i style="background:#9E8C7A"></i>Шампань · +10 000</button>
+        <button class="sw" data-f="white" data-price="0"><i style="background:#F5F5F5"></i>Белый</button>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s-num">02 · НАЧИНКА</div>
+      <h2>Оборудование GGS</h2>
+      <p class="s-sub">Экосистема Spider Farmer не рвётся: один контроллер, одна приложение, триггеры вместо расписаний.</p>
+      <div class="opts" id="equip">
+        <label class="opt" data-key="se3000"><input type="checkbox" checked><div class="o-top"><b>SE3000 · 300 Вт</b><span class="o-price">+28 000 ₽</span></div><p>PPF 856 µmol/s, автодимм по PAR/DLI, 603×585 мм.</p></label>
+        <label class="opt" data-key="uvir"><input type="checkbox"><div class="o-top"><b>UV30 + IR16</b><span class="o-price">+18 000 ₽</span></div><p>UV-A 365 нм в конце цветения, IR 730 нм на рассвете и закате.</p></label>
+        <label class="opt" data-key="ggs"><input type="checkbox" checked><div class="o-top"><b>GGS Controller</b><span class="o-price">+7 000 ₽</span></div><p>Единая точка настройки, RJ12, сценарии и триггеры.</p></label>
+        <label class="opt" data-key="ac10"><input type="checkbox" checked><div class="o-top"><b>AC10 × 2</b><span class="o-price">+9 000 ₽</span></div><p>Две умные розетки-гребёнки: свет, вентиляция, вода, электроника.</p></label>
+        <label class="opt" data-key="sensor"><input type="checkbox" checked><div class="o-top"><b>SensorPro</b><span class="o-price">+6 000 ₽</span></div><p>CO₂ + PAR + T + RH + VPD — строго в зоне канопы.</p></label>
+        <label class="opt" data-key="soil"><input type="checkbox" checked><div class="o-top"><b>Soil Sensor Pro × 2</b><span class="o-price">+5 000 ₽</span></div><p>VWC + EC + T по каждому горшку, без усреднения.</p></label>
+        <label class="opt" data-key="drip"><input type="checkbox" checked><div class="o-top"><b>Smart Drip</b><span class="o-price">+6 000 ₽</span></div><p>Автополив по влажности субстрата, не по таймеру.</p></label>
+        <label class="opt" data-key="humid"><input type="checkbox" checked><div class="o-top"><b>Увлажнитель SF 5 л</b><span class="o-price">+7 000 ₽</span></div><p>В секрет-боксе модуля B, патрубок Ø40 в камеру.</p></label>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s-num">03 · УЛУЧШЕНИЯ</div>
+      <h2>Тишина, безопасность, сервис</h2>
+      <p class="s-sub">Приоритеты по дБ — от уплотнений к массе, а не наоборот. Что берут чаще всего, уже включено.</p>
+      <div class="opts" id="upg">
+        <label class="opt" data-key="sil"><input type="checkbox" checked><div class="o-top"><b>Двухкамерный глушитель</b><span class="o-price">+10 000 ₽</span></div><p>−18 дБ на рабочей точке. Вместе с фильтром и пленумом тракт гасит −34 дБ.</p></label>
+        <label class="opt" data-key="vibe"><input type="checkbox" checked><div class="o-top"><b>Виброподвесы + гибкая вставка</b><span class="o-price">+3 500 ₽</span></div><p>Развязка вентилятора: лучший дБ/рубль, но хрупкая — соблюдаем инструкцию.</p></label>
+        <label class="opt" data-key="acdoor"><input type="checkbox" checked><div class="o-top"><b>Дверь-сэндвич 41 мм</b><span class="o-price">+12 000 ₽</span></div><p>ЛДСП 18 + MLV 3 + минвата 20 и уплотнитель по периметру: дверь — слабейшее звено.</p></label>
+        <label class="opt" data-key="leak"><input type="checkbox" checked><div class="o-top"><b>5 точек протечки + клапан НЗ</b><span class="o-price">+8 000 ₽</span></div><p>Hard-off воды первым при аварии; деградация — всегда в сторону выключения.</p></label>
+        <label class="opt" data-key="ups"><input type="checkbox"><div class="o-top"><b>ИБП 600 ВА + watchdog</b><span class="o-price">+18 000 ₽</span></div><p>Свет гаснет первым (75% тепла), электроника живёт ~3 часа. Watchdog следит за GGS.</p></label>
+        <label class="opt" data-key="rkn"><input type="checkbox"><div class="o-top"><b>РКН: свет гаснет первым</b><span class="o-price">+5 500 ₽</span></div><p>Реле контроля фазы управляет гашением без участия умной логики.</p></label>
+        <label class="opt" data-key="uzip"><input type="checkbox"><div class="o-top"><b>УЗИП + УЗО тип A</b><span class="o-price">+7 500 ₽</span></div><p>Для PWM-диммера и импульсных БП — «тип AC» их не видит.</p></label>
+        <label class="opt" data-key="reserve"><input type="checkbox"><div class="o-top"><b>Резервный бак 20 л</b><span class="o-price">+9 000 ₽</span></div><p>Автодолив 3/4" с поплавком сверху колонны. +20 кг к нагрузке на пол.</p></label>
+        <label class="opt" data-key="peri"><input type="checkbox"><div class="o-top"><b>Перистальика 3× + pH</b><span class="o-price">+19 000 ₽</span></div><p>Сервисный контур дозирования вместо «фирменных» дозаторов.</p></label>
+        <label class="opt" data-key="cam"><input type="checkbox"><div class="o-top"><b>Камера RTSP без ИК</b><span class="o-price">+9 000 ₽</span></div><p>Локальный стрим в Home Assistant. ИК-подсветка запрещена — это сбивает фотопериод.</p></label>
+      </div>
+    </div>
+  </div>
+
+  <aside class="b-right">
+    <div class="panel">
+      <div class="panel-top">
+        <div class="t-num">ЧЕРТЁЖ · REV.3</div>
+        <div class="vbar" id="viewbar">
+          <button class="vbtn active" data-view="front">ФАСАД</button>
+          <button class="vbtn" data-view="side">ТОРЕЦ</button>
+        </div>
+      </div>
+      <div class="dwg-paper"><svg id="dwg" viewBox="0 0 760 620" xmlns="http://www.w3.org/2000/svg"></svg></div>
+      <div class="spec">
+        <div class="row"><span>Габарит Ш×Г×В</span><b id="dimsTxt">—</b></div>
+        <div class="grp">МАССА И ПОЛ</div>
+        <div class="row"><span>Масса комплекта</span><b id="massTxt">—</b></div>
+        <div class="row"><span>На м² перекрытия</span><b id="loadTxt">—</b></div>
+        <div class="verdict" id="floorTxt">—</div>
+        <div class="grp">СМЕТА · EST</div>
+        <div id="bill"></div>
+        <div class="total"><span>Итого</span><b id="totalTxt">—</b></div>
+        <div class="pbtns">
+          <button class="btn btn-solid" id="specBtn">Скачать спецификацию
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v9M4 8l4 4 4-4M3 14h10"/></svg>
+          </button>
+          <a class="btn" href="calculators.html#calc-floor">Проверить пол</a>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<div class="wrap est-note">
+  <div class="t-num">ПРИМЕЧАНИЕ</div>
+  <p>Цены — ориентировочные (EST) до финальной сметы по обмерам и прайсам; смета закупки Spider Farmer с артикулами готовится отдельно. Геометрия — из чертежей rev.3, источник истины по сборке — STEP. <b>Решение по полу — до любых закупок:</b> собранная конфигурация кладётся на перекрытие всей массой, проверьте <a href="calculators.html#calc-floor">калькулятор нагрузки</a> и при сомнениях позовите техника-строителя.</p>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">SECRET<br>BOX®</div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h5>Продукт</h5>
+          <a href="index.html#models">Модели</a>
+          <a href="builder.html">Сборка с нуля</a>
+          <a href="index.html#flat">Разбор</a>
+          <a href="index.html#3d">3D-модель</a>
+        </div>
+        <div class="foot-col">
+          <h5>Знания</h5>
+          <a href="calculators.html">Калькуляторы</a>
+          <a href="growpedia.html">Гровпедия</a>
+          <a href="index.html#eng">Инженерия</a>
+        </div>
+        <div class="foot-col">
+          <h5>Контакты</h5>
+          <a href="#">Москва · сборка под ключ</a>
+          <a href="#">Запросить расчёт</a>
+          <a href="#">Стать дилером</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <div>© 2026 Secret Box® · Все права защищены</div>
+      <div>Мы считаем то, что другие обещают</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+var nav=document.getElementById('nav');
+addEventListener('scroll',function(){nav.classList.toggle('scrolled',scrollY>24)},{passive:true});
+
+function fmt(n){return Math.round(n).toLocaleString('ru-RU')}
+
+// ---------- данные по чертежам rev.3 ----------
+var WALL=18, W_B=400, W_A_FULL=1250, H=2060, H_A=300, D=741, PLINTH=55;
+var DOORS=[434,405,405]; // канон створок
+var PRICES={
+  body:72000,
+  mods:{a:20000,b:24000,c:28000}, // c масштабируется по ширине
+  equip:{se3000:28000,uvir:18000,ggs:7000,ac10:9000,sensor:6000,soil:5000,drip:6000,humid:7000},
+  upg:{sil:10000,vibe:3500,acdoor:12000,leak:8000,ups:18000,rkn:5500,uzip:7500,reserve:9000,peri:19000,cam:9000}
+};
+var KG={
+  mods:{a:45,b:65,c:98.7},
+  equip:{se3000:7,uvir:2,ggs:1,ac10:2,sensor:.5,soil:.5,drip:2,humid:3},
+  upg:{sil:8,vibe:2,acdoor:22,leak:3,ups:7,rkn:1,uzip:2,reserve:20,peri:4,cam:1},
+  waterWork:20, substrate:45
+};
+var NAMES={
+  body:'Каркас, сэндвич-стены, фурнитура Blum, уплотнитель',
+  mods:{a:'A · AIR / NOISE',b:'B · TECH COLUMN',c:'C · GROW CHAMBER'},
+  equip:{se3000:'Свет SE3000 300 Вт',uvir:'UV30 + IR16',ggs:'GGS Controller',ac10:'AC10 × 2',sensor:'SensorPro',soil:'Soil Sensor Pro × 2',drip:'Smart Drip',humid:'Увлажнитель SF 5 л'},
+  upg:{sil:'Двухкамерный глушитель',vibe:'Виброподвесы + гибкая вставка',acdoor:'Дверь-сэндвич 41 мм',leak:'5 точек протечки + клапан НЗ',ups:'ИБП 600 ВА + watchdog',rkn:'РКН: свет гаснет первым',uzip:'УЗИП + УЗО тип A',reserve:'Резервный бак 20 л',peri:'Перистальика 3× + pH',cam:'Камера RTSP без ИК'}
+};
+var FINISH={choco:{name:'Шоколад',hex:'#5A3A2E',price:25000},champ:{name:'Шампань',hex:'#9E8C7A',price:10000},white:{name:'Белый',hex:'#F5F5F5',price:0}};
+
+// ---------- состояние ----------
+var S={finish:'choco',cWidth:796,mods:{a:true,b:true,c:true},
+  equip:{se3000:true,uvir:false,ggs:true,ac10:true,sensor:true,soil:true,drip:true,humid:true},
+  upg:{sil:true,vibe:true,acdoor:true,leak:true,ups:false,rkn:false,uzip:false,reserve:false,peri:false,cam:false},
+  view:'front'};
+
+function totalW(){
+  var w=WALL;
+  if(S.mods.b)w+=W_B+(S.mods.c?WALL:0);
+  if(S.mods.c)w+=S.cWidth;
+  return w+WALL;
+}
+
+// ---------- смета / вес ----------
+function bill(){
+  var rows=[{g:'КОРПУС',n:'',p:0},{g:'',n:NAMES.body,p:PRICES.body}];
+  if(S.finish!=='white')rows.push({g:'',n:'Отделка: '+FINISH[S.finish].name,p:FINISH[S.finish].price});
+  ['a','b','c'].forEach(function(k){
+    if(!S.mods[k])return;
+    var p=PRICES.mods[k],n=NAMES.mods[k];
+    if(k==='c'&&S.cWidth!==796){p=Math.round(p*S.cWidth/796/500)*500;n+=' · '+S.cWidth+' мм';}
+    rows.push({g:'',n:n,p:p});
+  });
+  rows.push({g:'НАЧИНКА',n:'',p:0});
+  Object.keys(S.equip).forEach(function(k){if(S.equip[k])rows.push({g:'',n:NAMES.equip[k],p:PRICES.equip[k]})});
+  rows.push({g:'УЛУЧШЕНИЯ',n:'',p:0});
+  Object.keys(S.upg).forEach(function(k){if(S.upg[k])rows.push({g:'',n:NAMES.upg[k],p:PRICES.upg[k]})});
+  return rows.filter(function(r){return r.n||r.g});
+}
+function weight(){
+  var m=0;
+  if(S.mods.a)m+=KG.mods.a;
+  if(S.mods.b)m+=KG.mods.b+KG.waterWork;
+  if(S.mods.c)m+=KG.mods.c*S.cWidth/796+KG.substrate*S.cWidth/796;
+  Object.keys(S.equip).forEach(function(k){if(S.equip[k])m+=KG.equip[k]});
+  Object.keys(S.upg).forEach(function(k){if(S.upg[k])m+=KG.upg[k]});
+  return m;
+}
+
+// ---------- чертёж ----------
+function svgDim(x1,y1,x2,y2,label,rot){
+  var s='<g stroke="#8A6E4E" stroke-width="1">';
+  s+='<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'"/>';
+  if(y1===y2){s+='<line x1="'+x1+'" y1="'+(y1-5)+'" x2="'+x1+'" y2="'+(y1+5)+'"/><line x1="'+x2+'" y1="'+(y2-5)+'" x2="'+x2+'" y2="'+(y2+5)+'"/>';}
+  else{s+='<line x1="'+(x1-5)+'" y1="'+y1+'" x2="'+(x1+5)+'" y2="'+y1+'"/><line x1="'+(x2-5)+'" y1="'+y2+'" x2="'+(x2+5)+'" y2="'+y2+'"/>';}
+  var mx=(x1+x2)/2,my=(y1+y2)/2,tr=rot?' transform="rotate('+(rot)+' '+mx+' '+(my+3)+')"':'';
+  s+='<text x="'+mx+'" y="'+(rot?my+3:my-6)+'" fill="#5A3A2E" font-family="Manrope,sans-serif" font-size="10" letter-spacing="1.2" text-anchor="middle"'+tr+'>'+label+'</text></g>';
+  return s;
+}
+function renderDwg(){
+  var svg=document.getElementById('dwg'),s='';
+  var f=FINISH[S.finish].hex;
+  if(S.view==='front'){
+    var W=totalW(),sc=Math.min(600/W,500/H),w=W*sc,h=H*sc,X=80,Y=52;
+    s+='<rect x="'+X+'" y="'+Y+'" width="'+w+'" height="'+h+'" fill="#DED2BC" stroke="#2A2A2A" stroke-width="2.5"/>';
+    // фасады в цвете отделки (с небольшим отступом — притворы)
+    var g=3*sc;
+    s+='<rect x="'+(X+g)+'" y="'+(Y+g)+'" width="'+(w-2*g)+'" height="'+(h-2*g)+'" fill="'+f+'" opacity=".92"/>';
+    // модуль A — пунктир по высоте 300
+    var yA=Y+H_A*sc;
+    s+='<line x1="'+X+'" y1="'+yA+'" x2="'+(X+w)+'" y2="'+yA+'" stroke="#2A2A2A" stroke-width="1.2" stroke-dasharray="5 5"/>';
+    // линии створок (канон 434/405/405, масштаб по ширине)
+    var k=W/1250,x=X;
+    [DOORS[0]*k,DOORS[1]*k,DOORS[2]*k].forEach(function(dw,i){
+      if(i>0){x+=dw*sc;s+='<line x1="'+x+'" y1="'+Y+'" x2="'+x+'" y2="'+(Y+h)+'" stroke="#2A2A2A" stroke-width="2"/>';}
+    });
+    // границы модулей B/C
+    if(S.mods.b&&S.mods.c){
+      var xb=X+(WALL+W_B)*k*sc;
+      s+='<line x1="'+xb+'" y1="'+yA+'" x2="'+xb+'" y2="'+(Y+h)+'" stroke="#2A2A2A" stroke-width="1" stroke-dasharray="3 4" opacity=".8"/>';
+    }
+    // цоколь 55 мм
+    var yP=Y+h-PLINTH*sc;
+    s+='<rect x="'+X+'" y="'+yP+'" width="'+w+'" height="'+(PLINTH*sc)+'" fill="#2A2A2A" opacity=".18"/>';
+    s+='<text x="'+(X+w/2)+'" y="'+(yP+PLINTH*sc/2+3)+'" fill="#5A3A2E" font-family="Manrope,sans-serif" font-size="8" letter-spacing="1" text-anchor="middle">ЦОКОЛЬ 55 · ЗАМКНУТЫЙ КОНТУР</text>';
+    // подписи зон
+    s+='<text x="'+(X+w/2)+'" y="'+(Y+H_A*sc/2+4)+'" fill="#F1EBE0" font-family="Unbounded,sans-serif" font-size="12" font-weight="800" letter-spacing="2" text-anchor="middle">A · AIR / NOISE</text>';
+    if(S.mods.b){
+      var wb=W_B*k*sc;
+      s+='<text x="'+(X+WALL*k*sc+wb/2)+'" y="'+(yA+(h-H_A*sc)/2)+'" fill="#F1EBE0" font-family="Unbounded,sans-serif" font-size="11" font-weight="800" letter-spacing="1.5" text-anchor="middle">B</text>';
+    }
+    if(S.mods.c){
+      var xc=S.mods.b?(X+(WALL+W_B+WALL)*k*sc):(X+WALL*k*sc),wc=S.cWidth*k*sc;
+      s+='<text x="'+(xc+wc/2)+'" y="'+(yA+(h-H_A*sc)/2)+'" fill="#F1EBE0" font-family="Unbounded,sans-serif" font-size="11" font-weight="800" letter-spacing="1.5" text-anchor="middle">C</text>';
+    }
+    // размеры
+    s+=svgDim(X,Y-24,X+w,Y-24,W+' мм');
+    s+=svgDim(X-34,Y,X-34,Y+h,H+'');
+    s+=svgDim(X-34,Y,X-34,yA,H_A+'');
+    if(S.mods.b&&S.mods.c){
+      s+=svgDim(X,Y+h+26,X+(WALL+W_B)*k*sc,Y+h+26,W_B+'');
+      s+=svgDim(X+(WALL+W_B)*k*sc,Y+h+26,X+w,Y+h+26,S.cWidth+'');
+    }else if(S.mods.c){
+      s+=svgDim(X,Y+h+26,X+w,Y+h+26,S.cWidth+'');
+    }
+    // выноска: дверь-сэндвич
+    s+='<g stroke="#8A6E4E" stroke-width="1"><line x1="'+(X+w)+'" y1="'+(Y+h*0.32)+'" x2="'+(X+w+46)+'" y2="'+(Y+h*0.24)+'"/></g>';
+    s+='<text x="'+(X+w+50)+'" y="'+(Y+h*0.24)+'" fill="#5A3A2E" font-family="Manrope,sans-serif" font-size="9" letter-spacing="1">СТВОРКА · СЭНДВИЧ '+(S.upg.acdoor?'41 ММ':'18 ММ')+'</text>';
+  }else{
+    // ТОРЕЦ: слои от фасада к задней стенке
+    var sc=Math.min(360/D,500/H),w=D*sc,h=H*sc,X=110,Y=52;
+    s+='<rect x="'+X+'" y="'+Y+'" width="'+w+'" height="'+h+'" fill="#DED2BC" stroke="#2A2A2A" stroke-width="2.5"/>';
+    var x=X;
+    function band(mm,fill,op){var ww=mm*sc;s+='<rect x="'+x+'" y="'+Y+'" width="'+ww+'" height="'+h+'" fill="'+fill+'" opacity="'+op+'" stroke="#2A2A2A" stroke-width="1"/>';x+=ww;}
+    // створка 41 (или 18 без сэндвича)
+    if(S.upg.acdoor){band(18,'#C7B698',1);band(3,'#5A3A2E',1);band(20,'#D2C4AB',1);}
+    else{band(18,'#C7B698',1);}
+    x+=6*sc; // притвор + уплотнитель
+    s+='<line x1="'+x+'" y1="'+Y+'" x2="'+x+'" y2="'+(Y+h)+'" stroke="#B08A4F" stroke-width="2" stroke-dasharray="4 4"/>';
+    var xInner=x;
+    // задняя двойная стенка: фанера 12 + канал 80 + оргалит 8
+    x=X+w-100*sc;
+    s+='<rect x="'+x+'" y="'+Y+'" width="'+(12*sc)+'" height="'+h+'" fill="#C7B698" stroke="#2A2A2A" stroke-width="1"/>';
+    s+='<rect x="'+(x+12*sc)+'" y="'+Y+'" width="'+(80*sc)+'" height="'+h+'" fill="#0E0E10" opacity=".12" stroke="#2A2A2A" stroke-width="1"/>';
+    s+='<rect x="'+(x+92*sc)+'" y="'+Y+'" width="'+(8*sc)+'" height="'+h+'" fill="#B7A184" stroke="#2A2A2A" stroke-width="1"/>';
+    // 4 трассы в канале
+    [['#E0B44A','POWER'],['#E8DCC8','LOW VOLTAGE'],['#5B8FD4','WATER'],['#9AA3A8','SAFETY']].forEach(function(t,i){
+      var yy=Y+h*(.16+.18*i);
+      s+='<line x1="'+(x+12*sc)+'" y1="'+yy+'" x2="'+(x+92*sc)+'" y2="'+yy+'" stroke="'+t[0]+'" stroke-width="3"/>';
+      s+='<text x="'+(x+92*sc+8)+'" y="'+(yy+3)+'" fill="#5A3A2E" font-family="Manrope,sans-serif" font-size="8.5" letter-spacing="1">'+t[1]+'</text>';
+    });
+    // раздел модуля A
+    var yA=Y+H_A*sc;
+    s+='<line x1="'+X+'" y1="'+yA+'" x2="'+(X+w)+'" y2="'+yA+'" stroke="#2A2A2A" stroke-width="1.2" stroke-dasharray="5 5"/>';
+    s+='<text x="'+(X+w/2)+'" y="'+(Y+H_A*sc/2+4)+'" fill="#5A3A2E" font-family="Unbounded,sans-serif" font-size="10" font-weight="800" letter-spacing="1.5" text-anchor="middle">A</text>';
+    s+='<text x="'+(X+w/2)+'" y="'+(yA+(h-H_A*sc)/2)+'" fill="#5A3A2E" font-family="Unbounded,sans-serif" font-size="10" font-weight="800" letter-spacing="1.5" text-anchor="middle">B / C</text>';
+    // выноски слоёв
+    var lx=X+w+70;
+    s+='<text x="'+lx+'" y="'+(Y+18)+'" fill="#5A3A2E" font-family="Manrope,sans-serif" font-size="9.5" letter-spacing="1">'+(S.upg.acdoor?'СТВОРКА 41: ЛДСП 18 · MLV 3 · МИНВАТА 20':'СТВОРКА 18: ЛДСП')+'</text>';
+    s+='<text x="'+lx+'" y="'+(Y+40)+'" fill="#5A3A2E" font-family="Manrope,sans-serif" font-size="9.5" letter-spacing="1">УПЛОТНИТЕЛЬ КОНТУРА</text>';
+    s+='<text x="'+lx+'" y="'+(Y+62)+'" fill="#5A3A2E" font-family="Manrope,sans-serif" font-size="9.5" letter-spacing="1">СТЕНКА: ФАНЕРА 12 + ОРГАЛИТ 8</text>';
+    s+='<text x="'+lx+'" y="'+(Y+84)+'" fill="#5A3A2E" font-family="Manrope,sans-serif" font-size="9.5" letter-spacing="1">КАНАЛ 80 · 4 ТРАССЫ РАЗДЕЛЬНО</text>';
+    s+='<text x="'+lx+'" y="'+(Y+106)+'" fill="#5A3A2E" font-family="Manrope,sans-serif" font-size="9.5" letter-spacing="1">ПОКРЫТИЕ КАМЕРЫ · ПЛЁНКА 98%</text>';
+    // размеры
+    s+=svgDim(X,Y-24,X+w,Y-24,D+' мм');
+    s+=svgDim(X-34,Y,X-34,Y+h,H+'');
+  }
+  svg.innerHTML=s;
+}
+
+// ---------- перерисовка всего ----------
+function render(){
+  renderDwg();
+  var W=totalW(),m=weight(),S_m2=W*D/1e6,load=m/S_m2,ratio=load/150;
+  document.getElementById('dimsTxt').innerHTML=W+' × '+D+' × '+H+' <small>мм</small>';
+  document.getElementById('massTxt').innerHTML=fmt(m)+' <small>кг</small>';
+  document.getElementById('loadTxt').innerHTML=fmt(load)+' <small>кг/м² · норма 150</small>';
+  var ft=document.getElementById('floorTxt');
+  if(ratio<=1){ft.textContent='Укладывается в норму перекрытия.';ft.className='verdict ok';}
+  else if(ratio<=1.8){ft.textContent='×'+ratio.toFixed(1).replace('.',',')+' от нормы: размещайте у несущей стены, цоколь обязателен.';ft.className='verdict warn';}
+  else{ft.textContent='×'+ratio.toFixed(1).replace('.',',')+' от нормы: только у несущей стены, утопленный цоколь 55 мм замкнутым контуром, резервный бак не держать полным. Решение по полу — до закупок.';ft.className='verdict bad';}
+  // смета
+  var rows=bill(),html='',total=0;
+  rows.forEach(function(r){
+    if(r.g&&!r.n){html+='<div class="grp">'+r.g+'</div>';return;}
+    total+=r.p;
+    html+='<div class="row"><span>'+r.n+'</span><b>'+(r.p?fmt(r.p)+' ₽':'—')+'</b></div>';
+  });
+  document.getElementById('bill').innerHTML=html;
+  document.getElementById('totalTxt').innerHTML='≈ '+fmt(total)+' <small>₽</small>';
+}
+
+// ---------- управление ----------
+document.querySelectorAll('#mods .opt, #equip .opt, #upg .opt').forEach(function(lab){
+  var inp=lab.querySelector('input'),grp=lab.parentNode.id,key=lab.getAttribute('data-key');
+  lab.classList.toggle('on',inp.checked);
+  lab.addEventListener('click',function(e){
+    e.preventDefault();
+    inp.checked=!inp.checked;
+    S[grp][key]=inp.checked;
+    // нельзя выключить оба нижних модуля
+    if(!S.mods.b&&!S.mods.c){S.mods.c=true;document.querySelector('#mods .opt[data-key=c] input').checked=true;}
+    document.querySelectorAll('#'+grp+' .opt').forEach(function(x){x.classList.toggle('on',x.querySelector('input').checked)});
+    render();
+  });
+});
+document.getElementById('cWidth').addEventListener('input',function(){
+  S.cWidth=+this.value;
+  document.getElementById('cWidthVal').textContent=S.cWidth+' мм';
+  document.getElementById('cDims').textContent=S.cWidth+' × 1700 мм';
+  render();
+});
+document.querySelectorAll('#finish .sw').forEach(function(b){
+  b.addEventListener('click',function(){
+    S.finish=b.getAttribute('data-f');
+    document.querySelectorAll('#finish .sw').forEach(function(x){x.classList.toggle('on',x===b)});
+    render();
+  });
+});
+document.querySelectorAll('#viewbar .vbtn').forEach(function(b){
+  b.addEventListener('click',function(){
+    S.view=b.getAttribute('data-view');
+    document.querySelectorAll('#viewbar .vbtn').forEach(function(x){x.classList.toggle('active',x===b)});
+    renderDwg();
+  });
+});
+document.getElementById('specBtn').addEventListener('click',function(){
+  var rows=bill(),lines=[],total=0;
+  rows.forEach(function(r){if(r.g&&!r.n){lines.push('## '+r.g);return;}total+=r.p;lines.push('- '+r.n+': '+fmt(r.p)+' ₽');});
+  var m=weight(),W=totalW();
+  var spec={
+    product:'Secret Box®', rev:'rev.3', generated:new Date().toISOString().slice(0,10),
+    geometry:{width_mm:W,depth_mm:D,height_mm:H,module_a:S.mods.a,module_b:S.mods.b,module_c:S.mods.c?S.cWidth:false,finish:FINISH[S.finish].name},
+    equipment:Object.keys(S.equip).filter(function(k){return S.equip[k]}).map(function(k){return NAMES.equip[k]}),
+    upgrades:Object.keys(S.upg).filter(function(k){return S.upg[k]}).map(function(k){return NAMES.upg[k]}),
+    mass_kg:Math.round(m*10)/10, load_kg_m2:Math.round(m/(W*D/1e6)), price_est_rub:total,
+    note:'Цены EST до финальной сметы. Решение по перекрытию — до закупок.'
+  };
+  var blob=new Blob([JSON.stringify(spec,null,2)],{type:'application/json'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download='secret-box-spec.json';a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+render();
+</script>
+</body>
+</html>
