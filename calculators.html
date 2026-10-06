@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Калькуляторы — SECRET BOX®</title>
+<meta name="description" content="Инженерные калькуляторы для гроубокса: вентиляция и шум тракта, свет и DLI, VPD, тепловой баланс, нагрузка на перекрытие. С формулами и допущениями.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;800;900&family=Manrope:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#141416;--ink-2:#1B1B1E;--ink-3:#232327;
+  --cream:#E8DCC8;--cream-2:#CDBFA6;--paper:#F1EBE0;--brass:#C79A5B;--choco:#5A3A2E;
+  --line:rgba(232,220,200,.14);--line-strong:rgba(232,220,200,.32);
+  --disp:'Unbounded',sans-serif;--body:'Manrope',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+::selection{background:var(--brass);color:var(--ink)}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--cream);font-family:var(--body);font-size:16px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.noise{position:fixed;inset:0;pointer-events:none;z-index:200;opacity:.055;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{width:min(1280px,92vw);margin:0 auto;position:relative;z-index:2}
+.tag{display:inline-flex;align-items:center;gap:10px;font-family:var(--body);font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--brass)}
+.tag::before{content:"";width:36px;height:1px;background:var(--brass)}
+h1,h2,h3{font-family:var(--disp);letter-spacing:-.01em}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:background .35s,border-color .35s;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(20,20,22,.86);backdrop-filter:blur(14px);border-color:var(--line)}
+nav .wrap{display:flex;align-items:center;gap:36px;height:74px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .mark{width:34px;height:34px;border:1.5px solid var(--cream);border-radius:8px;display:grid;place-items:center;font-family:var(--disp);font-weight:900;font-size:15px;transition:transform .4s}
+.brand:hover .mark{transform:rotate(-8deg)}
+.brand b{font-family:var(--disp);font-weight:800;font-size:15px;letter-spacing:.22em}
+.brand sup{font-size:8px;letter-spacing:0;opacity:.7}
+nav .links{display:flex;gap:30px;margin-left:22px}
+nav .links a{font-size:11.5px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--cream-2);position:relative;padding:6px 0;transition:color .25s}
+nav .links a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--brass);transition:width .3s}
+nav .links a:hover,nav .links a.here{color:var(--cream)}
+nav .links a:hover::after,nav .links a.here::after{width:100%}
+.nav-cta{margin-left:auto;display:inline-flex;align-items:center;gap:10px;border:1px solid var(--line-strong);border-radius:100px;padding:11px 22px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;transition:all .3s}
+.nav-cta:hover{background:var(--cream);color:var(--ink);border-color:var(--cream)}
+
+/* ШАПКА СТРАНИЦЫ */
+.phead{padding:150px 0 30px}
+.phead h1{font-weight:800;font-size:clamp(38px,6vw,76px);line-height:.98;margin:18px 0 22px}
+.phead p{max-width:640px;color:var(--cream-2);font-size:16.5px;line-height:1.8}
+.phead em{font-style:normal;color:var(--cream);border-bottom:1px solid var(--brass);padding-bottom:1px}
+
+/* ЦЕПОЧКА */
+.chain{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:44px 0 10px;padding:22px 26px;border:1px solid var(--line);border-radius:10px;background:var(--ink-2)}
+.chain .ch{border:1px solid var(--line-strong);border-radius:100px;padding:9px 16px;font-family:var(--disp);font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.chain .ar{color:var(--brass);font-size:15px}
+.chain .ch-note{color:var(--cream-2);font-size:13px;flex-basis:100%;line-height:1.7}
+
+/* КАРТОЧКИ КАЛЬКУЛЯТОРОВ */
+.calc{border:1px solid var(--line);border-radius:14px;background:var(--ink-2);padding:42px 46px;margin:34px 0}
+.c-num{font-family:var(--disp);font-size:10.5px;letter-spacing:.32em;color:var(--brass)}
+.calc h2{font-weight:800;font-size:clamp(23px,3vw,34px);margin:14px 0 10px}
+.calc .lead{color:var(--cream-2);font-size:14.5px;line-height:1.8;max-width:640px;margin-bottom:32px}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px}
+.field{margin-bottom:20px}
+.field label{display:flex;justify-content:space-between;align-items:baseline;font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--cream-2);margin-bottom:9px}
+.field label b{font-family:var(--disp);font-size:13px;color:var(--brass);letter-spacing:0}
+.field input[type=number],.field select{
+  width:100%;background:var(--ink-3);border:1px solid var(--line);border-radius:8px;color:var(--cream);
+  font-family:var(--body);font-size:15px;padding:11px 14px;outline:none;transition:border-color .25s}
+.field input:focus,.field select:focus{border-color:var(--brass)}
+.field input[type=range]{width:100%;accent-color:var(--brass);height:26px}
+.field .hint{font-size:11.5px;color:var(--cream-2);opacity:.8;margin-top:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.out{border:1px solid var(--line);border-radius:10px;padding:26px 28px;background:var(--ink);align-self:start}
+.out .row{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:11px 0;border-bottom:1px dashed var(--line)}
+.out .row:last-of-type{border-bottom:none}
+.out .row span{font-size:13px;color:var(--cream-2)}
+.out .row b{font-family:var(--disp);font-weight:700;font-size:16px;text-align:right}
+.out .row b small{font-family:var(--body);font-weight:500;font-size:11.5px;color:var(--cream-2);display:block;letter-spacing:.06em}
+.verdict{margin-top:18px;border-radius:8px;padding:13px 16px;font-size:13.5px;line-height:1.65;border:1px solid var(--line-strong);background:var(--ink-3)}
+.verdict.ok{border-color:rgba(122,168,116,.55);color:#B9D4B2}
+.verdict.warn{border-color:rgba(199,154,91,.55);color:#E3C48E}
+.verdict.bad{border-color:rgba(198,106,92,.55);color:#E0A196}
+.pick{margin-top:14px;font-size:13px;line-height:1.7;color:var(--cream-2)}
+.pick b{color:var(--cream)}
+
+/* ФОРМУЛЫ */
+details.fml{margin-top:26px;border-top:1px solid var(--line);padding-top:18px}
+details.fml summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;font-family:var(--disp);font-size:11.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--brass)}
+details.fml summary::-webkit-details-marker{display:none}
+details.fml summary::after{content:"▾";transition:transform .25s;margin-left:2px}
+details.fml[open] summary::after{transform:rotate(180deg)}
+.fml .fbody{margin-top:16px;font-size:13.5px;line-height:1.85;color:var(--cream-2)}
+.fml code{background:var(--ink-3);border:1px solid var(--line);border-radius:6px;padding:2px 8px;font-size:12.5px;color:var(--cream)}
+.fml ul{margin:10px 0 0 18px}
+.fml li{margin-bottom:6px}
+
+/* ТАБЛИЦЫ */
+.tbl-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin:34px 0}
+.tbl-card{border:1px solid var(--line);border-radius:14px;background:var(--ink-2);padding:32px 34px}
+.tbl-card h3{font-weight:700;font-size:19px;margin:12px 0 18px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-family:var(--body);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--cream-2);text-align:left;padding:9px 8px;border-bottom:1px solid var(--line-strong)}
+td{padding:10px 8px;border-bottom:1px dashed var(--line);color:var(--cream)}
+td b{font-family:var(--disp);font-size:13.5px}
+.tbl-note{margin-top:14px;font-size:12px;color:var(--cream-2);line-height:1.7}
+
+/* FAQ */
+.faq{margin:34px 0 80px}
+.faq details{border:1px solid var(--line);border-radius:10px;background:var(--ink-2);margin-bottom:12px;padding:20px 26px}
+.faq summary{cursor:pointer;list-style:none;font-family:var(--disp);font-weight:600;font-size:15.5px;display:flex;justify-content:space-between;gap:18px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--brass);font-size:18px;line-height:1}
+.faq details[open] summary::after{content:"–"}
+.faq p{margin-top:13px;font-size:14px;line-height:1.8;color:var(--cream-2)}
+
+/* ФУТЕР */
+footer{border-top:1px solid var(--line);padding:54px 0 40px}
+.foot-top{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;margin-bottom:44px}
+.foot-brand{font-family:var(--disp);font-weight:900;font-size:34px;line-height:.95;letter-spacing:.04em}
+.foot-cols{display:flex;gap:70px;flex-wrap:wrap}
+.foot-col h5{font-family:var(--body);font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--brass);margin-bottom:16px}
+.foot-col a{display:block;font-size:13.5px;color:var(--cream-2);margin-bottom:9px;transition:color .25s}
+.foot-col a:hover{color:var(--cream)}
+.foot-bottom{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:22px;font-size:11.5px;letter-spacing:.08em;color:var(--cream-2)}
+
+@media(max-width:900px){
+  nav .links{display:none}
+  .calc-grid,.tbl-grid{grid-template-columns:1fr}
+  .calc{padding:30px 24px}
+}
+@media(max-width:560px){.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="noise"></div>
+
+<nav id="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark">S</span><b>SECRET BOX<sup>®</sup></b></a>
+    <div class="links">
+      <a href="index.html#models">Модели</a>
+      <a href="index.html#flat">Разбор</a>
+      <a href="index.html#3d">3D</a>
+      <a class="here" href="calculators.html">Калькуляторы</a>
+      <a href="growpedia.html">Гровпедия</a>
+    </div>
+    <a class="nav-cta" href="index.html#config">Собрать свой</a>
+  </div>
+</nav>
+
+<div class="wrap phead">
+  <div class="tag">Инструменты</div>
+  <h1>Калькуляторы</h1>
+  <p>Пять инженерных расчётов для Secret Box: <em>воздух и шум, свет и DLI, VPD, тепло, нагрузка на пол</em>. С формулами и допущениями — чтобы вы понимали, откуда взялась цифра, а не верили ей на слово.</p>
+
+  <div class="chain">
+    <span class="ch">DLI · свет</span><span class="ar">→</span>
+    <span class="ch">VPD · климат</span><span class="ar">→</span>
+    <span class="ch">Воздух</span><span class="ar">→</span>
+    <span class="ch">Тепло</span>
+    <p class="ch-note">Считайте калькуляторы в связке: больше света → выше температура → нужен больший воздухообмен → сушится воздух и уезжает VPD. В Secret Box эту цепочку держит GGS-контроллер, а до покупки — вот эти пять расчётов.</p>
+  </div>
+</div>
+
+<!-- ================= CALC-01 ВЕНТИЛЯЦИЯ ================= -->
+<section class="wrap calc" id="calc-vent">
+  <div class="c-num">CALC-01</div>
+  <h2>Вентиляция и шум тракта</h2>
+  <p class="lead">Расход, скорость в трубе, сопротивление системы и — главное — сколько децибел дойдёт до решётки. В гроубоксе тишину решают щели и развязка, а не «мощный вентилятор».</p>
+  <div class="calc-grid">
+    <div class="inputs">
+      <div class="grid2">
+        <div class="field"><label>Ширина камеры, см</label><input type="number" id="v-w" value="79.6" step="0.1" min="20"></div>
+        <div class="field"><label>Глубина, см</label><input type="number" id="v-d" value="70" step="0.1" min="20"></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Высота, см</label><input type="number" id="v-h" value="155" step="1" min="20"></div>
+        <div class="field"><label>Диаметр трубы</label>
+          <select id="v-dia"><option value="80">80 мм</option><option value="100" selected>100 мм</option><option value="125">125 мм</option><option value="150">150 мм</option></select>
+        </div>
+      </div>
+      <div class="field"><label>Расход воздуха <b><span id="v-q-val">135</span> м³/ч</b></label>
+        <input type="range" id="v-q" min="40" max="280" step="5" value="135">
+        <div class="hint">Для камеры 0,85 м³ рабочий диапазон проекта — 80–135 м³/ч.</div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Колена 90°</label><input type="number" id="v-el" value="2" min="0" max="6" step="1"></div>
+        <div class="field"><label>Угольный фильтр</label>
+          <select id="v-filter"><option value="50" selected>Новый (50 Па)</option><option value="62">Отработанный (+25%)</option></select>
+        </div>
+      </div>
+      <div class="field"><label>Двухкамерный глушитель</label>
+        <select id="v-sil"><option value="1" selected>Есть (−18 дБ)</option><option value="0">Нет</option></select>
+      </div>
+    </div>
+    <div class="out">
+      <div class="row"><span>Объём камеры</span><b id="o-vol">—</b></div>
+      <div class="row"><span>Полный обмен воздуха</span><b id="o-exch">—</b></div>
+      <div class="row"><span>Скорость в трубе</span><b id="o-vel">—</b></div>
+      <div class="row"><span>Скоростное давление</span><b id="o-pvel">—</b></div>
+      <div class="row"><span>Сопротивление системы</span><b id="o-r">—</b></div>
+      <div class="row"><span>Шум на решётке</span><b id="o-db">—</b></div>
+      <div class="verdict" id="o-vverdict">—</div>
+      <div class="pick" id="o-vpick"></div>
+    </div>
+  </div>
+  <details class="fml">
+    <summary>📐 Формула и допущения</summary>
+    <div class="fbody">
+      <ul>
+        <li>Скорость: <code>v = Q / (π·d²/4)</code>, Q — м³/с, d — диаметр трубы. На 135 м³/ч в Ø100 — 4,8 м/с: весь шум рождается в этом одном метре трубы.</li>
+        <li>Скоростное давление: <code>Pv = 0,6·v²</code> (ρ воздуха ≈ 1,2 кг/м³).</li>
+        <li>Сопротивление: фильтр 50 Па (половина всей системы) + колено 90° ≈ 9,6 Па + глушитель 15 Па + прочее (вход, пленум, решётка) ≈ 6,6 Па; все потери масштабируются <code>квадратично</code> от рабочей точки 135 м³/ч / Ø100.</li>
+        <li>Шум: источник 48,6 дБ(А) на рабочей точке, масштаб <code>+30·lg(Q/Q₀)</code>; тракт гасит −34 дБ (фильтр 8 + глушитель 18 + пленум 8). Оценка для решётки, не для корпуса.</li>
+        <li>Запас: берите вентилятор с производительностью <code>+30…100%</code> к расчёту — загрязнение фильтра роняет расход.</li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<!-- ================= CALC-02 СВЕТ ================= -->
+<section class="wrap calc" id="calc-light">
+  <div class="c-num">CALC-02</div>
+  <h2>Свет, PPFD и DLI</h2>
+  <p class="lead">Сколько фотонов достаётся канопе и сколько их набирается за сутки. Нормы Вт/м² по стадиям — чтобы не «пересветить» и не купить лишний светильник.</p>
+  <div class="calc-grid">
+    <div class="inputs">
+      <div class="field"><label>Стадия выращивания</label>
+        <select id="l-stage">
+          <option value="100,150,15">Рассада и зелень · 100–150 Вт/м²</option>
+          <option value="200,280,25">Вегетация · 200–280 Вт/м²</option>
+          <option value="350,420,38" selected>Цветение · 350–420 Вт/м²</option>
+          <option value="500,550,52">Максимум · 500–550 Вт/м²</option>
+        </select>
+        <div class="hint">Третья цифра — целевой DLI, моль/день.</div>
+      </div>
+      <div class="field"><label>Площадь канопы <b><span id="l-area-val">0,65</span> м²</b></label>
+        <input type="range" id="l-area" min="0.2" max="1.5" step="0.05" value="0.65">
+        <div class="hint">SCROG-рамка Secret Box: ≈ 0,65 м² под двумя растениями.</div>
+      </div>
+      <div class="field"><label>Мощность светильника <b><span id="l-w-val">300</span> Вт</b></label>
+        <input type="range" id="l-w" min="50" max="600" step="10" value="300">
+      </div>
+      <div class="grid2">
+        <div class="field"><label>PPF, µmol/Дж</label><input type="number" id="l-ppe" value="2.85" step="0.05" min="1"></div>
+        <div class="field"><label>Фотопериод</label>
+          <select id="l-hours"><option value="24">24/0</option><option value="18">18/6</option><option value="12" selected>12/12</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="out">
+      <div class="row"><span>PPF светильника</span><b id="o-ppf">—</b></div>
+      <div class="row"><span>PPFD на канопе</span><b id="o-ppfd">—</b></div>
+      <div class="row"><span>DLI за сутки</span><b id="o-dli">—</b></div>
+      <div class="row"><span>Мощность на м²</span><b id="o-wm2">—</b></div>
+      <div class="verdict" id="o-lverdict">—</div>
+      <div class="pick" id="o-lpick"></div>
+    </div>
+  </div>
+  <details class="fml">
+    <summary>📐 Формула и допущения</summary>
+    <div class="fbody">
+      <ul>
+        <li><code>PPF = W × PPE</code>. Для SE3000: 300 Вт × 2,85 = 856 µmol/s.</li>
+        <li><code>PPFD ≈ PPF × 0,75 / S</code> — коэффициент 0,75 учитывает отражение от матовых стенок и неравномерность; для открытого пространства он ниже.</li>
+        <li><code>DLI = PPFD × 3600 × часы / 1 000 000</code>, моль/м²·день.</li>
+        <li>Нормы Вт/м² и целевые DLI — усреднённые по стадиям; соотношение красного и синего, высота подвеса и сорт сдвигают их.</li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<!-- ================= CALC-03 VPD ================= -->
+<section class="wrap calc" id="calc-vpd">
+  <div class="c-num">CALC-03</div>
+  <h2>Микроклимат: VPD</h2>
+  <p class="lead">Дефицит давления пара — реальный «аппетит» растения. Именно его держит SensorPro в зоне канопы, а не «температура на стенке шкафа».</p>
+  <div class="calc-grid">
+    <div class="inputs">
+      <div class="field"><label>Температура <b><span id="t-t-val">26</span> °C</b></label>
+        <input type="range" id="t-t" min="15" max="35" step="0.5" value="26">
+      </div>
+      <div class="field"><label>Относительная влажность <b><span id="t-rh-val">60</span> %</b></label>
+        <input type="range" id="t-rh" min="30" max="90" step="1" value="60">
+      </div>
+      <div class="field"><label>Стадия</label>
+        <select id="t-stage"><option value="0.4,0.8">Клоны и рассада · 0,4–0,8 кПа</option><option value="0.8,1.2" selected>Вегетация · 0,8–1,2 кПа</option><option value="1.2,1.6">Цветение · 1,2–1,6 кПа</option></select>
+      </div>
+      <div class="pick">Меряйте в зоне канопы: разница с верхней зоной шкафа доходит до нескольких кПа-единиц по градиенту влажности. Датчик на стенке врёт в вашу пользу.</div>
+    </div>
+    <div class="out">
+      <div class="row"><span>Давление насыщения</span><b id="o-svp">—</b></div>
+      <div class="row"><span>VPD</span><b id="o-vpd">—</b></div>
+      <div class="row"><span>Целевая зона</span><b id="o-zone">—</b></div>
+      <div class="verdict" id="o-tverdict">—</div>
+      <div class="pick" id="o-tpick"></div>
+    </div>
+  </div>
+  <details class="fml">
+    <summary>📐 Формула и допущения</summary>
+    <div class="fbody">
+      <ul>
+        <li>Давление насыщения: <code>SVP = 0,6108 · e^(17,27·T / (T + 237,3))</code>, кПа (формула Магнуса).</li>
+        <li><code>VPD = SVP × (1 − RH/100)</code>, кПа.</li>
+        <li>Высокий VPD → растение закрывает устьица и не пьёт; низкий → висит вода, риск плесени и гнилей.</li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<!-- ================= CALC-04 ТЕПЛО ================= -->
+<section class="wrap calc" id="calc-heat">
+  <div class="c-num">CALC-04</div>
+  <h2>Тепловой баланс</h2>
+  <p class="lead">481 Вт тепла в закрытой мебели — и куда его деть. Проверьте, на сколько градусов греет ваш комплект и когда включается автодимм.</p>
+  <div class="calc-grid">
+    <div class="inputs">
+      <div class="field"><label>Свет (автодимм SE3000) <b><span id="h-l-val">300</span> Вт</b></label>
+        <input type="range" id="h-l" min="0" max="300" step="10" value="300">
+      </div>
+      <div class="field"><label>Расход воздуха <b><span id="h-q-val">135</span> м³/ч</b></label>
+        <input type="range" id="h-q" min="40" max="280" step="5" value="135">
+      </div>
+      <div class="field"><label>Температура притока <b><span id="h-in-val">24</span> °C</b></label>
+        <input type="range" id="h-in" min="16" max="34" step="0.5" value="24">
+      </div>
+      <div class="pick"><b>Постоянные источники — 181 Вт:</b> UV30+IR16 — 46, вентиляция и обдув — 50, вода — 30, электроника и БП — 55. Тёмная фаза: около 100 Вт суммарно.</div>
+    </div>
+    <div class="out">
+      <div class="row"><span>Суммарное тепло</span><b id="o-hw">—</b></div>
+      <div class="row"><span>Перегрев ΔT</span><b id="o-dt">—</b></div>
+      <div class="row"><span>Температура на выходе</span><b id="o-tout">—</b></div>
+      <div class="row"><span>Расход для ΔT = 5 К</span><b id="o-qneed">—</b></div>
+      <div class="verdict" id="o-hverdict">—</div>
+      <div class="pick" id="o-hpick"></div>
+    </div>
+  </div>
+  <details class="fml">
+    <summary>📐 Формула и допущения</summary>
+    <div class="fbody">
+      <ul>
+        <li><code>ΔT = W / (ρ·c·Q)</code>, где ρ = 1,204 кг/м³, c = 1005 Дж/(кг·K), Q — м³/с. Все источники считаются в тепло комнаты без учёта испарения воды.</li>
+        <li>Классическая ловушка: для +5 К при 481 Вт нужно 287 м³/ч — <b>воздухообменом тепло закрывается только до определённого предела</b>. Рабочий рычаг летом — автодимм: 200 Вт света → +8,4 К, 150 Вт → +7,3 К.</li>
+        <li>Внешнее решение — сплит в комнате + IR AC Companion: кондиционер включается от GGS-сценария.</li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<!-- ================= CALC-05 ПОЛ ================= -->
+<section class="wrap calc" id="calc-floor">
+  <div class="c-num">CALC-05</div>
+  <h2>Нагрузка на перекрытие</h2>
+  <p class="lead">358 кг собранного шкафа — главный риск проекта, и решают его до закупок, а не после доставки панелей в квартиру.</p>
+  <div class="calc-grid">
+    <div class="inputs">
+      <div class="grid2">
+        <div class="field"><label>Панели и фурнитура, кг</label><input type="number" id="f-p" value="208.7" step="0.1" min="0"></div>
+        <div class="field"><label>Вода (2 бака), кг</label><input type="number" id="f-w" value="40" step="1" min="0"></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Субстрат и горшки, кг</label><input type="number" id="f-s" value="45" step="1" min="0"></div>
+        <div class="field"><label>Оборудование, кг</label><input type="number" id="f-g" value="64" step="1" min="0"></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Ширина, см</label><input type="number" id="f-wm" value="125" step="1" min="20"></div>
+        <div class="field"><label>Глубина, см</label><input type="number" id="f-dm" value="74.1" step="0.1" min="20"></div>
+      </div>
+      <div class="field"><label>Перекрытие</label>
+        <select id="f-norm">
+          <option value="150" selected>Жилое · норма 150 кгс/м²</option>
+          <option value="210">Балкон / лоджия · 210 кгс/м² — ставить нельзя</option>
+          <option value="300">Первый этаж / над подвалом · 300+ кгс/м²</option>
+        </select>
+      </div>
+    </div>
+    <div class="out">
+      <div class="row"><span>Масса комплекта</span><b id="o-mass">—</b></div>
+      <div class="row"><span>Пятно контакта</span><b id="o-area">—</b></div>
+      <div class="row"><span>Нагрузка на м²</span><b id="o-load">—</b></div>
+      <div class="row"><span>К норме перекрытия</span><b id="o-ratio">—</b></div>
+      <div class="row"><span>На точку без цоколя</span><b id="o-point">—</b></div>
+      <div class="verdict" id="o-fverdict">—</div>
+      <div class="pick">Правила проекта: только у несущей стены, никогда на балконе и деревянных балках; утопленный цоколь 55 мм замкнутым контуром разносит вес; резервный бак не держите полным (−20 кг). При сомнениях — техник-строитель до закупок.</div>
+    </div>
+  </div>
+  <details class="fml">
+    <summary>📐 Формула и допущения</summary>
+    <div class="fbody">
+      <ul>
+        <li><code>Нагрузка = масса / (ширина × глубина)</code>, кг/м².</li>
+        <li>Точечная нагрузка — при четырёх опорах площадью ≈ 28 см² каждая (без утопленного цоколя): <code>P = m/4 × 9,81 / 0,0028</code>, кПа. Именно поэтому цоколь замкнутым периметром, а не на четырёх ножках.</li>
+        <li>Норма 150 кгс/м² — расчётная для жилых перекрытий; это не «максимум, который выдержит пол», а предел, при котором проект считается безопасным.</li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<!-- ================= ТАБЛИЦЫ ================= -->
+<div class="wrap tbl-grid">
+  <div class="tbl-card">
+    <div class="c-num">ТАБЛИЦА · DLI</div>
+    <h3>Суточный световой интеграл по стадиям</h3>
+    <table>
+      <tr><th>Стадия</th><th>PPFD, µmol/м²·с</th><th>DLI, моль/д</th></tr>
+      <tr><td>Клоны, рассада</td><td>150–300</td><td><b>10–20</b></td></tr>
+      <tr><td>Вегетация</td><td>350–600</td><td><b>20–30</b></td></tr>
+      <tr><td>Цветение</td><td>600–900</td><td><b>30–45</b></td></tr>
+      <tr><td>Максимум (под CO₂)</td><td>900–1100</td><td><b>45–60</b></td></tr>
+    </table>
+    <p class="tbl-note">DLI 40+ моль/день даёт прибавку выхода 30–50% к «примерному» свету — но только при в норме VPD и CO₂.</p>
+  </div>
+  <div class="tbl-card">
+    <div class="c-num">ТАБЛИЦА · VPD</div>
+    <h3>Зоны VPD по стадиям</h3>
+    <table>
+      <tr><th>Стадия</th><th>VPD, кПа</th><th>Если выше</th><th>Если ниже</th></tr>
+      <tr><td>Клоны, рассада</td><td><b>0,4–0,8</b></td><td>засыхает</td><td>гнили</td></tr>
+      <tr><td>Вегетация</td><td><b>0,8–1,2</b></td><td>закрытые устьица</td><td>плесень</td></tr>
+      <tr><td>Цветение</td><td><b>1,2–1,6</b></td><td>стресс, ломкие стебли</td><td>ботритис</td></tr>
+    </table>
+    <p class="tbl-note">Считайте VPD по температуре листа, а не воздуха: в сильном свете лист холоднее воздуха на 1–2 К.</p>
+  </div>
+</div>
+
+<!-- ================= FAQ ================= -->
+<div class="wrap faq">
+  <div class="c-num">FAQ</div>
+  <h2 style="font-weight:800;font-size:clamp(24px,3.4vw,38px);margin:14px 0 26px">Частые вопросы</h2>
+  <details>
+    <summary>Насколько точны расчёты?</summary>
+    <p>Формулы — базовые инженерные, допущения раскрыты под каждым калькулятором. Точность «в лаборатории» — единицы процентов; в жизни разброс даёт сорт, высота подвеса, герметичность и состояние фильтра. Реальные значения проверяйте приборами: PPFD-метром, термогигрометром, датчиком VWC/EC.</p>
+  </details>
+  <details>
+    <summary>Почему ваш калькулятор вентиляции считает шум и Па, а не только м³/ч?</summary>
+    <p>Потому что в спальне решает не расход, а то, сколько гула дойдёт до решётки и хватит ли вентилятору напора продавить фильтр. У «тихих» шкафов та же физика тракта — мы просто показываем её цифрами.</p>
+  </details>
+  <details>
+    <summary>Работают ли калькуляторы на телефоне?</summary>
+    <p>Да, страница адаптивна и не тянет внешних библиотек: всё считается прямо в браузере, офлайн — тоже.</p>
+  </details>
+  <details>
+    <summary>Можно ли так рассчитать не Secret Box, а свой ящик?</summary>
+    <p>Да, вводите свои размеры. Но учтите: расчёт шума и сопротивления заточен под наш тракт (гладкая труба, двухкамерный глушитель, пленум). Для гофры и прямого выброса результат будет оптимистичным.</p>
+  </details>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">SECRET<br>BOX®</div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h5>Продукт</h5>
+          <a href="index.html#models">Модели</a>
+          <a href="index.html#config">Конфигуратор</a>
+          <a href="index.html#flat">Разбор</a>
+          <a href="index.html#3d">3D-модель</a>
+        </div>
+        <div class="foot-col">
+          <h5>Знания</h5>
+          <a href="calculators.html">Калькуляторы</a>
+          <a href="growpedia.html">Гровпедия</a>
+          <a href="index.html#eng">Инженерия</a>
+        </div>
+        <div class="foot-col">
+          <h5>Контакты</h5>
+          <a href="#">Москва · сборка под ключ</a>
+          <a href="#">Запросить расчёт</a>
+          <a href="#">Стать дилером</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <div>© 2026 Secret Box® · Все права защищены</div>
+      <div>Мы считаем то, что другие обещают</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// nav при скролле
+var nav=document.getElementById('nav');
+addEventListener('scroll',function(){nav.classList.toggle('scrolled',scrollY>24)},{passive:true});
+
+function fx(n,d){return n.toFixed(d).replace('.',',')}
+function fmt(n){return Math.round(n).toLocaleString('ru-RU')}
+function set(id,html){var el=document.getElementById(id);if(el)el.innerHTML=html}
+function verdict(id,text,cls){var el=document.getElementById(id);if(!el)return;el.textContent=text;el.className='verdict '+(cls||'')}
+
+// ---------- CALC-01 ВЕНТИЛЯЦИЯ ----------
+var V_IDS=['v-w','v-d','v-h','v-dia','v-q','v-el','v-filter','v-sil'];
+function calcVent(){
+  var w=+document.getElementById('v-w').value||79.6,
+      d=+document.getElementById('v-d').value||70,
+      h=+document.getElementById('v-h').value||155,
+      dia=+document.getElementById('v-dia').value,
+      Q=+document.getElementById('v-q').value,
+      el=+document.getElementById('v-el').value||0,
+      fpa=+document.getElementById('v-filter').value,
+      sil=+document.getElementById('v-sil').value;
+  set('v-q-val',fmt(Q));
+  var V=w*d*h/1e6;
+  var area=Math.PI*Math.pow(dia/1000,2)/4;
+  var v=(Q/3600)/area;
+  var Pv=0.6*v*v;
+  var vRef=4.775; // рабочая точка проекта: 135 м³/ч в Ø100
+  var rRef=fpa+9.55*el+(sil?15:3)+6.6+13.7;
+  var R=rRef*Math.pow(v/vRef,2);
+  var dBsrc=48.6+30*Math.log(Q/135)/Math.LN10;
+  var atten=8+(sil?18:0)+8;
+  var dB=Math.max(10,dBsrc-atten);
+  var exchSec=3600*V/Q;
+
+  set('o-vol',fx(V,2)+' <small>м³</small>');
+  set('o-exch',fx(exchSec,0)+' <small>сек · «полный обмен»</small>');
+  set('o-vel',fx(v,2)+' <small>м/с в Ø'+dia+'</small>');
+  set('o-pvel',fx(Pv,1)+' <small>Па</small>');
+  set('o-r',fmt(R)+' <small>Па суммарно</small>');
+  set('o-db',fx(dB,1)+' <small>дБ(А) на решётке</small>');
+
+  var msgs=[];
+  if(R>105){msgs.push('Сопротивление выше напора SF 4" на рабочей точке: меньше колен, чище фильтр, труба большего сечения.');}
+  else if(R>88){msgs.push('Рабочая точка у верхней границы — резерва нет, загрязнение угля уронит расход.');}
+  else{msgs.push('По напору запас есть.');}
+  var cls=R>105?'bad':(R>88?'warn':'ok');
+  if(dB<=25)msgs.push('Тишина: не слышно во сне.');
+  else if(dB<=35)msgs.push('Слышно лишь вплотную — для спальни приемлемо.');
+  else{msgs.push('Ночью будет слышно: добавьте глушитель или снизьте обороты.');if(cls==='ok')cls='warn';}
+  verdict('o-vverdict',msgs.join(' '),cls);
+  set('o-vpick','Подбор: вентилятор от <b>'+fmt(Q*1.3)+'</b> м³/ч с напором от <b>'+fmt(R*1.25)+'</b> Па. SF 4" (до 267 м³/ч через фильтр) закрывает по воздуху, глушитель — по тишине.');
+}
+V_IDS.forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',calcVent)});
+
+// ---------- CALC-02 СВЕТ ----------
+var L_IDS=['l-stage','l-area','l-w','l-ppe','l-hours'];
+function calcLight(){
+  var st=document.getElementById('l-stage').value.split(',').map(Number),
+      wMin=st[0],wMax=st[1],dliTarget=st[2],
+      S=+document.getElementById('l-area').value,
+      W=+document.getElementById('l-w').value,
+      PPE=+document.getElementById('l-ppe').value||2.85,
+      hrs=+document.getElementById('l-hours').value;
+  set('l-area-val',fx(S,2));
+  set('l-w-val',fmt(W));
+  var PPF=W*PPE;
+  var PPFD=PPF*0.75/S;
+  var DLI=PPFD*3600*hrs/1e6;
+  var wm2=W/S;
+  set('o-ppf',fmt(PPF)+' <small>µmol/s</small>');
+  set('o-ppfd',fmt(PPFD)+' <small>µmol/м²·с</small>');
+  set('o-dli',fx(DLI,1)+' <small>моль/м²·день</small>');
+  set('o-wm2',fmt(wm2)+' <small>Вт/м² · норма '+wMin+'–'+wMax+'</small>');
+
+  var msgs=[],cls='ok';
+  if(wm2<wMin){msgs.push('Мощности мало для этой стадии: канопа будет тянуться.');cls='warn';}
+  else if(wm2>wMax){msgs.push('Мощность выше нормы: работайте автодиммом на '+Math.round(wMax*S)+' Вт, иначе будут ожоги и стресс.');cls='warn';}
+  else msgs.push('Мощность в норме для стадии.');
+  if(DLI<dliTarget*0.85){msgs.push('DLI ниже цели '+dliTarget+' — добавьте часы или мощность.');if(cls==='ok')cls='warn';}
+  else if(DLI>dliTarget*1.3){msgs.push('DLI выше цели — можно гасить свет и экономить электрики.');}
+  verdict('o-lverdict',msgs.join(' '),cls);
+  set('o-lpick','Подбор: на '+fx(S,2)+' м² этой стадии нужно <b>'+fmt(wMin*S)+'–'+fmt(wMax*S)+' Вт</b>. Ориентир — SE3000 (300 Вт, 856 µmol/s) c автодиммом по PAR/DLI.');
+}
+L_IDS.forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',calcLight)});
+
+// ---------- CALC-03 VPD ----------
+var T_IDS=['t-t','t-rh','t-stage'];
+function calcVpd(){
+  var T=+document.getElementById('t-t').value,
+      RH=+document.getElementById('t-rh').value,
+      zn=document.getElementById('t-stage').value.split(',').map(Number);
+  set('t-t-val',fx(T,1));
+  set('t-rh-val',fmt(RH));
+  var SVP=0.6108*Math.exp(17.27*T/(T+237.3));
+  var VPD=SVP*(1-RH/100);
+  set('o-svp',fx(SVP,2)+' <small>кПа</small>');
+  set('o-vpd',fx(VPD,2)+' <small>кПа</small>');
+  set('o-zone',fx(zn[0],1)+'–'+fx(zn[1],1)+' <small>кПа</small>');
+  var msg,cls,pick;
+  if(VPD<zn[0]){msg='Слишком влажно для этой стадии: вода висит на листьях, риск плесени и гнилей.';cls='warn';pick='Подсушите: прибавьте вытяжку/обдув, приглушите увлажнитель SF 5 л.';}
+  else if(VPD>zn[1]){msg='Слишком сухо: устьица закрываются, растение не пьёт и не ест.';cls='warn';pick='Поднимите влажность или снизьте температуру на 1–2 К. Автодимм в жару снижает VPD дважды: и по температуре, и по испарению.';}
+  else{msg='Зона попадания: растение пьёт и ест в полную силу.';cls='ok';pick='Держите датчик в зоне канопы (SensorPro) — GGS держит VPD триггерами, а не расписанием.';}
+  verdict('o-tverdict',msg,cls);
+  set('o-tpick',pick);
+}
+T_IDS.forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',calcVpd)});
+
+// ---------- CALC-04 ТЕПЛО ----------
+var H_IDS=['h-l','h-q','h-in'];
+function calcHeat(){
+  var L=+document.getElementById('h-l').value,
+      Q=+document.getElementById('h-q').value,
+      Tin=+document.getElementById('h-in').value;
+  set('h-l-val',fmt(L));set('h-q-val',fmt(Q));set('h-in-val',fx(Tin,1));
+  var Wtot=L+181;
+  var mDot=1.204*1005*(Q/3600);
+  var dT=Wtot/mDot;
+  var Qneed=Wtot/(1.204*1005*5/3600);
+  set('o-hw',fmt(Wtot)+' <small>Вт · свет '+fmt(L)+' + прочие 181</small>');
+  set('o-dt','+'+fx(dT,1)+' <small>К к притоку</small>');
+  set('o-tout',fx(Tin+dT,1)+' <small>°C в камере</small>');
+  set('o-qneed',fmt(Qneed)+' <small>м³/ч</small>');
+  var msg,cls,pick;
+  if(Tin+dT<=28){msg='Режим нормальный: канопа не перегревается.';cls='ok';pick='Проверьте VPD — при таком тепле влажность уезжает первой.';}
+  else if(Tin+dT<=32){msg='На пределе: ночью ок, днём жарко.';cls='warn';pick='Автодимм SE3000 по PAR/DLI — главный рычаг. 200 Вт света дают +8,4 К, 150 Вт — +7,3 К.';}
+  else{msg='Перегрев: цветение «в спячку», стресс, сухой VPD.';cls='bad';pick='Свет в автодимм + внешний сплит через IR AC Companion. Воздухообменом 135 м³/ч такое тепло не закрыть — это физика.';}
+  verdict('o-hverdict',msg,cls);
+  set('o-hpick',pick);
+}
+H_IDS.forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',calcHeat)});
+
+// ---------- CALC-05 ПОЛ ----------
+var F_IDS=['f-p','f-w','f-s','f-g','f-wm','f-dm','f-norm'];
+function calcFloor(){
+  var m=(+document.getElementById('f-p').value||0)+(+document.getElementById('f-w').value||0)+(+document.getElementById('f-s').value||0)+(+document.getElementById('f-g').value||0),
+      w=+document.getElementById('f-wm').value||125,
+      d=+document.getElementById('f-dm').value||74.1,
+      norm=+document.getElementById('f-norm').value;
+  var S=w*d/1e4;
+  var load=m/S;
+  var ratio=load/norm;
+  var pointKPa=(m/4)*9.81/0.0028/1000;
+  set('o-mass',fmt(m)+' <small>кг</small>');
+  set('o-area',fx(S,2)+' <small>м² подошвы</small>');
+  set('o-load',fmt(load)+' <small>кг/м²</small>');
+  set('o-ratio','×'+fx(ratio,1)+' <small>от нормы '+norm+' кгс/м²</small>');
+  set('o-point',fmt(pointKPa)+' <small>кПа на опору</small>');
+  var msg,cls;
+  if(ratio<=1){msg='Укладывается в норму перекрытия — ставьте где удобно, но всё равно не на балконе.';cls='ok';}
+  else if(norm>=300){msg='Даже над подвалом — разнесите вес цоколем и проконсультируйтесь с техником.';cls='warn';}
+  else if(norm===210){msg='Балкон или лоджия — исключены полностью: '+fmt(load)+' кг/м² при норме 210 и динамике ветровой нагрузки.';cls='bad';}
+  else{msg='Превышение нормы в ×'+fx(ratio,1)+': размещение — только у несущей стены, с утопленным цоколем 55 мм замкнутым контуром. Решение по полу — до любых закупок.';cls='bad';}
+  verdict('o-fverdict',msg,cls);
+}
+F_IDS.forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',calcFloor)});
+
+calcVent();calcLight();calcVpd();calcHeat();calcFloor();
+</script>
+</body>
+</html>

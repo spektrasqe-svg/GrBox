@@ -363,6 +363,15 @@ footer{padding:84px 0 40px}
   .eng-grid,.tiles{grid-template-columns:1fr}
   .hero-stats .st{padding-right:20px;margin-right:20px}
 }
+/* 3D-сцена */
+.stage3d{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0E0E10;aspect-ratio:16/9}
+.stage3d iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.stage3d-hint{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:14px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--cream-2)}
+.stage3d-hint a{color:var(--brass);transition:opacity .25s}
+.stage3d-hint a:hover{opacity:.75}
+.air{stroke-dasharray:5 11;animation:airdash 2.6s linear infinite}
+@keyframes airdash{to{stroke-dashoffset:-160}}
+@media(max-width:900px){.stage3d{aspect-ratio:4/3}}
 </style>
 </head>
 <body>
@@ -379,6 +388,7 @@ footer{padding:84px 0 40px}
       <a href="#interior">Внутри</a>
       <a href="#config">Конфигуратор</a>
       <a href="#flat">Разбор</a>
+      <a href="#3d">3D</a>
       <a href="#eng">Инженерия</a>
       <a href="#tools">Инструменты</a>
     </div>
@@ -625,55 +635,95 @@ footer{padding:84px 0 40px}
     <div class="flat-wrap reveal">
       <div class="flat-stage">
         <svg id="flatSvg" viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg">
-          <rect x="80" y="30" width="740" height="500" rx="8" fill="#DED2BC" stroke="#2A2A2A" stroke-width="2.5"/>
-          <rect x="96" y="46" width="708" height="110" rx="5" fill="#D2C4AB" stroke="#2A2A2A" stroke-width="1.2"/>
-          <text x="112" y="72" fill="#5A3A2E" font-family="Manrope,sans-serif" font-size="13" letter-spacing="3" font-weight="700">A · ТЕХНИЧЕСКИЙ МОДУЛЬ</text>
-          <g stroke="#8A6E4E" stroke-width="8" fill="none" stroke-linecap="round">
-            <path d="M170 120 H330"/><path d="M330 120 H470"/><path d="M470 120 H640"/>
+          <g font-family="Manrope,sans-serif" font-size="9" letter-spacing="1.5" fill="#5A3A2E" text-anchor="middle">
+            <line x1="80" y1="16" x2="820" y2="16" stroke="#8A6E4E" stroke-width="1"/>
+            <line x1="80" y1="10" x2="80" y2="22" stroke="#8A6E4E" stroke-width="1"/>
+            <line x1="820" y1="10" x2="820" y2="22" stroke="#8A6E4E" stroke-width="1"/>
+            <text x="450" y="9">1250</text>
+            <line x1="56" y1="30" x2="56" y2="530" stroke="#8A6E4E" stroke-width="1"/>
+            <line x1="50" y1="30" x2="62" y2="30" stroke="#8A6E4E" stroke-width="1"/>
+            <line x1="50" y1="530" x2="62" y2="530" stroke="#8A6E4E" stroke-width="1"/>
+            <text x="44" y="284" transform="rotate(-90 44 280)">2060</text>
+            <line x1="96" y1="544" x2="276" y2="544" stroke="#8A6E4E" stroke-width="1"/>
+            <line x1="292" y1="544" x2="804" y2="544" stroke="#8A6E4E" stroke-width="1"/>
+            <text x="186" y="557">400</text>
+            <text x="548" y="557">796</text>
           </g>
+          <rect x="80" y="30" width="740" height="500" rx="8" fill="#DED2BC" stroke="#2A2A2A" stroke-width="2.5"/>
+          <rect x="90" y="40" width="720" height="470" rx="6" fill="none" stroke="#B08A4F" stroke-width="1.4" stroke-dasharray="4 6" opacity=".7"/>
+          <rect x="96" y="46" width="708" height="110" rx="5" fill="#D2C4AB" stroke="#2A2A2A" stroke-width="1.2"/>
+          <text x="112" y="70" fill="#5A3A2E" font-family="Manrope,sans-serif" font-size="13" letter-spacing="3" font-weight="700">A · ТЕХМОДУЛЬ 300</text>
+          <text x="470" y="94" fill="#8A6E4E" font-family="Manrope,sans-serif" font-size="8.5" letter-spacing="1.2">ФИЛЬТР → ВЕНТИЛЯТОР → ГЛУШИТЕЛЬ → ПЛЕНУМ → РЕШЁТКА</text>
+          <path class="air" d="M310 176 V100 Q310 82 292 82 H188 Q170 82 170 100 V104" fill="none" stroke="#B08A4F" stroke-width="2"/>
+          <path class="air" d="M170 120 H788" fill="none" stroke="#B08A4F" stroke-width="2"/>
+          <path d="M788 113 L800 120 L788 127 Z" fill="#B08A4F"/>
+          <path d="M154 120 H780" stroke="#8A6E4E" stroke-width="8" fill="none" stroke-linecap="round"/>
           <circle cx="170" cy="120" r="16" fill="#DED2BC" stroke="#2A2A2A" stroke-width="2.5"/>
           <circle cx="380" cy="120" r="16" fill="#DED2BC" stroke="#2A2A2A" stroke-width="2.5"/>
-          <rect x="500" y="100" width="80" height="40" rx="5" fill="#DED2BC" stroke="#2A2A2A" stroke-width="2.5"/>
+          <rect x="490" y="100" width="110" height="40" rx="5" fill="#DED2BC" stroke="#2A2A2A" stroke-width="2.5"/>
+          <rect x="636" y="98" width="76" height="44" rx="5" fill="#DED2BC" stroke="#2A2A2A" stroke-width="2.5"/>
+          <rect x="724" y="98" width="56" height="44" rx="4" fill="#DED2BC" stroke="#2A2A2A" stroke-width="2.5"/>
+          <g stroke="#8A6E4E" stroke-width="2">
+            <line x1="736" y1="104" x2="736" y2="136"/><line x1="748" y1="104" x2="748" y2="136"/>
+            <line x1="760" y1="104" x2="760" y2="136"/><line x1="772" y1="104" x2="772" y2="136"/>
+          </g>
           <rect x="96" y="176" width="180" height="338" rx="5" fill="#D2C4AB" stroke="#2A2A2A" stroke-width="1.2"/>
-          <text x="110" y="202" fill="#5A3A2E" font-family="Manrope,sans-serif" font-size="13" letter-spacing="3" font-weight="700">B · КОЛОННА</text>
-          <rect x="112" y="220" width="148" height="60" rx="4" fill="#C7B698" stroke="#5A3A2E" stroke-width="2"/>
-          <rect x="112" y="296" width="148" height="60" rx="4" fill="#C7B698" stroke="#2A2A2A" stroke-width="1.2"/>
-          <rect x="112" y="372" width="148" height="60" rx="4" fill="#C7B698" stroke="#2A2A2A" stroke-width="1.2"/>
-          <rect x="112" y="448" width="148" height="50" rx="4" fill="#C7B698" stroke="#2A2A2A" stroke-width="1.2"/>
+          <text x="110" y="200" fill="#5A3A2E" font-family="Manrope,sans-serif" font-size="13" letter-spacing="3" font-weight="700">B · КОЛОННА 400</text>
+          <g font-family="Manrope,sans-serif" font-size="8.5" letter-spacing=".8" fill="#5A3A2E" font-weight="600">
+            <rect x="112" y="210" width="148" height="48" rx="4" fill="#C7B698" stroke="#2A2A2A" stroke-width="1.2"/>
+            <text x="156" y="237">РЕЗЕРВ. БАК 20 Л</text>
+            <rect x="112" y="266" width="148" height="52" rx="4" fill="#C7B698" stroke="#2A2A2A" stroke-width="1.2"/>
+            <text x="156" y="295">GGS · AC10 · ИБП</text>
+            <rect x="112" y="326" width="148" height="48" rx="4" fill="#C7B698" stroke="#2A2A2A" stroke-width="1.2"/>
+            <text x="156" y="353">УВЛАЖНИТЕЛЬ 5 Л</text>
+            <rect x="112" y="382" width="148" height="48" rx="4" fill="#C7B698" stroke="#2A2A2A" stroke-width="1.2"/>
+            <text x="156" y="409">НАСОС · ДОЗАТОРЫ</text>
+            <rect x="112" y="438" width="148" height="62" rx="4" fill="#C7B698" stroke="#2A2A2A" stroke-width="1.2"/>
+            <text x="156" y="472">БАК 20 Л · КРАН</text>
+          </g>
           <rect x="292" y="176" width="512" height="338" rx="5" fill="#D2C4AB" stroke="#2A2A2A" stroke-width="1.2"/>
-          <text x="306" y="202" fill="#5A3A2E" font-family="Manrope,sans-serif" font-size="13" letter-spacing="3" font-weight="700">C · КАМЕРА РОСТА</text>
-          <rect x="360" y="220" width="200" height="26" rx="4" fill="#DED2BC" stroke="#2A2A2A" stroke-width="2.5"/>
-          <g stroke="#B08A4F" stroke-width="2.2" opacity=".8">
-            <line x1="380" y1="252" x2="360" y2="300"/><line x1="420" y1="252" x2="400" y2="300"/>
-            <line x1="460" y1="252" x2="440" y2="300"/><line x1="500" y1="252" x2="520" y2="300"/>
-            <line x1="540" y1="252" x2="560" y2="300"/>
+          <text x="306" y="200" fill="#5A3A2E" font-family="Manrope,sans-serif" font-size="13" letter-spacing="3" font-weight="700">C · КАМЕРА РОСТА 796</text>
+          <g stroke="#B08A4F" stroke-width="1.6">
+            <line x1="440" y1="186" x2="440" y2="214"/><line x1="520" y1="186" x2="520" y2="214"/><line x1="600" y1="186" x2="600" y2="214"/>
           </g>
-          <g stroke="#5A3A2E" stroke-width="2.2">
-            <line x1="340" y1="360" x2="760" y2="360"/><line x1="340" y1="390" x2="760" y2="390"/>
-            <line x1="340" y1="420" x2="760" y2="420"/>
-          </g>
+          <rect x="420" y="214" width="200" height="24" rx="4" fill="#DED2BC" stroke="#2A2A2A" stroke-width="2.5"/>
           <g fill="#6B8556" opacity=".92">
-            <circle cx="420" cy="345" r="34"/><circle cx="600" cy="345" r="34"/>
+            <circle cx="430" cy="318" r="32"/><circle cx="610" cy="318" r="32"/>
+          </g>
+          <g stroke="#5A3A2E" stroke-width="1.8">
+            <line x1="340" y1="330" x2="760" y2="330"/><line x1="340" y1="355" x2="760" y2="355"/>
+            <line x1="340" y1="380" x2="760" y2="380"/><line x1="340" y1="405" x2="760" y2="405"/>
           </g>
           <g fill="#B7A184" stroke="#2A2A2A" stroke-width="1.2">
-            <rect x="392" y="460" width="56" height="42" rx="4"/><rect x="572" y="460" width="56" height="42" rx="4"/>
+            <rect x="392" y="432" width="80" height="48" rx="4"/><rect x="572" y="432" width="80" height="48" rx="4"/>
           </g>
+          <rect x="330" y="480" width="440" height="26" rx="4" fill="#C7B698" stroke="#5A3A2E" stroke-width="2"/>
+          <text x="550" y="497" fill="#5A3A2E" font-family="Manrope,sans-serif" font-size="8.5" letter-spacing="1" text-anchor="middle">EVA-ПОДДОН · БОРТ 60 · ДАТЧИК ПРОТОЧКИ</text>
+          <line x1="336" y1="510" x2="764" y2="510" stroke="#2A2A2A" stroke-width="2.5"/>
+          <text x="550" y="524" fill="#5A3A2E" font-family="Manrope,sans-serif" font-size="8.5" letter-spacing="1" text-anchor="middle">ВЫКАТНАЯ ПЛАТФОРМА · TANDEM 500</text>
+          <rect x="830" y="60" width="8" height="440" fill="#C7B698" stroke="#2A2A2A" stroke-width="1.2"/>
+          <rect x="838" y="60" width="3" height="440" fill="#5A3A2E"/>
+          <rect x="841" y="60" width="10" height="440" fill="#D2C4AB" stroke="#2A2A2A" stroke-width="1.2"/>
+          <text x="839" y="52" fill="#5A3A2E" font-family="Manrope,sans-serif" font-size="8.5" letter-spacing="1" text-anchor="middle">41 ММ</text>
+          <text x="868" y="284" transform="rotate(90 868 280)" fill="#5A3A2E" font-family="Manrope,sans-serif" font-size="8.5" letter-spacing="1.5" text-anchor="middle">ДВЕРЬ-СЭНДВИЧ · УПЛОТНИТЕЛЬ</text>
           <g class="hs" font-family="Unbounded,sans-serif" font-size="14" font-weight="800" text-anchor="middle">
             <circle cx="170" cy="120" r="21" fill="#5A3A2E" data-node="filter"/><text x="170" y="126" fill="#F1EBE0" pointer-events="none">1</text>
             <circle cx="380" cy="120" r="21" fill="#5A3A2E" data-node="fan"/><text x="380" y="126" fill="#F1EBE0" pointer-events="none">2</text>
-            <circle cx="540" cy="120" r="21" fill="#5A3A2E" data-node="silencer"/><text x="540" y="126" fill="#F1EBE0" pointer-events="none">3</text>
-            <circle cx="186" cy="250" r="21" fill="#5A3A2E" data-node="tank"/><text x="186" y="256" fill="#F1EBE0" pointer-events="none">4</text>
-            <circle cx="186" cy="402" r="21" fill="#5A3A2E" data-node="panel"/><text x="186" y="408" fill="#F1EBE0" pointer-events="none">5</text>
-            <circle cx="460" cy="233" r="21" fill="#5A3A2E" data-node="light"/><text x="460" y="239" fill="#F1EBE0" pointer-events="none">6</text>
-            <circle cx="550" cy="375" r="21" fill="#5A3A2E" data-node="scrog"/><text x="550" y="381" fill="#F1EBE0" pointer-events="none">7</text>
-            <circle cx="690" cy="250" r="21" fill="#5A3A2E" data-node="door"/><text x="690" y="256" fill="#F1EBE0" pointer-events="none">8</text>
+            <circle cx="545" cy="120" r="21" fill="#5A3A2E" data-node="silencer"/><text x="545" y="126" fill="#F1EBE0" pointer-events="none">3</text>
+            <circle cx="132" cy="469" r="21" fill="#5A3A2E" data-node="tank"/><text x="132" y="475" fill="#F1EBE0" pointer-events="none">4</text>
+            <circle cx="132" cy="292" r="21" fill="#5A3A2E" data-node="panel"/><text x="132" y="298" fill="#F1EBE0" pointer-events="none">5</text>
+            <circle cx="520" cy="226" r="21" fill="#5A3A2E" data-node="light"/><text x="520" y="232" fill="#F1EBE0" pointer-events="none">6</text>
+            <circle cx="550" cy="368" r="21" fill="#5A3A2E" data-node="scrog"/><text x="550" y="374" fill="#F1EBE0" pointer-events="none">7</text>
+            <circle cx="839" cy="280" r="21" fill="#5A3A2E" data-node="door"/><text x="839" y="286" fill="#F1EBE0" pointer-events="none">8</text>
           </g>
         </svg>
       </div>
-      <div class="flat-info" id="flatInfo">
-        <div class="fi-num">8 УЗЛОВ</div>
-        <h4>Нажмите на номер</h4>
-        <p>Каждый узел — реальный элемент конструкции: от угольного фильтра в тех-модуле до акустического сэндвича двери.</p>
+      <div class="flat-info">
+        <div id="flatText">
+          <div class="fi-num">8 УЗЛОВ</div>
+          <h4>Нажмите на номер</h4>
+          <p>Каждый узел — реальный элемент конструкции: от угольного фильтра в тех-модуле до акустического сэндвича двери.</p>
+        </div>
         <div class="flat-legend" id="flatLegend">
           <button data-node="filter">1 Фильтр</button>
           <button data-node="fan">2 Вентилятор</button>
@@ -688,6 +738,26 @@ footer{padding:84px 0 40px}
     </div>
   </div>
 </section>
+
+<section id="3d">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="tag">3D · Модель</div>
+        <h2>Крутите. Приближайте. Тыкайте.</h2>
+      </div>
+      <p>85 деталей проектной сборки в трёх измерениях. Тяните — вращение, щипок или колесо — зум, тап по детали — карточка узла.</p>
+    </div>
+    <div class="stage3d reveal">
+      <iframe src="GrowBox_v31_3D.html" title="3D-модель Secret Box" loading="lazy" allowfullscreen></iframe>
+    </div>
+    <div class="stage3d-hint">
+      <span>Тяните — вращение · щипок / колесо — зум · тап по детали — карточка</span>
+      <a href="GrowBox_v31_3D.html" target="_blank" rel="noopener">Открыть 3D на весь экран →</a>
+    </div>
+  </div>
+</section>
+
 
 <section id="eng">
   <div class="wrap">
@@ -717,14 +787,14 @@ footer{padding:84px 0 40px}
       <p>Для тех, кто считает и разбирается сам: рабочие инструменты в браузере и короткие статьи о выращивании внутри Secret Box.</p>
     </div>
     <div class="tiles">
-      <a class="tile reveal" href="#"><div class="t-num">CALC-01</div><h4>Вентиляция</h4><p>Расход, скорость по сечению, шум тракта, рабочая точка вентилятора.</p><svg class="arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
-      <a class="tile reveal" href="#"><div class="t-num">CALC-02</div><h4>Свет</h4><p>PPFD и DLI под площадь канопы, рабочее расстояние до светильника.</p><svg class="arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
-      <a class="tile reveal" href="#"><div class="t-num">CALC-03</div><h4>Тепло</h4><p>Тепловой баланс камеры, перегрев, автодимм, летний сценарий.</p><svg class="arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
-      <a class="tile reveal" href="#"><div class="t-num">CALC-04</div><h4>Нагрузка на пол</h4><p>Масса собранного шкафа, нагрузка на перекрытие, размещение в квартире.</p><svg class="arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
-      <a class="tile reveal" href="#"><div class="t-num">WIKI-01</div><h4>SCROG</h4><p>Ровная канопа и V-рамка: как получить максимум с двух растений.</p><svg class="arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
-      <a class="tile reveal" href="#"><div class="t-num">WIKI-02</div><h4>VPD и климат</h4><p>Почему датчик в зоне канопы важнее термометра на стенке шкафа.</p><svg class="arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
-      <a class="tile reveal" href="#"><div class="t-num">WIKI-03</div><h4>Фотопериод</h4><p>Свет, UV и IR: расписание, которое не сбивается даже ночью.</p><svg class="arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
-      <a class="tile reveal" href="#"><div class="t-num">WIKI-04</div><h4>Полив и питание</h4><p>VWC, EC, автополив и дозирование: как не перелить и не перекормить.</p><svg class="arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
+      <a class="tile reveal" href="calculators.html#calc-vent"><div class="t-num">CALC-01</div><h4>Вентиляция</h4><p>Расход, скорость по сечению, шум тракта, рабочая точка вентилятора.</p><svg class="arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
+      <a class="tile reveal" href="calculators.html#calc-light"><div class="t-num">CALC-02</div><h4>Свет</h4><p>PPFD и DLI под площадь канопы, рабочее расстояние до светильника.</p><svg class="arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
+      <a class="tile reveal" href="calculators.html#calc-heat"><div class="t-num">CALC-03</div><h4>Тепло</h4><p>Тепловой баланс камеры, перегрев, автодимм, летний сценарий.</p><svg class="arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
+      <a class="tile reveal" href="calculators.html#calc-floor"><div class="t-num">CALC-04</div><h4>Нагрузка на пол</h4><p>Масса собранного шкафа, нагрузка на перекрытие, размещение в квартире.</p><svg class="arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
+      <a class="tile reveal" href="growpedia.html#art-scrog"><div class="t-num">WIKI-01</div><h4>SCROG</h4><p>Ровная канопа и V-рамка: как получить максимум с двух растений.</p><svg class="arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
+      <a class="tile reveal" href="growpedia.html#art-vpd"><div class="t-num">WIKI-02</div><h4>VPD и климат</h4><p>Почему датчик в зоне канопы важнее термометра на стенке шкафа.</p><svg class="arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
+      <a class="tile reveal" href="growpedia.html#art-photo"><div class="t-num">WIKI-03</div><h4>Фотопериод</h4><p>Свет, UV и IR: расписание, которое не сбивается даже ночью.</p><svg class="arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
+      <a class="tile reveal" href="growpedia.html#art-water"><div class="t-num">WIKI-04</div><h4>Полив и питание</h4><p>VWC, EC, автополив и дозирование: как не перелить и не перекормить.</p><svg class="arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
     </div>
   </div>
 </section>
@@ -749,12 +819,13 @@ footer{padding:84px 0 40px}
           <a href="#models">Модели</a>
           <a href="#config">Конфигуратор</a>
           <a href="#flat">Разбор</a>
+          <a href="#3d">3D-модель</a>
           <a href="#eng">Инженерия</a>
         </div>
         <div class="foot-col">
           <h5>Знания</h5>
-          <a href="#tools">Калькуляторы</a>
-          <a href="#tools">Гровпедия</a>
+          <a href="calculators.html">Калькуляторы</a>
+          <a href="growpedia.html">Гровпедия</a>
           <a href="#interior">Внутри шкафа</a>
         </div>
         <div class="foot-col">
@@ -823,17 +894,17 @@ var NODES={
   filter:['Угольный фильтр','Запах и примеси удерживаются до вентилятора — контур работает под разрежением, и аромат не выходит за пределы шкафа. Замена угля — сверху, без разборки камеры.'],
   fan:['Вентилятор на виброподвесах','Сердце тракта. Подвешен, а не прикручен к панели: вибрация не превращает стенки шкафа в динамик. Ночью — минимум оборотов.'],
   silencer:['Шумоглушитель и пленум','Двухкамерный глушитель и большой пленум гасят шум потока. Воздух выходит через широкую решётку — без свиста и сквозняка.'],
-  tank:['Бак воды','Встроенный резервуар автополива с автодоливом. Уровень видно с фронта, слив — без шлангов через дверной проём.'],
+  tank:['Баки воды','Два бака по 20 л. Рабочий — выдвижным ящиком снизу: кран, поддон с датчиком протечки, слив без шлангов через проём. Резервный — сверху, с автодоливом 3/4" и поплавком. Полным держим только по графику: это −20 кг к нагрузке на пол.'],
   panel:['Панель управления','Свет, обдув, вентиляция, автополив — с подписями и индикацией. Вся автоматика собрана в одном съёмном узле, сервис — без инструмента.'],
   light:['Свет X SPACE','LED-панель на регулируемых подвесах: высота меняется по мере роста канопы. Плюс боковые светильники и спектральные добавки.'],
   scrog:['Сетка SCROG','Ровная канопа по всей площади: растения раскладываются по сетке и получают свет равномерно. Внизу — решётчатая полка-дренаж.'],
-  door:['Дверь-сэндвич','Многослойная дверь с уплотнителем по периметру: свет, звук и запах не покидают объём. Снаружи — просто красивый фасад без ручек.']
+  door:['Дверь-сэндвич 41 мм','ЛДСП 18 + MLV 3 + минвата 20 с уплотнителем по периметру: свет, звук и запах не находят щель. Дверь легче стены на 15–25% — поэтому материал вложили в неё, а не в стены. Снаружи — просто красивый фасад без ручек.']
 };
 function showNode(key){
   var d=NODES[key];if(!d)return;
   document.querySelectorAll('#flatSvg .hs circle').forEach(function(c){c.classList.toggle('act',c.getAttribute('data-node')===key)});
   document.querySelectorAll('#flatLegend button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-node')===key)});
-  document.getElementById('flatInfo').innerHTML='<div class="fi-num">УЗЕЛ · '+key.toUpperCase()+'</div><h4>'+d[0]+'</h4><p>'+d[1]+'</p>';
+  document.getElementById('flatText').innerHTML='<div class="fi-num">УЗЕЛ · '+key.toUpperCase()+'</div><h4>'+d[0]+'</h4><p>'+d[1]+'</p>';
 }
 var svg=document.getElementById('flatSvg');
 svg.addEventListener('click',function(e){var t=e.target;if(t.getAttribute&&t.getAttribute('data-node'))showNode(t.getAttribute('data-node'))});

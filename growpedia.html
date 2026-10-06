@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Гровпедия — SECRET BOX®</title>
+<meta name="description" content="База знаний Secret Box: SCROG, VPD и климат, фотопериод UV/IR, полив и питание, акустика, вес и перекрытие. Короткие инженерные статьи.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;800;900&family=Manrope:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#141416;--ink-2:#1B1B1E;--ink-3:#232327;
+  --cream:#E8DCC8;--cream-2:#CDBFA6;--paper:#F1EBE0;--brass:#C79A5B;--choco:#5A3A2E;
+  --line:rgba(232,220,200,.14);--line-strong:rgba(232,220,200,.32);
+  --disp:'Unbounded',sans-serif;--body:'Manrope',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+::selection{background:var(--brass);color:var(--ink)}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--cream);font-family:var(--body);font-size:16px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.noise{position:fixed;inset:0;pointer-events:none;z-index:200;opacity:.055;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{width:min(1280px,92vw);margin:0 auto;position:relative;z-index:2}
+.tag{display:inline-flex;align-items:center;gap:10px;font-family:var(--body);font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--brass)}
+.tag::before{content:"";width:36px;height:1px;background:var(--brass)}
+h1,h2,h3{font-family:var(--disp);letter-spacing:-.01em}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:background .35s,border-color .35s;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(20,20,22,.86);backdrop-filter:blur(14px);border-color:var(--line)}
+nav .wrap{display:flex;align-items:center;gap:36px;height:74px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .mark{width:34px;height:34px;border:1.5px solid var(--cream);border-radius:8px;display:grid;place-items:center;font-family:var(--disp);font-weight:900;font-size:15px;transition:transform .4s}
+.brand:hover .mark{transform:rotate(-8deg)}
+.brand b{font-family:var(--disp);font-weight:800;font-size:15px;letter-spacing:.22em}
+.brand sup{font-size:8px;letter-spacing:0;opacity:.7}
+nav .links{display:flex;gap:30px;margin-left:22px}
+nav .links a{font-size:11.5px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--cream-2);position:relative;padding:6px 0;transition:color .25s}
+nav .links a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--brass);transition:width .3s}
+nav .links a:hover,nav .links a.here{color:var(--cream)}
+nav .links a:hover::after,nav .links a.here::after{width:100%}
+.nav-cta{margin-left:auto;display:inline-flex;align-items:center;gap:10px;border:1px solid var(--line-strong);border-radius:100px;padding:11px 22px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;transition:all .3s}
+.nav-cta:hover{background:var(--cream);color:var(--ink);border-color:var(--cream)}
+
+.phead{padding:150px 0 26px}
+.phead h1{font-weight:800;font-size:clamp(38px,6vw,76px);line-height:.98;margin:18px 0 22px}
+.phead p{max-width:640px;color:var(--cream-2);font-size:16.5px;line-height:1.8}
+.phead em{font-style:normal;color:var(--cream);border-bottom:1px solid var(--brass);padding-bottom:1px}
+
+/* фильтры и поиск */
+.toolbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:36px 0 30px}
+.chips{display:flex;gap:9px;flex-wrap:wrap}
+.chip{background:transparent;border:1px solid var(--line-strong);border-radius:100px;padding:9px 17px;
+  font-family:var(--body);font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--cream-2);cursor:pointer;transition:all .25s}
+.chip:hover{color:var(--cream)}
+.chip.on{background:var(--brass);border-color:var(--brass);color:var(--ink)}
+#q{margin-left:auto;min-width:240px;background:var(--ink-2);border:1px solid var(--line);border-radius:100px;color:var(--cream);
+  font-family:var(--body);font-size:14px;padding:11px 20px;outline:none;transition:border-color .25s}
+#q:focus{border-color:var(--brass)}
+
+/* карточки статей */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding-bottom:26px}
+.card{border:1px solid var(--line);border-radius:14px;background:var(--ink-2);padding:30px 32px;display:flex;flex-direction:column;transition:transform .3s,border-color .3s}
+.card:hover{transform:translateY(-5px);border-color:var(--line-strong)}
+.card.hide{display:none}
+.a-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+.a-cat{font-family:var(--disp);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--brass)}
+.a-time{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--cream-2)}
+.card h3{font-weight:700;font-size:19.5px;line-height:1.25;margin-bottom:12px}
+.card .lead{font-size:13.5px;line-height:1.8;color:var(--cream-2);margin-bottom:18px}
+.card details{margin-top:auto;border-top:1px solid var(--line);padding-top:14px}
+.card summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:9px;font-family:var(--disp);font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--brass)}
+.card summary::-webkit-details-marker{display:none}
+.card summary::after{content:"▾";transition:transform .25s}
+.card details[open] summary::after{transform:rotate(180deg)}
+.a-body{padding-top:14px;font-size:14px;line-height:1.85}
+.a-body p{margin-bottom:12px;color:var(--cream)}
+.a-body b{color:var(--cream)}
+.a-body ul{margin:0 0 12px 18px;color:var(--cream)}
+.a-body li{margin-bottom:7px}
+.a-body table{width:100%;border-collapse:collapse;font-size:12.5px;margin:4px 0 14px}
+.a-body th{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--cream-2);text-align:left;padding:7px 6px;border-bottom:1px solid var(--line-strong)}
+.a-body td{padding:8px 6px;border-bottom:1px dashed var(--line)}
+.a-body .x-ref{display:inline-block;margin-top:4px;font-size:12.5px;color:var(--brass);border-bottom:1px solid var(--brass);padding-bottom:1px}
+.empty{display:none;padding:40px 0 60px;color:var(--cream-2)}
+.empty.show{display:block}
+
+footer{border-top:1px solid var(--line);padding:54px 0 40px;margin-top:40px}
+.foot-top{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;margin-bottom:44px}
+.foot-brand{font-family:var(--disp);font-weight:900;font-size:34px;line-height:.95;letter-spacing:.04em}
+.foot-cols{display:flex;gap:70px;flex-wrap:wrap}
+.foot-col h5{font-family:var(--body);font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--brass);margin-bottom:16px}
+.foot-col a{display:block;font-size:13.5px;color:var(--cream-2);margin-bottom:9px;transition:color .25s}
+.foot-col a:hover{color:var(--cream)}
+.foot-bottom{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:22px;font-size:11.5px;letter-spacing:.08em;color:var(--cream-2)}
+
+@media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){nav .links{display:none}}
+@media(max-width:640px){.cards{grid-template-columns:1fr}#q{margin-left:0;width:100%}}
+</style>
+</head>
+<body>
+<div class="noise"></div>
+
+<nav id="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark">S</span><b>SECRET BOX<sup>®</sup></b></a>
+    <div class="links">
+      <a href="index.html#models">Модели</a>
+      <a href="index.html#flat">Разбор</a>
+      <a href="index.html#3d">3D</a>
+      <a href="calculators.html">Калькуляторы</a>
+      <a class="here" href="growpedia.html">Гровпедия</a>
+    </div>
+    <a class="nav-cta" href="index.html#config">Собрать свой</a>
+  </div>
+</nav>
+
+<div class="wrap phead">
+  <div class="tag">База знаний</div>
+  <h1>Гровпедия</h1>
+  <p>Короткие инженерные статьи о выращивании внутри Secret Box: <em>канопа, климат, свет, вода, тишина и вес</em>. Без магии — с цифрами и ссылками на калькуляторы.</p>
+
+  <div class="toolbar">
+    <div class="chips" id="chips">
+      <button class="chip on" data-cat="all">Все</button>
+      <button class="chip" data-cat="tech">Техники</button>
+      <button class="chip" data-cat="climate">Климат</button>
+      <button class="chip" data-cat="light">Свет</button>
+      <button class="chip" data-cat="water">Полив</button>
+      <button class="chip" data-cat="quiet">Тишина</button>
+      <button class="chip" data-cat="build">Конструкция</button>
+    </div>
+    <input id="q" type="search" placeholder="Поиск по статьям…">
+  </div>
+</div>
+
+<div class="wrap cards" id="cards">
+
+  <article class="card" id="art-scrog" data-cat="tech">
+    <div class="a-top"><span class="a-cat">Техники</span><span class="a-time">⏱ 6 мин чтения</span></div>
+    <h3>SCROG и V-рамка: ровная канопа с двух растений</h3>
+    <p class="lead">Почему два растения под сеткой дают больше, чем четыре «на воле», и как V-рамка 700×500 превращает камеру 0,65 м² в сплошной зелёный ковёр.</p>
+    <details>
+      <summary>Читать</summary>
+      <div class="a-body">
+        <p><b>Свет падает сверху — и проигрывает всё, что ниже кромки канопы.</b> Задача SCROG — не «усадить» растения, а уложить их горизонтально до цветения, чтобы бутоны оказались на одном уровне и в одной освещённости.</p>
+        <ul>
+          <li><b>V-рамка 700×500, 4 уровня.</b> Растения раскладываются по сетке уже в веге: каждый побег — в свободную ячейку. К моменту переключения на 12/12 канопа закрывает ~0,65 м².</li>
+          <li><b>Два горшка 15 л, Ø320.</b> Корням хватает объёма на весь цикл, а выкатная платформа на направляющих Tandem 500 позволяет вывести растения из шкафа целиком — для обрезки и осмотра без акробатики.</li>
+          <li><b>Раскладка > количество.</b> Четыре растения в той же площади дают хаос из пересекающихся ярусов: нижние ветки голодные, верхние горят. Два — предсказуемо и обслуживаемо.</li>
+          <li><b>Лоллипоппинг снизу.</b> Всё, что не вышло на уровень сетки к 3-й неделе цветения, — в удаление: оно всё равно не даст товарного бутона, но ест свет и воздух.</li>
+        </ul>
+        <p>Чек-лист укладки: переключили на 12/12 → дали 5–7 дней роста «вверх» → зафиксировали новые побеги по ячейкам → больше не трогали. Всё, что уходит за сетку вверх после 3-й недели, пригибается или вырезается.</p>
+      </div>
+    </details>
+  </article>
+
+  <article class="card" id="art-vpd" data-cat="climate">
+    <div class="a-top"><span class="a-cat">Климат</span><span class="a-time">⏱ 7 мин чтения</span></div>
+    <h3>VPD и климат: датчик в канопе важнее термометра на стенке</h3>
+    <p class="lead">Дефицит давления пара — настоящий регулятор «аппетита» растения. Как его считать, держать и почему «24 °C и 50%» без VPD — пустые цифры.</p>
+    <details>
+      <summary>Читать</summary>
+      <div class="a-body">
+        <p><b>Растение пьёт не потому, что «сухо», а потому, что разница давления пара между листом и воздухом тянет воду через устьица.</b> Эта разница и есть VPD. Слишком низкий — вода не идёт, на листьях висит сырость и плесень. Слишком высокий — устьица закрываются, растение не пьёт и не ест, даже если субстрат мокрый.</p>
+        <table>
+          <tr><th>Стадия</th><th>VPD, кПа</th><th>Риск при отклонении</th></tr>
+          <tr><td>Клоны, рассада</td><td>0,4–0,8</td><td>засыхание / гнили</td></tr>
+          <tr><td>Вегетация</td><td>0,8–1,2</td><td>стресс / плесень</td></tr>
+          <tr><td>Цветение</td><td>1,2–1,6</td><td>ломкие стебли / ботритис</td></tr>
+        </table>
+        <ul>
+          <li><b>SensorPro — в зоне канопы.</b> CO₂+PAR+T+RH+VPD измеряются там, где растение, а не у потолка: градиент влажности между ярусами доходит до 10–15%.</li>
+          <li><b>Увлажнитель SF 5 л в секрет-боксе</b>, патрубок Ø40 в камеру — испарение идёт вне зоны листа, без луж на канопе.</li>
+          <li><b>Триггеры, а не расписание.</b> GGS держит VPD связкой «влага ↔ вытяжка ↔ обдув»: датчик увидел отклонение — цепочка отработала за минуты, а не «по графику раз в час».</li>
+          <li><b>Температура листа ≠ температура воздуха.</b> В сильном свете лист холоднее на 1–2 К за счёт транспирации — считайте VPD по нему.</li>
+        </ul>
+        <a class="x-ref" href="calculators.html#calc-vpd">Открыть VPD-калькулятор →</a>
+      </div>
+    </details>
+  </article>
+
+  <article class="card" id="art-photo" data-cat="light">
+    <div class="a-top"><span class="a-cat">Свет</span><span class="a-time">⏱ 5 мин чтения</span></div>
+    <h3>Фотопериод, UV и IR: расписание, которое не сбивается</h3>
+    <p class="lead">Зачем нужны 730 нм на рассвете и 365 нм в конце цветения — и как сделать так, чтобы свет упал только по вашей команде.</p>
+    <details>
+      <summary>Читать</summary>
+      <div class="a-body">
+        <ul>
+          <li><b>IR 730 нм — «кнопка заката».</b> Фитохром переключается из Pfr в Pr за минуты: 15 минут инфракрасного света на рассвете и закате имитируют природный сдвиг спектра и сглаживают стресс переключения фотопериода.</li>
+          <li><b>UV-A 365 нм — только последние 2–3 недели цветения.</b> Растение защищается от «солнца» вторичными метаболитами — именно это нам и нужно. В веге UV не нужен, на рассаде — вреден.</li>
+          <li><b>SE3000 + UV30 + IR16 на роликовых подвесах</b>, ход 300 мм: светильник поднимается по мере роста канопы, а не «растёт вместе с ней» на фиксированной высоте.</li>
+          <li><b>Утечка света = сбитый цикл.</b> В Secret Box свет не выходит наружу: матовые фасады и уплотнитель по периметру. Но проверьте трещину притвора щелью — ночная полоска света в комнату сбивает фотопериод надёжнее любой ошибки в настройках.</li>
+          <li><b>Тишина и стабильность — одна задача.</b> Расписание держится, потому что питание на ИБП, контроллер под watchdog, а гашение света при аварии идёт через РКН первым — свет = 75% тепла, и он гаснет раньше электроники.</li>
+        </ul>
+        <p>Камера наблюдения в камере роста — только без ИК-подсветки: ИК-вспышка ночью для растения равна включённому свету.</p>
+        <a class="x-ref" href="calculators.html#calc-light">Открыть калькулятор света и DLI →</a>
+      </div>
+    </details>
+  </article>
+
+  <article class="card" id="art-water" data-cat="water">
+    <div class="a-top"><span class="a-cat">Полив</span><span class="a-time">⏱ 7 мин чтения</span></div>
+    <h3>Полив и питание: как не перелить и не перекормить</h3>
+    <p class="lead">VWC, EC и два бака по 20 литров: почему мы меряем каждый горшок отдельно и почему pH-дозирование — сервисный контур, а не «умная кнопка».</p>
+    <details>
+      <summary>Читать</summary>
+      <div class="a-body">
+        <ul>
+          <li><b>Soil Sensor Pro — по одному на горшок, без усреднения.</b> Два растения в одном шкафу пьют по-разному: средняя цифра «между двумя горшками» не существует. VWC (влага) + EC (соли) + T (температура субстрата) — три параметра, по которым принимается решение.</li>
+          <li><b>Полив по влажности, а не по таймеру.</b> Сигнал — нижняя граница VWC по фазе; доза — до верхней. Ночью полив не идёт: холодный мокрый субстрат + закрытая канопа = прямой путь к гнилям.</li>
+          <li><b>Рабочий бак 20 л с краном и поддоном-датчиком протечки</b> выкатывается как ящик. Резервный бак 20 л сверху с поплавком 3/4" — автодолив, но держите его полным только по графику: это −20 кг к нагрузке на пол.</li>
+          <li><b>Перистальтика вместо «фирменных» дозаторов.</b> Три помпы + pH как отдельный сервисный контур: проверить, промыть, заменить — без разбора шкафа и без привязки к экосистеме.</li>
+          <li><b>EC растёт быстрее, чем сохнет.</b> Доливайте водой, а не раствором: растение ест неравномерно, и соли остаются. Разница EC между поливом и дренажом — ваш главный индикатор перекорма.</li>
+        </ul>
+        <p>И пять точек протечки с электроклапаном воды НЗ: при аварии вода отсекается первой, деградация любой системы — всегда в сторону выключения.</p>
+      </div>
+    </details>
+  </article>
+
+  <article class="card" id="art-quiet" data-cat="quiet">
+    <div class="a-top"><span class="a-cat">Тишина</span><span class="a-time">⏱ 8 мин чтения</span></div>
+    <h3>Акустика: тише — не значит толще</h3>
+    <p class="lead">Почему шкала STC врёт для гроубокса, зачем в тракте глушитель с пленумом и почему главный враг тишины — не вентилятор, а щель в притворе.</p>
+    <details>
+      <summary>Читать</summary>
+      <div class="a-body">
+        <ul>
+          <li><b>Шкала STC считает 125–4000 Гц, а гул живёт на 50–120 Гц.</b> На 100 Гц длина волны — 3,4 м: преграда в 40 мм для неё «невидима». Толстить стены бессмысленно — это классическая ошибка «тихих» шкафов.</li>
+          <li><b>Тракт гасит −34 дБ: фильтр 8 + глушитель 18 + пленум 8.</b> Источник 48,6 дБ(А) → на решётке 14,6. Затухания больше, чем нужно — значит, тишину решают щели, а не глушитель.</li>
+          <li><b>Приоритеты вложений:</b> уплотнение дверей → герметизация обходных путей (розетки, колодцы, вводы) → вибролента → уплотнение стыков → и только потом толщина сэндвича.</li>
+          <li><b>Развязка — лучший дБ/рубль, но хрупкая.</b> Вентилятор на виброподвесах, труба без жёстких косынок. Один винт «для надёжности» между виброзвеном и корпусом обнуляет всю работу.</li>
+          <li><b>Дверь легче стены на 15–25% — это слабейшее звено.</b> Поэтому дверь-сэндвич 41 мм (ЛДСП 18 + MLV 3 + минвата 20) с уплотнителем по периметру: свет, звук и запах не находят щель.</li>
+        </ul>
+        <p>Пять обходных путей звука в вентилируемом корпусе: дверные зазоры, розетки спиной к спине, сквозной колодец, общий пленум, жёсткий воздуховод. В Secret Box все пять закрыты по проекту — и все пять проверяются на пусконаладке.</p>
+      </div>
+    </details>
+  </article>
+
+  <article class="card" id="art-floor" data-cat="build">
+    <div class="a-top"><span class="a-cat">Конструкция</span><span class="a-time">⏱ 5 мин чтения</span></div>
+    <h3>Вес и перекрытие: 358 кг в спальне</h3>
+    <p class="lead">Главный риск проекта — не климат и не запах, а квадратный метр пола. Что делать до закупок и почему цоколь — не декор.</p>
+    <details>
+      <summary>Читать</summary>
+      <div class="a-body">
+        <ul>
+          <li><b>Считаем честно:</b> панели и фурнитура 208,7 + вода 40 + субстрат 45 + оборудование 64 = <b>358 кг</b>. На пятно 1250×741 мм это <b>386 кг/м² — в 2,6 раза выше нормы 150 кгс/м²</b> жилого перекрытия.</li>
+          <li><b>Где ставить:</b> только у несущей стены. Никогда на балконе или лоджии (210 кгс/м² плюс ветровая динамика), никогда на деревянных балках.</li>
+          <li><b>Утопленный цоколь 55 мм замкнутым контуром</b> разносит вес по площади. На четырёх ножках остаются четыре точки по ~89 кг (≈ 315 кПа на опору) — это продавливает напольное покрытие и доходит до плиты точечной нагрузкой.</li>
+          <li><b>Разнесите вес понизу</b> и не держите резервный бак полным: −20 кг «бесплатно», а по нагрузке — почти 22 кг/м².</li>
+          <li><b>Решение по полу — до любых закупок.</b> Если сомневаетесь — техник-строитель с осмотром перекрытия стоит дешевле любого ремонта соседей снизу.</li>
+        </ul>
+        <a class="x-ref" href="calculators.html#calc-floor">Открыть калькулятор нагрузки на пол →</a>
+      </div>
+    </details>
+  </article>
+
+</div>
+
+<div class="wrap empty" id="empty">Статьи не найдены. Попробуйте другой запрос или категорию.</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">SECRET<br>BOX®</div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h5>Продукт</h5>
+          <a href="index.html#models">Модели</a>
+          <a href="index.html#config">Конфигуратор</a>
+          <a href="index.html#flat">Разбор</a>
+          <a href="index.html#3d">3D-модель</a>
+        </div>
+        <div class="foot-col">
+          <h5>Знания</h5>
+          <a href="calculators.html">Калькуляторы</a>
+          <a href="growpedia.html">Гровпедия</a>
+          <a href="index.html#eng">Инженерия</a>
+        </div>
+        <div class="foot-col">
+          <h5>Контакты</h5>
+          <a href="#">Москва · сборка под ключ</a>
+          <a href="#">Запросить расчёт</a>
+          <a href="#">Стать дилером</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <div>© 2026 Secret Box® · Все права защищены</div>
+      <div>Сделано с уважением к тишине</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+var nav=document.getElementById('nav');
+addEventListener('scroll',function(){nav.classList.toggle('scrolled',scrollY>24)},{passive:true});
+
+var cards=Array.prototype.slice.call(document.querySelectorAll('#cards .card'));
+var cat='all',qs='';
+function applyFilter(){
+  var shown=0;
+  cards.forEach(function(c){
+    var okCat=(cat==='all'||c.getAttribute('data-cat')===cat);
+    var okQ=!qs||c.textContent.toLowerCase().indexOf(qs)>=0;
+    var ok=okCat&&okQ;
+    c.classList.toggle('hide',!ok);
+    if(ok)shown++;
+  });
+  document.getElementById('empty').classList.toggle('show',shown===0);
+}
+document.getElementById('chips').addEventListener('click',function(e){
+  var b=e.target.closest?e.target.closest('.chip'):null;
+  if(!b)return;
+  cat=b.getAttribute('data-cat');
+  this.querySelectorAll('.chip').forEach(function(x){x.classList.toggle('on',x===b)});
+  applyFilter();
+});
+document.getElementById('q').addEventListener('input',function(){qs=this.value.trim().toLowerCase();applyFilter()});
+</script>
+</body>
+</html>
