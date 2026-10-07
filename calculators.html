@@ -642,5 +642,23 @@ F_IDS.forEach(function(id){var el=document.getElementById(id);if(el)el.addEventL
 calcVent();calcLight();calcVpd();calcHeat();calcFloor();
 </script>
 <script src="assets/site/platform-shell.js"></script>
-</body>
+<script id="secretbox:calculator-sync">
+(function(){
+ if(!window.SECRETBOX)return;
+ function apply(){
+  const s=SECRETBOX.load(),g=SECRETBOX.geometry(s),m=SECRETBOX.mass(s);
+  const vals={'f-p':Math.max(0,m-20-45),'f-w':s.upg.reserve?40:20,'f-s':45,'f-g':Math.max(0,m-(s.mods.a?45:0)-(s.mods.b?85:0)-(s.mods.c?143.7*s.cWidth/796:0)-20-45)};
+  Object.keys(vals).forEach(id=>{const e=document.getElementById(id);if(e)e.value=vals[id]});
+  const fw=document.getElementById('f-wm'),fd=document.getElementById('f-dm');
+  if(fw)fw.value=(g.width/10).toFixed(1);
+  if(fd)fd.value=(g.depth/10).toFixed(1);
+  if(typeof calcFloor==='function')calcFloor();
+ }
+ const bar=document.createElement('div');bar.style.cssText='position:relative;margin:10px auto 0;width:min(1280px,92vw);padding:12px 16px;border:1px solid rgba(199,154,91,.35);border-radius:10px;background:rgba(199,154,91,.06);color:#cdbfa6;font:12px/1.5 Manrope,sans-serif;z-index:3';
+ bar.innerHTML='<b style="color:#c79a5b">LIVE CONFIG</b> · Нагрузка берёт массу и габариты из текущего Сборщика. <button id="sbApplyCalc" style="float:right;border:1px solid #c79a5b;background:transparent;color:#e8dcc8;border-radius:999px;padding:5px 10px;cursor:pointer">Применить</button>';
+ document.body.insertBefore(bar,document.querySelector('.chain')||document.body.firstChild);
+ document.getElementById('sbApplyCalc').onclick=apply;apply();
+ SECRETBOX.subscribe(apply);
+})();
+</script></body>
 </html>
