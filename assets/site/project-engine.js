@@ -34,11 +34,32 @@ function build(config){
  const total=rows.reduce((s,x)=>s+x.qty*x.price,0), mass=rows.reduce((s,x)=>s+x.qty*x.mass,0);
  return {layout:L,rows,totalPrice:Math.round(total/500)*500,totalMass:+mass.toFixed(1),componentCount:rows.reduce((s,x)=>s+x.qty,0)};
 }
+function projectId(){return 'SB-'+new Date().toISOString().replace(/[-:TZ.]/g,'').slice(0,14)+'-'+Math.random().toString(36).slice(2,6).toUpperCase()}
+function create(config,meta){
+ const p=build(config), now=new Date().toISOString();
+ return {schema:'SECRETBOX-PROJECT/1.0',id:(meta&&meta.id)||projectId(),name:(meta&&meta.name)||'SECRET BOX Custom',createdAt:(meta&&meta.createdAt)||now,updatedAt:now,config:JSON.parse(JSON.stringify(config)),project:p};
+}
+function save(config,meta){
+ const p=create(config,meta), key='secretbox.project.'+p.id;
+ localStorage.setItem(key,JSON.stringify(p)); localStorage.setItem('secretbox.project.current',p.id); return p;
+}
+function load(id){
+ const key=id||localStorage.getItem('secretbox.project.current');
+ try{return key?JSON.parse(localStorage.getItem('secretbox.project.'+key)||'null'):null}catch(e){return null}
+}
+function list(){
+ const out=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.indexOf('secretbox.project.')===0&&k!=='secretbox.project.current'){try{const p=JSON.parse(localStorage.getItem(k));if(p)out.push({id:p.id,name:p.name,updatedAt:p.updatedAt})}catch(e){}}}return out.sort((a,b)=>String(b.updatedAt).localeCompare(String(a.updatedAt)));
+}
+function exportJSON(p){return JSON.stringify(p,null,2)}
+function download(name,textValue,type){
+ const blob=new Blob([textValue],{type:type||'text/plain;charset=utf-8'}),a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),800);
+}
 function exportText(p){
  const lines=['SECRET BOX CUSTOM — BOM','Размер: '+p.layout.outer.W+' × '+p.layout.outer.D+' × '+p.layout.outer.H+' мм',''];
  p.rows.filter(x=>x.qty>0).forEach(x=>lines.push([x.category,x.name,x.qty,x.unit,x.mass+' кг/ед.',x.price+' ₽/ед.'].join(' | ')));
  lines.push('','ИТОГО | '+p.componentCount+' поз. | '+p.totalMass+' кг | '+p.totalPrice+' ₽');
  return lines.join('\n');
 }
-g.SECRETBOX_PROJECT={build,exportText};
+g.SECRETBOX_PROJECT={build,exportText,create,save,load,list,exportJSON,download};
 })(window);
