@@ -545,7 +545,7 @@ document.getElementById('bExport').addEventListener('click', function(){
     state: state,
     camera: {r:camT.r, th:+camT.th.toFixed(3), ph:+camT.ph.toFixed(3), targetY:+target.y.toFixed(3)},
     selected: selected ? selected.userData.part.n : null,
-    box: {w:1250, cWidth:liveCfg.cWidth||796, d:700, h:2000, assembly:[1250,741,2060], mass_kg:358, floor_kgm2:386},
+    box: (window.SECRETBOX_LAYOUT&&SECRETBOX_LAYOUT.derive(window.SECRETBOX.load)?(()=>{var L=SECRETBOX_LAYOUT.derive(SECRETBOX.load()),o=L.outer;return {w:o.W,cWidth:L.zones.grow.w,d:o.D,h:o.H,assembly:[o.W,o.D,o.H],mass_kg:L.metrics.mass,power_w:L.metrics.power,floor_kgm2:+(L.metrics.mass/(o.W*o.D/1e6)).toFixed(1),compatible:L.compatible,checks:L.checks};})():{w:1250,cWidth:796,d:700,h:2000,assembly:[1250,741,2060],mass_kg:358,floor_kgm2:386}),
     product: {model:liveCfg.model||'A', cWidth:liveCfg.cWidth||796, equipment:liveCfg.equipment||{}, upgrades:liveCfg.upg||{}},
     parts: PARTS.length
   };
