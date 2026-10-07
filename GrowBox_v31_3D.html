@@ -59,9 +59,9 @@ canvas:active{cursor:grabbing}
   #info{bottom:auto;top:calc(58px + env(safe-area-inset-top));left:auto;right:12px;width:330px}
   #hint{left:auto;right:12px;top:auto;bottom:14px}
 }
-</style>
+.platform-return{position:fixed;top:14px;left:14px;z-index:10000;display:flex;align-items:center;gap:8px;padding:10px 13px;border:1px solid rgba(230,238,240,.16);border-radius:12px;background:rgba(10,14,16,.78);backdrop-filter:blur(16px);color:#e6eef0;text-decoration:none;font:700 11px/1 Manrope,system-ui,sans-serif;box-shadow:0 12px 35px rgba(0,0,0,.28)}.platform-return:hover{border-color:rgba(201,242,127,.45);color:#c9f27f}@media(max-width:700px){.platform-return{top:9px;left:9px;padding:9px 11px;font-size:10px}}\n</style>
 </head>
-<body>
+<body><a id="platform-return" class="platform-return" href="platform.html">← SECRET BOX PLATFORM</a>
 <div id="app">
   <div id="loader"><div class="ring"></div><div id="loaderTxt">Загрузка 3D-модели…</div></div>
   <canvas id="cv"></canvas>
