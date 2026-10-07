@@ -13,7 +13,7 @@
   ['documentation.html','Документы','docs']
  ];
  const shell=document.createElement('div'); shell.className='sb-shell';
- shell.innerHTML='<div class="sb-brand">SECRET BOX</div><button class="sb-menu" type="button" aria-label="Меню">MENU</button><nav class="sb-links">'+items.map(x=>'<a href="'+x[0]+'" data-key="'+x[2]+'">'+x[1]+'</a>').join('')+'</nav><a class="sb-home" href="platform.html">Открыть платформу</a>';
+ shell.innerHTML='<a class="sb-brand" href="platform.html" aria-label="SECRET BOX"><img src="assets/logo_20261005.jpg" alt="SECRET BOX"></a><button class="sb-menu" type="button" aria-label="Меню">MENU</button><nav class="sb-links">'+items.map(x=>'<a href="'+x[0]+'" data-key="'+x[2]+'">'+x[1]+'</a>').join('')+'</nav><a class="sb-home" href="platform.html">Открыть платформу</a>';
  document.body.appendChild(shell);
  const key=path==='index.html'||path===''?'index':path.includes('3D')?'3d':path.includes('engineering')?'engineering':path.includes('documentation')?'docs':path.replace('.html','').replace('calculators','calc');
  shell.querySelectorAll('[data-key]').forEach(a=>{if(a.dataset.key===key)a.classList.add('sb-active')});
