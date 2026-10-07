@@ -8,7 +8,9 @@
 :root{--bg:#0b0c0e;--panel:#191a1d;--panel2:#232327;--line:#303136;
   --txt:#eee8dd;--dim:#aaa69e;--acc:#c5a46c;--acc2:#e0cc8c}
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--txt);
+html{margin:0;width:100%;height:100%;overflow-x:hidden;overflow-y:scroll;scrollbar-gutter:stable;background:var(--bg);color:var(--txt);
+  font-family:"Roboto Mono",ui-monospace,monospace;-webkit-tap-highlight-color:transparent}
+body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--txt);
   font-family:"Roboto Mono",ui-monospace,monospace;-webkit-tap-highlight-color:transparent}
 #app{position:relative;width:100%;height:100%}
 canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}

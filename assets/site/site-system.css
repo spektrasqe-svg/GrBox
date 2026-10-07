@@ -11,6 +11,8 @@
   --sb-body:"Manrope",system-ui,-apple-system,sans-serif;
   --sb-mono:"Roboto Mono",ui-monospace,SFMono-Regular,monospace;
 }
+/* stable scrollbar gutter: header/centering must not shift between pages */
+html{scrollbar-gutter:stable}
 .sb-platform-page{
   background:var(--sb-bg);
   color:var(--sb-paper);
@@ -19,7 +21,7 @@
 }
 .sb-platform-page a{color:inherit}
 .sb-platform-page ::selection{background:var(--sb-brass);color:#111215}
-.sb-platform-page .wrap{width:min(1240px,calc(100vw - 36px));margin-inline:auto}
+.sb-platform-page .wrap{width:min(1240px,calc(100% - 36px));margin-inline:auto}
 .sb-platform-page h1,.sb-platform-page h2,.sb-platform-page h3,
 .sb-platform-page h4,.sb-platform-page h5{font-family:var(--sb-display);letter-spacing:.015em}
 .sb-platform-page .panel,.sb-platform-page .card,.sb-platform-page .doc,
