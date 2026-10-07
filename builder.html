@@ -71,7 +71,7 @@ const defs=[
 const esc=v=>String(v).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
 const main=document.getElementById('main');
 function field(path,label,value,min,max,unit='мм',stepv=1){let id='f_'+path.replaceAll('.','_');return '<div class="field"><label>'+label+' <span class="unit">'+unit+'</span></label><input id="'+id+'" type="number" value="'+value+'" min="'+min+'" max="'+max+'" step="'+stepv+'"></div>'}
-function bindNum(path){const id='f_'+path.replaceAll('.','_');const el=document.getElementById(id);if(!el)return;el.oninput=()=>{let a=path.split('.'),o=S;for(let i=0;i<a.length-1;i++)o=o[a[i]];o[a.at(-1)]=+el.value;save();render()}}
+function bindNum(path){const id='f_'+path.replaceAll('.','_');const el=document.getElementById(id);if(!el)return;el.oninput=()=>{let a=path.split('.'),o=S;for(let i=0;i<a.length-1;i++)o=o[a[i]];o[a.at(-1)]=el.value===''?'':+el.value;save()};el.onchange=()=>{if(el.value==='')el.value=0;let a=path.split('.'),o=S;for(let i=0;i<a.length-1;i++)o=o[a[i]];o[a.at(-1)]=+el.value;save()}}
 function opt(path,title,items){let val=path.split('.').reduce((o,k)=>o[k],S);return '<div class="options">'+items.map(x=>'<label class="option"><input type="radio" name="'+path+'" value="'+x[0]+'" '+(val===x[0]?'checked':'')+'><b>'+x[1]+'</b><small>'+x[2]+'</small></label>').join('')+'</div>'}
 function bool(path,title,desc){let val=path.split('.').reduce((o,k)=>o[k],S);return '<label class="option"><input type="checkbox" id="b_'+path.replaceAll('.','_')+'" '+(val?'checked':'')+'><b>'+title+'</b><small>'+desc+'</small></label>'}
 function setPath(path,val){let a=path.split('.'),o=S;for(let i=0;i<a.length-1;i++)o=o[a[i]];o[a.at(-1)]=val}
