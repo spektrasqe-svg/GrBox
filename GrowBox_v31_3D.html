@@ -61,6 +61,7 @@ canvas:active{cursor:grabbing}
 }
 .platform-return{position:fixed;top:14px;left:14px;z-index:10000;display:flex;align-items:center;gap:8px;padding:10px 13px;border:1px solid rgba(230,238,240,.16);border-radius:12px;background:rgba(10,14,16,.78);backdrop-filter:blur(16px);color:#e6eef0;text-decoration:none;font:700 11px/1 Manrope,system-ui,sans-serif;box-shadow:0 12px 35px rgba(0,0,0,.28)}.platform-return:hover{border-color:rgba(201,242,127,.45);color:#c9f27f}@media(max-width:700px){.platform-return{top:9px;left:9px;padding:9px 11px;font-size:10px}}\n</style>
 <script src="assets/site/product-state.js"></script>
+<script src="assets/site/parametric-layout.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/site/classified-theme.css"></head>
 <body>
 <div id="app">
@@ -754,6 +755,152 @@ setTimeout(function(){
 </script>
 <script id="secretbox:3d-config">
 (function(){function paint(s){if(!window.SECRETBOX)return;const l=SECRETBOX.label(s);const el=document.getElementById('secretbox-3d-config');if(el)el.innerHTML='<b style="color:#c9f27f">LIVE CONFIG</b> · '+l.dimensions+' · '+l.finish}paint(SECRETBOX.load());SECRETBOX.subscribe(paint)})();
+</script>
+<script id="secretbox:parametric-v2">
+(function(){
+'use strict';
+if(!window.SECRETBOX_LAYOUT || !window.SECRETBOX) return;
+var P=null, doors=[], mode='product';
+var U=0.0032;
+function mat(color,rough,metal,opacity){
+  return new THREE.MeshStandardMaterial({color:color,roughness:rough||.55,metalness:metal||0,transparent:opacity<1,opacity:opacity==null?1:opacity,side:THREE.DoubleSide});
+}
+var M={
+  shell:mat(0x242a2c,.62,.28,1),
+  edge:mat(0x566168,.38,.55,1),
+  inner:mat(0x30383b,.76,.15,1),
+  tech:mat(0x151b1e,.52,.45,.98),
+  glass:mat(0x55747a,.18,.25,.25),
+  accent:mat(0xc9f27f,.32,.12,.95),
+  steel:mat(0x8b9598,.32,.7,1),
+  black:mat(0x0b0e10,.78,.3,1),
+  white:mat(0xe0e4e4,.5,.08,1),
+  water:mat(0x315d67,.22,.25,.55)
+};
+var G=new THREE.Group(); G.name='SECRET_BOX_PARAMETRIC_CUSTOM'; scene.add(G);
+function mm(v){return v*U}
+function box(name,w,h,d,x,y,z,material,parent){
+  var o=new THREE.Mesh(new THREE.BoxGeometry(mm(w),mm(h),mm(d)),material||M.inner);
+  o.name=name; o.position.set(mm(x),mm(y),mm(z)); (parent||G).add(o); return o;
+}
+function line(name,w,h,d,x,y,z,material,parent){
+  return box(name,w,h,d,x,y,z,material||M.edge,parent);
+}
+function clear(){
+  while(G.children.length) G.remove(G.children[G.children.length-1]);
+  doors=[];
+}
+function addFrame(l){
+  var o=l.outer, W=o.W,H=o.H,D=o.D,p=o.panel,pl=o.plinth;
+  var x=W/2-p/2,z=D/2-p/2,y0=-H/2;
+  line('FRAME_LEFT',p,H,D,-x,0,0,M.shell);
+  line('FRAME_RIGHT',p,H,D,x,0,0,M.shell);
+  line('FRAME_TOP',W,p,D,0,H/2-p/2,0,M.shell);
+  line('FRAME_BOTTOM',W,p,D,0,y0+p/2,0,M.shell);
+  line('BACK_PANEL',W-2*p,H-2*p,p,0,0,-D/2+p/2,M.shell);
+  line('PLINTH',W+18,pl,D+18,0,y0+pl/2,0,M.edge);
+  for(var i=1;i<4;i++) line('VERTICAL_RAIL_'+i,p*.55,H-90,p*.55,-W/2+p+i*(W-2*p)/4,0,D/2-p*.7,M.edge);
+}
+function addDoors(l){
+  var o=l.outer, d=l.doors, W=o.W,H=o.H,D=o.D,p=o.panel;
+  var front=D/2+3;
+  var gap=7;
+  for(var i=0;i<d.count;i++){
+    var w=d.width-gap;
+    var x=-W/2+p+i*d.width+d.width/2;
+    var g=new THREE.Group(); g.name='DOOR_'+i; g.position.set(mm(x),0,mm(front));
+    var slab=box('DOOR_PANEL_'+i,w,H-o.plinth,d.thickness,0,-o.plinth/2,0,M.shell,g);
+    box('DOOR_INNER_'+i,w-36,H-o.plinth-36,10,0,-o.plinth/2,-d.thickness/2-5,M.inner,g);
+    box('DOOR_HANDLE_'+i,18,180,28,w/2-32,0,d.thickness/2+10,M.steel,g);
+    G.add(g); doors.push(g);
+  }
+}
+function addTech(l){
+  var z=l.zones.tech, o=l.outer;
+  box('TECH_COLUMN',z.w,z.h,z.d,z.x,z.y,0,M.tech);
+  var levels=[.20,.42,.64,.82];
+  levels.forEach(function(q,i){
+    var yy=-o.H/2+o.plinth+z.h*q;
+    line('TECH_RAIL_'+i,z.w-46,8,z.d-30,z.x,yy,0,M.edge);
+  });
+  box('DIN_PANEL',z.w-80,150,35,z.x,z.y+z.h*.25,o.D/2-40,M.black);
+  box('SERVICE_CASSETTE',z.w-70,260,z.d-80,z.x,z.y-z.h*.24,0,M.inner);
+}
+function addTop(l){
+  var z=l.zones.top;
+  box('TOP_NOISE_BOX',z.w,z.h,z.d,0,z.y,0,M.tech);
+  box('TOP_BAFFLE',z.w-80,z.h-70,22,0,z.y,0,M.inner);
+  box('TOP_AIR_CHAMBER',z.w-130,z.h-100,z.d-90,0,z.y,.01,M.black);
+  box('SILENCER',Math.min(300,z.w*.5),Math.min(160,z.h*.45),Math.min(300,z.d*.42),z.w*.22,z.y,0,M.steel);
+}
+function addGrow(l){
+  var z=l.zones.grow, o=l.outer, e=l.equipment;
+  var light=e.light;
+  box('GROW_BACKING',z.w,z.h,z.d-24,z.x,z.y,0,M.inner);
+  line('TRAY',l.zones.tray.w,l.zones.tray.h,l.zones.tray.d,l.zones.tray.x,l.zones.tray.y,0,M.steel);
+  var sc=l.zones.scrog;
+  var grid=new THREE.Group(); grid.name='SCROG';
+  var sx=sc.w/8, sz=sc.d/6;
+  for(var ix=0;ix<=8;ix++) line('SCROG_X',3,5,sc.d-20,sc.x-sc.w/2+ix*sx,sc.y,0,M.accent,grid);
+  for(var iz=0;iz<=6;iz++) line('SCROG_Z',sc.w-20,5,3,sc.x,sc.y,-sc.d/2+iz*sz,M.accent,grid);
+  G.add(grid);
+  var ly=l.anchors.light.y;
+  box('LIGHT',light.w,light.h,light.d,l.anchors.light.x,ly,0,M.white);
+  for(var i=0;i<4;i++) line('LIGHT_HANGER',5,ly+o.H/2-120,5,l.anchors.light.x-light.w/2+light.w*(i/3),0,0,M.steel);
+  var fan=e.fan;
+  box('FAN',fan.w,fan.h,fan.d,l.anchors.fan.x,l.anchors.fan.y,l.anchors.fan.z,M.black);
+  box('FAN_CORE',fan.w*.55,fan.h*.55,fan.d*.55,l.anchors.fan.x,l.anchors.fan.y,l.anchors.fan.z+fan.d*.28,M.accent);
+  box('RESERVOIR',300,430,300,z.x+110,l.zones.tray.y-220,-o.D/2+180,M.water);
+  box('VIBRATION_PLATFORM',fan.w+120,22,fan.d+100,l.anchors.fan.x,l.anchors.fan.y-fan.h/2-22,l.anchors.fan.z,M.edge);
+}
+function addRails(l){
+  var z=l.zones.grow;
+  for(var side=-1;side<=1;side+=2){
+    var x=z.x+side*(z.w/2-24);
+    line('ADJUSTABLE_UPRIGHT',24,z.h-80,24,x,z.y,0,M.edge);
+    for(var i=0;i<8;i++) line('CARRIAGE',52,18,18,x,z.y-z.h/2+90+i*(z.h-180)/7,0,M.steel);
+  }
+}
+function apply(config){
+  P=SECRETBOX_LAYOUT.derive(config);
+  clear();
+  addFrame(P); addTech(P); addTop(P); addGrow(P); addRails(P); addDoors(P);
+  G.visible=true;
+  if(window.root) root.visible=false;
+  var maxDim=Math.max(P.outer.W,P.outer.H,P.outer.D);
+  if(window.camT){ camT.r=Math.max(4.2,maxDim*U*1.35); camT.ph=.98; camT.th=.65; }
+  if(window.target) target.set(0,mm(P.outer.H*.06),0);
+  var checks=P.checks.map(function(x){return x.level+': '+x.text}).join(' | ');
+  var el=document.getElementById('secretbox-3d-config');
+  if(el) el.innerHTML='<b style="color:#c9f27f">LIVE PARAMETRIC</b> · '+P.outer.W+' × '+P.outer.D+' × '+P.outer.H+' мм · '+P.metrics.mass+' кг · '+P.metrics.power+' Вт'+(checks?' · ⚠ '+checks:' · ✓');
+}
+function setVisual(name){
+  mode=name;
+  doors.forEach(function(d,i){
+    var open=(name==='cutaway'||name==='engineering'||name==='exploded');
+    d.rotation.y += ((open?(i%2?-1:1)*Math.PI*.34:0)-d.rotation.y)*.35;
+  });
+  var tech=G.getObjectByName('TECH_COLUMN'), top=G.getObjectByName('TOP_NOISE_BOX');
+  if(tech) tech.visible=name!=='light';
+  if(top) top.visible=name!=='light';
+}
+function tick(){
+  try{
+    var s=SECRETBOX.load(); if(!s)return;
+    var sig=JSON.stringify(s);
+    if(sig!==tick.last){tick.last=sig;apply(s);}
+  }catch(e){}
+  requestAnimationFrame(tick);
+}
+document.querySelectorAll('[data-mode]').forEach(function(b){
+  b.addEventListener('click',function(){setVisual(b.dataset.mode);});
+});
+document.querySelectorAll('[data-cam]').forEach(function(b){
+  b.addEventListener('click',function(){setTimeout(function(){if(P&&window.camT)camT.r=Math.max(camT.r,P.outer.H*U*.72);},40);});
+});
+window.__SECRETBOX_PARAMETRIC={version:'2.0',apply:apply,get:function(){return P}};
+tick();
+})();
 </script>
 </body>
 </html>
