@@ -662,7 +662,7 @@ function loop(){
   if(window.__SECRETBOX_APPLY_C_WIDTH){ window.__SECRETBOX_APPLY_C_WIDTH(Number(s.cWidth)||796); }
   else if(groups.doorC2){
    var sc=(Number(s.cWidth)||796)/796;
-   groups.doorC2.position.x=px(437)+px(796)*sc;
+   groups.doorC2.position.x=px(454)+px(796)*sc;
   }
   if(labels[0])labels[0].visible=!!s.mods.a;
   if(labels[1])labels[1].visible=!!s.mods.b;
@@ -714,7 +714,7 @@ function loop(){
     cBodyRoot.position.x=cLeft*(1-s);
     /* Move the second door hinge to the new right edge. */
     if(groups.doorC2){
-      groups.doorC2.position.x=px(437)+px(width);
+      groups.doorC2.position.x=px(454)+px(width);
     }
     /* Keep the chamber label honest. */
     if(labels[2]) labels[2].position.x=px(437)+px(width)/2;
