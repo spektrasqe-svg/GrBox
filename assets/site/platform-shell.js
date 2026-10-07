@@ -13,7 +13,7 @@
   ['documentation.html','Документы','docs']
  ];
  const shell=document.createElement('div'); shell.className='sb-shell';
- shell.innerHTML='<a class="sb-brand" href="platform.html" aria-label="SECRET BOX"><img src="assets/logo_20261005.jpg" alt="SECRET BOX"></a><button class="sb-menu" type="button" aria-label="Меню">MENU</button><nav class="sb-links">'+items.map(x=>'<a href="'+x[0]+'" data-key="'+x[2]+'">'+x[1]+'</a>').join('')+'</nav><a class="sb-home" href="index.html#models">ВЫБРАТЬ BOX →</a>';
+ shell.innerHTML='<a class="sb-brand" href="index.html" aria-label="SECRET BOX"><img src="assets/logo_20261005.jpg" alt="SECRET BOX"></a><button class="sb-menu" type="button" aria-label="Меню">MENU</button><nav class="sb-links">'+items.map(x=>'<a href="'+x[0]+'" data-key="'+x[2]+'">'+x[1]+'</a>').join('')+'</nav><a class="sb-home" href="index.html#models">ВЫБРАТЬ BOX →</a>';
  document.body.appendChild(shell); document.querySelectorAll('body > nav').forEach(n=>{if(n!==shell.querySelector('nav')) n.style.display='none'});
  const key=path.includes('3D')?'3d':path.includes('engineering')?'engineering':path.includes('documentation')?'docs':path.includes('builder')?'builder':path.includes('calculators')?'calc':path.includes('growpedia')?'pedia':'models';
  shell.querySelectorAll('[data-key]').forEach(a=>{if(a.dataset.key===key)a.classList.add('sb-active')});
