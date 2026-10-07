@@ -1,9 +1,10 @@
 (function(){
 'use strict';
-if(!window.THREE||!window.SECRETBOX||!window.SECRETBOX_LAYOUT||!window.scene)return;
+if(!window.THREE||!window.SECRETBOX||!window.SECRETBOX_LAYOUT||!window.__SECRETBOX_SCENE)return;
+var scene=window.__SECRETBOX_SCENE;
 var G=scene.getObjectByName('SECRET_BOX_PRODUCT_GRADE');
 if(!G){G=new THREE.Group();G.name='SECRET_BOX_PRODUCT_GRADE';scene.add(G);}
-var U=.0032;
+var U=.001;
 var M={
  frame:new THREE.MeshStandardMaterial({color:0x4c5559,metalness:.7,roughness:.34}),
  steel:new THREE.MeshStandardMaterial({color:0x8d979a,metalness:.8,roughness:.25}),
