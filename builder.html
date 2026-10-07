@@ -624,7 +624,7 @@ render();
   document.querySelectorAll('#finish .sw').forEach(x=>x.classList.toggle('on',x.dataset.f===S.finish));
   render();
   let last=JSON.stringify(SECRETBOX.load());
-  const sync=()=>{const now=JSON.stringify({finish:S.finish,cWidth:S.cWidth,mods:S.mods,equip:S.equip,upg:S.upg});if(now!==last){last=now;SECRETBOX.save(JSON.parse(now));}};
+  const sync=()=>{const now=JSON.stringify({model:S.model||'A',finish:S.finish,cWidth:S.cWidth,mods:S.mods,equip:S.equip,upg:S.upg});if(now!==last){last=now;SECRETBOX.save(JSON.parse(now));}};
   setInterval(sync,700);
 })();
 </script>
