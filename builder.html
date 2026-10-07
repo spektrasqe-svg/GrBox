@@ -146,6 +146,19 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px}
 @media(max-width:1000px){.builder-3d-stage{height:600px}}
 @media(max-width:640px){.builder-3d-stage{height:520px}.builder-3d-hint{display:none}.live-title{font-size:11px}}
 
+
+/* MODEL SELECTOR */
+.model-pick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 22px}
+.model-choice{position:relative;display:block;border:1px solid var(--line);border-radius:12px;background:var(--ink-2);padding:17px 18px;cursor:pointer;transition:.25s}
+.model-choice:hover{border-color:var(--line-strong);transform:translateY(-1px)}
+.model-choice.active{border-color:var(--brass);background:rgba(199,154,91,.09);box-shadow:inset 0 2px var(--brass)}
+.model-choice b{display:block;font-family:var(--disp);font-size:13px;letter-spacing:.05em}
+.model-choice span{display:block;margin-top:6px;color:var(--cream-2);font-size:11px;line-height:1.45}
+.model-choice small{display:block;margin-top:9px;color:var(--brass);font:9px var(--body);letter-spacing:.16em;text-transform:uppercase}
+.model-choice .model-mark{position:absolute;right:13px;top:13px;font:9px var(--body);letter-spacing:.12em;color:var(--brass);opacity:.8}
+.model-state{display:flex;align-items:center;justify-content:space-between;gap:16px;border:1px solid var(--line);border-radius:10px;background:var(--ink-2);padding:11px 15px;margin-bottom:22px;color:var(--cream-2);font-size:11px}
+.model-state b{color:var(--cream);font-family:var(--disp);font-size:11px;letter-spacing:.05em}
+@media(max-width:700px){.model-pick{grid-template-columns:1fr}.model-state{align-items:flex-start;flex-direction:column;gap:5px}}
 </style>
 <script src="assets/site/product-state.js"></script>
 <link rel="stylesheet" href="assets/site/platform-shell.css">
@@ -171,6 +184,11 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px}
   <div class="tag">Конфигуратор</div>
   <h1>Соберите бокс с нуля</h1>
   <p>От каркаса по чертежам rev.3 до последнего уплотнителя. Выбирайте <em>модули, начинку и улучшения</em> — чертёж, вес и смета пересчитываются на лету.</p>
+</div>
+<div class="wrap model-pick" id="modelPick">
+  <button type="button" class="model-choice active" data-model="A"><span class="model-mark">01</span><b>A · FLAGSHIP</b><span>Максимальный объём и полная система.</span><small>796 мм · FULL SIZE</small></button>
+  <button type="button" class="model-choice" data-model="B"><span class="model-mark">02</span><b>B · COMPACT</b><span>Меньший footprint, та же логика конфигурации.</span><small>600 мм · SPACE SAVER</small></button>
+  <button type="button" class="model-choice" data-model="C"><span class="model-mark">03</span><b>C · DUAL ZONE</b><span>Расширенная двухзонная компоновка.</span><small>700 мм · HYBRID</small></button>
 </div>
 
 <div class="wrap builder">
@@ -608,6 +626,35 @@ render();
   let last=JSON.stringify(SECRETBOX.load());
   const sync=()=>{const now=JSON.stringify({finish:S.finish,cWidth:S.cWidth,mods:S.mods,equip:S.equip,upg:S.upg});if(now!==last){last=now;SECRETBOX.save(JSON.parse(now));}};
   setInterval(sync,700);
+})();
+</script>
+
+<script id="secretbox:model-selector">
+(function(){
+  if(!window.SECRETBOX||!window.S)return;
+  const names={A:'A · FLAGSHIP',B:'B · COMPACT',C:'C · DUAL ZONE'};
+  const widths={A:796,B:600,C:700};
+  const params=new URLSearchParams(location.search);
+  const requested=(params.get('model')||'').toUpperCase();
+  let current=(SECRETBOX.load().model||'A').toUpperCase();
+  if(!names[current])current='A';
+  function paint(){
+    document.querySelectorAll('#modelPick [data-model]').forEach(b=>b.classList.toggle('active',b.dataset.model===current));
+    const label=document.getElementById('selectedModelLabel'); if(label)label.textContent=names[current];
+  }
+  function apply(model,fromUrl){
+    current=names[model]?model:'A';
+    S.model=current;
+    S.cWidth=widths[current];
+    const cw=document.getElementById('cWidth');
+    if(cw){cw.value=S.cWidth;document.getElementById('cWidthVal').textContent=S.cWidth+' мм';document.getElementById('cDims').textContent=S.cWidth+' × 1700 мм';}
+    paint();
+    render();
+    SECRETBOX.set({model:current,cWidth:S.cWidth});
+    if(fromUrl)history.replaceState(null,'',location.pathname+'?model='+current);
+  }
+  document.querySelectorAll('#modelPick [data-model]').forEach(b=>b.addEventListener('click',()=>apply(b.dataset.model,false)));
+  if(names[requested])apply(requested,true);else{S.model=current;paint();}
 })();
 </script>
 <script src="assets/site/platform-shell.js"></script>
