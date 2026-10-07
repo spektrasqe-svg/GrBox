@@ -1,0 +1,7 @@
+/* SECRET BOX classified engineering layer — additive */
+:root{--sb-mil-bg:#1e2024;--sb-mil-panel:#2c2e33;--sb-mil-paper:#e8dcc8;--sb-mil-gold:#c4a96a;--sb-mil-red:#8b2e2e}
+body{background-color:var(--sb-mil-bg)}
+.sb-classified-bg{background-image:repeating-linear-gradient(112deg,rgba(255,255,255,.014) 0 1px,transparent 1px 7px),repeating-linear-gradient(0deg,rgba(0,0,0,.07) 0 2px,transparent 2px 5px)}
+.sb-shell{border-radius:2px!important;background:rgba(30,32,36,.92)!important;border-color:rgba(232,220,200,.18)!important;box-shadow:0 14px 45px rgba(0,0,0,.35)!important;font-family:"Roboto Mono",monospace!important}
+.sb-brand{font-family:"Bebas Neue","Arial Narrow",Impact,sans-serif!important;letter-spacing:.12em!important}.sb-links a{font-family:"Roboto Mono",monospace!important;text-transform:uppercase;letter-spacing:.04em;border-radius:2px!important}.sb-links a:hover,.sb-links a.sb-active{background:rgba(232,220,200,.08)!important}.sb-home{background:var(--sb-mil-gold)!important;border-radius:2px!important}.sb-dock,.sb-state{border-radius:2px!important;background:rgba(30,32,36,.92)!important;font-family:"Roboto Mono",monospace!important}.sb-live{background:#9fb58b!important;box-shadow:0 0 12px #9fb58b!important}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:97;opacity:.07;background:repeating-linear-gradient(135deg,transparent 0 22px,rgba(232,220,200,.035) 22px 24px)}
