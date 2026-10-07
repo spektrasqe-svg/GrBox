@@ -141,6 +141,7 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 var scene = new THREE.Scene();
+window.__SECRETBOX_SCENE=scene;
 scene.background = new THREE.Color(0x0a0e10);
 scene.fog = new THREE.Fog(0x0a0e10, 7, 18);
 
@@ -302,7 +303,7 @@ PARTS.forEach(function(p){
     mesh.position.sub(groups[g].position);
     groups[g].add(mesh);
   } else root.add(mesh);
-  meshes.push(mesh); clickable.push(mesh);
+  meshes.push(mesh); clickable.push(mesh); window.__SECRETBOX_CLICKABLE=clickable;
 });
 
 /* ---------- метки модулей ---------- */
@@ -782,7 +783,13 @@ var G=new THREE.Group(); G.name='SECRET_BOX_PARAMETRIC_CUSTOM'; scene.add(G);
 function mm(v){return v*U}
 function box(name,w,h,d,x,y,z,material,parent){
   var o=new THREE.Mesh(new THREE.BoxGeometry(mm(w),mm(h),mm(d)),material||M.inner);
-  o.name=name; o.position.set(mm(x),mm(y),mm(z)); (parent||G).add(o); return o;
+  o.name=name;
+  o.position.set(mm(x),mm(y),mm(z));
+  var k=/LIGHT|FAN|RESERVOIR|SILENCER|DIN|PUMP|CONTROLLER/i.test(name)?'оборудование':'деталь';
+  o.userData={part:{n:name,k:k,s:'box',m:'CUSTOM',b:[x-w/2,z-d/2,y-h/2,w,d,h]}};
+  (parent||G).add(o);
+  if(window.__SECRETBOX_CLICKABLE) window.__SECRETBOX_CLICKABLE.push(o);
+  return o;
 }
 function line(name,w,h,d,x,y,z,material,parent){
   return box(name,w,h,d,x,y,z,material||M.edge,parent);
@@ -901,7 +908,7 @@ document.querySelectorAll('[data-mode]').forEach(function(b){
 document.querySelectorAll('[data-cam]').forEach(function(b){
   b.addEventListener('click',function(){setTimeout(function(){if(P&&window.camT)camT.r=Math.max(camT.r,P.outer.H*U*.72);},40);});
 });
-window.__SECRETBOX_PARAMETRIC={version:'2.0',apply:apply,get:function(){return P}};
+window.__SECRETBOX_PARAMETRIC={version:'2.1',apply:apply,get:function(){return P}};
 tick();
 })();
 </script>
