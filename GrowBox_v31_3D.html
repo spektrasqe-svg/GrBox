@@ -659,9 +659,10 @@ function loop(){
    if(m.indexOf('B+C')>=0)ok=!!(s.mods.b||s.mods.c);
    mesh.visible=ok&&visiblePart(n,s);
   });
-  if(groups.doorC2){
+  if(window.__SECRETBOX_APPLY_C_WIDTH){ window.__SECRETBOX_APPLY_C_WIDTH(Number(s.cWidth)||796); }
+  else if(groups.doorC2){
    var sc=(Number(s.cWidth)||796)/796;
-   groups.doorC2.position.x=px(436)+(px(1250)-px(436))*sc;
+   groups.doorC2.position.x=px(437)+px(796)*sc;
   }
   if(labels[0])labels[0].visible=!!s.mods.a;
   if(labels[1])labels[1].visible=!!s.mods.b;
@@ -676,6 +677,122 @@ function loop(){
  tick();setInterval(tick,180);
 })();
  
+/* ---------- V3.1 geometry + mobile interaction hardening ---------- */
+(function(){
+  /* Keep the CAD source intact, but give the C chamber a real width transform.
+     We scale the chamber body around its left datum; hinge groups remain independent. */
+  var cParts = meshes.filter(function(m){
+    var p=m.userData&&m.userData.part;
+    var mod=(p&&p.m)||'';
+    return mod.split('+').indexOf('C')>=0 && mod!=='B+C' &&
+      ['doorC1','doorC2'].indexOf(groupOf(p.n))<0;
+  });
+  var cBodyRoot = new THREE.Group();
+  cBodyRoot.name='C_MODULE_WIDTH_CONTROLLER';
+  root.add(cBodyRoot);
+
+  cParts.forEach(function(m){
+    if(m.parent===root){
+      var wp=m.position.clone();
+      root.remove(m);
+      cBodyRoot.add(m);
+      m.position.copy(wp);
+    }
+    m.userData.cBaseLocal=m.position.clone();
+    m.userData.cBaseScale=m.scale.clone();
+  });
+
+  var cBaseWidth=796;
+  var cLeft=px(437);
+  var cLastWidth=cBaseWidth;
+
+  function applyRealCWidth(width){
+    width=Math.max(600,Math.min(796,Number(width)||796));
+    var s=width/cBaseWidth;
+    if(Math.abs(width-cLastWidth)<0.01)return;
+    cBodyRoot.scale.set(s,1,1);
+    cBodyRoot.position.x=cLeft*(1-s);
+    /* Move the second door hinge to the new right edge. */
+    if(groups.doorC2){
+      groups.doorC2.position.x=px(437)+px(width);
+    }
+    /* Keep the chamber label honest. */
+    if(labels[2]) labels[2].position.x=px(437)+px(width)/2;
+    cLastWidth=width;
+  }
+
+  /* Rebuild the C body transform from the current product state. */
+  window.__SECRETBOX_APPLY_C_WIDTH=applyRealCWidth;
+
+  /* Pointer Events: one interaction path for mouse + touch, with native
+     pointer capture. The legacy touch handlers are blocked in capture phase. */
+  var activePointers=new Map(), gesture=null, tapTime=0, tapX=0, tapY=0;
+  function stop(e){ e.preventDefault(); e.stopImmediatePropagation(); }
+
+  cv.addEventListener('pointerdown',function(e){
+    if(e.pointerType==='mouse' && e.button!==0 && e.button!==2)return;
+    stop(e);
+    try{cv.setPointerCapture(e.pointerId)}catch(_){}
+    activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(activePointers.size===1){
+      pointerDown(e.clientX,e.clientY,e.shiftKey,e.button);
+      gesture={mode:'drag',lastX:e.clientX,lastY:e.clientY};
+    }else if(activePointers.size===2){
+      drag=null;
+      var a=[...activePointers.values()];
+      gesture={mode:'pinch',dist:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)};
+    }
+  },true);
+
+  cv.addEventListener('pointermove',function(e){
+    if(!activePointers.has(e.pointerId))return;
+    stop(e);
+    activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(activePointers.size===1 && gesture&&gesture.mode==='drag'){
+      pointerMove(e.clientX,e.clientY);
+    }else if(activePointers.size===2 && gesture&&gesture.mode==='pinch'){
+      var a=[...activePointers.values()];
+      var d=Math.max(1,Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y));
+      camT.r=Math.max(1.1,Math.min(9,camT.r*(gesture.dist/d)));
+      gesture.dist=d;
+    }
+  },true);
+
+  cv.addEventListener('pointerup',function(e){
+    if(!activePointers.has(e.pointerId))return;
+    stop(e);
+    activePointers.delete(e.pointerId);
+    if(activePointers.size===0){
+      if(gesture&&gesture.mode==='drag'){
+        var moved=drag&&drag.moved||0;
+        if(moved<7){
+          var now=Date.now();
+          if(now-tapTime<320 && Math.hypot(e.clientX-tapX,e.clientY-tapY)<18){
+            resetAll(); tapTime=0;
+          }else{
+            pickAt(e.clientX,e.clientY); tapTime=now; tapX=e.clientX; tapY=e.clientY;
+          }
+        }
+        drag=null;
+      }
+      gesture=null;
+    }
+  },true);
+
+  cv.addEventListener('pointercancel',function(e){
+    stop(e); activePointers.delete(e.pointerId);
+    if(activePointers.size===0){drag=null;gesture=null;}
+  },true);
+
+  cv.addEventListener('wheel',function(e){
+    stop(e);
+    camT.r=Math.max(1.1,Math.min(9,camT.r*(e.deltaY>0?1.09:0.92)));
+  },true);
+
+  /* Expose a tiny diagnostics hook for the builder bridge. */
+  window.__SECRETBOX_DIAG={cParts:cParts.length,realCWidth:true,pointerEvents:true};
+})();
+
 /* ---------- старт ---------- */
 document.getElementById('loader').style.display = 'none';
 loadState();
