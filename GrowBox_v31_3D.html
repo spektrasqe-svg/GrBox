@@ -762,7 +762,7 @@ setTimeout(function(){
 'use strict';
 if(!window.SECRETBOX_LAYOUT || !window.SECRETBOX) return;
 var P=null, doors=[], mode='product';
-var U=0.0032;
+var U=0.001;
 function mat(color,rough,metal,opacity){
   return new THREE.MeshStandardMaterial({color:color,roughness:rough||.55,metalness:metal||0,transparent:opacity<1,opacity:opacity==null?1:opacity,side:THREE.DoubleSide});
 }
@@ -770,8 +770,8 @@ var M={
   shell:mat(0x242a2c,.62,.28,1),
   edge:mat(0x566168,.38,.55,1),
   inner:mat(0x30383b,.76,.15,1),
-  tech:mat(0x151b1e,.52,.45,.98),
-  glass:mat(0x55747a,.18,.25,.25),
+  tech:mat(0x151b1e,.52,.45,.24),
+  glass:mat(0x55747a,.18,.25,.16),
   accent:mat(0xc9f27f,.32,.12,.95),
   steel:mat(0x8b9598,.32,.7,1),
   black:mat(0x0b0e10,.78,.3,1),
@@ -818,7 +818,7 @@ function addDoors(l){
 }
 function addTech(l){
   var z=l.zones.tech, o=l.outer;
-  box('TECH_COLUMN',z.w,z.h,z.d,z.x,z.y,0,M.tech);
+  box('TECH_COLUMN',z.w,z.h,18,z.x,z.y,-o.D/2+9,M.tech);
   var levels=[.20,.42,.64,.82];
   levels.forEach(function(q,i){
     var yy=-o.H/2+o.plinth+z.h*q;
@@ -829,7 +829,7 @@ function addTech(l){
 }
 function addTop(l){
   var z=l.zones.top;
-  box('TOP_NOISE_BOX',z.w,z.h,z.d,0,z.y,0,M.tech);
+  box('TOP_NOISE_BOX',z.w,z.h,18,0,z.y,-z.d/2+9,M.tech);
   box('TOP_BAFFLE',z.w-80,z.h-70,22,0,z.y,0,M.inner);
   box('TOP_AIR_CHAMBER',z.w-130,z.h-100,z.d-90,0,z.y,.01,M.black);
   box('SILENCER',Math.min(300,z.w*.5),Math.min(160,z.h*.45),Math.min(300,z.d*.42),z.w*.22,z.y,0,M.steel);
@@ -837,7 +837,7 @@ function addTop(l){
 function addGrow(l){
   var z=l.zones.grow, o=l.outer, e=l.equipment;
   var light=e.light;
-  box('GROW_BACKING',z.w,z.h,z.d-24,z.x,z.y,0,M.inner);
+  box('GROW_BACKING',z.w,z.h,18,z.x,z.y,-z.d/2+9,M.inner);
   line('TRAY',l.zones.tray.w,l.zones.tray.h,l.zones.tray.d,l.zones.tray.x,l.zones.tray.y,0,M.steel);
   var sc=l.zones.scrog;
   var grid=new THREE.Group(); grid.name='SCROG';
@@ -847,11 +847,12 @@ function addGrow(l){
   G.add(grid);
   var ly=l.anchors.light.y;
   box('LIGHT',light.w,light.h,light.d,l.anchors.light.x,ly,0,M.white);
-  for(var i=0;i<4;i++) line('LIGHT_HANGER',5,ly+o.H/2-120,5,l.anchors.light.x-light.w/2+light.w*(i/3),0,0,M.steel);
+  var hangerTop=o.H/2-90, hangerH=Math.max(120,hangerTop-ly), hangerY=ly+hangerH/2;
+  for(var i=0;i<4;i++) line('LIGHT_HANGER',5,hangerH,5,l.anchors.light.x-light.w/2+light.w*(i/3),hangerY,0,M.steel);
   var fan=e.fan;
   box('FAN',fan.w,fan.h,fan.d,l.anchors.fan.x,l.anchors.fan.y,l.anchors.fan.z,M.black);
   box('FAN_CORE',fan.w*.55,fan.h*.55,fan.d*.55,l.anchors.fan.x,l.anchors.fan.y,l.anchors.fan.z+fan.d*.28,M.accent);
-  box('RESERVOIR',300,430,300,z.x+110,l.zones.tray.y-220,-o.D/2+180,M.water);
+  box('RESERVOIR',300,430,300,l.zones.tech.x,l.zones.tech.y-o.inner.H/2+390,-o.D/2+170,M.water);
   box('VIBRATION_PLATFORM',fan.w+120,22,fan.d+100,l.anchors.fan.x,l.anchors.fan.y-fan.h/2-22,l.anchors.fan.z,M.edge);
 }
 function addRails(l){
@@ -877,10 +878,7 @@ function apply(config){
 }
 function setVisual(name){
   mode=name;
-  doors.forEach(function(d,i){
-    var open=(name==='cutaway'||name==='engineering'||name==='exploded');
-    d.rotation.y += ((open?(i%2?-1:1)*Math.PI*.34:0)-d.rotation.y)*.35;
-  });
+  desiredOpen=(name==='cutaway'||name==='engineering'||name==='exploded');
   var tech=G.getObjectByName('TECH_COLUMN'), top=G.getObjectByName('TOP_NOISE_BOX');
   if(tech) tech.visible=name!=='light';
   if(top) top.visible=name!=='light';
@@ -890,6 +888,10 @@ function tick(){
     var s=SECRETBOX.load(); if(!s)return;
     var sig=JSON.stringify(s);
     if(sig!==tick.last){tick.last=sig;apply(s);}
+    doors.forEach(function(d,i){
+      var to=desiredOpen?(i%2?-1:1)*Math.PI*.34:0;
+      d.rotation.y += (to-d.rotation.y)*.16;
+    });
   }catch(e){}
   requestAnimationFrame(tick);
 }
