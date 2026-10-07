@@ -1,0 +1,20 @@
+/* SECRET BOX platform shell — additive shared navigation */
+.sb-shell{position:fixed;z-index:9999;top:14px;left:50%;transform:translateX(-50%);width:min(920px,calc(100vw - 28px));display:flex;align-items:center;gap:8px;padding:7px 9px;border:1px solid rgba(238,230,216,.14);border-radius:18px;background:rgba(12,12,14,.78);backdrop-filter:blur(18px) saturate(1.2);box-shadow:0 14px 45px rgba(0,0,0,.24);font:600 11px/1.2 Manrope,system-ui,sans-serif;letter-spacing:.02em}
+.sb-brand{padding:8px 11px;color:#eee6d8;white-space:nowrap;font:800 11px/1 Unbounded,sans-serif;letter-spacing:.04em}
+.sb-links{display:flex;align-items:center;gap:4px;min-width:0;flex:1}
+.sb-links a{padding:8px 10px;border-radius:11px;color:#a9a094;white-space:nowrap;transition:.2s ease}
+.sb-links a:hover,.sb-links a.sb-active{color:#eee6d8;background:rgba(238,230,216,.08)}
+.sb-home{margin-left:auto;padding:8px 12px!important;color:#0b0b0c!important;background:#c79a5b!important;border-radius:11px!important}
+.sb-menu{display:none;background:transparent;border:1px solid rgba(238,230,216,.16);color:#eee6d8;border-radius:10px;padding:8px 10px}
+@media(max-width:760px){
+ .sb-shell{top:8px;padding:6px 7px;border-radius:15px}
+ .sb-brand{font-size:9px;padding:8px 8px}
+ .sb-menu{display:block}
+ .sb-links{display:none;position:absolute;left:7px;right:7px;top:calc(100% + 7px);padding:6px;background:rgba(12,12,14,.94);border:1px solid rgba(238,230,216,.14);border-radius:14px;flex-direction:column;align-items:stretch}
+ .sb-links.sb-open{display:flex}
+ .sb-links a{padding:11px 12px}
+ .sb-home{margin-left:0;text-align:center}
+}
+.sb-dock{position:fixed;z-index:9998;right:18px;bottom:18px;display:flex;align-items:center;gap:7px;padding:7px;border:1px solid rgba(238,230,216,.12);border-radius:14px;background:rgba(12,12,14,.72);backdrop-filter:blur(14px);font:600 10px/1 Manrope,sans-serif}
+.sb-dock a{padding:8px 9px;border-radius:9px;color:#a9a094}.sb-dock a:hover{color:#eee6d8;background:rgba(238,230,216,.07)}
+@media(max-width:760px){.sb-dock{display:none}}
