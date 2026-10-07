@@ -623,7 +623,7 @@ function loop(){
    var d={finish:'choco',cWidth:796,mods:{a:true,b:true,c:true},equip:{se3000:true,uvir:false,ggs:true,ac10:true,sensor:true,soil:true,drip:true,humid:true},upg:{sil:true,vibe:true,acdoor:true,leak:true,ups:false,rkn:false,uzip:false,reserve:false,peri:false,cam:false}};
    var x=JSON.parse(localStorage.getItem(KEY)||'null')||{};
    ['mods','equip','upg'].forEach(function(k){d[k]=Object.assign(d[k],x[k]||{})});
-   if(x.finish!==undefined)d.finish=x.finish;if(x.cWidth!==undefined)d.cWidth=Number(x.cWidth);return d;
+   if(x.finish!==undefined)d.finish=x.finish;if(x.cWidth!==undefined)d.cWidth=Number(x.cWidth);if(x.model!==undefined)d.model=String(x.model).toUpperCase();return d;
   }catch(e){return null}
  }
  function pre(n,p){return n.indexOf(p)===0}
@@ -656,8 +656,10 @@ function loop(){
   if(labels[0])labels[0].visible=!!s.mods.a;
   if(labels[1])labels[1].visible=!!s.mods.b;
   if(labels[2]){labels[2].visible=!!s.mods.c;labels[2].material.map.needsUpdate=true}
+  var modelEl=document.getElementById('secretbox-3d-model');
+  if(modelEl)modelEl.textContent=(s.model==='B'?'COMPACT · BOX B':s.model==='C'?'DUAL ZONE · BOX C':'FLAGSHIP · BOX A');
   var el=document.getElementById('secretbox-3d-config');
-  if(el)el.innerHTML='<b style="color:#c9f27f">LIVE CONFIG</b> · '+(s.cWidth||796)+' mm C · '+Object.keys(s.equip).filter(function(k){return s.equip[k]}).length+' equipment';
+  if(el)el.innerHTML='<b style="color:#c9f27f">LIVE CONFIG</b> · '+(s.model||'A')+' · '+(s.cWidth||796)+' mm C · '+Object.keys(s.equip).filter(function(k){return s.equip[k]}).length+' equipment';
   last=JSON.stringify(s);
  }
  function tick(){var s=read();if(s&&JSON.stringify(s)!==last)apply(s)}
