@@ -1,5 +1,7 @@
 (function(){
  const SB=window.SECRETBOX;
+ const is3d=/GrowBox_v31_3D\.html$/i.test(location.pathname);
+ document.body.classList.add(is3d?'sb-3d-page':'sb-platform-page');
  function mountState(){if(!SB)return;const el=document.createElement('div');el.className='sb-state';function paint(s){const x=SB.label(s);el.innerHTML='<span class="sb-live"></span><b>LIVE CONFIG</b><span>'+x.dimensions+'</span><span>≈ '+Math.round(x.estimate).toLocaleString('ru-RU')+' ₽</span><a href="builder.html">Изменить</a>'}paint(SB.load());document.body.appendChild(el);SB.subscribe(paint)}
  const path=location.pathname.split('/').pop()||'index.html';
  const items=[
