@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SECRET BOX — цифровая платформа</title>
+<meta name="description" content="Премиальная цифровая платформа SECRET BOX: архитектура, системы, 3D, сборщик, калькуляторы, гровпедия и инженерная документация.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0b0c;--panel:#121214;--panel2:#18181b;--paper:#eee6d8;--muted:#a9a094;--gold:#c79a5b;--line:rgba(238,230,216,.12);--line2:rgba(238,230,216,.23);--green:#9fb58b;--display:Unbounded,sans-serif;--body:Manrope,sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--paper);font:15px/1.65 var(--body);overflow-x:hidden}a{color:inherit;text-decoration:none}button{font:inherit}.wrap{width:min(1320px,92vw);margin:auto}.grain{position:fixed;inset:0;pointer-events:none;z-index:99;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+nav{position:fixed;top:0;left:0;right:0;z-index:50;border-bottom:1px solid transparent;transition:.35s}nav.on{background:rgba(11,11,12,.82);backdrop-filter:blur(18px);border-color:var(--line)}nav .inner{height:76px;display:flex;align-items:center;gap:28px}.logo{font:800 14px var(--display);letter-spacing:.2em;display:flex;align-items:center;gap:11px}.logo i{font-style:normal;border:1px solid var(--paper);width:31px;height:31px;border-radius:7px;display:grid;place-items:center;font-size:12px}.navlinks{display:flex;gap:25px;margin-left:22px}.navlinks a{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);transition:.2s}.navlinks a:hover{color:var(--paper)}.navbtn{margin-left:auto;border:1px solid var(--line2);border-radius:999px;padding:10px 17px;font-size:10px;letter-spacing:.16em;text-transform:uppercase}.menu{display:none;margin-left:auto;background:none;border:0;color:var(--paper);font-size:24px}
+.hero{min-height:100svh;padding:145px 0 80px;display:grid;align-items:center;position:relative;overflow:hidden}.hero:before{content:"";position:absolute;width:900px;height:600px;right:-240px;top:60px;background:radial-gradient(circle,rgba(199,154,91,.16),transparent 65%);filter:blur(10px)}.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}.eyebrow{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:12px}.eyebrow:before{content:"";width:34px;height:1px;background:var(--gold)}h1{font:800 clamp(48px,7.2vw,104px)/.93 var(--display);letter-spacing:-.035em;margin:25px 0}.outline{color:transparent;-webkit-text-stroke:1px var(--paper)}.lead{font-size:18px;color:var(--muted);max-width:590px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}.btn{display:inline-flex;align-items:center;gap:12px;padding:14px 21px;border:1px solid var(--line2);border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;transition:.3s}.btn.primary{background:var(--paper);color:var(--bg);border-color:var(--paper)}.btn:hover{transform:translateY(-2px);border-color:var(--paper)}.btn.primary:hover{background:var(--gold);border-color:var(--gold)}.hero-meta{display:flex;gap:0;margin-top:52px;border-top:1px solid var(--line)}.metric{padding:18px 30px 0 0;margin-right:30px;border-right:1px solid var(--line)}.metric:last-child{border:0}.metric b{display:block;font:700 25px var(--display)}.metric span{font-size:9px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase}.hero-visual{position:relative}.hero-photo{height:600px;border-radius:8px;overflow:hidden;border:1px solid var(--line);box-shadow:0 50px 100px #000}.hero-photo img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s}.hero-photo:hover img{transform:scale(1.035)}.hero-label{position:absolute;left:20px;bottom:20px;background:rgba(11,11,12,.76);backdrop-filter:blur(12px);border:1px solid var(--line2);padding:12px 15px;border-radius:8px;font-size:10px;letter-spacing:.12em;text-transform:uppercase}.hero-label b{color:var(--gold)}
+section{padding:115px 0}.dark{background:#0e0e10}.paper{background:var(--paper);color:#111}.head{display:flex;justify-content:space-between;gap:35px;align-items:end;margin-bottom:48px}.head h2{font:700 clamp(30px,4.5vw,59px)/1.02 var(--display);margin:13px 0 0;max-width:15ch}.head p{max-width:470px;color:var(--muted)}.paper .head p{color:#655d52}.paper .eyebrow{color:#705235}.paper .eyebrow:before{background:#705235}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}.card{background:var(--panel);padding:30px;min-height:220px;position:relative;transition:.3s}.card:hover{background:var(--panel2);transform:translateY(-3px)}.card small{color:var(--gold);letter-spacing:.2em}.card h3{font:600 20px var(--display);margin:19px 0 9px}.card p{color:var(--muted);font-size:13px}.card .go{position:absolute;right:25px;bottom:23px;color:var(--gold)}
+.arch{display:grid;grid-template-columns:1.05fr .95fr;gap:25px}.arch-map{min-height:560px;background:linear-gradient(145deg,#171719,#0b0b0c);border:1px solid var(--line);border-radius:10px;padding:25px;position:relative;overflow:hidden}.rack{position:absolute;inset:75px 24% 45px 20%;border:2px solid #4a4540;border-radius:6px;box-shadow:inset 0 0 0 9px #151516}.zonebox{position:absolute;left:29%;width:42%;border:1px solid var(--line2);background:rgba(199,154,91,.07);padding:14px;border-radius:7px;font-size:10px;letter-spacing:.06em}.z1{top:105px}.z2{top:245px}.z3{top:365px;height:105px}.zonebox b{display:block;color:var(--gold);font:600 11px var(--display);margin-bottom:4px}.arch-list{display:grid;gap:10px}.arch-item{border:1px solid var(--line);background:var(--panel);padding:22px;border-radius:8px}.arch-item b{font:600 15px var(--display)}.arch-item p{margin:7px 0 0;color:var(--muted);font-size:13px}
+.systems{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.system{min-height:230px;padding:27px;border:1px solid var(--line);border-radius:8px;background:linear-gradient(150deg,#151517,#0d0d0e);position:relative;overflow:hidden}.system:after{content:"";position:absolute;right:-70px;bottom:-70px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(199,154,91,.16),transparent 65%)}.system .num{font:500 10px var(--display);color:var(--gold);letter-spacing:.2em}.system h3{font:600 22px var(--display);margin:20px 0 8px}.system p{color:var(--muted);max-width:360px}.flow{margin-top:25px;display:flex;gap:6px;flex-wrap:wrap}.flow span{border:1px solid var(--line2);border-radius:999px;padding:6px 9px;font-size:9px;letter-spacing:.08em}.flow i{color:var(--gold);font-style:normal;padding:6px 0}
+.digital{background:#09090a}.twin{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#050506;box-shadow:0 35px 80px #000}.twin iframe{width:100%;height:720px;border:0;display:block}.twin-foot{display:flex;justify-content:space-between;gap:20px;padding:16px 20px;border-top:1px solid var(--line);color:var(--muted);font-size:11px}.twin-foot a{color:var(--paper)}
+.toolgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.tool{border:1px solid rgba(17,17,17,.14);border-radius:10px;padding:30px;background:rgba(255,255,255,.23);transition:.3s}.tool:hover{transform:translateY(-4px);background:rgba(255,255,255,.45)}.tool b{font:600 11px var(--display);letter-spacing:.16em;color:#705235}.tool h3{font:600 24px var(--display);margin:13px 0 7px}.tool p{color:#655d52}.tool a{display:inline-block;margin-top:18px;border-bottom:1px solid #705235;padding-bottom:2px;font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+.builder{display:grid;grid-template-columns:1fr 1fr;gap:35px;align-items:stretch}.builder-copy{padding:20px 0}.builder-copy h2{font:700 clamp(32px,4.7vw,61px)/1.04 var(--display);margin:15px 0 20px}.builder-copy p{color:var(--muted);max-width:550px}.builder-ui{border:1px solid var(--line);border-radius:10px;background:linear-gradient(150deg,#171719,#0d0d0e);padding:25px}.step{display:flex;align-items:center;gap:13px;padding:14px 0;border-bottom:1px solid var(--line)}.step:last-child{border:0}.step i{width:29px;height:29px;border:1px solid var(--line2);border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:10px;color:var(--gold)}.step b{font-size:12px}.step span{margin-left:auto;color:var(--muted);font-size:11px}
+.docs{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.doc{border:1px solid var(--line);border-radius:8px;padding:27px;background:var(--panel)}.doc b{font:600 10px var(--display);color:var(--gold);letter-spacing:.18em}.doc h3{font:600 19px var(--display);margin:15px 0 8px}.doc p{color:var(--muted);font-size:13px}.doc a{display:inline-block;margin-top:15px;color:var(--paper);font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+.cta{padding:85px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.cta-inner{display:flex;justify-content:space-between;align-items:center;gap:30px}.cta h2{font:700 clamp(35px,5vw,68px)/1 var(--display);margin:0}.cta p{color:var(--muted);max-width:430px}
+footer{padding:55px 0 30px}.foot{display:flex;justify-content:space-between;gap:25px;flex-wrap:wrap}.foot strong{font:800 17px var(--display);letter-spacing:.16em}.footlinks{display:flex;gap:22px;flex-wrap:wrap}.footlinks a{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}.copy{border-top:1px solid var(--line);margin-top:35px;padding-top:20px;color:#666;font-size:11px}
+.reveal{opacity:0;transform:translateY(18px);transition:.7s}.reveal.in{opacity:1;transform:none}
+@media(max-width:950px){.navlinks{display:none}.menu{display:block}.hero-grid,.arch,.builder{grid-template-columns:1fr}.hero-photo{height:480px}.cards{grid-template-columns:1fr 1fr}.systems{grid-template-columns:1fr 1fr}.docs{grid-template-columns:1fr 1fr}.twin iframe{height:610px}}
+@media(max-width:600px){section{padding:82px 0}.hero{padding-top:120px}.hero-meta{overflow:auto}.metric{min-width:110px}.hero-photo{height:390px}.cards,.systems,.toolgrid,.docs{grid-template-columns:1fr}.head{display:block}.head p{margin-top:20px}.arch-map{min-height:470px}.rack{inset:55px 16% 40px 12%}.zonebox{left:23%;width:54%}.twin iframe{height:520px}.twin-foot{display:block}.twin-foot a{display:inline-block;margin-top:8px}.cta-inner{display:block}.cta p{margin:20px 0}.btn{padding:13px 16px}}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<nav id="nav"><div class="wrap inner">
+<a class="logo" href="#top"><i>SB</i>SECRET BOX</a>
+<div class="navlinks">
+<a href="#concept">Концепция</a><a href="#systems">Системы</a><a href="#twin">3D</a><a href="#tools">Инструменты</a><a href="#builder">Сборщик</a>
+</div>
+<a class="navbtn" href="#start">Открыть платформу →</a><button class="menu">☰</button>
+</div></nav>
+
+<header class="hero" id="top"><div class="wrap hero-grid">
+<div>
+<div class="eyebrow">Digital product platform · 2026</div>
+<h1>НЕ ПРОСТО<br><span class="outline">ШКАФ.</span></h1>
+<p class="lead">Одна система, в которой продукт можно рассмотреть, разобрать, посчитать, настроить и понять. От архитектуры и 3D до сборщика, калькуляторов и базы знаний.</p>
+<div class="actions"><a class="btn primary" href="#twin">Открыть 3D →</a><a class="btn" href="#builder">Собрать конфигурацию</a></div>
+<div class="hero-meta"><div class="metric"><b>85+</b><span>деталей модели</span></div><div class="metric"><b>7</b><span>систем</span></div><div class="metric"><b>1</b><span>цифровая платформа</span></div></div>
+</div>
+<div class="hero-visual"><div class="hero-photo"><img src="assets/site/hero.jpg" alt="SECRET BOX"></div><div class="hero-label"><b>SECRET BOX</b> · product system</div></div>
+</div></header>
+
+<section id="concept"><div class="wrap">
+<div class="head"><div><div class="eyebrow">01 · Концепция</div><h2>Снаружи — мебель. Внутри — система.</h2></div><p>Сайт должен объяснять продукт так же, как сам продукт: красиво с первого взгляда, но с инженерной глубиной для тех, кто хочет разобраться.</p></div>
+<div class="cards">
+<div class="card reveal"><small>01</small><h3>Мебель</h3><p>Фасад, материалы, свет, пропорции и сервисные зоны собраны в единый объект интерьера.</p><span class="go">↗</span></div>
+<div class="card reveal"><small>02</small><h3>Тишина</h3><p>Воздушный тракт, акустические узлы, виброразвязка и герметичность рассматриваются как одна система.</p><span class="go">↗</span></div>
+<div class="card reveal"><small>03</small><h3>Климат</h3><p>Воздух, свет, вода и датчики связаны между собой, а не существуют отдельными коробками.</p><span class="go">↗</span></div>
+<div class="card reveal"><small>04</small><h3>Сервис</h3><p>Каждый узел должен быть понятен: где он расположен, как открыть, что проверить и чем заменить.</p><span class="go">↗</span></div>
+</div></div></section>
+
+<section class="paper" id="architecture"><div class="wrap">
+<div class="head"><div><div class="eyebrow">02 · Архитектура</div><h2>Не картинка. Пространственная логика.</h2></div><p>Три функциональные зоны, верхний технический модуль, отдельные сервисные трассы и понятная связь между ними.</p></div>
+<div class="arch">
+<div class="arch-map reveal"><div class="rack"></div><div class="zonebox z1"><b>A · AIR / NOISE</b>Фильтрация · вентилятор · шумоглушение · plenum</div><div class="zonebox z2"><b>B · TECH</b>Вода · сервис · автоматика · питание</div><div class="zonebox z3"><b>C · GROW</b>Поддон · растения · SCROG · свет · датчики</div></div>
+<div class="arch-list">
+<div class="arch-item reveal"><b>01 · AIR</b><p>Воздушный поток проходит последовательную цепочку, а не хаотичную систему труб.</p></div>
+<div class="arch-item reveal"><b>02 · TECH COLUMN</b><p>Техническая зона собирает всё, что требует доступа, обслуживания и контроля.</p></div>
+<div class="arch-item reveal"><b>03 · GROW CHAMBER</b><p>Рабочая камера отделена от сервисной логики и остаётся визуально чистой.</p></div>
+<div class="arch-item reveal"><b>04 · SERVICE</b><p>Силовые, слаботочные и водные трассы разделяются и получают собственные точки доступа.</p></div>
+</div></div>
+</div></section>
+
+<section id="systems"><div class="wrap">
+<div class="head"><div><div class="eyebrow">03 · Systems</div><h2>Семь систем. Один объект.</h2></div><p>Здесь мы будем раскрывать каждый контур отдельно — с визуальными схемами, компонентами, расчётами и сервисом.</p></div>
+<div class="systems">
+<div class="system reveal"><div class="num">SYS-01</div><h3>AIR</h3><p>Воздухообмен и стабильная рабочая точка.</p><div class="flow"><span>FILTER</span><i>→</i><span>FAN</span><i>→</i><span>SILENCER</span></div></div>
+<div class="system reveal"><div class="num">SYS-02</div><h3>SILENCE</h3><p>Шум, вибрации и акустическая оболочка.</p><div class="flow"><span>MLV</span><span>ISOLATION</span><span>SEALS</span></div></div>
+<div class="system reveal"><div class="num">SYS-03</div><h3>GROW</h3><p>Свет, рабочая зона и геометрия растения.</p><div class="flow"><span>LIGHT</span><span>SCROG</span><span>SENSORS</span></div></div>
+<div class="system reveal"><div class="num">SYS-04</div><h3>SMART</h3><p>Сценарии, датчики, контроль и уведомления.</p><div class="flow"><span>INPUT</span><i>→</i><span>LOGIC</span><i>→</i><span>ACTION</span></div></div>
+<div class="system reveal"><div class="num">SYS-05</div><h3>WATER</h3><p>Резервуар, насосная часть и сервис.</p><div class="flow"><span>TANK</span><i>→</i><span>PUMP</span><i>→</i><span>ZONE</span></div></div>
+<div class="system reveal"><div class="num">SYS-06</div><h3>POWER</h3><p>Разделение групп и понятная электрическая архитектура.</p><div class="flow"><span>MAINS</span><i>→</i><span>PROTECTION</span><i>→</i><span>LOADS</span></div></div>
+<div class="system reveal"><div class="num">SYS-07</div><h3>SAFETY</h3><p>Контроль утечек, температуры и отказоустойчивость.</p><div class="flow"><span>DETECT</span><i>→</i><span>ISOLATE</span><i>→</i><span>ALERT</span></div></div>
+</div></div></section>
+
+<section class="digital" id="twin"><div class="wrap">
+<div class="head"><div><div class="eyebrow">04 · Digital Twin</div><h2>Настоящая модель — прямо в сайте.</h2></div><p>Интерактивный 3D остаётся отдельным глубоким инструментом. Остальной сайт не превращается в бесконечную сцену.</p></div>
+<div class="twin reveal"><iframe src="GrowBox_v31_3D.html" title="3D Digital Twin" loading="lazy" allowfullscreen></iframe><div class="twin-foot"><span>Вращение · масштаб · виды · разбор узлов</span><a href="GrowBox_v31_3D.html" target="_blank">Открыть на весь экран →</a></div></div>
+</div></section>
+
+<section class="paper" id="tools"><div class="wrap">
+<div class="head"><div><div class="eyebrow">05 · Инструменты</div><h2>Сайт не только показывает. Он считает.</h2></div><p>Рабочие инструменты уже существуют отдельными страницами — здесь они получают единую точку входа и понятную роль.</p></div>
+<div class="toolgrid">
+<div class="tool reveal"><b>CALCULATORS</b><h3>Инженерные калькуляторы</h3><p>Вентиляция, шум, свет, DLI, VPD, тепловой баланс, нагрузка на пол и электрическая часть.</p><a href="calculators.html">Открыть калькуляторы →</a></div>
+<div class="tool reveal"><b>GROWPEDIA</b><h3>База знаний</h3><p>Статьи, объяснения и практические карточки: от SCROG и климата до обслуживания и акустики.</p><a href="growpedia.html">Открыть гровпедию →</a></div>
+</div></div></section>
+
+<section id="builder"><div class="wrap">
+<div class="builder"><div class="builder-copy"><div class="eyebrow">06 · Box Builder</div><h2>Собери конфигурацию.</h2><p>Сборщик превращается из отдельной страницы в центральный инструмент: корпус → модули → оборудование → апгрейды → результат. Следующий шаг — связать итоговую конфигурацию с 3D и спецификацией.</p><div class="actions"><a class="btn primary" href="builder.html">Запустить сборщик →</a></div></div>
+<div class="builder-ui reveal"><div class="step"><i>01</i><b>BODY</b><span>геометрия</span></div><div class="step"><i>02</i><b>MODULES</b><span>A / B / C</span></div><div class="step"><i>03</i><b>EQUIPMENT</b><span>комплектация</span></div><div class="step"><i>04</i><b>UPGRADES</b><span>опции</span></div><div class="step"><i>05</i><b>RESULT</b><span>масса · мощность · цена</span></div></div></div>
+</div></section>
+
+<section class="dark" id="engineering"><div class="wrap">
+<div class="head"><div><div class="eyebrow">07 · Engineering</div><h2>Глубина для тех, кто хочет цифры.</h2></div><p>Следующий слой платформы — инженерное досье: размеры, нагрузки, трассы, узлы, BOM, электрические группы и сервисные процедуры.</p></div>
+<div class="docs">
+<div class="doc reveal"><b>ENG-01</b><h3>Architecture</h3><p>Размеры, модули, сечения, зоны обслуживания и логика сборки.</p><a href="#architecture">Смотреть →</a></div>
+<div class="doc reveal"><b>ENG-02</b><h3>BOM / Components</h3><p>Компоненты по категориям, количество, назначение и связь с узлами.</p><a href="#systems">Открыть систему →</a></div>
+<div class="doc reveal"><b>ENG-03</b><h3>Service</h3><p>Что обслуживать, где находится, как получить доступ и что проверять.</p><a href="#start">Скоро в платформе →</a></div>
+</div></div></section>
+
+<section class="cta" id="start"><div class="wrap cta-inner"><div><div class="eyebrow">08 · One platform</div><h2>Сделаем из сайта<br>цифровой продукт.</h2></div><div><p>Главная задача — не добавить ещё одну красивую страницу, а связать всё между собой: 3D ↔ сборщик ↔ калькуляторы ↔ знания ↔ инженерия.</p><div class="actions"><a class="btn primary" href="builder.html">Начать со сборщика →</a><a class="btn" href="calculators.html">К инструментам</a></div></div></div></section>
+
+<footer><div class="wrap"><div class="foot"><strong>SECRET BOX</strong><div class="footlinks"><a href="#concept">Концепция</a><a href="#architecture">Архитектура</a><a href="#systems">Системы</a><a href="#twin">3D</a><a href="builder.html">Сборщик</a><a href="calculators.html">Калькуляторы</a><a href="growpedia.html">Гровпедия</a></div></div><div class="copy">© 2026 SECRET BOX · цифровая платформа</div></div></footer>
+<script>
+const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.classList.toggle('on',scrollY>30),{passive:true});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1});document.querySelectorAll('.reveal').forEach(e=>io.observe(e));
+</script>
+</body></html>
