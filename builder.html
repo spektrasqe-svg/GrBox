@@ -633,28 +633,47 @@ render();
 (function(){
   if(!window.SECRETBOX||!window.S)return;
   const names={A:'A · FLAGSHIP',B:'B · COMPACT',C:'C · DUAL ZONE'};
-  const widths={A:796,B:600,C:700};
+  const presets={
+    A:{cWidth:796,mods:{a:true,b:true,c:true}},
+    B:{cWidth:600,mods:{a:true,b:true,c:true}},
+    C:{cWidth:700,mods:{a:true,b:true,c:true}}
+  };
   const params=new URLSearchParams(location.search);
   const requested=(params.get('model')||'').toUpperCase();
-  let current=(SECRETBOX.load().model||'A').toUpperCase();
+  let current=(SECRETBOX.load().model||requested||'A').toUpperCase();
   if(!names[current])current='A';
+
   function paint(){
     document.querySelectorAll('#modelPick [data-model]').forEach(b=>b.classList.toggle('active',b.dataset.model===current));
     const label=document.getElementById('selectedModelLabel'); if(label)label.textContent=names[current];
+    const state=document.getElementById('modelState'); if(state)state.textContent=names[current]+' · '+presets[current].cWidth+' мм C';
   }
+
   function apply(model,fromUrl){
     current=names[model]?model:'A';
+    const p=presets[current];
     S.model=current;
-    S.cWidth=widths[current];
+    S.cWidth=p.cWidth;
+    Object.assign(S.mods,p.mods);
+    document.querySelectorAll('#mods .opt').forEach(x=>{
+      const k=x.getAttribute('data-key'), inp=x.querySelector('input');
+      if(inp)inp.checked=!!S.mods[k];
+      x.classList.toggle('on',!!S.mods[k]);
+    });
     const cw=document.getElementById('cWidth');
-    if(cw){cw.value=S.cWidth;document.getElementById('cWidthVal').textContent=S.cWidth+' мм';document.getElementById('cDims').textContent=S.cWidth+' × 1700 мм';}
+    if(cw){
+      cw.value=S.cWidth;
+      const val=document.getElementById('cWidthVal'); if(val)val.textContent=S.cWidth+' мм';
+      const dims=document.getElementById('cDims'); if(dims)dims.textContent=S.cWidth+' × 1700 мм';
+    }
     paint();
     render();
-    SECRETBOX.set({model:current,cWidth:S.cWidth});
+    SECRETBOX.set({model:current,cWidth:S.cWidth,mods:S.mods});
     if(fromUrl)history.replaceState(null,'',location.pathname+'?model='+current);
   }
+
   document.querySelectorAll('#modelPick [data-model]').forEach(b=>b.addEventListener('click',()=>apply(b.dataset.model,false)));
-  if(names[requested])apply(requested,true);else{S.model=current;paint();}
+  if(names[requested]) apply(requested,true); else { S.model=current; paint(); render(); }
 })();
 </script>
 <script src="assets/site/platform-shell.js"></script>
