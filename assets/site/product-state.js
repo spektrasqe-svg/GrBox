@@ -1,15 +1,77 @@
-/* SECRET BOX — shared product state */
+/* SECRET BOX — shared product state v2 */
 (function(){
- const KEY='secretbox.product.state.v1';
- const D={model:'A',finish:'choco',cWidth:796,mods:{a:true,b:true,c:true},equip:{se3000:true,uvir:false,ggs:true,ac10:true,sensor:true,soil:true,drip:true,humid:true},upg:{sil:true,vibe:true,acdoor:true,leak:true,ups:false,rkn:false,uzip:false,reserve:false,peri:false,cam:false}};
+ const KEY='secretbox.product.state.v2';
+ const OLD='secretbox.product.state.v1';
+ const D={
+  mode:'custom', model:'CUSTOM', finish:'choco',
+  dimensions:{W:1250,H:2060,D:741,plinth:55,panel:18},
+  architecture:{techColumn:400,topBoxH:300,serviceGap:40,doors:3,doorSandwich:41,trayH:120,scrogH:650},
+  equipment:{light:'SE3000',fan:'SF4',controller:'GGS',climate:'humidifier',irrigation:'smart-drip',reservoir:'20L',sensors:true,camera:false},
+  engineering:{silencer:true,vibration:true,leakProtection:true,ups:false,din:true,rkn:true},
+  finish:'choco'
+ };
  const clone=o=>JSON.parse(JSON.stringify(o));
- function merge(base,src){const o=clone(base);src=src||{};Object.keys(src).forEach(k=>{if(src[k]&&typeof src[k]==='object'&&!Array.isArray(src[k]))o[k]=Object.assign({},o[k],src[k]);else if(src[k]!==undefined)o[k]=src[k]});return o}
- function load(){try{return merge(D,JSON.parse(localStorage.getItem(KEY)||'null'))}catch(e){return clone(D)}}
- function save(v){const x=merge(D,v);localStorage.setItem(KEY,JSON.stringify(x));window.dispatchEvent(new CustomEvent('secretbox:state',{detail:x}));return x}
+ function merge(base,src){
+  const o=clone(base); src=src||{};
+  Object.keys(src).forEach(k=>{
+   if(src[k]&&typeof src[k]==='object'&&!Array.isArray(src[k]))o[k]=Object.assign({},o[k]||{},src[k]);
+   else if(src[k]!==undefined)o[k]=src[k];
+  });
+  return o;
+ }
+ function migrate(){
+  try{
+   const old=JSON.parse(localStorage.getItem(OLD)||'null');
+   if(!old)return null;
+   const g={width:18+(old.mods?.b?400:0)+(old.mods?.c?Number(old.cWidth||796):0)+18,height:2060,depth:741};
+   return merge(D,{model:'CUSTOM',dimensions:{W:g.width,H:g.height,D:g.depth},finish:old.finish||'choco'});
+  }catch(e){return null}
+ }
+ function load(){
+  try{
+   const raw=JSON.parse(localStorage.getItem(KEY)||'null');
+   if(raw)return merge(D,raw);
+   return migrate()||clone(D);
+  }catch(e){return clone(D)}
+ }
+ function save(v){
+  const x=merge(D,v);
+  localStorage.setItem(KEY,JSON.stringify(x));
+  window.dispatchEvent(new CustomEvent('secretbox:state',{detail:x}));
+  return x;
+ }
  function set(v){return save(merge(load(),v))}
- function geometry(s=load()){return{width:18+(s.mods.b?400:0)+(s.mods.c?Number(s.cWidth):0)+18,depth:741,height:2060,airHeight:300}}
- function mass(s=load()){const e={se3000:7,uvir:2,ggs:1,ac10:2,sensor:.5,soil:.5,drip:2,humid:3},u={sil:8,vibe:2,acdoor:22,leak:3,ups:7,rkn:1,uzip:2,reserve:20,peri:4,cam:1};let m=(s.mods.a?45:0)+(s.mods.b?85:0)+(s.mods.c?(98.7+45)*s.cWidth/796:0);Object.keys(e).forEach(k=>{if(s.equip[k])m+=e[k]});Object.keys(u).forEach(k=>{if(s.upg[k])m+=u[k]});return Math.round(m*10)/10}
- function estimate(s=load()){const e={se3000:28000,uvir:18000,ggs:7000,ac10:9000,sensor:6000,soil:5000,drip:6000,humid:7000},u={sil:10000,vibe:3500,acdoor:12000,leak:8000,ups:18000,rkn:5500,uzip:7500,reserve:9000,peri:19000,cam:9000};let t=72000+(s.finish==='choco'?25000:s.finish==='champ'?10000:0);['a','b','c'].forEach(k=>{if(s.mods[k])t+=k==='c'?Math.round(28000*s.cWidth/796/500)*500:{a:20000,b:24000}[k]});Object.keys(e).forEach(k=>{if(s.equip[k])t+=e[k]});Object.keys(u).forEach(k=>{if(s.upg[k])t+=u[k]});return t}
- function label(s=load()){const g=geometry(s);const models={A:'FLAGSHIP · BOX A',B:'COMPACT · BOX B',C:'DUAL ZONE · BOX C'};return{model:s.model||'A',modelName:models[s.model]||models.A,finish:{choco:'Шоколад',champ:'Шампань',white:'Белый'}[s.finish]||s.finish,dimensions:g.width+' × '+g.depth+' × '+g.height+' мм',mass:mass(s),estimate:estimate(s)}}
- window.SECRETBOX={key:KEY,defaults:clone(D),load,save,set,reset:()=>{localStorage.removeItem(KEY);return save(D)},geometry,mass,estimate,label,subscribe(fn){const h=e=>fn(e.detail);addEventListener('secretbox:state',h);return()=>removeEventListener('secretbox:state',h)}};
+ function geometry(s=load()){const d=s.dimensions;return{width:+d.W||0,height:+d.H||0,depth:+d.D||0,plinth:+d.plinth||0,panel:+d.panel||0}}
+ function mass(s=load()){
+  const d=geometry(s), a=s.architecture||{}, e=s.equipment||{}, en=s.engineering||{};
+  let m=80+(d.width*d.height*d.depth)/9000000;
+  m+=(+a.techColumn||0)*0.08;
+  if(e.light)m+=8;if(e.fan)m+=4;if(e.reservoir)m+=22;
+  if(en.silencer)m+=8;if(en.vibration)m+=2;if(en.ups)m+=7;if(en.din)m+=3;
+  return Math.round(m*10)/10;
+ }
+ function estimate(s=load()){
+  let t=72000;
+  const eq={SE3000:28000,SE5000:42000,G8600:56000};
+  const fan={SF4:9000,SF6:13000,SF8:18000};
+  if(eq[s.equipment?.light])t+=eq[s.equipment.light];
+  if(fan[s.equipment?.fan])t+=fan[s.equipment.fan];
+  t+=s.equipment?.controller==='GGS'?7000:0;
+  t+=s.equipment?.climate==='humidifier'?7000:0;
+  t+=s.equipment?.irrigation==='smart-drip'?12000:0;
+  t+=s.engineering?.silencer?10000:0;
+  t+=s.engineering?.vibration?3500:0;
+  t+=s.engineering?.leakProtection?8000:0;
+  t+=s.engineering?.ups?18000:0;
+  t+=s.engineering?.rkn?5500:0;
+  t+=s.finish==='choco'?25000:s.finish==='champ'?10000:0;
+  return Math.round(t/500)*500;
+ }
+ function label(s=load()){
+  const g=geometry(s);
+  return{model:'CUSTOM',modelName:'SECRET BOX · CUSTOM',finish:{choco:'Шоколад',champ:'Шампань',white:'Белый'}[s.finish]||s.finish,
+   dimensions:g.width+' × '+g.depth+' × '+g.height+' мм',mass:mass(s),estimate:estimate(s)}
+ }
+ window.SECRETBOX={key:KEY,defaults:clone(D),load,save,set,reset:()=>{localStorage.removeItem(KEY);return save(D)},geometry,mass,estimate,label,
+  subscribe(fn){const h=e=>fn(e.detail);addEventListener('secretbox:state',h);return()=>removeEventListener('secretbox:state',h)}};
 })();
