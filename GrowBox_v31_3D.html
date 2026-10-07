@@ -617,70 +617,32 @@ function loop(){
 }
 
 
-/* ---------- SECRET BOX live builder bridge ---------- */
+/* ---------- SECRET BOX custom configurator bridge ---------- */
 (function(){
- var KEY='secretbox.product.state.v1',last='';
- var params=new URLSearchParams(location.search);
- var urlModel=(params.get('model')||'').toUpperCase();
- var presets={A:796,B:600,C:700};
- var presetNames={A:'FLAGSHIP',B:'COMPACT',C:'DUAL ZONE'};
+ var KEY='secretbox.product.state.v2',last='';
  function read(){
   try{
-   var d={model:'A',finish:'choco',cWidth:796,mods:{a:true,b:true,c:true},equip:{se3000:true,uvir:false,ggs:true,ac10:true,sensor:true,soil:true,drip:true,humid:true},upg:{sil:true,vibe:true,acdoor:true,leak:true,ups:false,rkn:false,uzip:false,reserve:false,peri:false,cam:false}};
-   var x=JSON.parse(localStorage.getItem(KEY)||'null')||{};
-   ['mods','equip','upg'].forEach(function(k){d[k]=Object.assign(d[k],x[k]||{})});
-   if(x.finish!==undefined)d.finish=x.finish;
-   if(x.cWidth!==undefined)d.cWidth=Number(x.cWidth);
-   if(x.model!==undefined)d.model=String(x.model).toUpperCase();
-   if(presets[urlModel]){d.model=urlModel;d.cWidth=presets[urlModel];d.mods={a:true,b:true,c:true};}
-   return d;
+   var d=SECRETBOX&&SECRETBOX.load?SECRETBOX.load():null;
+   if(!d)return null;
+   var g=d.dimensions||{},a=d.architecture||{};
+   var cWidth=Math.max(300,Number(g.W||1250)-36-Number(a.techColumn||400));
+   return {model:'CUSTOM',finish:d.finish||'choco',cWidth:cWidth,dimensions:g,architecture:a,equipment:d.equipment||{},engineering:d.engineering||{}};
   }catch(e){return null}
  }
- function pre(n,p){return n.indexOf(p)===0}
- function visiblePart(n,s){
-  if(pre(n,'25_'))return !!s.equip.se3000;
-  if(pre(n,'26_'))return !!s.equip.uvir;
-  if(pre(n,'28_'))return !!s.equip.soil;
-  if(pre(n,'32_'))return !!s.equip.drip||!!s.upg.peri;
-  if(pre(n,'34_'))return !!s.equip.humid;
-  if(pre(n,'36_'))return !!s.equip.ggs;
-  if(pre(n,'37_'))return !!s.equip.ac10;
-  if(pre(n,'38_'))return !!s.upg.ups;
-  if(pre(n,'35_'))return !!s.upg.rkn||!!s.upg.uzip;
-  if(pre(n,'39_')||pre(n,'40_')||pre(n,'41_')||pre(n,'63_'))return !!s.upg.reserve;
-  if(pre(n,'18_'))return !!s.upg.sil;
-  if(pre(n,'53_')||pre(n,'54_')||pre(n,'55_')||pre(n,'56_')||pre(n,'57_')||pre(n,'58_')||pre(n,'64_')||pre(n,'65_'))return !!s.upg.acdoor;
-  return true;
- }
  function apply(s){
-  meshes.forEach(function(mesh){
-   var p=mesh.userData&&mesh.userData.part;if(!p)return;
-   var n=p.n,m=p.m||'',ok=true;
-   if(m.indexOf('A')>=0&&!s.mods.a)ok=false;
-   if(m.indexOf('B')>=0&&!s.mods.b)ok=false;
-   if(m.indexOf('C')>=0&&!s.mods.c)ok=false;
-   if(m.indexOf('B+C')>=0)ok=!!(s.mods.b||s.mods.c);
-   mesh.visible=ok&&visiblePart(n,s);
-  });
-  if(window.__SECRETBOX_APPLY_C_WIDTH){ window.__SECRETBOX_APPLY_C_WIDTH(Number(s.cWidth)||796); }
-  else if(groups.doorC2){
-   var sc=(Number(s.cWidth)||796)/796;
-   groups.doorC2.position.x=px(454)+px(796)*sc;
-  }
-  if(labels[0])labels[0].visible=!!s.mods.a;
-  if(labels[1])labels[1].visible=!!s.mods.b;
-  if(labels[2])labels[2].visible=!!s.mods.c;
+  var w=s.dimensions||{},a=s.architecture||{};
+  if(window.__SECRETBOX_APPLY_C_WIDTH)window.__SECRETBOX_APPLY_C_WIDTH(s.cWidth);
+  window.__SECRETBOX_CONFIG={model:'CUSTOM',cWidth:s.cWidth,dimensions:w,architecture:a,equipment:s.equipment,engineering:s.engineering};
   var modelEl=document.getElementById('secretbox-3d-model');
-  window.__SECRETBOX_CONFIG={model:s.model||'A',cWidth:Number(s.cWidth)||796,equipment:s.equip||{},upg:s.upg||{}};
-  if(modelEl)modelEl.textContent=(presetNames[s.model]||'FLAGSHIP')+' · BOX '+(s.model||'A');
+  if(modelEl)modelEl.textContent='CUSTOM · '+s.cWidth+' mm C';
   var el=document.getElementById('secretbox-3d-config');
-  if(el)el.innerHTML='<b style="color:#c9f27f">LIVE CONFIG</b> · '+(presetNames[s.model]||'FLAGSHIP')+' · '+(s.cWidth||796)+' mm C · '+Object.keys(s.equip).filter(function(k){return s.equip[k]}).length+' equipment';
+  if(el)el.innerHTML='<b style="color:#c9f27f">LIVE CONFIG</b> · '+(w.W||'—')+' × '+(w.D||'—')+' × '+(w.H||'—')+' мм · C '+Math.round(s.cWidth)+' мм';
   var pills=document.querySelectorAll('.top .pill');
-  if(pills[0])pills[0].innerHTML='<b>GrowBox v3.1 rev.2</b> · '+(presetNames[s.model]||'FLAGSHIP')+' · C '+(s.cWidth||796)+' mm · '+PARTS.length+' деталей';
+  if(pills[0])pills[0].innerHTML='<b>SECRET BOX · CUSTOM</b> · '+(w.W||'—')+'×'+(w.D||'—')+'×'+(w.H||'—')+' мм · '+PARTS.length+' деталей';
   last=JSON.stringify(s);
  }
  function tick(){var s=read();if(s&&JSON.stringify(s)!==last)apply(s)}
- tick();setInterval(tick,180);
+ tick();setInterval(tick,250);
 })();
  
 /* ---------- V3.1 geometry + mobile interaction hardening ---------- */
@@ -699,7 +661,7 @@ function loop(){
     if(m.parent===root){ var wp=m.position.clone(); root.remove(m); cBodyRoot.add(m); m.position.copy(wp); }
   });
 
-  var baseWidth=796, minWidth=600, maxWidth=796, left=437, last=-1;
+  var baseWidth=796, minWidth=300, maxWidth=1800, left=437, last=-1;
   var doorBaseScale={};
   ['doorC1','doorC2'].forEach(function(g){
     if(groups[g]) doorBaseScale[g]=groups[g].scale.clone();
