@@ -387,23 +387,23 @@ function pointerUp(x,y){
   }
   drag = null;
 }
-cv.addEventListener('mousedown', function(e){ pointerDown(e.clientX, e.clientY, e.shiftKey, e.button); });
-window.addEventListener('mousemove', function(e){ pointerMove(e.clientX, e.clientY); });
-window.addEventListener('mouseup',   function(e){ pointerUp(e.clientX, e.clientY); });
+cv.addEventListener('mousedown', function(e){ if(window.PointerEvent)return; pointerDown(e.clientX, e.clientY, e.shiftKey, e.button); });
+window.addEventListener('mousemove', function(e){ if(window.PointerEvent)return; pointerMove(e.clientX, e.clientY); });
+window.addEventListener('mouseup',   function(e){ if(window.PointerEvent)return; pointerUp(e.clientX, e.clientY); });
 cv.addEventListener('contextmenu', function(e){ e.preventDefault(); });
 cv.addEventListener('wheel', function(e){
   e.preventDefault();
   camT.r = Math.max(1.1, Math.min(9, camT.r * (e.deltaY > 0 ? 1.12 : 0.89)));
 }, {passive:false});
 
-cv.addEventListener('touchstart', function(e){
+cv.addEventListener('touchstart', function(e){ if(window.PointerEvent)return;
   if (e.touches.length === 1){ pointerDown(e.touches[0].clientX, e.touches[0].clientY, false, 0); }
   else if (e.touches.length === 2){
     drag = null;
     pinch = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
   }
 }, {passive:true});
-cv.addEventListener('touchmove', function(e){
+cv.addEventListener('touchmove', function(e){ if(window.PointerEvent)return;
   if (e.touches.length === 1 && drag){ pointerMove(e.touches[0].clientX, e.touches[0].clientY); }
   else if (e.touches.length === 2 && pinch){
     var d = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
@@ -411,7 +411,7 @@ cv.addEventListener('touchmove', function(e){
     pinch = d;
   }
 }, {passive:true});
-cv.addEventListener('touchend', function(e){
+cv.addEventListener('touchend', function(e){ if(window.PointerEvent)return;
   if (drag) pointerUp(drag.x, drag.y);
   pinch = null;
 }, {passive:true});
@@ -536,6 +536,7 @@ document.getElementById('bReset').addEventListener('click', resetAll);
 
 /* ---------- экспорт конфигурации ---------- */
 document.getElementById('bExport').addEventListener('click', function(){
+  var liveCfg = window.__SECRETBOX_CONFIG || {model:'A',cWidth:796};
   var cfg = {
     project: 'GrowBox v3.1 rev.2',
     date: new Date().toISOString(),
@@ -543,7 +544,8 @@ document.getElementById('bExport').addEventListener('click', function(){
     state: state,
     camera: {r:camT.r, th:+camT.th.toFixed(3), ph:+camT.ph.toFixed(3), targetY:+target.y.toFixed(3)},
     selected: selected ? selected.userData.part.n : null,
-    box: {w:1250, d:700, h:2000, assembly:[1250,741,2060], mass_kg:358, floor_kgm2:386},
+    box: {w:1250, cWidth:liveCfg.cWidth||796, d:700, h:2000, assembly:[1250,741,2060], mass_kg:358, floor_kgm2:386},
+    product: {model:liveCfg.model||'A', cWidth:liveCfg.cWidth||796, equipment:liveCfg.equipment||{}, upgrades:liveCfg.upg||{}},
     parts: PARTS.length
   };
   var blob = new Blob([JSON.stringify(cfg, null, 2)], {type:'application/json'});
@@ -621,6 +623,7 @@ function loop(){
  var params=new URLSearchParams(location.search);
  var urlModel=(params.get('model')||'').toUpperCase();
  var presets={A:796,B:600,C:700};
+ var presetNames={A:'FLAGSHIP',B:'COMPACT',C:'DUAL ZONE'};
  function read(){
   try{
    var d={model:'A',finish:'choco',cWidth:796,mods:{a:true,b:true,c:true},equip:{se3000:true,uvir:false,ggs:true,ac10:true,sensor:true,soil:true,drip:true,humid:true},upg:{sil:true,vibe:true,acdoor:true,leak:true,ups:false,rkn:false,uzip:false,reserve:false,peri:false,cam:false}};
@@ -668,9 +671,12 @@ function loop(){
   if(labels[1])labels[1].visible=!!s.mods.b;
   if(labels[2])labels[2].visible=!!s.mods.c;
   var modelEl=document.getElementById('secretbox-3d-model');
-  if(modelEl)modelEl.textContent=(s.model==='B'?'COMPACT · BOX B':s.model==='C'?'DUAL ZONE · BOX C':'FLAGSHIP · BOX A');
+  window.__SECRETBOX_CONFIG={model:s.model||'A',cWidth:Number(s.cWidth)||796,equipment:s.equip||{},upg:s.upg||{}};
+  if(modelEl)modelEl.textContent=(presetNames[s.model]||'FLAGSHIP')+' · BOX '+(s.model||'A');
   var el=document.getElementById('secretbox-3d-config');
-  if(el)el.innerHTML='<b style="color:#c9f27f">LIVE CONFIG</b> · '+(s.model||'A')+' · '+(s.cWidth||796)+' mm C · '+Object.keys(s.equip).filter(function(k){return s.equip[k]}).length+' equipment';
+  if(el)el.innerHTML='<b style="color:#c9f27f">LIVE CONFIG</b> · '+(presetNames[s.model]||'FLAGSHIP')+' · '+(s.cWidth||796)+' mm C · '+Object.keys(s.equip).filter(function(k){return s.equip[k]}).length+' equipment';
+  var pills=document.querySelectorAll('.top .pill');
+  if(pills[0])pills[0].innerHTML='<b>GrowBox v3.1 rev.2</b> · '+(presetNames[s.model]||'FLAGSHIP')+' · C '+(s.cWidth||796)+' mm · '+PARTS.length+' деталей';
   last=JSON.stringify(s);
  }
  function tick(){var s=read();if(s&&JSON.stringify(s)!==last)apply(s)}
@@ -679,120 +685,100 @@ function loop(){
  
 /* ---------- V3.1 geometry + mobile interaction hardening ---------- */
 (function(){
-  /* Keep the CAD source intact, but give the C chamber a real width transform.
-     We scale the chamber body around its left datum; hinge groups remain independent. */
+  /* C is a parametric chamber: body, two doors and their contents follow C width.
+     We scale only X so equipment dimensions in Y/Z remain physically meaningful. */
   var cParts = meshes.filter(function(m){
-    var p=m.userData&&m.userData.part;
-    var mod=(p&&p.m)||'';
+    var p=m.userData&&m.userData.part, mod=(p&&p.m)||'';
     return mod.split('+').indexOf('C')>=0 && mod!=='B+C' &&
       ['doorC1','doorC2'].indexOf(groupOf(p.n))<0;
   });
-  var cBodyRoot = new THREE.Group();
+  var cBodyRoot=new THREE.Group();
   cBodyRoot.name='C_MODULE_WIDTH_CONTROLLER';
   root.add(cBodyRoot);
-
   cParts.forEach(function(m){
-    if(m.parent===root){
-      var wp=m.position.clone();
-      root.remove(m);
-      cBodyRoot.add(m);
-      m.position.copy(wp);
-    }
-    m.userData.cBaseLocal=m.position.clone();
-    m.userData.cBaseScale=m.scale.clone();
+    if(m.parent===root){ var wp=m.position.clone(); root.remove(m); cBodyRoot.add(m); m.position.copy(wp); }
   });
 
-  var cBaseWidth=796;
-  var cLeft=px(437);
-  var cLastWidth=cBaseWidth;
+  var baseWidth=796, minWidth=600, maxWidth=796, left=437, last=-1;
+  var doorBaseScale={};
+  ['doorC1','doorC2'].forEach(function(g){
+    if(groups[g]) doorBaseScale[g]=groups[g].scale.clone();
+  });
 
-  function applyRealCWidth(width){
-    width=Math.max(600,Math.min(796,Number(width)||796));
-    var s=width/cBaseWidth;
-    if(Math.abs(width-cLastWidth)<0.01)return;
+  function apply(width){
+    width=Math.max(minWidth,Math.min(maxWidth,Number(width)||baseWidth));
+    var s=width/baseWidth;
+    if(Math.abs(width-last)<0.01)return;
     cBodyRoot.scale.set(s,1,1);
-    cBodyRoot.position.x=cLeft*(1-s);
-    /* Move the second door hinge to the new right edge. */
-    if(groups.doorC2){
-      groups.doorC2.position.x=px(454)+px(width);
+    cBodyRoot.position.x=px(left)*(1-s);
+
+    /* C1 stays on the left hinge; C2 follows the right edge including the 18 mm frame. */
+    if(groups.doorC1){
+      groups.doorC1.position.x=px(left);
+      groups.doorC1.scale.copy(doorBaseScale.doorC1||new THREE.Vector3(1,1,1));
+      groups.doorC1.scale.x*=s;
     }
-    /* Keep the chamber label honest. */
-    if(labels[2]) labels[2].position.x=px(437)+px(width)/2;
-    cLastWidth=width;
+    if(groups.doorC2){
+      groups.doorC2.position.x=px(left+18+width);
+      groups.doorC2.scale.copy(doorBaseScale.doorC2||new THREE.Vector3(1,1,1));
+      groups.doorC2.scale.x*=s;
+    }
+    if(labels[2]) labels[2].position.x=px(left+width/2);
+    last=width;
   }
 
-  /* Rebuild the C body transform from the current product state. */
-  window.__SECRETBOX_APPLY_C_WIDTH=applyRealCWidth;
+  window.__SECRETBOX_APPLY_C_WIDTH=apply;
+  window.__SECRETBOX_C_WIDTH_STATE={min:minWidth,max:maxWidth,base:baseWidth};
 
-  /* Pointer Events: one interaction path for mouse + touch, with native
-     pointer capture. The legacy touch handlers are blocked in capture phase. */
-  var activePointers=new Map(), gesture=null, tapTime=0, tapX=0, tapY=0;
-  function stop(e){ e.preventDefault(); e.stopImmediatePropagation(); }
-
+  /* Pointer Events are the single interaction path on modern browsers. */
+  var active=new Map(),gesture=null,tapTime=0,tapX=0,tapY=0;
+  function stop(e){e.preventDefault();e.stopImmediatePropagation();}
   cv.addEventListener('pointerdown',function(e){
-    if(e.pointerType==='mouse' && e.button!==0 && e.button!==2)return;
-    stop(e);
-    try{cv.setPointerCapture(e.pointerId)}catch(_){}
-    activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
-    if(activePointers.size===1){
+    if(e.pointerType==='mouse'&&e.button!==0&&e.button!==2)return;
+    stop(e); try{cv.setPointerCapture(e.pointerId)}catch(_){}
+    active.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(active.size===1){
       pointerDown(e.clientX,e.clientY,e.shiftKey,e.button);
-      gesture={mode:'drag',lastX:e.clientX,lastY:e.clientY};
-    }else if(activePointers.size===2){
+      gesture={mode:'drag'};
+    }else if(active.size===2){
       drag=null;
-      var a=[...activePointers.values()];
-      gesture={mode:'pinch',dist:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)};
+      var a=[...active.values()];
+      gesture={mode:'pinch',dist:Math.max(1,Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y))};
     }
   },true);
-
   cv.addEventListener('pointermove',function(e){
-    if(!activePointers.has(e.pointerId))return;
-    stop(e);
-    activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
-    if(activePointers.size===1 && gesture&&gesture.mode==='drag'){
-      pointerMove(e.clientX,e.clientY);
-    }else if(activePointers.size===2 && gesture&&gesture.mode==='pinch'){
-      var a=[...activePointers.values()];
-      var d=Math.max(1,Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y));
-      camT.r=Math.max(1.1,Math.min(9,camT.r*(gesture.dist/d)));
-      gesture.dist=d;
+    if(!active.has(e.pointerId))return;
+    stop(e); active.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(active.size===1&&gesture&&gesture.mode==='drag') pointerMove(e.clientX,e.clientY);
+    else if(active.size===2&&gesture&&gesture.mode==='pinch'){
+      var a=[...active.values()],d=Math.max(1,Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y));
+      camT.r=Math.max(1.1,Math.min(9,camT.r*(gesture.dist/d))); gesture.dist=d;
     }
   },true);
-
   cv.addEventListener('pointerup',function(e){
-    if(!activePointers.has(e.pointerId))return;
-    stop(e);
-    activePointers.delete(e.pointerId);
-    if(activePointers.size===0){
-      if(gesture&&gesture.mode==='drag'){
-        var moved=drag&&drag.moved||0;
-        if(moved<7){
+    if(!active.has(e.pointerId))return;
+    stop(e); active.delete(e.pointerId);
+    if(active.size===0){
+      if(gesture&&gesture.mode==='drag'&&drag){
+        if(drag.moved<7){
           var now=Date.now();
-          if(now-tapTime<320 && Math.hypot(e.clientX-tapX,e.clientY-tapY)<18){
-            resetAll(); tapTime=0;
-          }else{
-            pickAt(e.clientX,e.clientY); tapTime=now; tapX=e.clientX; tapY=e.clientY;
-          }
+          if(now-tapTime<320&&Math.hypot(e.clientX-tapX,e.clientY-tapY)<18){resetAll();tapTime=0;}
+          else{pickAt(e.clientX,e.clientY);tapTime=now;tapX=e.clientX;tapY=e.clientY;}
         }
         drag=null;
       }
       gesture=null;
     }
   },true);
-
   cv.addEventListener('pointercancel',function(e){
-    stop(e); activePointers.delete(e.pointerId);
-    if(activePointers.size===0){drag=null;gesture=null;}
+    active.delete(e.pointerId); if(active.size===0){drag=null;gesture=null;}
   },true);
-
   cv.addEventListener('wheel',function(e){
-    stop(e);
-    camT.r=Math.max(1.1,Math.min(9,camT.r*(e.deltaY>0?1.09:0.92)));
+    stop(e); camT.r=Math.max(1.1,Math.min(9,camT.r*(e.deltaY>0?1.09:0.92)));
   },true);
-
-  /* Expose a tiny diagnostics hook for the builder bridge. */
-  window.__SECRETBOX_DIAG={cParts:cParts.length,realCWidth:true,pointerEvents:true};
+  window.__SECRETBOX_DIAG={realCWidth:true,pointerEvents:true};
 })();
-
+ 
 /* ---------- старт ---------- */
 document.getElementById('loader').style.display = 'none';
 loadState();
