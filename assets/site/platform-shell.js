@@ -8,12 +8,13 @@
   ['GrowBox_v31_3D.html','3D','3d'],
   ['builder.html','Сборщик','builder'],
   ['calculators.html','Калькуляторы','calc'],
-  ['growpedia.html','Гровпедия','pedia']
+  ['growpedia.html','Гровпедия','pedia'],
+  ['engineering.html','Инженерия','engineering']
  ];
  const shell=document.createElement('div'); shell.className='sb-shell';
  shell.innerHTML='<div class="sb-brand">SECRET BOX</div><button class="sb-menu" type="button" aria-label="Меню">MENU</button><nav class="sb-links">'+items.map(x=>'<a href="'+x[0]+'" data-key="'+x[2]+'">'+x[1]+'</a>').join('')+'</nav><a class="sb-home" href="platform.html">Открыть платформу</a>';
  document.body.appendChild(shell);
- const key=path==='index.html'||path===''?'index':path.includes('3D')?'3d':path.replace('.html','').replace('calculators','calc');
+ const key=path==='index.html'||path===''?'index':path.includes('3D')?'3d':path.includes('engineering')?'engineering':path.replace('.html','').replace('calculators','calc');
  shell.querySelectorAll('[data-key]').forEach(a=>{if(a.dataset.key===key)a.classList.add('sb-active')});
  const btn=shell.querySelector('.sb-menu'), links=shell.querySelector('.sb-links');
  btn.addEventListener('click',()=>links.classList.toggle('sb-open'));
