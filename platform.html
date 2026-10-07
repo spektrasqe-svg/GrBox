@@ -91,6 +91,36 @@ nav.on{background:rgba(30,32,36,.88)!important}
  .hero-photo:after{font-size:7px}
  .hero-photo:before{font-size:7px}
 }
+</style><style id="rebrand-v2">
+:root{--rb-bg:#101113;--rb-paper:#eee7da;--rb-gold:#c9aa70}
+body{background:#101113!important;color:var(--rb-paper)}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:linear-gradient(115deg,rgba(255,255,255,.025),transparent 28%,rgba(201,170,112,.018) 52%,transparent 75%),repeating-linear-gradient(90deg,rgba(255,255,255,.012) 0 1px,transparent 1px 9px)}
+nav.on{background:rgba(16,17,19,.9)!important}
+.logo,.navlinks a,.navbtn,.btn,.metric span,.classified-strip,.twin-foot,.foot{font-family:"Roboto Mono",monospace!important}
+.logo{letter-spacing:.14em!important}.logo i{border-radius:0!important;border-color:var(--rb-gold)!important;color:var(--rb-gold)}
+.navbtn,.btn{border-radius:0!important}.hero{position:relative;overflow:hidden}
+.hero-grid{grid-template-columns:minmax(0,.82fr) minmax(420px,1.18fr)!important;gap:5vw!important}
+.hero h1{font-size:clamp(54px,7.4vw,112px)!important;line-height:.87!important;letter-spacing:-.055em!important}
+.hero h1 .outline{color:transparent!important;-webkit-text-stroke:1px var(--rb-paper)!important}
+.hero-in{font-size:.46em;letter-spacing:.02em;color:var(--rb-gold);display:inline-block;margin-top:12px}
+.lead{max-width:570px!important;font-size:17px!important;color:#c1bbb1!important}
+.btn{padding:14px 18px!important;letter-spacing:.08em!important}.btn.primary{box-shadow:8px 8px 0 rgba(201,170,112,.14)}
+.hero-meta{margin-top:55px!important;border-top:1px solid rgba(238,231,218,.14);padding-top:20px}
+.metric{border-left:1px solid rgba(201,170,112,.45);padding-left:15px}.metric b{font-size:30px!important}
+.hero-visual{min-height:650px!important}.hero-photo{height:min(72vh,760px)!important;min-height:560px!important;border-radius:0!important;background:#0b0c0e!important;border:1px solid rgba(238,231,218,.2)!important;box-shadow:35px 35px 0 rgba(201,170,112,.045),0 40px 100px rgba(0,0,0,.55)!important}
+.hero-photo:before{left:18px!important;top:18px!important;border-radius:0!important;font-family:"Roboto Mono",monospace!important;background:rgba(10,11,12,.82)!important}
+.hero-photo:after{font-family:"Roboto Mono",monospace!important;background:linear-gradient(transparent,rgba(8,9,10,.9))!important}
+.hero-label{border-radius:0!important;font-family:"Roboto Mono",monospace!important}
+.classified-strip{letter-spacing:.1em!important}
+#concept,#systems,#tools,#builder{scroll-margin-top:90px}
+#concept{padding-top:150px!important}
+#concept .head h2,#systems .head h2,#tools .head h2,#builder .builder-copy h2{font-size:clamp(38px,5vw,72px)!important;line-height:.95!important;letter-spacing:-.045em!important}
+.cards{grid-template-columns:repeat(4,1fr)!important;gap:1px!important;background:rgba(238,231,218,.14);border:1px solid rgba(238,231,218,.14)}
+.card{min-height:310px!important;border:0!important;border-radius:0!important;padding:28px!important;transition:transform .35s,background .35s!important}.card:hover{transform:translateY(-6px)!important;background:#202328!important}
+.card h3{font-size:28px!important}.arch-map,.twin,.builder-ui,.doc,.tool,.system{border-radius:0!important}.system{min-height:250px!important}
+.paper{background:#e9e1d3!important}.paper .head h2{font-size:clamp(42px,5vw,78px)!important}.cta-inner{border-radius:0!important}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr!important}.hero-visual{min-height:520px!important}.hero-photo{height:520px!important;min-height:0!important}.cards{grid-template-columns:repeat(2,1fr)!important}}
+@media(max-width:600px){.hero{padding-top:105px!important}.hero h1{font-size:58px!important}.hero-visual{min-height:430px!important}.hero-photo{height:430px!important}.cards{grid-template-columns:1fr!important}}
 </style></head>
 <body>
 <div class="grain"></div><div class="progress" id="progress"></div><div class="cursor-glow" id="glow"></div>
@@ -104,11 +134,11 @@ nav.on{background:rgba(30,32,36,.88)!important}
 
 <header class="hero" id="top"><div class="wrap hero-grid">
 <div>
-<div class="section-stamp"><i></i> SYSTEM STATUS // ONLINE</div><div class="eyebrow">DIGITAL PRODUCT PLATFORM · 2026</div>
-<h1>НЕ ПРОСТО<br><span class="outline">ШКАФ.</span></h1>
-<p class="lead">Одна система, в которой продукт можно рассмотреть, разобрать, посчитать, настроить и понять. От архитектуры и 3D до сборщика, калькуляторов и базы знаний.</p>
-<div class="actions"><a class="btn primary" href="#twin">Открыть 3D →</a><a class="btn" href="#builder">Собрать конфигурацию</a></div>
-<div class="hero-meta"><div class="metric"><b>85+</b><span>деталей модели</span></div><div class="metric"><b>7</b><span>систем</span></div><div class="metric"><b>1</b><span>цифровая платформа</span></div></div>
+<div class="section-stamp"><i></i> SYSTEM STATUS // ONLINE</div><div class="eyebrow">CLASSIFIED GROW SYSTEM · ENGINEERED 2026</div>
+<h1>МЕБЕЛЬ<br><span class="outline">СНАРУЖИ.</span><br><span class="hero-in">СИСТЕМА ВНУТРИ.</span></h1>
+<p class="lead">SECRET BOX — инженерная система, замаскированная под мебель. Увидьте устройство изнутри, соберите конфигурацию, проверьте расчёты и пройдите путь от идеи до готового объекта.</p>
+<div class="actions"><a class="btn primary" href="#twin">ОТКРЫТЬ DIGITAL TWIN →</a><a class="btn" href="#builder">СОБРАТЬ СВОЙ BOX</a></div>
+<div class="hero-meta"><div class="metric"><b>85+</b><span>деталей модели</span></div><div class="metric"><b>7</b><span>систем</span></div><div class="metric"><b>01</b><span>единая система</span></div></div>
 </div>
 <div class="scrollline"><i></i>SCROLL TO EXPLORE · ACCESSING FILE</div><div class="hero-visual"><div class="hero-photo hero-twin"><iframe src="GrowBox_v31_3D.html?hero=1" title="SECRET BOX Digital Twin" loading="eager" allowfullscreen></iframe></div><div class="hero-label"><b>SECRET BOX</b> · product system</div></div>
 <div class="classified-strip"><span>SECRET BOX® / ENGINEERING FILE // SB-001</span><strong>STATUS ACTIVE</strong><span>DIGITAL TWIN ONLINE</span></div></div></header>
