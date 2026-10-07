@@ -377,6 +377,46 @@ footer{padding:84px 0 40px}
   .cabinet{width:290px;height:370px}
   .ctop{width:290px;height:52px;top:-52px}
   .cside{right:-56px;height:370px;width:56px}}
+
+/* ================= STOREFRONT / PRODUCT LAYER ================= */
+.product-compare{background:#111215}
+.product-compare .sec-head{margin-bottom:42px}
+.compare-grid{display:grid;grid-template-columns:1.12fr 1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
+.compare-card{background:#18191c;min-width:0;transition:transform .45s ease,background .35s,border-color .35s;position:relative;overflow:hidden}
+.compare-card:hover{background:#202126;transform:translateY(-5px);z-index:2}
+.compare-card.featured{background:linear-gradient(145deg,#24211d,#18191c)}
+.compare-top{display:flex;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line);font-family:var(--body);font-size:9px;letter-spacing:.18em;color:var(--cream-2)}
+.compare-top b{color:var(--brass);font-weight:700}
+.compare-media{height:330px;overflow:hidden;background:#0c0d0f}
+.compare-media img{width:100%;height:100%;object-fit:cover;transition:transform .8s ease;filter:saturate(.92)}
+.compare-card:hover .compare-media img{transform:scale(1.045)}
+.compare-content{padding:26px 24px 24px}
+.compare-content h3{font-family:var(--disp);font-size:24px;letter-spacing:.01em}
+.compare-content p{margin:8px 0 20px;color:var(--cream-2);font-size:13px;line-height:1.65}
+.spec-row{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding:11px 0;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#8f8b83}
+.spec-row strong{color:var(--cream);font-weight:600}
+.compare-action{margin-top:18px;color:var(--cream);font-size:10px;letter-spacing:.18em;font-weight:700}
+.compare-card:hover .compare-action{color:var(--brass)}
+.trust-strip{display:grid;grid-template-columns:repeat(4,1fr);margin-top:1px;border:1px solid var(--line);background:#18191c}
+.trust-strip>div{padding:23px;border-right:1px solid var(--line)}
+.trust-strip>div:last-child{border-right:0}
+.trust-strip b{display:block;font-family:var(--disp);font-size:10px;color:var(--brass);margin-bottom:12px}
+.trust-strip span{display:block;font-family:var(--disp);font-size:12px;letter-spacing:.02em}
+.trust-strip small{display:block;color:#85827b;font-size:10px;margin-top:7px}
+.sales-cta{padding:100px 0;background:linear-gradient(120deg,#211e1a,#141518 65%);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.sales-cta-inner{display:flex;justify-content:space-between;align-items:end;gap:60px}
+.sales-cta h2{font-family:var(--disp);font-size:clamp(38px,5.2vw,72px);line-height:1.02;margin:20px 0;letter-spacing:-.025em}
+.sales-cta h2 span{color:transparent;-webkit-text-stroke:1px var(--cream)}
+.sales-cta p{max-width:620px;color:var(--cream-2);font-size:15px;line-height:1.8}
+.sales-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:900px){.compare-grid{grid-template-columns:1fr}.compare-media{height:300px}.trust-strip{grid-template-columns:1fr 1fr}.trust-strip>div:nth-child(2){border-right:0}.sales-cta-inner{align-items:flex-start;flex-direction:column}.sales-actions{justify-content:flex-start}}
+@media(max-width:560px){.trust-strip{grid-template-columns:1fr}.trust-strip>div{border-right:0;border-bottom:1px solid var(--line)}.trust-strip>div:last-child{border-bottom:0}.compare-media{height:250px}}
+/* product cards: make the original catalog feel more like commerce */
+.model .m-img{height:270px}
+.model .m-body{min-height:280px}
+.model .m-buy{margin-top:auto}
+.model .m-buy span{font-family:var(--disp);font-size:12px;color:var(--cream)}
+.model .m-buy a{border-radius:2px;padding:12px 15px}
 </style>
 <script src="assets/site/product-state.js"></script>
 <link rel="stylesheet" href="assets/site/platform-shell.css">
@@ -475,9 +515,9 @@ footer{padding:84px 0 40px}
     <div class="sec-head">
       <div>
         <div class="tag">Линейка</div>
-        <h2>Три корпуса. Один характер.</h2>
+        <h2>ВЫБЕРИТЕ СВОЙ BOX.</h2>
       </div>
-      <p>От компактного шкафа для спальни до флагмана с тех-колонной. Наполнение собирается в конфигураторе — от базы до полного цикла.</p>
+      <p>Три реальные конструкции с разным сценарием использования. Выберите корпус — затем соберите оснащение, отделку и сервисные опции под себя.</p>
     </div>
     <div class="models">
       <div class="model reveal">
@@ -488,7 +528,7 @@ footer{padding:84px 0 40px}
         <div class="m-body">
           <h3>Secret Box A</h3>
           <div class="m-dims">Флагман · камера + тех-колонна</div>
-          <p>Большая камера роста, колонна с ящиками и баком воды, фасады с фирменным тиснением «паутина».</p>
+          <p>Флагманская конфигурация с большой камерой роста и отдельной технической зоной. Максимум объёма, сервисного доступа и возможностей комплектации.</p>
           <div class="m-foot">
             <div class="swatch"><i style="background:#5A3A2E"></i>Шоколад</div>
             <a class="m-link" href="builder.html?model=A">Собрать A →</a>
@@ -504,7 +544,7 @@ footer{padding:84px 0 40px}
         <div class="m-body">
           <h3>Secret Box B</h3>
           <div class="m-dims">Компакт · узкий вертикальный</div>
-          <p>Одна дверь, весь объём — под растения. Верхний бак воды и боковые светильники. Встаёт в спальню.</p>
+          <p>Компактный вертикальный корпус для тех, кому важны минимальный footprint и полноценная автоматизация. Чистый внешний вид — вся система внутри.</p>
           <div class="m-foot">
             <div class="swatch"><i style="background:#9E8C7A"></i>Шампань</div>
             <a class="m-link" href="builder.html?model=B">Собрать B →</a>
@@ -520,7 +560,7 @@ footer{padding:84px 0 40px}
         <div class="m-body">
           <h3>Secret Box C</h3>
           <div class="m-dims">Двухсекционный · гроу + хранение</div>
-          <p>Две створки: гроу-камера и хозяйственная секция. LED-строка с брендингом и панелью автополива.</p>
+          <p>Две независимые зоны: гроу-камера и хозяйственный блок. Удобный вариант, если кроме системы роста нужно обычное полезное хранение.</p>
           <div class="m-foot">
             <div class="swatch"><i style="background:#F5F5F5"></i>Белый</div>
             <a class="m-link" href="builder.html?model=C">Собрать C →</a>
@@ -528,6 +568,59 @@ footer{padding:84px 0 40px}
           <div class="m-buy"><span>от 175 000 ₽</span><a href="builder.html?model=C">ВЫБРАТЬ МОДЕЛЬ</a></div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="product-compare" id="compare">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="tag">Выбор модели</div>
+        <h2>Не просто шкаф.<br>Готовая система.</h2>
+      </div>
+      <p>Все модели проектируются вокруг одной идеи: снаружи — мебель, внутри — инженерная система. Разница между корпусами в объёме, сценарии использования и доступном оснащении.</p>
+    </div>
+    <div class="compare-grid">
+      <a class="compare-card featured" href="builder.html?model=A">
+        <div class="compare-top"><span>01 / FLAGSHIP</span><b>BEST FOR MAXIMUM</b></div>
+        <div class="compare-media"><img src="assets/site/model_a.jpg" alt="SECRET BOX Model A"></div>
+        <div class="compare-content">
+          <h3>SECRET BOX A</h3>
+          <p>Большой формат · тех-колонна · полный цикл</p>
+          <div class="spec-row"><span>Объём</span><strong>MAX</strong></div>
+          <div class="spec-row"><span>Сценарий</span><strong>FULL SYSTEM</strong></div>
+          <div class="compare-action">СМОТРЕТЬ КОНФИГУРАЦИЮ →</div>
+        </div>
+      </a>
+      <a class="compare-card" href="builder.html?model=B">
+        <div class="compare-top"><span>02 / COMPACT</span><b>SPACE SAVER</b></div>
+        <div class="compare-media"><img src="assets/site/model_b.jpg" alt="SECRET BOX Model B"></div>
+        <div class="compare-content">
+          <h3>SECRET BOX B</h3>
+          <p>Компактный формат · вертикальная компоновка</p>
+          <div class="spec-row"><span>Габарит</span><strong>COMPACT</strong></div>
+          <div class="spec-row"><span>Сценарий</span><strong>HOME</strong></div>
+          <div class="compare-action">СМОТРЕТЬ КОНФИГУРАЦИЮ →</div>
+        </div>
+      </a>
+      <a class="compare-card" href="builder.html?model=C">
+        <div class="compare-top"><span>03 / DUAL ZONE</span><b>STORAGE + GROW</b></div>
+        <div class="compare-media"><img src="assets/site/model_c.jpg" alt="SECRET BOX Model C"></div>
+        <div class="compare-content">
+          <h3>SECRET BOX C</h3>
+          <p>Две зоны · рост + хозяйственное хранение</p>
+          <div class="spec-row"><span>Компоновка</span><strong>DUAL</strong></div>
+          <div class="spec-row"><span>Сценарий</span><strong>HYBRID</strong></div>
+          <div class="compare-action">СМОТРЕТЬ КОНФИГУРАЦИЮ →</div>
+        </div>
+      </a>
+    </div>
+    <div class="trust-strip">
+      <div><b>01</b><span>Реальные модели</span><small>Фотографии из проекта</small></div>
+      <div><b>02</b><span>Своя комплектация</span><small>Собирается в конфигураторе</small></div>
+      <div><b>03</b><span>Digital Twin</span><small>Проверка системы в 3D</small></div>
+      <div><b>04</b><span>Инженерные расчёты</span><small>Размеры · воздух · тепло · нагрузка</small></div>
     </div>
   </div>
 </section>
@@ -749,6 +842,22 @@ footer{padding:84px 0 40px}
   </div>
 </section>
 
+<section class="sales-cta" id="order">
+  <div class="wrap">
+    <div class="sales-cta-inner">
+      <div>
+        <div class="tag">Следующий шаг</div>
+        <h2>Соберите BOX,<br><span>который нужен именно вам.</span></h2>
+        <p>Выберите корпус, отделку и оснащение. Конфигуратор покажет состав системы и поможет подготовить запрос на точный расчёт.</p>
+      </div>
+      <div class="sales-actions">
+        <a class="btn btn-solid" href="builder.html">СОБРАТЬ СВОЙ BOX →</a>
+        <a class="btn btn-ghost" href="GrowBox_v31_3D.html">ОТКРЫТЬ 3D →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="wrap">
     <div class="foot-top">
@@ -787,7 +896,7 @@ footer{padding:84px 0 40px}
 <script>
 // nav при скролле
 var nav=document.getElementById('nav');
-addEventListener('scroll',function(){nav.classList.toggle('scrolled',scrollY>24)},{passive:true});
+addEventListener('scroll',function(){if(nav)nav.classList.toggle('scrolled',scrollY>24)},{passive:true});
 
 // появление блоков
 var io=new IntersectionObserver(function(es){
