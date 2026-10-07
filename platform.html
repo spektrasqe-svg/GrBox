@@ -256,7 +256,9 @@ nav{display:none!important}
 
 <footer><div class="wrap"><div class="foot"><strong>SECRET BOX</strong><div class="footlinks"><a href="#concept">Концепция</a><a href="#architecture">Архитектура</a><a href="#systems">Системы</a><a href="#twin">3D</a><a href="builder.html">Сборщик</a><a href="calculators.html">Калькуляторы</a><a href="growpedia.html">Гровпедия</a><a href="engineering.html">Инженерия</a></div></div><div class="copy">© 2026 SECRET BOX · цифровая платформа</div></div></footer>
 <script>
-const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.classList.toggle('on',scrollY>30),{passive:true});
+const nav=document.getElementById('nav');addEventListener('scroll',()=>{if(nav)nav.classList.toggle('on',scrollY>30)},{passive:true});
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1});document.querySelectorAll('.reveal').forEach(e=>io.observe(e));
 const progress=document.getElementById('progress'),glow=document.getElementById('glow');addEventListener('scroll',()=>{const h=document.documentElement.scrollHeight-innerHeight;progress.style.width=(h>0?(scrollY/h)*100:0)+'%'},{passive:true});addEventListener('pointermove',e=>{if(glow){glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px'}});document.querySelectorAll('.system').forEach(card=>card.addEventListener('click',()=>card.classList.toggle('active')));</script>
+<link rel="stylesheet" href="assets/site/platform-shell.css">
+<script src="assets/site/platform-shell.js"></script>
 </body></html>
