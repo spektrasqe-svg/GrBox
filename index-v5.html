@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GrowBox v3.1 — SECRET BOX / Premium</title>
+<meta name="description" content="GrowBox v3.1 — премиальный инженерный шкаф. Мебель снаружи. Инженерия внутри.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700&display=swap');
+:root{--bg:#08090a;--panel:#111315;--panel2:#17191b;--line:#2a2d30;--text:#f3f4f1;--muted:#969b9d;--accent:#d8ff54;--max:1240px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Manrope,Arial,sans-serif}a{color:inherit;text-decoration:none}.wrap{max-width:var(--max);margin:auto;padding:0 24px}
+nav{position:fixed;z-index:20;top:0;left:0;right:0;background:rgba(8,9,10,.78);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.07)}
+.nav{height:72px;display:flex;align-items:center;justify-content:space-between}.logo{font-family:Unbounded;font-size:14px;letter-spacing:.08em}.logo span{color:var(--accent)}
+.links{display:flex;gap:24px;color:#b9bdbe;font-size:13px}.links a:hover{color:#fff}
+.hero{min-height:92vh;display:grid;align-items:end;padding:120px 0 70px;position:relative;overflow:hidden;background:linear-gradient(180deg,rgba(8,9,10,.15),rgba(8,9,10,.95)),url('assets/site/hero.jpg') center/cover}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,9,10,.88),rgba(8,9,10,.25) 65%,rgba(8,9,10,.7))}
+.hero>*{position:relative;z-index:1}.eyebrow{color:var(--accent);font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:800}.hero h1{font-family:Unbounded;font-size:clamp(38px,7vw,88px);line-height:1.02;max-width:950px;margin:18px 0}.hero p{font-size:clamp(18px,2vw,24px);max-width:650px;color:#d0d3d2;line-height:1.5}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}.btn{padding:14px 20px;border:1px solid var(--line);border-radius:8px;font-weight:700;font-size:14px}.btn.primary{background:var(--accent);color:#08090a;border-color:var(--accent)}
+section{padding:100px 0}.section-head{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:36px}.kicker{color:var(--accent);font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:800}.section-head h2{font-family:Unbounded;font-size:clamp(28px,4vw,48px);margin:10px 0 0;max-width:760px}.section-head p{color:var(--muted);max-width:440px;line-height:1.65}
+.philosophy,.modules,.specs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:30px;min-height:210px}.num{font-family:Unbounded;color:var(--accent);font-size:12px}.card h3{font-family:Unbounded;font-size:20px;margin:34px 0 12px}.card p{color:var(--muted);line-height:1.65}
+.arch{display:grid;grid-template-columns:1.15fr .85fr;gap:20px}.visual{min-height:560px;border-radius:16px;border:1px solid var(--line);background:center/cover url('assets/site/int_a.jpg');position:relative}.tag{position:absolute;padding:8px 11px;background:rgba(8,9,10,.84);border:1px solid #3b3e40;border-radius:7px;font-size:11px}.t1{top:12%;left:7%}.t2{top:35%;right:8%}.t3{bottom:17%;left:12%}.archcopy{display:flex;flex-direction:column;gap:12px}.architem{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px}.architem strong{display:block;margin-bottom:8px}.architem span{color:var(--muted);font-size:14px;line-height:1.55}
+.spec{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px}.spec b{display:block;font-family:Unbounded;font-size:30px}.spec small{color:var(--muted);display:block;margin-top:10px}
+.module{overflow:hidden;padding:0;min-height:330px}.module img{width:100%;height:190px;object-fit:cover;display:block}.module div{padding:20px}.module h3{margin:0 0 8px}.module p{margin:0;color:var(--muted);font-size:14px}
+.viewer{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#0c0d0e}.viewer iframe{display:block;width:100%;height:720px;border:0}.viewerbar{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;color:var(--muted);font-size:12px}
+.docs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.doc{padding:22px;background:var(--panel);border:1px solid var(--line);border-radius:12px}.doc:hover{border-color:#666}.doc b{display:block;margin-bottom:8px}.doc span{color:var(--muted);font-size:13px}
+.cta{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:80px 0}.cta h2{font-family:Unbounded;font-size:clamp(28px,5vw,62px);max-width:900px;margin:0 0 24px}
+footer{padding:36px 0;color:#707577;font-size:12px;display:flex;justify-content:space-between}
+@media(max-width:850px){.links{display:none}.philosophy,.modules,.specs,.arch,.docs{grid-template-columns:1fr}.visual{min-height:420px}.viewer iframe{height:560px}.section-head{display:block}.section-head p{margin-top:18px}}
+</style>
+</head>
+<body>
+<nav><div class="wrap nav"><div class="logo">SECRET <span>BOX</span> / v3.1</div><div class="links"><a href="#system">Система</a><a href="#inside">Внутри</a><a href="#3d">3D</a><a href="#docs">Документы</a><a href="builder.html">Builder</a></div></div></nav>
+
+<header class="hero">
+<div class="wrap">
+<div class="eyebrow">GrowBox v3.1 · engineered furniture</div>
+<h1>Мебель снаружи.<br>Инженерия внутри.</h1>
+<p>Премиальный модульный шкаф, в котором конструкция, климат, акустика, сервис и автоматизация собраны в одну систему.</p>
+<div class="actions"><a class="btn primary" href="#3d">Открыть 3D</a><a class="btn" href="#system">Изучить систему</a></div>
+</div>
+</header>
+
+<main>
+<section id="system"><div class="wrap">
+<div class="section-head"><div><div class="kicker">01 / Philosophy</div><h2>Три принципа проекта</h2></div><p>Каждое решение должно работать как часть единого продукта: выглядеть как мебель, работать тихо и оставаться управляемым.</p></div>
+<div class="philosophy">
+<div class="card"><div class="num">01</div><h3>Мебель</h3><p>Чистая внешняя геометрия, скрытая инженерия и аккуратная сервисная логика без ощущения промышленного шкафа.</p></div>
+<div class="card"><div class="num">02</div><h3>Тишина</h3><p>Воздушный тракт, шумоглушение, виброразвязка и многослойные двери проектируются как одна акустическая система.</p></div>
+<div class="card"><div class="num">03</div><h3>Часы</h3><p>Система должна быть предсказуемой: датчики, питание, климат и обслуживание организованы вокруг контролируемых режимов.</p></div>
+</div>
+</div></section>
+
+<section id="inside"><div class="wrap">
+<div class="section-head"><div><div class="kicker">02 / Architecture</div><h2>Внутри — не пустой шкаф, а система</h2></div><p>Три функциональные зоны объединяют воздушный тракт, техническую колонну и рабочий объём.</p></div>
+<div class="arch"><div class="visual"><div class="tag t1">A · AIR</div><div class="tag t2">B · TECH</div><div class="tag t3">C · GROW</div></div><div class="archcopy">
+<div class="architem"><strong>A / AIR</strong><span>Фильтр → вентилятор → глушитель → plenum → решётка. Воздух проходит отдельным инженерным трактом.</span></div>
+<div class="architem"><strong>B / TECH</strong><span>Резервуар, сервисный блок, Secret Box, DIN-панель и верхний технический объём собраны в сервисную колонну.</span></div>
+<div class="architem"><strong>C / GROW</strong><span>Рабочая зона с регулируемыми направляющими, SCROG-уровнем, поддоном и организованными сервисными точками.</span></div>
+<div class="architem"><strong>UPPER NOISE BOX</strong><span>Верхний модуль принимает акустическую часть воздушного тракта и изолирует её от корпуса.</span></div>
+</div></div>
+</div></section>
+
+<section><div class="wrap">
+<div class="specs">
+<div class="spec"><b>1250</b><small>ширина, мм</small></div><div class="spec"><b>741</b><small>глубина, мм</small></div><div class="spec"><b>2060</b><small>высота, мм</small></div><div class="spec"><b>85</b><small>CAD-деталей</small></div><div class="spec"><b>−34 dB</b><small>цель воздушного тракта</small></div><div class="spec"><b>135 m³/h</b><small>расчётный расход</small></div>
+</div></div></section>
+
+<section><div class="wrap">
+<div class="section-head"><div><div class="kicker">03 / Modules</div><h2>Модульность без визуального компромисса</h2></div></div>
+<div class="modules">
+<div class="card module"><img src="assets/site/model_a.jpg"><div><h3>A / AIR</h3><p>Воздух, фильтрация и акустика.</p></div></div>
+<div class="card module"><img src="assets/site/model_b.jpg"><div><h3>B / TECH</h3><p>Техническая колонна и сервисные узлы.</p></div></div>
+<div class="card module"><img src="assets/site/model_c.jpg"><div><h3>C / GROW</h3><p>Рабочий объём, SCROG и tray.</p></div></div>
+</div></div></section>
+
+<section id="3d"><div class="wrap">
+<div class="section-head"><div><div class="kicker">04 / Interactive 3D</div><h2>Открой шкаф и изучи конструкцию</h2></div><p>Полноценный WebGL-просмотрщик: вращение, масштаб, открытие дверей, разрез, Exploded, свет и воздушный тракт.</p></div>
+<div class="viewer"><div class="viewerbar"><span>GrowBox v3.1 / Interactive Viewer</span><span>Rotate · Zoom · Open · Cutaway · Exploded</span></div><iframe src="GrowBox_v3_1_PREMIUM_3D.html" title="GrowBox v3.1 3D"></iframe></div>
+</div></section>
+
+<section id="docs"><div class="wrap">
+<div class="section-head"><div><div class="kicker">05 / Project tools</div><h2>Документация и инструменты</h2></div></div>
+<div class="docs">
+<a class="doc" href="builder.html"><b>Builder</b><span>Конфигуратор корпуса и комплектации →</span></a>
+<a class="doc" href="calculators.html"><b>Calculators</b><span>Вентиляция, шум, PPFD, VPD, тепло и нагрузка →</span></a>
+<a class="doc" href="growpedia.html"><b>GrowPedia</b><span>Инженерные решения и эксплуатационные принципы →</span></a>
+<a class="doc" href="docs/growbox_v31_rev3.pdf"><b>Rev.3 PDF</b><span>Основной документ проекта →</span></a>
+</div>
+</div></section>
+
+<section class="cta"><div class="wrap"><div class="kicker">GrowBox v3.1</div><h2>Не просто шкаф.<br>Цельная инженерная система.</h2><div class="actions"><a class="btn primary" href="#3d">Перейти в 3D</a><a class="btn" href="builder.html">Открыть Builder</a></div></div></section>
+</main>
+
+<footer class="wrap"><span>SECRET BOX / GrowBox v3.1</span><span>Furniture outside · Engineering inside</span></footer>
+</body>
+</html>
