@@ -24,7 +24,7 @@ function install(){
  const info=document.getElementById('info'), iN=document.getElementById('iN');
  if(!info||!iN||info.dataset.bomBridge)return;
  info.dataset.bomBridge='1';
- const row=document.createElement('div'); row.id='bomLink'; row.className='dm'; row.style.color='#c4a96a';
+ const row=document.createElement('div'); row.id='bomLink'; row.className='dm'; row.style.color='#c5a46c';
  info.appendChild(row);
  const paint=()=>{
    const m=matchBom(iN.textContent);

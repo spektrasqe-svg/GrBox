@@ -1,46 +1,45 @@
-/* SECRET BOX — unified product design system v1.0
-   Shared visual language for storefront, configurator, engineering, docs and tools.
+/* SECRET BOX — unified product design system v2.0
+   One visual language for storefront, configurator, engineering, docs, tools and 3D.
+   Tokens: near-black luxe palette, Unbounded display / Manrope body / Roboto Mono labels.
 */
 :root{
-  --sb-bg:#1e2024; --sb-bg-deep:#17191c; --sb-panel:#292c31; --sb-panel-2:#32353a;
-  --sb-paper:#e8dcc8; --sb-paper-2:#cfc2ac; --sb-brass:#c4a96a; --sb-brass-2:#d8bf83;
-  --sb-green:#9fb58b; --sb-red:#a95b55; --sb-line:rgba(232,220,200,.14);
-  --sb-line-strong:rgba(232,220,200,.28); --sb-radius:4px;
-  --sb-display:"Bebas Neue","Arial Narrow",Impact,sans-serif;
+  --sb-bg:#111215; --sb-bg-deep:#0b0c0e; --sb-panel:#191a1d; --sb-panel-2:#232327;
+  --sb-paper:#eee8dd; --sb-paper-2:#aaa69e; --sb-brass:#c5a46c; --sb-brass-2:#e0cc8c;
+  --sb-green:#9fb58b; --sb-red:#d96d61;
+  --sb-line:#303136; --sb-line-strong:#3a3a40; --sb-radius:4px;
+  --sb-display:"Unbounded","Arial Narrow",Impact,sans-serif;
+  --sb-body:"Manrope",system-ui,-apple-system,sans-serif;
   --sb-mono:"Roboto Mono",ui-monospace,SFMono-Regular,monospace;
 }
 .sb-platform-page{
   background:var(--sb-bg);
   color:var(--sb-paper);
-  font-family:var(--sb-mono);
+  font-family:var(--sb-body);
   min-height:100vh;
 }
 .sb-platform-page a{color:inherit}
-.sb-platform-page ::selection{background:var(--sb-brass);color:#17191c}
+.sb-platform-page ::selection{background:var(--sb-brass);color:#111215}
 .sb-platform-page .wrap{width:min(1240px,calc(100vw - 36px));margin-inline:auto}
-.sb-platform-page main,.sb-platform-page .page,.sb-platform-page .content{padding-top:108px}
-.sb-platform-page .head{padding-top:148px}
 .sb-platform-page h1,.sb-platform-page h2,.sb-platform-page h3,
-.sb-platform-page h4,.sb-platform-page h5{font-family:var(--sb-display);letter-spacing:.035em}
+.sb-platform-page h4,.sb-platform-page h5{font-family:var(--sb-display);letter-spacing:.015em}
 .sb-platform-page .panel,.sb-platform-page .card,.sb-platform-page .doc,
 .sb-platform-page .tile,.sb-platform-page .metric,.sb-platform-page .sys{
-  background:linear-gradient(145deg,rgba(50,53,58,.94),rgba(35,38,42,.94));
+  background:var(--sb-panel);
   border-color:var(--sb-line);
   border-radius:var(--sb-radius);
-  box-shadow:0 18px 55px rgba(0,0,0,.18);
 }
 .sb-platform-page input,.sb-platform-page select,.sb-platform-page textarea{
-  color:var(--sb-paper);background:#202328;border:1px solid var(--sb-line-strong);
+  color:var(--sb-paper);background:var(--sb-bg-deep);border:1px solid var(--sb-line-strong);
   border-radius:3px;font:500 12px/1.3 var(--sb-mono);outline:none;
 }
 .sb-platform-page input:focus,.sb-platform-page select:focus,.sb-platform-page textarea:focus{
-  border-color:var(--sb-brass);box-shadow:0 0 0 2px rgba(196,169,106,.12);
+  border-color:var(--sb-brass);box-shadow:0 0 0 2px rgba(197,164,108,.12);
 }
 .sb-platform-page button,.sb-platform-page .btn{
   font-family:var(--sb-mono);border-radius:3px;cursor:pointer;
 }
 .sb-platform-page .btn.primary,.sb-platform-page .btn-solid{
-  background:var(--sb-paper);color:#1a1b1e;border-color:var(--sb-paper);
+  background:var(--sb-paper);color:#111215;border-color:var(--sb-paper);
 }
 .sb-platform-page .btn.primary:hover,.sb-platform-page .btn-solid:hover{
   background:var(--sb-brass-2);border-color:var(--sb-brass-2);
@@ -63,23 +62,20 @@
 .sb-platform-page .sb-kicker:before{content:"";width:28px;height:1px;background:currentColor}
 @media(max-width:760px){
   .sb-platform-page .wrap{width:min(100% - 20px,1240px)}
-  .sb-platform-page main,.sb-platform-page .page,.sb-platform-page .content{padding-top:82px}
-  .sb-platform-page .head{padding-top:118px}
   .sb-platform-page h1{font-size:clamp(36px,13vw,68px)!important}
-  .sb-platform-page .panel,.sb-platform-page .card,.sb-platform-page .doc{box-shadow:0 12px 30px rgba(0,0,0,.16)}
   .sb-platform-page button,.sb-platform-page .btn{min-height:42px}
 }
 /* 3D keeps its specialist canvas UI but shares the same brand palette */
-.sb-3d-page{background:#17191c!important;color:var(--sb-paper)}
+.sb-3d-page{background:var(--sb-bg-deep)!important;color:var(--sb-paper)}
 .sb-3d-page #ui,.sb-3d-page .top,.sb-3d-page .panel,
 .sb-3d-page .hud,.sb-3d-page .info,.sb-3d-page .toolbar{
   font-family:var(--sb-mono)!important;
 }
 .sb-3d-page .top .pill,.sb-3d-page button,.sb-3d-page .pill{
-  border-color:rgba(232,220,200,.18)!important;
+  border-color:var(--sb-line-strong)!important;
 }
 .sb-3d-page button.on,.sb-3d-page [data-mode].on,.sb-3d-page [data-cam].on{
-  border-color:var(--sb-brass)!important;color:var(--sb-paper)!important;
-  background:rgba(196,169,106,.13)!important;
+  border-color:var(--sb-brass)!important;color:#111215!important;
+  background:var(--sb-brass)!important;
 }
 .sb-3d-page #secretbox-3d-config b{color:var(--sb-brass-2)!important}
