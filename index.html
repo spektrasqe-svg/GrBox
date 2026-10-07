@@ -418,6 +418,37 @@ footer{padding:84px 0 40px}
 .model .m-buy span{font-family:var(--disp);font-size:12px;color:var(--cream)}
 .model .m-buy a{border-radius:2px;padding:12px 15px}
 
+/* ================= PACKAGES / SALES ================= */
+.packages-section{padding:110px 0 90px;background:#141518;border-top:1px solid var(--line)}
+.packages-section .sec-head{margin-bottom:42px}
+.package-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.package-card{background:#1a1b1f;border:1px solid #303136;padding:28px 26px 24px;min-height:410px;display:flex;flex-direction:column;transition:.4s}
+.package-card:hover{transform:translateY(-6px);border-color:#71634e}
+.package-card.package-featured{background:linear-gradient(145deg,#27231e,#191a1d);border-color:#8b734d;box-shadow:inset 0 0 0 1px rgba(199,154,91,.12)}
+.package-top{display:flex;justify-content:space-between;gap:10px;padding-bottom:16px;border-bottom:1px solid #303136;font:9px var(--body);letter-spacing:.18em;color:#85817a}
+.package-top b{color:#c7a66c}
+.package-card h3{font-family:var(--disp);font-size:42px;line-height:1;margin:28px 0 12px}
+.package-card p{color:#aaa69e;font-size:12.5px;line-height:1.7;max-width:34ch}
+.package-card ul{list-style:none;display:grid;gap:9px;margin:22px 0 25px}
+.package-card li{font-size:11px;color:#c8c3b9;padding-left:17px;position:relative}
+.package-card li::before{content:"+";position:absolute;left:0;color:#c7a66c}
+.package-card>a{margin-top:auto;border-top:1px solid #303136;padding-top:17px;font:800 9px var(--body);letter-spacing:.16em;color:#eee8dd}
+.package-card>a:hover{color:#c7a66c}
+.included-box{margin-top:12px;border:1px solid #303136;background:#101114;display:grid;grid-template-columns:230px 1fr;align-items:stretch}
+.included-title{padding:25px;border-right:1px solid #303136;display:flex;flex-direction:column;justify-content:center;gap:8px}
+.included-title span{font:9px var(--body);letter-spacing:.22em;color:#c7a66c}
+.included-title b{font-family:var(--disp);font-size:20px}
+.included-list{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.included-list span{padding:18px 17px;border-right:1px solid #25262a;border-bottom:1px solid #25262a;font:9px var(--body);letter-spacing:.08em;color:#aaa69e}
+.included-list span::before{content:"/";color:#c7a66c;margin-right:7px}
+.quote-band{margin-top:28px;padding:30px 32px;border:1px solid #514937;background:linear-gradient(110deg,#24211c,#17181b 70%);display:flex;justify-content:space-between;align-items:center;gap:30px}
+.quote-kicker{font:9px var(--body);letter-spacing:.22em;color:#c7a66c}
+.quote-band h3{font-family:var(--disp);font-size:27px;margin:10px 0 7px}
+.quote-band p{color:#aaa69e;font-size:12px;line-height:1.65;max-width:600px}
+.quote-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.quote-actions .btn{padding:14px 19px}
+@media(max-width:900px){.package-grid{grid-template-columns:1fr}.package-card{min-height:0}.included-box{grid-template-columns:1fr}.included-title{border-right:0;border-bottom:1px solid #303136}.included-list{grid-template-columns:1fr 1fr}.quote-band{align-items:flex-start;flex-direction:column}.quote-actions{justify-content:flex-start}}
+@media(max-width:560px){.included-list{grid-template-columns:1fr}.package-card h3{font-size:36px}.quote-band{padding:24px 20px}}
 /* SHOP CATALOG */
 .shop-section{padding:105px 0 55px;background:#111215}
 .shop-head{display:grid;grid-template-columns:1fr .75fr;gap:70px;align-items:end;margin-bottom:48px}
@@ -588,6 +619,80 @@ footer{padding:84px 0 40px}
 <a href="product-b.html"><b>B</b><span>Минимальный footprint</span><em>Компакт</em></a>
 <a href="product-c.html"><b>C</b><span>Гроу + хранение</span><em>Dual Zone</em></a>
 </div></div>
+</section>
+
+<section class="packages-section" id="packages">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="tag">Комплектации</div>
+        <h2>BASE / FULL / PRO</h2>
+      </div>
+      <p>Один корпус — три уровня оснащения. Начните с базы и добавляйте системы по задаче. Точный состав и финальная стоимость фиксируются в конфигураторе.</p>
+    </div>
+    <div class="package-grid">
+      <article class="package-card">
+        <div class="package-top"><span>01 · BASE</span><b>START</b></div>
+        <h3>BASE</h3>
+        <p>Чистый корпус и основа системы для тех, кто хочет выбрать оборудование самостоятельно.</p>
+        <ul>
+          <li>Корпус + фасады + фурнитура</li>
+          <li>Базовая внутренняя компоновка</li>
+          <li>Подготовка кабельных трасс</li>
+          <li>Сервисный доступ</li>
+        </ul>
+        <a href="builder.html">СОБРАТЬ BASE →</a>
+      </article>
+      <article class="package-card package-featured">
+        <div class="package-top"><span>02 · FULL</span><b>RECOMMENDED</b></div>
+        <h3>FULL</h3>
+        <p>Оптимальный готовый комплект: свет, климат, вентиляция и автоматизация собраны в одну систему.</p>
+        <ul>
+          <li>Всё из BASE</li>
+          <li>Свет + вентиляция + климат</li>
+          <li>Автополив и датчики</li>
+          <li>Монтаж и пусконаладка</li>
+        </ul>
+        <a href="builder.html">СОБРАТЬ FULL →</a>
+      </article>
+      <article class="package-card">
+        <div class="package-top"><span>03 · PRO</span><b>MAX SYSTEM</b></div>
+        <h3>PRO</h3>
+        <p>Максимальная автоматизация и сервисный уровень для проекта, который должен работать как единая машина.</p>
+        <ul>
+          <li>Всё из FULL</li>
+          <li>Расширенный контроль климата</li>
+          <li>Шумоподавление и виброразвязка</li>
+          <li>Расширенная сервисная комплектация</li>
+        </ul>
+        <a href="builder.html">СОБРАТЬ PRO →</a>
+      </article>
+    </div>
+    <div class="included-box">
+      <div class="included-title"><span>КОРОБКА</span><b>ЧТО ПОЛУЧАЕТЕ</b></div>
+      <div class="included-list">
+        <span>Корпус и фасады</span>
+        <span>Внутренний каркас</span>
+        <span>Вентиляционный тракт</span>
+        <span>Световой контур</span>
+        <span>Tech Column</span>
+        <span>SCROG / поддон</span>
+        <span>Силовая разводка</span>
+        <span>Сервисная документация</span>
+      </div>
+    </div>
+    <div class="quote-band">
+      <div>
+        <div class="quote-kicker">01 / ТОЧНЫЙ РАСЧЁТ</div>
+        <h3>Не угадывайте комплектацию.</h3>
+        <p>Соберите модель, выберите пакет и оборудование — конфигурация сохранится и будет использована как основа расчёта.</p>
+      </div>
+      <div class="quote-actions">
+        <a class="btn btn-solid" href="builder.html">ПОЛУЧИТЬ РАСЧЁТ →</a>
+        <a class="btn btn-ghost" href="calculators.html">ПРОВЕРИТЬ РАСЧЁТЫ</a>
+      </div>
+    </div>
+  </div>
 </section>
 
 <section class="light" id="interior">
