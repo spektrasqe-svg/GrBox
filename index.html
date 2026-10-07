@@ -417,6 +417,35 @@ footer{padding:84px 0 40px}
 .model .m-buy{margin-top:auto}
 .model .m-buy span{font-family:var(--disp);font-size:12px;color:var(--cream)}
 .model .m-buy a{border-radius:2px;padding:12px 15px}
+
+/* SHOP CATALOG */
+.shop-section{padding:105px 0 55px;background:#111215}
+.shop-head{display:grid;grid-template-columns:1fr .75fr;gap:70px;align-items:end;margin-bottom:48px}
+.shop-head h2{font-family:var(--disp);font-size:clamp(48px,7vw,100px);line-height:.84;margin:18px 0 0;letter-spacing:-.035em}
+.shop-head h2 span{color:transparent;-webkit-text-stroke:1px var(--cream)}
+.shop-intro{border-left:1px solid var(--brass);padding:6px 0 6px 25px;max-width:480px}
+.shop-intro strong{font-family:var(--disp);font-size:20px}.shop-intro p{color:#a7a39b;line-height:1.7;margin-top:10px}
+.shop-grid{display:grid;grid-template-columns:1.12fr 1fr 1fr;gap:12px}
+.product-card{background:#191a1d;border:1px solid #303136;transition:.45s;min-width:0}
+.product-card:hover{border-color:#72654f;transform:translateY(-6px)}
+.product-photo{display:block;height:470px;position:relative;overflow:hidden;background:#0b0c0e}
+.product-card:not(.product-a) .product-photo{height:410px}
+.product-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s;filter:saturate(.9)}
+.product-card:hover .product-photo img{transform:scale(1.045)}
+.product-badge{position:absolute;left:16px;top:16px;z-index:2;background:#111215e8;border:1px solid #55565a;padding:8px 10px;font:9px var(--body);letter-spacing:.16em;color:#eee8dd}
+.product-label{position:absolute;right:16px;top:16px;z-index:2;background:#c5a46c;color:#111215;padding:8px 10px;font:800 9px var(--body);letter-spacing:.12em}
+.product-info{padding:25px 25px 23px}.product-meta{display:flex;justify-content:space-between;color:#817d76;font:9px var(--body);letter-spacing:.17em;border-bottom:1px solid #303136;padding-bottom:14px}
+.product-info h3{font-family:var(--disp);font-size:35px;line-height:.98;margin:24px 0 12px}.product-info h3 em{font-style:normal;color:transparent;-webkit-text-stroke:1px #e9e2d6}
+.product-info p{color:#aaa69e;font-size:12px;line-height:1.65;min-height:60px}
+.product-specs{display:flex;flex-wrap:wrap;gap:6px;margin:18px 0}.product-specs span{font:8px var(--body);letter-spacing:.12em;text-transform:uppercase;border:1px solid #36373b;padding:7px 8px;color:#c7c2b8}
+.product-bottom{border-top:1px solid #303136;padding-top:18px;display:flex;justify-content:space-between;align-items:end;gap:12px}
+.product-bottom small{display:block;font:8px var(--body);letter-spacing:.15em;color:#77736c}.product-bottom b{display:block;font:18px var(--disp);margin-top:4px}
+.product-bottom a{background:#eee8dd;color:#111215;padding:12px 13px;font:800 8px var(--body);letter-spacing:.12em;white-space:nowrap}.product-bottom a:hover{background:#c5a46c}.product-bottom i{font-style:normal;font-size:13px}
+.shop-note{margin-top:12px;border:1px solid #303136;padding:14px 16px;display:flex;gap:28px;align-items:center;font:8px var(--body);letter-spacing:.16em;color:#77736c}.shop-note a{margin-left:auto;color:#d0b27b}
+.compare-mini{padding:65px 0;background:#18191c;border-top:1px solid #303136}.compare-mini-head{display:flex;align-items:end;justify-content:space-between;margin-bottom:22px}.compare-mini h2{font-family:var(--disp);font-size:42px;margin-top:10px}
+.compare-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#303136;border:1px solid #303136}.compare-mini-grid a{background:#111215;padding:23px;display:grid;grid-template-columns:45px 1fr;grid-template-rows:auto auto;column-gap:12px}.compare-mini-grid a:hover{background:#222327}.compare-mini-grid b{grid-row:1/3;font:42px var(--disp);color:#c5a46c}.compare-mini-grid span{font-family:var(--disp);font-size:16px}.compare-mini-grid em{font:9px var(--body);letter-spacing:.14em;color:#77736c;margin-top:7px;font-style:normal}
+@media(max-width:900px){.shop-head{grid-template-columns:1fr;gap:25px}.shop-grid{grid-template-columns:1fr}.product-photo,.product-card:not(.product-a) .product-photo{height:390px}.shop-note{flex-wrap:wrap}.shop-note a{margin-left:0}.compare-mini-head{display:block}.compare-mini-grid{grid-template-columns:1fr}}
+@media(max-width:560px){.shop-section{padding-top:75px}.product-photo,.product-card:not(.product-a) .product-photo{height:300px}.product-info h3{font-size:30px}.shop-note{gap:14px}.compare-mini h2{font-size:34px}}
 </style>
 <script src="assets/site/product-state.js"></script>
 <link rel="stylesheet" href="assets/site/platform-shell.css">
@@ -510,119 +539,55 @@ footer{padding:84px 0 40px}
   </div>
 </section>
 
-<section id="models">
+<section id="models" class="shop-section">
   <div class="wrap">
-    <div class="sec-head">
-      <div>
-        <div class="tag">Линейка</div>
-        <h2>ВЫБЕРИТЕ СВОЙ BOX.</h2>
-      </div>
-      <p>Три реальные конструкции с разным сценарием использования. Выберите корпус — затем соберите оснащение, отделку и сервисные опции под себя.</p>
+    <div class="shop-head">
+      <div><div class="tag">SECRET BOX · CATALOG</div><h2>ВЫБЕРИТЕ<br><span>СВОЙ BOX.</span></h2></div>
+      <div class="shop-intro"><strong>Три реальные модели.</strong><p>Не концепты и не визуализации. Выберите корпус, посмотрите реальные фотографии и перейдите к комплектации.</p></div>
     </div>
-    <div class="models">
-      <div class="model reveal">
-        <div class="m-img">
-          <div class="m-code">MODEL-A</div>
-          <img src="assets/site/model_a.jpg" alt="Secret Box A">
+    <div class="shop-grid">
+      <article class="product-card product-a">
+        <a class="product-photo" href="product-a.html"><span class="product-badge">01 · FLAGSHIP</span><span class="product-label">BESTSELLER</span><img src="assets/site/model_a.jpg" alt="SECRET BOX A"></a>
+        <div class="product-info">
+          <div class="product-meta"><span>SECRET BOX A</span><span>FULL SIZE</span></div>
+          <h3>Флагман.<br><em>Максимум системы.</em></h3>
+          <p>Большая камера роста + отдельная техническая зона. Для полной комплектации, сервиса и максимального объёма.</p>
+          <div class="product-specs"><span>Тех-колонна</span><span>SCROG</span><span>Автополив</span><span>Smart climate</span></div>
+          <div class="product-bottom"><div><small>СТАРТ</small><b>от 190 000 ₽</b></div><a href="product-a.html">СМОТРЕТЬ BOX <i>→</i></a></div>
         </div>
-        <div class="m-body">
-          <h3>Secret Box A</h3>
-          <div class="m-dims">Флагман · камера + тех-колонна</div>
-          <p>Флагманская конфигурация с большой камерой роста и отдельной технической зоной. Максимум объёма, сервисного доступа и возможностей комплектации.</p>
-          <div class="m-foot">
-            <div class="swatch"><i style="background:#5A3A2E"></i>Шоколад</div>
-            <a class="m-link" href="builder.html?model=A">Собрать A →</a>
-          </div>
-          <div class="m-buy"><span>от 190 000 ₽</span><a href="builder.html?model=A">ВЫБРАТЬ МОДЕЛЬ</a></div>
+      </article>
+      <article class="product-card product-b">
+        <a class="product-photo" href="product-b.html"><span class="product-badge">02 · COMPACT</span><span class="product-label">SPACE SAVER</span><img src="assets/site/model_b.jpg" alt="SECRET BOX B"></a>
+        <div class="product-info">
+          <div class="product-meta"><span>SECRET BOX B</span><span>COMPACT</span></div>
+          <h3>Компактный.<br><em>Ничего лишнего.</em></h3>
+          <p>Вертикальный формат для дома. Полноценная автоматизация и чистый внешний вид при меньшем footprint.</p>
+          <div class="product-specs"><span>Vertical</span><span>Smart climate</span><span>LED</span><span>Auto water</span></div>
+          <div class="product-bottom"><div><small>СТАРТ</small><b>от 150 000 ₽</b></div><a href="product-b.html">СМОТРЕТЬ BOX <i>→</i></a></div>
         </div>
-      </div>
-      <div class="model reveal">
-        <div class="m-img">
-          <div class="m-code">MODEL-B</div>
-          <img src="assets/site/model_b.jpg" alt="Secret Box B">
+      </article>
+      <article class="product-card product-c">
+        <a class="product-photo" href="product-c.html"><span class="product-badge">03 · DUAL ZONE</span><span class="product-label">HYBRID</span><img src="assets/site/model_c.jpg" alt="SECRET BOX C"></a>
+        <div class="product-info">
+          <div class="product-meta"><span>SECRET BOX C</span><span>DUAL ZONE</span></div>
+          <h3>Две зоны.<br><em>Рост + хранение.</em></h3>
+          <p>Гроу-камера и отдельная хозяйственная секция. Когда нужен не только гроубокс, но и полезное пространство.</p>
+          <div class="product-specs"><span>Dual zone</span><span>Storage</span><span>LED</span><span>Auto water</span></div>
+          <div class="product-bottom"><div><small>СТАРТ</small><b>от 175 000 ₽</b></div><a href="product-c.html">СМОТРЕТЬ BOX <i>→</i></a></div>
         </div>
-        <div class="m-body">
-          <h3>Secret Box B</h3>
-          <div class="m-dims">Компакт · узкий вертикальный</div>
-          <p>Компактный вертикальный корпус для тех, кому важны минимальный footprint и полноценная автоматизация. Чистый внешний вид — вся система внутри.</p>
-          <div class="m-foot">
-            <div class="swatch"><i style="background:#9E8C7A"></i>Шампань</div>
-            <a class="m-link" href="builder.html?model=B">Собрать B →</a>
-          </div>
-          <div class="m-buy"><span>от 150 000 ₽</span><a href="builder.html?model=B">ВЫБРАТЬ МОДЕЛЬ</a></div>
-        </div>
-      </div>
-      <div class="model reveal">
-        <div class="m-img">
-          <div class="m-code">MODEL-C</div>
-          <img src="assets/site/model_c.jpg" alt="Secret Box C">
-        </div>
-        <div class="m-body">
-          <h3>Secret Box C</h3>
-          <div class="m-dims">Двухсекционный · гроу + хранение</div>
-          <p>Две независимые зоны: гроу-камера и хозяйственный блок. Удобный вариант, если кроме системы роста нужно обычное полезное хранение.</p>
-          <div class="m-foot">
-            <div class="swatch"><i style="background:#F5F5F5"></i>Белый</div>
-            <a class="m-link" href="builder.html?model=C">Собрать C →</a>
-          </div>
-          <div class="m-buy"><span>от 175 000 ₽</span><a href="builder.html?model=C">ВЫБРАТЬ МОДЕЛЬ</a></div>
-        </div>
-      </div>
+      </article>
     </div>
+    <div class="shop-note"><span>REAL PRODUCT PHOTOS</span><span>CONFIGURABLE</span><span>ENGINEERED SYSTEM</span><a href="builder.html">СОБРАТЬ СВОЙ BOX →</a></div>
   </div>
 </section>
 
-<section class="product-compare" id="compare">
-  <div class="wrap">
-    <div class="sec-head">
-      <div>
-        <div class="tag">Выбор модели</div>
-        <h2>Не просто шкаф.<br>Готовая система.</h2>
-      </div>
-      <p>Все модели проектируются вокруг одной идеи: снаружи — мебель, внутри — инженерная система. Разница между корпусами в объёме, сценарии использования и доступном оснащении.</p>
-    </div>
-    <div class="compare-grid">
-      <a class="compare-card featured" href="builder.html?model=A">
-        <div class="compare-top"><span>01 / FLAGSHIP</span><b>BEST FOR MAXIMUM</b></div>
-        <div class="compare-media"><img src="assets/site/model_a.jpg" alt="SECRET BOX Model A"></div>
-        <div class="compare-content">
-          <h3>SECRET BOX A</h3>
-          <p>Большой формат · тех-колонна · полный цикл</p>
-          <div class="spec-row"><span>Объём</span><strong>MAX</strong></div>
-          <div class="spec-row"><span>Сценарий</span><strong>FULL SYSTEM</strong></div>
-          <div class="compare-action">СМОТРЕТЬ КОНФИГУРАЦИЮ →</div>
-        </div>
-      </a>
-      <a class="compare-card" href="builder.html?model=B">
-        <div class="compare-top"><span>02 / COMPACT</span><b>SPACE SAVER</b></div>
-        <div class="compare-media"><img src="assets/site/model_b.jpg" alt="SECRET BOX Model B"></div>
-        <div class="compare-content">
-          <h3>SECRET BOX B</h3>
-          <p>Компактный формат · вертикальная компоновка</p>
-          <div class="spec-row"><span>Габарит</span><strong>COMPACT</strong></div>
-          <div class="spec-row"><span>Сценарий</span><strong>HOME</strong></div>
-          <div class="compare-action">СМОТРЕТЬ КОНФИГУРАЦИЮ →</div>
-        </div>
-      </a>
-      <a class="compare-card" href="builder.html?model=C">
-        <div class="compare-top"><span>03 / DUAL ZONE</span><b>STORAGE + GROW</b></div>
-        <div class="compare-media"><img src="assets/site/model_c.jpg" alt="SECRET BOX Model C"></div>
-        <div class="compare-content">
-          <h3>SECRET BOX C</h3>
-          <p>Две зоны · рост + хозяйственное хранение</p>
-          <div class="spec-row"><span>Компоновка</span><strong>DUAL</strong></div>
-          <div class="spec-row"><span>Сценарий</span><strong>HYBRID</strong></div>
-          <div class="compare-action">СМОТРЕТЬ КОНФИГУРАЦИЮ →</div>
-        </div>
-      </a>
-    </div>
-    <div class="trust-strip">
-      <div><b>01</b><span>Реальные модели</span><small>Фотографии из проекта</small></div>
-      <div><b>02</b><span>Своя комплектация</span><small>Собирается в конфигураторе</small></div>
-      <div><b>03</b><span>Digital Twin</span><small>Проверка системы в 3D</small></div>
-      <div><b>04</b><span>Инженерные расчёты</span><small>Размеры · воздух · тепло · нагрузка</small></div>
-    </div>
-  </div>
+<section class="compare-mini">
+<div class="wrap"><div class="compare-mini-head"><div class="tag">БЫСТРЫЙ ВЫБОР</div><h2>Какой BOX вам подходит?</h2></div>
+<div class="compare-mini-grid">
+<a href="product-a.html"><b>A</b><span>Максимальный объём</span><em>Флагман</em></a>
+<a href="product-b.html"><b>B</b><span>Минимальный footprint</span><em>Компакт</em></a>
+<a href="product-c.html"><b>C</b><span>Гроу + хранение</span><em>Dual Zone</em></a>
+</div></div>
 </section>
 
 <section class="light" id="interior">
