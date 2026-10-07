@@ -129,6 +129,23 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px}
 @media(max-width:1000px){.builder{grid-template-columns:1fr}.b-right{position:static}}
 @media(max-width:900px){nav .links{display:none}}
 @media(max-width:640px){.opts{grid-template-columns:1fr}}
+/* LIVE 3D BUILDER */
+.builder-live-panel{overflow:hidden;box-shadow:0 28px 80px rgba(0,0,0,.28)}
+.builder-3d-head{padding:18px 20px;background:linear-gradient(180deg,rgba(255,255,255,.025),transparent)}
+.live-title{font-family:var(--disp);font-size:14px;font-weight:800;letter-spacing:.02em;margin-top:7px}
+.builder-3d-stage{position:relative;height:680px;background:#080c0e;overflow:hidden}
+.builder-3d-stage iframe{display:block;width:100%;height:100%;border:0}
+.builder-live-badge{position:absolute;left:16px;top:16px;z-index:4;display:flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid rgba(232,220,200,.16);border-radius:999px;background:rgba(10,14,16,.82);backdrop-filter:blur(12px);font-size:9px;letter-spacing:.16em;color:var(--cream-2);pointer-events:none}
+.builder-live-badge b{font-family:var(--disp);font-size:9px;color:var(--cream);letter-spacing:.05em}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#9bd66d;box-shadow:0 0 14px rgba(155,214,109,.8)}
+.builder-3d-hint{position:absolute;right:14px;bottom:14px;z-index:4;max-width:250px;padding:8px 11px;border:1px solid rgba(232,220,200,.12);border-radius:8px;background:rgba(10,14,16,.72);color:rgba(232,220,200,.7);font-size:9px;line-height:1.45;pointer-events:none}
+.builder-drawing-stage{background:#E7DECE}
+.builder-drawing-stage .dwg-paper{background:#E7DECE;padding:8px}
+.builder-drawing-stage .spec{background:var(--ink-2)}
+.builder-3d-head .vbar{flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:1000px){.builder-3d-stage{height:600px}}
+@media(max-width:640px){.builder-3d-stage{height:520px}.builder-3d-hint{display:none}.live-title{font-size:11px}}
+
 </style>
 <script src="assets/site/product-state.js"></script>
 <link rel="stylesheet" href="assets/site/platform-shell.css">
@@ -234,6 +251,21 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px}
   </div>
 
   <aside class="b-right">
+    <div class="panel builder-live-panel">
+      <div class="panel-top builder-3d-head">
+        <div><div class="t-num">DIGITAL TWIN · LIVE</div><div class="live-title">Ваша сборка — прямо в 3D</div></div>
+        <div class="vbar" id="builderViewbar">
+          <button class="vbtn active" data-live-view="3d">3D</button>
+          <button class="vbtn" data-live-view="drawing">ЧЕРТЁЖ</button>
+          <a class="vbtn" href="GrowBox_v31_3D.html" target="_blank" rel="noopener">FULL</a>
+        </div>
+      </div>
+      <div id="builder3dStage" class="builder-3d-stage">
+        <iframe id="builder3dFrame" src="GrowBox_v31_3D.html?builder=1" title="SECRET BOX — Live 3D Builder" loading="eager" allowfullscreen></iframe>
+        <div class="builder-live-badge"><span class="live-dot"></span><span>LIVE CONFIG</span><b id="builder3dState">Синхронизация</b></div>
+        <div class="builder-3d-hint">Вращение · зум · тап по детали · модель обновляется из конфигурации</div>
+      </div>
+      <div id="builderDrawingStage" class="builder-drawing-stage" hidden>
     <div class="panel">
       <div class="panel-top">
         <div class="t-num">ЧЕРТЁЖ · REV.3</div>
@@ -261,7 +293,10 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px}
       </div>
     </div>
   </aside>
-</div>
+
+      </div>
+    </div>
+  </aside></div>
 
 <div class="wrap est-note">
   <div class="t-num">ПРИМЕЧАНИЕ</div>
@@ -546,6 +581,17 @@ document.getElementById('specBtn').addEventListener('click',function(){
 
 render();
 </script>
+<script id="secretbox:builder-3d-toggle">
+(function(){
+ const live=document.getElementById('builder3dStage'), drawing=document.getElementById('builderDrawingStage');
+ const buttons=document.querySelectorAll('#builderViewbar [data-live-view]');
+ function view(v){buttons.forEach(b=>b.classList.toggle('active',b.dataset.liveView===v));live.hidden=v!=='3d';drawing.hidden=v==='3d'}
+ buttons.forEach(b=>b.addEventListener('click',()=>view(b.dataset.liveView))); view('3d');
+ function paint(){if(!window.SECRETBOX)return;const s=SECRETBOX.load(),l=SECRETBOX.label(s),e=document.getElementById('builder3dState');if(e)e.textContent=l.dimensions+' · '+l.finish}
+ paint(); if(window.SECRETBOX)SECRETBOX.subscribe(paint);
+})();
+</script>
+
 <script>
 /* secretbox:builder-sync */
 (function(){
