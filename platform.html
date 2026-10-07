@@ -96,7 +96,7 @@ footer{padding:55px 0 30px}.foot{display:flex;justify-content:space-between;gap:
 </div></div></section>
 
 <section id="builder"><div class="wrap">
-<div class="builder"><div class="builder-copy"><div class="eyebrow">06 · Box Builder</div><h2>Собери конфигурацию.</h2><p>Сборщик превращается из отдельной страницы в центральный инструмент: корпус → модули → оборудование → апгрейды → результат. Следующий шаг — связать итоговую конфигурацию с 3D и спецификацией.</p><div class="actions"><a class="btn primary" href="builder.html">Запустить сборщик →</a></div></div>
+<div class="builder"><div class="builder-copy"><div class="eyebrow">06 · Box Builder</div><h2>Собери конфигурацию.</h2><p>Сборщик превращается из отдельной страницы в центральный инструмент: корпус → модули → оборудование → апгрейды → результат. Итоговая конфигурация уже становится общей для 3D, расчётов и инженерного досье.</p><div class="actions"><a class="btn primary" href="builder.html">Запустить сборщик →</a></div></div>
 <div class="builder-ui reveal"><div class="step"><i>01</i><b>BODY</b><span>геометрия</span></div><div class="step"><i>02</i><b>MODULES</b><span>A / B / C</span></div><div class="step"><i>03</i><b>EQUIPMENT</b><span>комплектация</span></div><div class="step"><i>04</i><b>UPGRADES</b><span>опции</span></div><div class="step"><i>05</i><b>RESULT</b><span>масса · мощность · цена</span></div></div></div>
 </div></section>
 
@@ -104,13 +104,13 @@ footer{padding:55px 0 30px}.foot{display:flex;justify-content:space-between;gap:
 <div class="head"><div><div class="eyebrow">07 · Engineering</div><h2>Глубина для тех, кто хочет цифры.</h2></div><p>Следующий слой платформы — инженерное досье: размеры, нагрузки, трассы, узлы, BOM, электрические группы и сервисные процедуры.</p></div>
 <div class="docs">
 <div class="doc reveal"><b>ENG-01</b><h3>Architecture</h3><p>Размеры, модули, сечения, зоны обслуживания и логика сборки.</p><a href="#architecture">Смотреть →</a></div>
-<div class="doc reveal"><b>ENG-02</b><h3>BOM / Components</h3><p>Компоненты по категориям, количество, назначение и связь с узлами.</p><a href="#systems">Открыть систему →</a></div>
-<div class="doc reveal"><b>ENG-03</b><h3>Service</h3><p>Что обслуживать, где находится, как получить доступ и что проверять.</p><a href="#start">Скоро в платформе →</a></div>
+<div class="doc reveal"><b>ENG-02</b><h3>BOM / Components</h3><p>Компоненты по категориям, количество, назначение и связь с узлами.</p><a href="engineering.html">Открыть инженерное досье →</a></div>
+<div class="doc reveal"><b>ENG-03</b><h3>Service</h3><p>Что обслуживать, где находится, как получить доступ и что проверять.</p><a href="engineering.html">Открыть сервис и BOM →</a></div>
 </div></div></section>
 
 <section class="cta" id="start"><div class="wrap cta-inner"><div><div class="eyebrow">08 · One platform</div><h2>Сделаем из сайта<br>цифровой продукт.</h2></div><div><p>Главная задача — не добавить ещё одну красивую страницу, а связать всё между собой: 3D ↔ сборщик ↔ калькуляторы ↔ знания ↔ инженерия.</p><div class="actions"><a class="btn primary" href="builder.html">Начать со сборщика →</a><a class="btn" href="calculators.html">К инструментам</a></div></div></div></section>
 
-<footer><div class="wrap"><div class="foot"><strong>SECRET BOX</strong><div class="footlinks"><a href="#concept">Концепция</a><a href="#architecture">Архитектура</a><a href="#systems">Системы</a><a href="#twin">3D</a><a href="builder.html">Сборщик</a><a href="calculators.html">Калькуляторы</a><a href="growpedia.html">Гровпедия</a></div></div><div class="copy">© 2026 SECRET BOX · цифровая платформа</div></div></footer>
+<footer><div class="wrap"><div class="foot"><strong>SECRET BOX</strong><div class="footlinks"><a href="#concept">Концепция</a><a href="#architecture">Архитектура</a><a href="#systems">Системы</a><a href="#twin">3D</a><a href="builder.html">Сборщик</a><a href="calculators.html">Калькуляторы</a><a href="growpedia.html">Гровпедия</a><a href="engineering.html">Инженерия</a></div></div><div class="copy">© 2026 SECRET BOX · цифровая платформа</div></div></footer>
 <script>
 const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.classList.toggle('on',scrollY>30),{passive:true});
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1});document.querySelectorAll('.reveal').forEach(e=>io.observe(e));
