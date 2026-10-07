@@ -130,6 +130,7 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px}
 @media(max-width:900px){nav .links{display:none}}
 @media(max-width:640px){.opts{grid-template-columns:1fr}}
 </style>
+<script src="assets/site/product-state.js"></script>
 <link rel="stylesheet" href="assets/site/platform-shell.css">
 </head>
 <body>
@@ -544,6 +545,26 @@ document.getElementById('specBtn').addEventListener('click',function(){
 });
 
 render();
+</script>
+<script>
+/* secretbox:builder-sync */
+(function(){
+  if(!window.SECRETBOX||!window.S)return;
+  const s=SECRETBOX.load();
+  Object.assign(S,s);
+  ['mods','equip','upg'].forEach(g=>Object.keys(S[g]).forEach(k=>{
+    const el=document.querySelector('#'+g+' .opt[data-key="'+k+'"] input');
+    if(el)el.checked=!!S[g][k];
+    const box=document.querySelector('#'+g+' .opt[data-key="'+k+'"]');
+    if(box)box.classList.toggle('on',!!S[g][k]);
+  }));
+  const cw=document.getElementById('cWidth'); if(cw){cw.value=S.cWidth;document.getElementById('cWidthVal').textContent=S.cWidth+' мм';document.getElementById('cDims').textContent=S.cWidth+' × 1700 мм';}
+  document.querySelectorAll('#finish .sw').forEach(x=>x.classList.toggle('on',x.dataset.f===S.finish));
+  render();
+  let last=JSON.stringify(SECRETBOX.load());
+  const sync=()=>{const now=JSON.stringify({finish:S.finish,cWidth:S.cWidth,mods:S.mods,equip:S.equip,upg:S.upg});if(now!==last){last=now;SECRETBOX.save(JSON.parse(now));}};
+  setInterval(sync,700);
+})();
 </script>
 <script src="assets/site/platform-shell.js"></script>
 </body>
