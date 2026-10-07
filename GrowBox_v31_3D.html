@@ -614,6 +614,56 @@ function loop(){
   renderer.render(scene, camera);
 }
 
+
+/* ---------- SECRET BOX live builder bridge ---------- */
+(function(){
+ var KEY='secretbox.product.state.v1',last='';
+ function read(){
+  try{
+   var d={finish:'choco',cWidth:796,mods:{a:true,b:true,c:true},equip:{se3000:true,uvir:false,ggs:true,ac10:true,sensor:true,soil:true,drip:true,humid:true},upg:{sil:true,vibe:true,acdoor:true,leak:true,ups:false,rkn:false,uzip:false,reserve:false,peri:false,cam:false}};
+   var x=JSON.parse(localStorage.getItem(KEY)||'null')||{};
+   ['mods','equip','upg'].forEach(function(k){d[k]=Object.assign(d[k],x[k]||{})});
+   if(x.finish!==undefined)d.finish=x.finish;if(x.cWidth!==undefined)d.cWidth=Number(x.cWidth);return d;
+  }catch(e){return null}
+ }
+ function pre(n,p){return n.indexOf(p)===0}
+ function visiblePart(n,s){
+  if(pre(n,'25_'))return !!s.equip.se3000;
+  if(pre(n,'26_'))return !!s.equip.uvir;
+  if(pre(n,'28_'))return !!s.equip.soil;
+  if(pre(n,'32_'))return !!s.equip.drip||!!s.upg.peri;
+  if(pre(n,'34_'))return !!s.equip.humid;
+  if(pre(n,'36_'))return !!s.equip.ggs;
+  if(pre(n,'37_'))return !!s.equip.ac10;
+  if(pre(n,'38_'))return !!s.upg.ups;
+  if(pre(n,'35_'))return !!s.upg.rkn||!!s.upg.uzip;
+  if(pre(n,'39_')||pre(n,'40_')||pre(n,'41_')||pre(n,'63_'))return !!s.upg.reserve;
+  if(pre(n,'18_'))return !!s.upg.sil;
+  if(pre(n,'53_')||pre(n,'54_')||pre(n,'55_')||pre(n,'56_')||pre(n,'57_')||pre(n,'58_')||pre(n,'64_')||pre(n,'65_'))return !!s.upg.acdoor;
+  return true;
+ }
+ function apply(s){
+  meshes.forEach(function(mesh){
+   var p=mesh.userData&&mesh.userData.part;if(!p)return;var n=p.n,m=p.m||'';
+   var ok=true;
+   if(m.indexOf('A')>=0&&!s.mods.a)ok=false;
+   if(m.indexOf('B')>=0&&!s.mods.b)ok=false;
+   if(m.indexOf('C')>=0&&!s.mods.c)ok=false;
+   if(m.indexOf('B+C')>=0)ok=!!(s.mods.b||s.mods.c);
+   mesh.visible=ok&&visiblePart(n,s);
+  });
+  if(groups.doorC2){var sc=(Number(s.cWidth)||796)/796;groups.doorC2.position.x=px(436)+(px(1250)-px(436))*sc}
+  if(labels[0])labels[0].visible=!!s.mods.a;
+  if(labels[1])labels[1].visible=!!s.mods.b;
+  if(labels[2]){labels[2].visible=!!s.mods.c;labels[2].material.map.needsUpdate=true}
+  var el=document.getElementById('secretbox-3d-config');
+  if(el)el.innerHTML='<b style="color:#c9f27f">LIVE CONFIG</b> · '+(s.cWidth||796)+' mm C · '+Object.keys(s.equip).filter(function(k){return s.equip[k]}).length+' equipment';
+  last=JSON.stringify(s);
+ }
+ function tick(){var s=read();if(s&&JSON.stringify(s)!==last)apply(s)}
+ tick();setInterval(tick,180);
+})();
+
 /* ---------- старт ---------- */
 document.getElementById('loader').style.display = 'none';
 loadState();
