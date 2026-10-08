@@ -173,10 +173,36 @@ function build(){
    box('РУЧКА '+(i+1),18,180,28,g.userData.hinge<0?w/2-30:-w/2+30,0,P.doors.thickness/2+12,M.steel,{parent:g,module:'Фасад'});
    root.add(g);
  }
+ addRail(-P.outer.W/2+70,P.outer.D/2-45,P.zones.grow.h*.72);
+ addRail(P.outer.W/2-70,P.outer.D/2-45,P.zones.grow.h*.72);
+ addTray(P.zones.grow.d);
+ addTopNoise();
  // Задняя кабельная зона
  for(let i=0;i<4;i++)line('ЗАДНИЙ КАБЕЛЬНЫЙ КАНАЛ '+(i+1),24,o.H-160,18,-o.W/2+100+i*42,0,-o.D/2+o.panel+12,M.dark,{module:'Кабельная трасса'});
  applyMode();
  updatePanel(s);
+}
+function detailBox(name,w,h,d,x,y,z,mat,parent,module){return box(name,w,h,d,x,y,z,mat,{parent:parent||root,module:module||'Конструкция'})}
+function addRail(x,z,h){
+ const rg=new THREE.Group(); rg.position.set(mm(x),0,mm(z));
+ detailBox('ВЕРТИКАЛЬНАЯ РЕЙКА',22,h,18,0,0,0,M.steel,rg,'Крепление');
+ for(let yy=-h/2+55;yy<h/2;yy+=90) detailBox('КАРЕТКА',48,28,28,0,mm(yy),mm(12),M.steel,rg,'Крепление');
+ root.add(rg); pickables.push(rg); return rg;
+}
+function addTray(d){
+ const tg=new THREE.Group(); tg.position.y=mm(P.zones.tray.y+P.zones.tray.h/2);
+ detailBox('ПОДДОН',P.zones.grow.w-36,18,d-55,0,0,0,M.steel,tg,'Сервис');
+ detailBox('ПЕРЕДНЯЯ ПАНЕЛЬ ПОДДОНА',P.zones.grow.w-36,80,18,0,mm(-40),mm(d/2-27),M.shell,tg,'Сервис');
+ detailBox('НАПРАВЛЯЮЩАЯ ЛЕВАЯ',18,24,d-90,-mm(P.zones.grow.w/2-25),0,0,M.steel,tg,'Крепление');
+ detailBox('НАПРАВЛЯЮЩАЯ ПРАВАЯ',18,24,d-90,mm(P.zones.grow.w/2-25),0,0,M.steel,tg,'Крепление');
+ root.add(tg); pickables.push(tg);
+}
+function addTopNoise(){
+ const t=P.zones.top, tg=new THREE.Group(); tg.position.y=mm(t.y+t.h/2);
+ detailBox('ВЕРХНИЙ ШУМОЗАЩИТНЫЙ МОДУЛЬ',t.w,t.h,t.d,0,0,0,M.shell,tg,'Акустика');
+ detailBox('АКУСТИЧЕСКАЯ ПЕРЕГОРОДКА',t.w-50,t.h-70,18,0,0,mm(-t.d/2+25),M.acoustic,tg,'Акустика');
+ detailBox('ВОЗДУШНАЯ КАМЕРА',t.w-80,t.h-95,60,0,0,mm(t.d/2-55),M.acoustic,tg,'Акустика');
+ root.add(tg); pickables.push(tg);
 }
 function sideHinge(i,count,w){return i<Math.ceil(count/2)?-1:1}
 function toggleDoor(g){g.userData.target=g.userData.target>.5?0:1}
