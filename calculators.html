@@ -524,7 +524,7 @@ V_IDS.forEach(function(id){var el=document.getElementById(id);if(el)el.addEventL
 
 // ---------- РАСЧЁТ 02 СВЕТ ----------
 var L_IDS=['l-stage','l-area','l-w','l-ppe','l-hours'];
-function calcLight(){
+function calcСвет(){
   var st=document.getElementById('l-stage').value.split(',').map(Number),
       wMin=st[0],wMax=st[1],dliTarget=st[2],
       S=+document.getElementById('l-area').value,
@@ -551,7 +551,7 @@ function calcLight(){
   verdict('o-lverdict',msgs.join(' '),cls);
   set('o-lpick','Подбор: на '+fx(S,2)+' м² этой стадии нужно <b>'+fmt(wMin*S)+'–'+fmt(wMax*S)+' Вт</b>. Ориентир — SE3000 (300 Вт, 856 µmol/s) c автодиммом по PAR/DLI.');
 }
-L_IDS.forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',calcLight)});
+L_IDS.forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',calcСвет)});
 
 // ---------- РАСЧЁТ 03 VPD ----------
 var T_IDS=['t-t','t-rh','t-stage'];
@@ -624,7 +624,7 @@ function calcFloor(){
 }
 F_IDS.forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',calcFloor)});
 
-calcVent();calcLight();calcVpd();calcHeat();calcFloor();
+calcVent();calcСвет();calcVpd();calcHeat();calcFloor();
 </script>
 <script id="secretbox:calculator-sync">
 (function(){
