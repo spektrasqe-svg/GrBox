@@ -19,11 +19,11 @@ html{scrollbar-gutter:stable}
   font-family:var(--sb-body);
   min-height:100vh;
 }
-.sb-platform-page a{color:inherit}
+a{color:inherit}
 .sb-platform-page ::selection{background:var(--sb-brass);color:#111215}
 .sb-platform-page .wrap{width:min(1240px,calc(100% - 36px));margin-inline:auto}
 .sb-platform-page h1,.sb-platform-page h2,.sb-platform-page h3,
-.sb-platform-page h4,.sb-platform-page h5{font-family:var(--sb-display);letter-spacing:.015em}
+.sb-platform-page h4,.sb-platform-page h5{font-family:var(--sb-display);letter-spacing:.015em;overflow-wrap:break-word}
 .sb-platform-page .panel,.sb-platform-page .card,.sb-platform-page .doc,
 .sb-platform-page .tile,.sb-platform-page .metric,.sb-platform-page .sys{
   background:var(--sb-panel);
@@ -64,7 +64,7 @@ html{scrollbar-gutter:stable}
 .sb-platform-page .sb-kicker:before{content:"";width:28px;height:1px;background:currentColor}
 @media(max-width:760px){
   .sb-platform-page .wrap{width:min(100% - 20px,1240px)}
-  .sb-platform-page h1{font-size:clamp(36px,13vw,68px)!important}
+  .sb-platform-page h1{font-size:clamp(31px,8.6vw,68px)!important}
   .sb-platform-page button,.sb-platform-page .btn{min-height:42px}
 }
 /* 3D keeps its specialist canvas UI but shares the same brand palette */

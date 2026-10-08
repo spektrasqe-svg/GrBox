@@ -198,7 +198,7 @@ function build(){
  for(let i=0;i<=6;i++)line('SCROG ПРОДОЛЬНАЯ',sc.w-18,5,3,sc.x,sc.y,-sc.d/2+i*sc.d/6,M.brass,{parent:grid,module:'SCROG'});
  root.add(grid);
  // Реальное выбранное оборудование
- const L=P.equipment.light,F=P.equipment.fan;
+ const F=P.equipment.fan; // L объявлен выше (тот же P.equipment.light)
  // Оборудование никогда не выходит за внутренний габарит: при малом корпусе 3D ужимает только визуальное представление и сохраняет предупреждение в конфигураторе.
  const lx=Math.max(growLeft+L.w*lightScale/2,Math.min(growRight-L.w*lightScale/2,P.anchors.light.x));
  const lz=Math.max(growFront+L.d*lightScale/2,Math.min(growBack-L.d*lightScale/2,0));

@@ -96,10 +96,10 @@ details.fml[open] summary::after{transform:rotate(180deg)}
 .fml li{margin-bottom:6px}
 
 /* ТАБЛИЦЫ */
-.tbl-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin:34px 0}
+.tbl-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin:34px 0;overflow-x:auto}
 .tbl-card{border:1px solid var(--line);border-radius:14px;background:var(--ink-2);padding:32px 34px}
 .tbl-card h3{font-weight:700;font-size:19px;margin:12px 0 18px}
-table{width:100%;border-collapse:collapse;font-size:13.5px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}@media(max-width:400px){table{font-size:11px}td{padding:7px 4px}th{letter-spacing:.06em}}
 th{font-family:var(--body);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--cream-2);text-align:left;padding:9px 8px;border-bottom:1px solid var(--line-strong)}
 td{padding:10px 8px;border-bottom:1px dashed var(--line);color:var(--cream)}
 td b{font-family:var(--disp);font-size:13.5px}
