@@ -895,7 +895,7 @@ function apply(config){
   var checks=P.checks.map(function(x){return x.level+': '+x.text}).join(' | ');
   buildSerial++;
   var el=document.getElementById('secretbox-3d-config');
-  if(el) el.innerHTML='<b style="color:#c5a46c">LIVE PARAПАРАМЕТР v2.2</b> · '+P.outer.W+' × '+P.outer.D+' × '+P.outer.H+' мм · '+P.doors.count+' двери · '+Math.round(P.doors.width)+' мм/дверь · '+P.metrics.mass+' кг · '+P.metrics.power+' Вт'+(checks?' · ⚠ '+checks:' · ✓');
+  if(el) el.innerHTML='<b style="color:#c5a46c">ЖИВОЙ ПАРАМЕТРИЧЕСКИЙ ВИД v2.2</b> · '+P.outer.W+' × '+P.outer.D+' × '+P.outer.H+' мм · '+P.doors.count+' двери · '+Math.round(P.doors.width)+' мм/дверь · '+P.metrics.mass+' кг · '+P.metrics.power+' Вт'+(checks?' · ⚠ '+checks:' · ✓');
 }
 function setVisual(name){
   mode=name;
@@ -922,7 +922,7 @@ document.querySelectorAll('[data-mode]').forEach(function(b){
 document.querySelectorAll('[data-cam]').forEach(function(b){
   b.addEventListener('click',function(){setTimeout(function(){if(P&&window.camT)camT.r=Math.max(camT.r,P.outer.H*U*.72);},40);});
 });
-window.__SECRETBOX_PARAПАРАМЕТР={version:'2.2',apply:apply,get:function(){return P,buildSerial:buildSerial}};
+window.__SECRETBOX_PARAПАРАМЕТР={version:'2.2',apply:apply,get:function(){return {P:P,buildSerial:buildSerial}}};
 if(window.SECRETBOX&&SECRETBOX.subscribe) SECRETBOX.subscribe(function(s){ try{ apply(s); }catch(e){ console.error('SECRET BOX parametric rebuild',e); } });
 tick();
 })();
