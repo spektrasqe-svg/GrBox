@@ -19,7 +19,17 @@ var MAP={
 'DIGITAL TWIN':'ЦИФРОВОЙ ДВОЙНИК','PLATFORM':'ПЛАТФОРМА','DESIGN':'ПРОЕКТ','PACKAGE':'КОМПЛЕКТАЦИЯ','CONFIGURATION':'КОНФИГУРАЦИЯ','STEALTH':'СКРЫТНОСТЬ','FULL CYCLE':'ПОЛНЫЙ ЦИКЛ','PRODUCT GRADE':'ПРОМЫШЛЕННЫЙ УРОВЕНЬ',
 'WATCHDOG':'КОНТРОЛЬ РЕЗЕРВА','LEAK PROTECTION':'ЗАЩИТА ОТ ПРОТЕЧЕК','UPS':'ИБП','SURGE':'ЗАЩИТА ОТ ИМПУЛЬСОВ','RCD':'УЗО',
 'RTSP CAMERA':'СЕТЕВАЯ КАМЕРА','SENSOR PACK':'НАБОР ДАТЧИКОВ','SMART LIFE':'УПРАВЛЕНИЕ СО СМАРТФОНА','READY':'ГОТОВО','SPECIFICATION READY':'СПЕЦИФИКАЦИЯ ГОТОВА','AIR/NOISE':'ВОЗДУХ / ШУМ','TECHNICAL':'ТЕХНИЧЕСКИЙ','CUTAWAY':'РАЗРЕЗ','EXPLODED':'ВЗРЫВ-СХЕМА','ISOMETRIC':'ИЗОМЕТРИЯ','FRONT':'ФРОНТ','SIDE':'СБОКУ','TOP':'СВЕРХУ','PRODUCT VIEW':'ВИД ПРОДУКТА','LIGHT MODE':'РЕЖИМ СВЕТА','AIRFLOW MODE':'РЕЖИМ ВОЗДУХООБМЕНА','REVISION':'РЕВИЗИЯ','ARCHITECTURE':'АРХИТЕКТУРА','TECHNICAL COLUMN':'ТЕХНИЧЕСКАЯ КОЛОННА','CURRENT CONFIGURATION':'ТЕКУЩАЯ КОНФИГУРАЦИЯ','SPECIFICATION':'СПЕЦИФИКАЦИЯ',
-'GEOMETRY COMPATIBLE':'ГЕОМЕТРИЯ СОВМЕСТИМА','ACTIVE':'АКТИВНО','INACTIVE':'НЕ АКТИВНО','OPENING':'ПРОЁМ','DOOR WIDTH':'ШИРИНА ДВЕРИ'
+'GEOMETRY COMPATIBLE':'ГЕОМЕТРИЯ СОВМЕСТИМА','ACTIVE':'АКТИВНО','INACTIVE':'НЕ АКТИВНО','OPENING':'ПРОЁМ','DOOR WIDTH':'ШИРИНА ДВЕРИ',
+'FRONT':'СПЕРЕДИ','SIDE':'СБОКУ','TOP':'СВЕРХУ','REAR':'СЗАДИ','ISO':'ИЗОМЕТРИЯ','ISOMETRIC':'ИЗОМЕТРИЯ','ROTATE':'ВРАЩЕНИЕ','ZOOM':'МАСШТАБ','DRAG':'ТЯНИТЕ','SWIPE':'СВАЙП','PINCH':'ЩИПOК','WHEEL':'КОЛЕСО','DOUBLE TAP':'ДВОЙНОЕ КАСАНИЕ',
+'CUTAWAY':'РАЗРЕЗ','EXPLODED':'ВЗРЫВ-СХЕМА','AIR':'ВОЗДУХ','AIRFLOW':'ВОЗДУШНЫЙ ПОТОК','CLOSED':'ЗАКРЫТО','OPEN DOORS':'ОТКРЫТЬ ДВЕРИ','RESET VIEW':'СБРОСИТЬ ВИД','PRESENTATION':'ПРЕЗЕНТАЦИЯ','PRESENTATION MODE':'РЕЖИМ ПРЕЗЕНТАЦИИ',
+'INTERACTIVE':'ИНТЕРАКТИВНЫЙ','VIEWER':'ПРОСМОТРЩИК','WEBGL VIEWER':'WEBGL-ПРОСМОТРЩИК','FULL SCREEN':'ВО ВЕСЬ ЭКРАН','FULLSCREEN':'ВО ВЕСЬ ЭКРАН','PRODUCT VIEW':'ВИД ИЗДЕЛИЯ','ENGINEERING':'ИНЖЕНЕРИЯ','ENGINEERING MODE':'ИНЖЕНЕРНЫЙ РЕЖИМ','ENGINEERING VIEW':'ИНЖЕНЕРНЫЙ ВИД','CUT':'РАЗРЕЗ','EXPLODE':'РАЗНЕСТИ','LIGHT MODE':'РЕЖИМ СВЕТА',
+'ALL':'ВСЁ','ZONE':'ЗОНА','ZONES':'ЗОНЫ','MODULE':'МОДУЛЬ','MODULES':'МОДУЛИ','GROW':'КАМЕРА','GROW CHAMBER':'КАМЕРА ВЫРАЩИВАНИЯ','TECH MODULE':'ТЕХНИЧЕСКИЙ МОДУЛЬ','NOISE MODULE':'ШУМОЗАЩИТНЫЙ МОДУЛЬ',
+'ROTATE · ZOOM · OPEN':'ВРАЩЕНИЕ · МАСШТАБ · ОТКРЫТИЕ','DRAG · PINCH · OPEN':'ТЯНИТЕ · ЩИПOК · ОТКРЫТИЕ',
+'READY':'ГОТОВО','LOADING':'ЗАГРУЗКА','LOADED':'ЗАГРУЖЕНО','STATUS':'СТАТУС','CURRENT CONFIGURATION':'ТЕКУЩАЯ КОНФИГУРАЦИЯ','SAVE CONFIGURATION':'СОХРАНИТЬ КОНФИГУРАЦИЮ','CLEAR':'ОЧИСТИТЬ','CANCEL':'ОТМЕНА','CONFIRM':'ПОДТВЕРДИТЬ',
+'CALCULATOR':'КАЛЬКУЛЯТОР','CALCULATORS':'КАЛЬКУЛЯТОРЫ','KNOWLEDGE':'ЗНАНИЯ','DOCUMENTATION':'ДОКУМЕНТАЦИЯ','TOOLS':'ИНСТРУМЕНТЫ','ABOUT':'О ПРОЕКТЕ','OVERVIEW':'ОБЗОР','SPECS':'ХАРАКТЕРИСТИКИ','SPECIFICATION':'СПЕЦИФИКАЦИЯ',
+'QUALITY':'КАЧЕСТВО','SAFETY':'БЕЗОПАСНОСТЬ','CONTROL':'УПРАВЛЕНИЕ','MONITORING':'МОНИТОРИНГ','INSTALLATION':'МОНТАЖ','MAINTENANCE':'ОБСЛУЖИВАНИЕ','ACCESS':'ДОСТУП','INPUT':'ВВОД','OUTPUT':'ВЫХОД','TOTAL':'ИТОГО','ESTIMATE':'ОЦЕНКА','COST':'СТОИМОСТЬ',
+'BASIC':'БАЗОВЫЙ','ADVANCED':'РАСШИРЕННЫЙ','PREMIUM':'ПРЕМИАЛЬНЫЙ','SMART':'УМНЫЙ','SPACE':'ПРОСТРАНСТВО','SAVER':'ЭКОНОМИЯ МЕСТА','BESTSELLER':'ПОПУЛЯРНЫЙ','FLAGSHIP':'ФЛАГМАНСКИЙ','HYBRID':'ГИБРИДНЫЙ','DUAL ZONE':'ДВЕ ЗОНЫ',
+'BUILD YOUR BOX':'СОБЕРИТЕ СВОЙ ШКАФ','BUILDER':'СБОРЩИК','CUSTOM BUILD':'ИНДИВИДУАЛЬНАЯ СБОРКА','DIGITAL TWIN':'ЦИФРОВОЙ ДВОЙНИК','LIVE 3D · DIGITAL TWIN':'ЖИВАЯ 3D-МОДЕЛЬ · ЦИФРОВОЙ ДВОЙНИК'
 };
 var keys=Object.keys(MAP).sort(function(a,b){return b.length-a.length});
 function esc(s){return s.replace(/[.*+?^$()|[\]\\]/g,'\\$&')}
