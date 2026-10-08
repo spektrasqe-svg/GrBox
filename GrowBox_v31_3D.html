@@ -82,7 +82,7 @@ hemi=new THREE.HemisphereLight(0xfff5df,0x16191b,mobile?1.7:2.2);scene.add(hemi)
 key=new THREE.DirectionalLight(0xffedc9,mobile?2.1:3.2);key.position.set(4,6,5);key.castShadow=!mobile;scene.add(key);
 fill=new THREE.DirectionalLight(0xbfc8d4,mobile?1.0:1.4);fill.position.set(-5,3,-4);scene.add(fill);
 root=new THREE.Group();scene.add(root);
-const pickables=[];let P=null,mode='product',selected=null,liveConfig=null;
+const pickables=[];const doorGroups=[];let P=null,mode='product',selected=null,liveConfig=null;
 function getState(){return liveConfig||SECRETBOX.load()}
 function consumeHandoff(){
   if(new URLSearchParams(location.search).get('config')!=='live')return;
@@ -166,8 +166,9 @@ function build(){
  const doorH=P.doors.height,front=o.D/2+o.panel+4,openingLeft=-o.W/2+o.panel;
  for(let i=0;i<P.doors.count;i++){
    const w=Math.max(120,P.doors.width-P.doors.gap),cx=openingLeft+i*P.doors.width+P.doors.width/2;
-   const g=new THREE.Group();g.name='ДВЕРЬ '+(i+1);g.userData.baseX=mm(cx);g.userData.open=0;g.position.set(mm(cx),0,mm(front));
+   const g=new THREE.Group();g.name='ДВЕРЬ '+(i+1);g.userData.baseX=mm(cx);g.userData.open=0;g.userData.target=0;g.userData.hinge=sideHinge(i,P.doors.count,w);g.position.set(mm(cx),0,mm(front));doorGroups.push(g);
    box('ДВЕРНОЕ ПОЛОТНО '+(i+1),w,doorH,P.doors.thickness,0,-o.plinth/2,0,M.shell,{parent:g,module:'Фасад'});
+   g.children[0].position.x=(g.userData.hinge<0?1:-1)*w/2;
    box('ВНУТРЕННЯЯ ПАНЕЛЬ ДВЕРИ '+(i+1),Math.max(90,w-36),Math.max(90,doorH-36),10,0,-o.plinth/2,-P.doors.thickness/2-5,M.inner,{parent:g,module:'Фасад',click:false});
    box('РУЧКА '+(i+1),18,180,28,w/2-30,0,P.doors.thickness/2+12,M.steel,{parent:g,module:'Фасад'});
    root.add(g);
@@ -177,6 +178,9 @@ function build(){
  applyMode();
  updatePanel(s);
 }
+function sideHinge(i,count,w){return i<Math.ceil(count/2)?-1:1}
+function toggleDoor(g){g.userData.target=g.userData.target>.5?0:1}
+function updateDoors(){doorGroups.forEach(g=>{const a=g.userData.target,cur=g.userData.open;g.userData.open=cur+(a-cur)*.16;const angle=(g.userData.hinge<0?-1:1)*g.userData.open*Math.PI*.52;g.rotation.y=angle;g.position.x=g.userData.baseX+(g.userData.hinge<0?1:-1)*Math.sin(Math.abs(angle))*mm(P.doors.width*.42)})}
 function applyMode(){
  const cut=mode==='cutaway',eng=mode==='engineering',expl=mode==='exploded',air=mode==='airflow',light=mode==='light';
  root.children.forEach(o=>{
@@ -228,7 +232,10 @@ function pick(x,y){
  const rect=cv.getBoundingClientRect(),mouse=new THREE.Vector2((x-rect.left)/rect.width*2-1,-(y-rect.top)/rect.height*2+1),ray=new THREE.Raycaster();ray.setFromCamera(mouse,camera);
  const hit=ray.intersectObjects(pickables,true)[0];if(!hit)return;
  let o=hit.object;while(o&&!o.userData.part)o=o.parent;
- if(!o)return;selected=o;document.getElementById('infoName').textContent=o.userData.part.name;document.getElementById('infoMeta').innerHTML=o.userData.part.description+'<br>Модуль: '+o.userData.part.module+'<br>Габарит: '+o.userData.part.dimensions.join(' × ')+' мм';
+ if(!o)return;
+ let dg=o;while(dg&&!(dg.name||'').startsWith('ДВЕРЬ '))dg=dg.parent;
+ if(dg){toggleDoor(dg);document.getElementById('infoName').textContent=dg.name;document.getElementById('infoMeta').innerHTML='Нажмите ещё раз, чтобы закрыть дверь<br>Угол открытия: до 94°';return}
+ selected=o;document.getElementById('infoName').textContent=o.userData.part.name;document.getElementById('infoMeta').innerHTML=o.userData.part.description+'<br>Модуль: '+o.userData.part.module+'<br>Габарит: '+o.userData.part.dimensions.join(' × ')+' мм';
 }
 document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
 document.querySelectorAll('[data-cam]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-cam]').forEach(x=>x.classList.remove('on'));b.classList.add('on');frameCamera(b.dataset.cam)});
@@ -243,7 +250,7 @@ addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updat
 renderer.setSize(innerWidth,innerHeight,false);frameCamera('iso');
 document.getElementById('loader').style.display='none';
 fitView();
-function loop(){requestAnimationFrame(loop);cameraTick();renderer.render(scene,camera)}loop();
+function loop(){requestAnimationFrame(loop);cameraTick();updateDoors();renderer.render(scene,camera)}loop();
 })();
 </script>
 </body>
