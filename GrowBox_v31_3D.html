@@ -215,7 +215,7 @@ function pick(x,y){
 document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
 document.querySelectorAll('[data-cam]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-cam]').forEach(x=>x.classList.remove('on'));b.classList.add('on');frameCamera(b.dataset.cam)});
 document.getElementById('reset').onclick=()=>{setMode('product');frameCamera('iso')};
-document.getElementById('export').onclick=()=>{const s=SECRETBOX.load(),l=SECRETBOX_LAYOUT.derive(s),payload={project:'SECRET BOX · параметрическая 3D-конфигурация',date:new Date().toISOString(),configuration:s,geometry:l};const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}));a.download='secret-box-parametric-config.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000)};
+document.getElementById('export').onclick=()=>{const s=getState(),l=SECRETBOX_LAYOUT.derive(s),payload={project:'SECRET BOX · параметрическая 3D-конфигурация',date:new Date().toISOString(),configuration:s,geometry:l};const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}));a.download='secret-box-parametric-config.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000)};
 let lastState='';
 function sync(){const s=getState(),sig=JSON.stringify(s);if(sig!==lastState){lastState=sig;build();frameCamera('iso')}}
 SECRETBOX.subscribe(()=>{liveConfig=null;lastState='';sync()});
