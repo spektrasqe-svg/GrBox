@@ -74,20 +74,20 @@ canvas:active{cursor:grabbing}
   <div id="loader"><div class="ring"></div><div id="loaderTxt">Загрузка 3D-модели…</div></div>
   <canvas id="cv"></canvas>
 
-  <div id="secretbox-3d-config" style="position:absolute;right:12px;top:136px;z-index:7;background:#191a1d;border:1px solid #303136;border-radius:4px;padding:8px 11px;font-size:11px;color:#aaa69e;font-family:Roboto Mono,monospace">LIVE CONFIG</div>
+  <div id="secretbox-3d-config" style="position:absolute;right:12px;top:136px;z-index:7;background:#191a1d;border:1px solid #303136;border-radius:4px;padding:8px 11px;font-size:11px;color:#aaa69e;font-family:Roboto Mono,monospace">ТЕКУЩАЯ КОНФИГУРАЦИЯ</div>
   <div class="top">
-    <div class="pill"><b>GrowBox v3.1 rev.3</b> · 1250×741×2060 мм · 85 деталей</div>
+    <div class="pill"><b>GrowBox v3.1 · ревизия 3</b> · 1250×741×2060 мм · 85 деталей</div>
     <div class="pill">режим: <span id="modeName">ПРОДУКТ</span></div>
   </div>
 
   <div class="leftbar" id="modes">
     <button data-mode="isometric">ISOПАРАМЕТР</button>
     <button data-mode="product" class="on">ПРОДУКТ</button>
-    <button data-mode="engineering">ENGINEERING</button>
-    <button data-mode="cutaway">CUTAWAY</button>
-    <button data-mode="exploded">EXPLODED</button>
+    <button data-mode="engineering">ИНЖЕНЕРИЯ</button>
+    <button data-mode="cutaway">РАЗРЕЗ</button>
+    <button data-mode="exploded">ВЗРЫВ-СХЕМА</button>
     <button data-mode="airflow">ВОЗДУХООБМЕН</button>
-    <button data-mode="light">LIGHT</button>
+    <button data-mode="light">СВЕТ</button>
   </div>
 
   <div id="hint">тап — деталь · свайп — вращение · щипок — масштаб · двойной тап — сброс</div>
@@ -644,7 +644,7 @@ function loop(){
   var modelEl=document.getElementById('secretbox-3d-model');
   if(modelEl)modelEl.textContent='ИНДИВИДУАЛЬНЫЙ · '+s.cWidth+' mm C';
   var el=document.getElementById('secretbox-3d-config');
-  if(el)el.innerHTML='<b style="color:#c5a46c">LIVE CONFIG</b> · '+(w.W||'—')+' × '+(w.D||'—')+' × '+(w.H||'—')+' мм · C '+Math.round(s.cWidth)+' мм';
+  if(el)el.innerHTML='<b style="color:#c5a46c">ТЕКУЩАЯ КОНФИГУРАЦИЯ</b> · '+(w.W||'—')+' × '+(w.D||'—')+' × '+(w.H||'—')+' мм · C '+Math.round(s.cWidth)+' мм';
   var pills=document.querySelectorAll('.top .pill');
   if(pills[0])pills[0].innerHTML='<b>SECRET BOX · ИНДИВИДУАЛЬНЫЙ</b> · '+(w.W||'—')+'×'+(w.D||'—')+'×'+(w.H||'—')+' мм · '+ДЕТАЛИ.length+' деталей';
   last=JSON.stringify(s);
@@ -767,7 +767,7 @@ setTimeout(function(){
 })();
 </script>
 <script id="secretbox:3d-config">
-(function(){function paint(s){if(!window.SECRETBOX)return;const l=SECRETBOX.label(s);const el=document.getElementById('secretbox-3d-config');if(el)el.innerHTML='<b style="color:#c5a46c">LIVE CONFIG</b> · '+l.dimensions+' · '+l.finish}paint(SECRETBOX.load());SECRETBOX.subscribe(paint)})();
+(function(){function paint(s){if(!window.SECRETBOX)return;const l=SECRETBOX.label(s);const el=document.getElementById('secretbox-3d-config');if(el)el.innerHTML='<b style="color:#c5a46c">ТЕКУЩАЯ КОНФИГУРАЦИЯ</b> · '+l.dimensions+' · '+l.finish}paint(SECRETBOX.load());SECRETBOX.subscribe(paint)})();
 </script>
 <script id="secretbox:parametric-v2">
 (function(){
