@@ -52,7 +52,7 @@ function derive(config){
   tech:{x:-W/2+tech/2,y:-H/2+plinth+innerH/2,z:0},
   reservoir:{x:-W/2+tech+18+Math.min(Math.max(150,growW*.22),Math.max(150,growW-150)),y:поддонY+поддонH/2+215,z:-D/2+150}
  },
- mounts:{rails:[-W/2+tech+42,-W/2+tech+growW-42],railTop:growY+growH/2-45,railBottom:growY-growH/2+45},
+ mounts:{rails:[-W/2+tech+42,-W/2+tech+growW-42],railTop:growY+growH/2-45,railBottom:growY-growH/2+45,scrogY:scrogY,lightY:growY+growH/2-90,reservoirSupportY:поддонY+поддонH/2+8},
  checks:[]
  };
  const add=(level,code,text,detail)=>L.checks.push({level,code,text,detail:detail||''});
