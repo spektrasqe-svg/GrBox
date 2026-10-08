@@ -180,8 +180,12 @@ function build(){
    const rx=z.grow.x+side*(z.grow.w/2-24);
    line('РЕГУЛИРУЕМАЯ ВЕРТИКАЛЬНАЯ РЕЙКА',24,z.grow.h-80,24,rx,z.grow.y,0,M.steel,{module:'Регулируемое крепление'});
    for(let i=0;i<9;i++)line('КАРЕТКА '+(i+1),58,16,20,rx,z.grow.y-z.grow.h/2+45+i*(z.grow.h-90)/8,0,M.brass,{module:'Регулируемое крепление'});
+   line('СТОПОР SCROG',42,12,30,rx,sc.y,0,M.steel,{module:'Регулируемое крепление'});
+   line('СТОПОР СВЕТ',42,12,30,rx,P.anchors.light.y,0,M.steel,{module:'Регулируемое крепление'});
  }
  const sc=P.zones.scrog,grid=new THREE.Group();grid.name='SCROG';
+ line('ПОПЕРЕЧИНА КРЕПЛЕНИЯ SCROG',sc.w,18,28,sc.x,sc.y,0,M.steel,{module:'SCROG'});
+ line('ПОПЕРЕЧИНА КРЕПЛЕНИЯ СВЕТ',Math.max(220,Math.min(sc.w,L.w*lightScale+100)),18,28,P.anchors.light.x,P.anchors.light.y+L.h/2+22,P.anchors.light.z,M.steel,{module:'Крепление'});
  for(let i=0;i<=8;i++)line('SCROG ПОПЕРЕЧИНА',3,5,sc.d-18,sc.x-sc.w/2+i*sc.w/8,sc.y,0,M.brass,{parent:grid,module:'SCROG'});
  for(let i=0;i<=6;i++)line('SCROG ПРОДОЛЬНАЯ',sc.w-18,5,3,sc.x,sc.y,-sc.d/2+i*sc.d/6,M.brass,{parent:grid,module:'SCROG'});
  root.add(grid);
@@ -194,7 +198,7 @@ function build(){
  const lx=Math.max(growLeft+L.w*lightScale/2,Math.min(growRight-L.w*lightScale/2,P.anchors.light.x));
  const lz=Math.max(growFront+L.d*lightScale/2,Math.min(growBack-L.d*lightScale/2,0));
  box('СВЕТИЛЬНИК '+(s.equipment.light||''),L.w,L.h,L.d,lx,P.anchors.light.y,lz,M.cream,{module:'Оборудование',description:'Выбранный светильник Spider Farmer',scale:lightScale});
- line('ПЛАТФОРМА СВЕТИЛЬНИКА',L.w*lightScale+90,12,L.d*lightScale+90,lx,P.anchors.light.y,lz,M.edge,{module:'Крепление'});
+ line('ПЛАТФОРМА СВЕТИЛЬНИКА',L.w*lightScale+90,12,L.d*lightScale+90,lx,P.anchors.light.y+L.h/2+30,lz,M.edge,{module:'Крепление'});
  box('ВЕНТИЛЯТОР '+(s.equipment.fan||''),F.w,F.h,F.d,P.anchors.fan.x,P.anchors.fan.y,P.anchors.fan.z,M.dark,{module:'Оборудование',description:'Выбранный вентилятор Spider Farmer'});
  box('СЕРДЦЕВИНА ВЕНТИЛЯТОРА',F.w*.5,F.h*.5,F.d*.5,P.anchors.fan.x,P.anchors.fan.y,P.anchors.fan.z+F.d*.28,M.brass,{module:'Оборудование',click:false});
  line('ВИБРОИЗОЛИРОВАННАЯ ПЛАТФОРМА',F.w+120,22,F.d+100,P.anchors.fan.x,P.anchors.fan.y-F.h/2-22,P.anchors.fan.z,M.edge,{module:'Виброизоляция'});
@@ -203,7 +207,10 @@ function build(){
    const rx=Math.max(-o.W/2+o.panel+rw/2+8,Math.min(o.W/2-o.panel-rw/2-8,P.anchors.reservoir.x));
    const rz=Math.max(-o.D/2+o.panel+rd/2+8,Math.min(o.D/2-o.panel-rd/2-8,P.anchors.reservoir.z));
    const ry=Math.max(-o.H/2+o.plinth+rh/2+8,Math.min(o.H/2-o.panel-rh/2-8,P.anchors.reservoir.y));
-   box('РЕЗЕРВУАР 20 Л',rw,rh,rd,rx,ry,rz,M.water,{module:'Водный контур'});
+   const trayTop=P.zones.поддон.y+P.zones.поддон.h/2;
+   const reservoirY=Math.min(ry,Math.max(ry,trayTop+rh/2+8));
+   box('ОПОРНАЯ ПЛАТФОРМА РЕЗЕРВУАРА',rw+70,18,rd+70,rx,reservoirY-rh/2-10,rz,M.edge,{module:'Несущий крепёж'});
+   box('РЕЗЕРВУАР 20 Л',rw,rh,rd,rx,reservoirY,rz,M.water,{module:'Водный контур'});
  }
  // Двери строго от фактического проёма
  const doorH=P.doors.height,front=o.D/2+o.panel+4,openingLeft=-o.W/2+o.panel;
