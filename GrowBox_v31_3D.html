@@ -185,12 +185,24 @@ function build(){
  root.add(grid);
  // Реальное выбранное оборудование
  const L=P.equipment.light,F=P.equipment.fan;
- box('СВЕТИЛЬНИК '+(s.equipment.light||''),L.w,L.h,L.d,P.anchors.light.x,P.anchors.light.y,0,M.cream,{module:'Оборудование',description:'Выбранный светильник Spider Farmer'});
- line('ПЛАТФОРМА СВЕТИЛЬНИКА',L.w+90,12,L.d+90,P.anchors.light.x,P.anchors.light.y,0,M.edge,{module:'Крепление'});
+ // Оборудование никогда не выходит за внутренний габарит: при малом корпусе 3D ужимает только визуальное представление и сохраняет предупреждение в конфигураторе.
+ const growLeft=P.zones.grow.x-P.zones.grow.w/2+24, growRight=P.zones.grow.x+P.zones.grow.w/2-24;
+ const growFront=-P.zones.grow.d/2+24, growBack=P.zones.grow.d/2-24;
+ const lightScale=Math.min(1,(growRight-growLeft)/L.w,(growBack-growFront)/L.d);
+ const lx=Math.max(growLeft+L.w*lightScale/2,Math.min(growRight-L.w*lightScale/2,P.anchors.light.x));
+ const lz=Math.max(growFront+L.d*lightScale/2,Math.min(growBack-L.d*lightScale/2,0));
+ box('СВЕТИЛЬНИК '+(s.equipment.light||''),L.w,L.h,L.d,lx,P.anchors.light.y,lz,M.cream,{module:'Оборудование',description:'Выбранный светильник Spider Farmer',scale:lightScale});
+ line('ПЛАТФОРМА СВЕТИЛЬНИКА',L.w*lightScale+90,12,L.d*lightScale+90,lx,P.anchors.light.y,lz,M.edge,{module:'Крепление'});
  box('ВЕНТИЛЯТОР '+(s.equipment.fan||''),F.w,F.h,F.d,P.anchors.fan.x,P.anchors.fan.y,P.anchors.fan.z,M.dark,{module:'Оборудование',description:'Выбранный вентилятор Spider Farmer'});
  box('СЕРДЦЕВИНА ВЕНТИЛЯТОРА',F.w*.5,F.h*.5,F.d*.5,P.anchors.fan.x,P.anchors.fan.y,P.anchors.fan.z+F.d*.28,M.brass,{module:'Оборудование',click:false});
  line('ВИБРОИЗОЛИРОВАННАЯ ПЛАТФОРМА',F.w+120,22,F.d+100,P.anchors.fan.x,P.anchors.fan.y-F.h/2-22,P.anchors.fan.z,M.edge,{module:'Виброизоляция'});
- if(s.equipment.reservoir)box('РЕЗЕРВУАР 20 Л',300,430,300,P.anchors.reservoir.x,P.anchors.reservoir.y,P.anchors.reservoir.z,M.water,{module:'Водный контур'});
+ if(s.equipment.reservoir){
+   const rw=300,rh=430,rd=300;
+   const rx=Math.max(-o.W/2+o.panel+rw/2+8,Math.min(o.W/2-o.panel-rw/2-8,P.anchors.reservoir.x));
+   const rz=Math.max(-o.D/2+o.panel+rd/2+8,Math.min(o.D/2-o.panel-rd/2-8,P.anchors.reservoir.z));
+   const ry=Math.max(-o.H/2+o.plinth+rh/2+8,Math.min(o.H/2-o.panel-rh/2-8,P.anchors.reservoir.y));
+   box('РЕЗЕРВУАР 20 Л',rw,rh,rd,rx,ry,rz,M.water,{module:'Водный контур'});
+ }
  // Двери строго от фактического проёма
  const doorH=P.doors.height,front=o.D/2+o.panel+4,openingLeft=-o.W/2+o.panel;
  for(let i=0;i<P.doors.count;i++){
