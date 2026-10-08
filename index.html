@@ -549,8 +549,8 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
   </div>
   <div class="marquee">
     <div class="track" id="mq">
-      <span><i>✕</i>ТИШИНА<i>✕</i>МЕБЕЛЬ<i>✕</i>ЧАСЫ<i>✕</i>СКРЫТЫЙ РОСТ<i>✕</i>ПОЛНЫЙ ЦИКЛ<i>✕</i>STEALTH<i>✕</i></span>
-      <span><i>✕</i>ТИШИНА<i>✕</i>МЕБЕЛЬ<i>✕</i>ЧАСЫ<i>✕</i>СКРЫТЫЙ РОСТ<i>✕</i>ПОЛНЫЙ ЦИКЛ<i>✕</i>STEALTH<i>✕</i></span>
+      <span><i>✕</i>ТИШИНА<i>✕</i>МЕБЕЛЬ<i>✕</i>ЧАСЫ<i>✕</i>СКРЫТЫЙ РОСТ<i>✕</i>ПОЛНЫЙ ЦИКЛ<i>✕</i>СКРЫТНОСТЬ<i>✕</i></span>
+      <span><i>✕</i>ТИШИНА<i>✕</i>МЕБЕЛЬ<i>✕</i>ЧАСЫ<i>✕</i>СКРЫТЫЙ РОСТ<i>✕</i>ПОЛНЫЙ ЦИКЛ<i>✕</i>СКРЫТНОСТЬ<i>✕</i></span>
     </div>
   </div>
 </header>
@@ -590,7 +590,7 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
           <div class="product-meta"><span>SECRET BOX · ИНДИВИДУАЛЬНЫЙ ПРОЕКТ</span><span>ИНЖЕНЕРНАЯ СИСТЕМА</span></div>
           <h3>Размер задаёте вы.<br><em>3D и расчёт следуют за ним.</em></h3>
           <p>Ширина, высота, глубина, Техническая колонна, верхний шумовой модуль, двери, свет, вентиляция, автоматика и инженерные системы собираются в одну конфигурацию.</p>
-          <div class="product-specs"><span>ПАРАМЕТРИЧЕСКИЙ</span><span>Live 3D</span><span>Spider Farmer</span><span>СПЕЦИФИКАЦИЯ ready</span></div>
+          <div class="product-specs"><span>ПАРАМЕТРИЧЕСКИЙ</span><span>ЖИВАЯ 3D</span><span>Spider Farmer</span><span>СПЕЦИФИКАЦИЯ ГОТОВА</span></div>
           <div class="product-bottom"><div><small>НАЧАТЬ</small><b>С НУЛЯ</b></div><a href="builder.html">ОТКРЫТЬ КОНФИГУРАТОР <i>→</i></a></div>
         </div>
       </article>
@@ -992,7 +992,7 @@ var xv=document.getElementById('cab'),xhint=document.getElementById('hint');
 var XVIEWS={iso:'rotateX(0deg) rotateY(-24deg)',front:'rotateX(0deg) rotateY(0deg)',side:'rotateX(0deg) rotateY(-90deg)',top:'rotateX(-88deg) rotateY(0deg)',open:'rotateX(0deg) rotateY(-62deg)'};
 function setXView(v){
   xv.style.transform=XVIEWS[v]||XVIEWS.iso;
-  xhint.textContent=v.toUpperCase()+' / architecture';
+  xhint.textContent=v.toUpperCase()+' / архитектура';
   document.querySelectorAll('#viewbar .xbtn').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-view')===v)});
 }
 document.querySelectorAll('#viewbar .xbtn').forEach(function(b){b.addEventListener('click',function(){setXView(b.getAttribute('data-view'))})});
