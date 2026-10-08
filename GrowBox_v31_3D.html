@@ -107,7 +107,8 @@ const M={
  cream:new THREE.MeshStandardMaterial({color:0xe8e1d5,roughness:.5,metalness:.08}),
  glass:new THREE.MeshStandardMaterial({color:0x9b8664,roughness:.22,metalness:.2,transparent:true,opacity:.18,depthWrite:false}),
  water:new THREE.MeshStandardMaterial({color:0x52676a,roughness:.3,metalness:.2,transparent:true,opacity:.65}),
- red:new THREE.MeshStandardMaterial({color:0xd96d61,roughness:.42,metalness:.12,transparent:true,opacity:.25})
+ red:new THREE.MeshStandardMaterial({color:0xd96d61,roughness:.42,metalness:.12,transparent:true,opacity:.25}),
+ acoustic:new THREE.MeshStandardMaterial({color:0x5b5144,roughness:.82,metalness:.05})
 };
 const mm=v=>v*U;
 function box(name,w,h,d,x,y,z,mat,opts={}){
@@ -173,10 +174,6 @@ function build(){
    box('РУЧКА '+(i+1),18,180,28,g.userData.hinge<0?w/2-30:-w/2+30,0,P.doors.thickness/2+12,M.steel,{parent:g,module:'Фасад'});
    root.add(g);
  }
- addRail(-P.outer.W/2+70,P.outer.D/2-45,P.zones.grow.h*.72);
- addRail(P.outer.W/2-70,P.outer.D/2-45,P.zones.grow.h*.72);
- addTray(P.zones.grow.d);
- addTopNoise();
  // Задняя кабельная зона
  for(let i=0;i<4;i++)line('ЗАДНИЙ КАБЕЛЬНЫЙ КАНАЛ '+(i+1),24,o.H-160,18,-o.W/2+100+i*42,0,-o.D/2+o.panel+12,M.dark,{module:'Кабельная трасса'});
  applyMode();
