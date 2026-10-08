@@ -219,15 +219,32 @@ function build(){
    box('ОПОРНАЯ ПЛАТФОРМА РЕЗЕРВУАРА',rw+70,18,rd+70,rx,reservoirY-rh/2-10,rz,M.edge,{module:'Несущий крепёж'});
    box('РЕЗЕРВУАР 20 Л',rw,rh,rd,rx,reservoirY,rz,M.water,{module:'Водный контур'});
  }
- // Двери строго от фактического проёма
- const doorH=P.doors.height,front=o.D/2+o.panel+4,openingLeft=-o.W/2+o.panel;
+ // Двери рассчитываются от реального чистого проёма: одинаковые зазоры, точные петли, без перекрытий.
+ const doorH=P.doors.height,front=o.D/2+o.panel+4;
+ const openingLeft=-o.W/2+o.panel,openingRight=o.W/2-o.panel;
+ const gap=Math.max(4,P.doors.gap);
+ const clearW=Math.max(120,openingRight-openingLeft-gap*(P.doors.count-1));
+ const leafW=Math.max(120,clearW/P.doors.count);
  for(let i=0;i<P.doors.count;i++){
-   const w=Math.max(120,P.doors.width-P.doors.gap),cx=openingLeft+i*P.doors.width+P.doors.width/2;
-   const g=new THREE.Group();g.name='ДВЕРЬ '+(i+1);g.userData.baseX=mm(cx);g.userData.open=0;g.userData.target=0;g.userData.hinge=sideHinge(i,P.doors.count,w);g.position.set(mm(cx+g.userData.hinge*w/2),0,mm(front));doorGroups.push(g);
+   const cx=openingLeft+leafW/2+i*(leafW+gap);
+   const w=leafW;
+   const hinge=sideHinge(i,P.doors.count,w);
+   const pivotX=cx+hinge*w/2;
+   const g=new THREE.Group();
+   g.name='ДВЕРЬ '+(i+1);
+   g.userData.baseX=mm(pivotX);
+   g.userData.open=0;
+   g.userData.target=0;
+   g.userData.hinge=hinge;
+   g.userData.width=w;
+   g.position.set(mm(pivotX),0,mm(front));
+   doorGroups.push(g);
    box('ДВЕРНОЕ ПОЛОТНО '+(i+1),w,doorH,P.doors.thickness,0,-o.plinth/2,0,M.shell,{parent:g,module:'Фасад'});
-   g.children[0].position.x=-g.userData.hinge*w/2;
-   box('ВНУТРЕННЯЯ ПАНЕЛЬ ДВЕРИ '+(i+1),Math.max(90,w-36),Math.max(90,doorH-36),10,0,-o.plinth/2,-P.doors.thickness/2-5,M.inner,{parent:g,module:'Фасад',click:false});
-   box('РУЧКА '+(i+1),18,180,28,g.userData.hinge<0?w/2-30:-w/2+30,0,P.doors.thickness/2+12,M.steel,{parent:g,module:'Фасад'});
+   g.children[0].position.x=-hinge*w/2;
+   box('ВНУТРЕННЯЯ ПАНЕЛЬ ДВЕРИ '+(i+1),Math.max(90,w-36),Math.max(90,doorH-36),10,-hinge*18,-o.plinth/2,-P.doors.thickness/2-5,M.inner,{parent:g,module:'Фасад',click:false});
+   box('РУЧКА '+(i+1),18,180,28,-hinge*(w/2-30),0,P.doors.thickness/2+12,M.steel,{parent:g,module:'Фасад'});
+   box('ПЕТЛЯ НИЖНЯЯ '+(i+1),12,70,24,hinge*(w/2-18),-doorH/2+70,P.doors.thickness/2+8,M.brass,{parent:g,module:'Фасад'});
+   box('ПЕТЛЯ ВЕРХНЯЯ '+(i+1),12,70,24,hinge*(w/2-18),doorH/2-70,P.doors.thickness/2+8,M.brass,{parent:g,module:'Фасад'});
    root.add(g);
  }
  // Задняя кабельная зона
@@ -260,7 +277,7 @@ function addTopNoise(){
 }
 function sideHinge(i,count,w){return i<Math.ceil(count/2)?-1:1}
 function toggleDoor(g){g.userData.target=g.userData.target>.5?0:1}
-function updateDoors(){doorGroups.forEach(g=>{const a=g.userData.target,cur=g.userData.open;g.userData.open=cur+(a-cur)*.16;const angle=(g.userData.hinge<0?-1:1)*g.userData.open*Math.PI*.52;g.rotation.y=angle;g.position.x=g.userData.baseX+g.userData.hinge*mm(w*.42)*Math.sin(Math.abs(angle))})}
+function updateDoors(){doorGroups.forEach(g=>{const a=g.userData.target,cur=g.userData.open;g.userData.open=cur+(a-cur)*.16;const angle=(g.userData.hinge<0?-1:1)*g.userData.open*Math.PI*.52;g.rotation.y=angle;g.position.x=g.userData.baseX})}
 function applyMode(){
  const cut=mode==='cutaway',eng=mode==='engineering',expl=mode==='exploded',air=mode==='airflow',light=mode==='light';
  root.children.forEach(o=>{
