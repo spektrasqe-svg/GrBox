@@ -96,6 +96,7 @@ function show3DError(message){
   document.getElementById('retry3d').onclick=()=>location.reload();
 }
 try{
+ if(typeof THREE==='undefined') throw new Error('THREE_NOT_LOADED');
  scene=new THREE.Scene();
  scene.background=new THREE.Color(0x0b0c0e);
  camera=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,.01,100);
@@ -103,7 +104,7 @@ try{
  renderer.setPixelRatio(Math.min(devicePixelRatio,mobile?1.15:1.8));renderer.outputColorSpace=THREE.SRGBColorSpace;
  renderer.shadowMap.enabled=!mobile;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 }catch(err){
- show3DError('Браузер не смог создать WebGL-контекст. Попробуйте Chrome/Firefox, отключите режим экономии энергии и перезагрузите страницу.');
+ show3DError(err&&err.message==='THREE_NOT_LOADED'?'Не удалось загрузить библиотеку 3D. Проверьте интернет-соединение и перезагрузите страницу.':'Браузер не смог создать WebGL-контекст. Попробуйте Chrome/Firefox, отключите режим экономии энергии и перезагрузите страницу.');
  return;
 }
 hemi=new THREE.HemisphereLight(0xfff5df,0x16191b,mobile?1.7:2.2);scene.add(hemi);
