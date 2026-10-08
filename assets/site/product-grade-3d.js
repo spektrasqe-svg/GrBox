@@ -31,14 +31,14 @@ function build(){
  box('LIGHT_MOUNT_PLATE',light.w+90,12,light.d+90,L.anchors.light.x,L.anchors.light.y,0,M.frame);
  box('FAN_MOUNT_PLATE',fan.w+100,18,fan.d+100,L.anchors.fan.x,L.anchors.fan.y,L.anchors.fan.z,M.frame);
  if(S.engineering.vibration)for(var sx=-1;sx<=1;sx+=2)for(var sz=-1;sz<=1;sz+=2)box('VIBRATION_MOUNT',20,22,20,L.anchors.fan.x+sx*(fan.w/2-35),L.anchors.fan.y-fan.h/2-20,L.anchors.fan.z+sz*(fan.d/2-35),M.steel);
- box('LIGHT_CLEARANCE',light.w+70,light.h+80,light.d+70,L.anchors.light.x,L.anchors.light.y,0,(L.zones.grow.w<light.w+70||L.zones.grow.d<light.d+60)?M.bad:M.clear);
- box('FAN_CLEARANCE',fan.w+150,fan.h+140,fan.d+150,L.anchors.fan.x,L.anchors.fan.y,L.anchors.fan.z,L.checks.some(function(x){return x.code==='FAN_СЕРВИС';})?M.bad:M.clear);
+ box('ГАБАРИТ СВЕТИЛЬНИКА',light.w+70,light.h+80,light.d+70,L.anchors.light.x,L.anchors.light.y,0,(L.zones.grow.w<light.w+70||L.zones.grow.d<light.d+60)?M.bad:M.clear);
+ box('ГАБАРИТ ВЕНТИЛЯТОРА',fan.w+150,fan.h+140,fan.d+150,L.anchors.fan.x,L.anchors.fan.y,L.anchors.fan.z,L.checks.some(function(x){return x.code==='FAN_СЕРВИС';})?M.bad:M.clear);
  box('СЕРВИС_ZONE_FRAME',L.zones.сервис.w,12,L.zones.сервис.d,L.zones.сервис.x,L.zones.сервис.y+L.zones.сервис.h/2-6,0,M.accent);
- L.mounts.rails.forEach(function(x){box('ADJUSTABLE_RAIL',24,L.zones.grow.h-80,24,x,L.zones.grow.y,0,M.steel);for(var j=0;j<9;j++)box('CARRIAGE',58,16,20,x,L.mounts.railBottom+j*(L.mounts.railTop-L.mounts.railBottom)/8,0,M.accent);});
+ L.mounts.rails.forEach(function(x){box('РЕГУЛИРУЕМАЯ РЕЙКА',24,L.zones.grow.h-80,24,x,L.zones.grow.y,0,M.steel);for(var j=0;j<9;j++)box('КАРЕТКА',58,16,20,x,L.mounts.railBottom+j*(L.mounts.railTop-L.mounts.railBottom)/8,0,M.accent);});
  box('DIN_СЕРВИС_FRAME',L.zones.tech.w-70,220,L.zones.tech.d-90,L.zones.tech.x,L.zones.tech.y+L.zones.tech.h*.22,d.D/2-65,M.frame);
  box('PUMP_СЕРВИС_FRAME',L.zones.tech.w-70,180,L.zones.tech.d-90,L.zones.tech.x,L.zones.tech.y-L.zones.tech.h*.20,d.D/2-65,M.frame);
- box('NOISE_BAFFLE_A',L.zones.top.w-90,L.zones.top.h-70,18,0,L.zones.top.y,-L.zones.top.d/2+60,M.frame);
- box('NOISE_BAFFLE_B',L.zones.top.w-140,L.zones.top.h-110,18,70,L.zones.top.y,0,M.frame);
+ box('АКУСТИЧЕСКАЯ ПЕРЕГОРОДКА A',L.zones.top.w-90,L.zones.top.h-70,18,0,L.zones.top.y,-L.zones.top.d/2+60,M.frame);
+ box('АКУСТИЧЕСКАЯ ПЕРЕГОРОДКА B',L.zones.top.w-140,L.zones.top.h-110,18,70,L.zones.top.y,0,M.frame);
  for(var k=0;k<3;k++)box('ТЕХНИКА_ACCESS_PANEL_'+k,L.zones.tech.w-46,190,L.zones.tech.d-55,L.zones.tech.x,L.zones.tech.y-L.zones.tech.h*.30+k*220,d.D/2-30,M.dark);
  var p=document.getElementById('sb3d-info');
  if(!p){p=document.createElement('div');p.id='sb3d-info';p.style.cssText='position:fixed;right:18px;bottom:18px;z-index:50;max-width:340px;background:rgba(15,17,18,.92);border:1px solid rgba(232,220,200,.22);border-radius:14px;padding:14px 16px;color:#eee8dd;font:12px/1.5 Manrope,sans-serif;backdrop-filter:blur(12px)';document.body.appendChild(p);}
