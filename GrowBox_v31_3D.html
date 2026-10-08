@@ -627,7 +627,7 @@ function loop(){
 
 /* ---------- SECRET BOX custom configurator bridge ---------- */
 (function(){
- var KEY='secretbox.product.state.v2',last='';
+ var KEY='secretbox.product.state.v2',HANDOFF='secretbox.config.handoff.v1',last='';
  function read(){
   try{
    var d=SECRETBOX&&SECRETBOX.load?SECRETBOX.load():null;
@@ -649,7 +649,13 @@ function loop(){
   if(pills[0])pills[0].innerHTML='<b>SECRET BOX · CUSTOM</b> · '+(w.W||'—')+'×'+(w.D||'—')+'×'+(w.H||'—')+' мм · '+PARTS.length+' деталей';
   last=JSON.stringify(s);
  }
- function tick(){var s=read();if(s&&JSON.stringify(s)!==last)apply(s)}
+ function tick(){
+  try{
+   var handoff=sessionStorage.getItem(HANDOFF);
+   if(handoff){var hs=JSON.parse(handoff);if(hs&&hs.dimensions){SECRETBOX.save(hs);sessionStorage.removeItem(HANDOFF);}}
+  }catch(e){}
+  var s=read();if(s&&JSON.stringify(s)!==last)apply(s)
+ }
  tick();setInterval(tick,250);
 })();
  
