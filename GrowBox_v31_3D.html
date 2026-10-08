@@ -184,13 +184,13 @@ function build(){
 }
 function detailBox(name,w,h,d,x,y,z,mat,parent,module){return box(name,w,h,d,x,y,z,mat,{parent:parent||root,module:module||'Конструкция'})}
 function addRail(x,z,h){
- const rg=new THREE.Group(); rg.position.set(mm(x),0,mm(z));
+ const rg=new THREE.Group(); rg.position.set(mm(x),0,mm(z)); rg.userData.part={name:'Регулируемая вертикальная рейка',module:'Крепление'};
  detailBox('ВЕРТИКАЛЬНАЯ РЕЙКА',22,h,18,0,0,0,M.steel,rg,'Крепление');
  for(let yy=-h/2+55;yy<h/2;yy+=90) detailBox('КАРЕТКА',48,28,28,0,mm(yy),mm(12),M.steel,rg,'Крепление');
  root.add(rg); pickables.push(rg); return rg;
 }
 function addTray(d){
- const tg=new THREE.Group(); tg.position.y=mm(P.zones.tray.y+P.zones.tray.h/2);
+ const tg=new THREE.Group(); tg.position.y=mm(P.zones.tray.y+P.zones.tray.h/2); tg.userData.part={name:'Выдвижной сервисный поддон',module:'Сервис'};
  detailBox('ПОДДОН',P.zones.grow.w-36,18,d-55,0,0,0,M.steel,tg,'Сервис');
  detailBox('ПЕРЕДНЯЯ ПАНЕЛЬ ПОДДОНА',P.zones.grow.w-36,80,18,0,mm(-40),mm(d/2-27),M.shell,tg,'Сервис');
  detailBox('НАПРАВЛЯЮЩАЯ ЛЕВАЯ',18,24,d-90,-mm(P.zones.grow.w/2-25),0,0,M.steel,tg,'Крепление');
@@ -198,7 +198,7 @@ function addTray(d){
  root.add(tg); pickables.push(tg);
 }
 function addTopNoise(){
- const t=P.zones.top, tg=new THREE.Group(); tg.position.y=mm(t.y+t.h/2);
+ const t=P.zones.top, tg=new THREE.Group(); tg.position.y=mm(t.y+t.h/2); tg.userData.part={name:'Верхний шумозащитный модуль',module:'Акустика'};
  detailBox('ВЕРХНИЙ ШУМОЗАЩИТНЫЙ МОДУЛЬ',t.w,t.h,t.d,0,0,0,M.shell,tg,'Акустика');
  detailBox('АКУСТИЧЕСКАЯ ПЕРЕГОРОДКА',t.w-50,t.h-70,18,0,0,mm(-t.d/2+25),M.acoustic,tg,'Акустика');
  detailBox('ВОЗДУШНАЯ КАМЕРА',t.w-80,t.h-95,60,0,0,mm(t.d/2-55),M.acoustic,tg,'Акустика');
@@ -245,6 +245,7 @@ function frameCamera(kind){
  target.set(0,mm(d.H*.05),0);
 }
 function cameraTick(){
+ if(!P)return;
  clampGoal();spherical.r+=(goal.r-spherical.r)*.12;spherical.theta+=(goal.theta-spherical.theta)*.12;spherical.phi+=(goal.phi-spherical.phi)*.12;
  const r=spherical.r;camera.position.set(target.x+r*Math.sin(spherical.phi)*Math.cos(spherical.theta),target.y+r*Math.cos(spherical.phi),target.z+r*Math.sin(spherical.phi)*Math.sin(spherical.theta));camera.lookAt(target);
 }
