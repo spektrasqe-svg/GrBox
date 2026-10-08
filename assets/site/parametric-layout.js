@@ -71,6 +71,6 @@ function derive(config){
  return L;
 }
 function n(v,def){return Number.isFinite(Number(v))?Number(v):def}
-function label(config){const l=derive(config),d=l.outer;return{dimensions:d.W+' × '+d.D+' × '+d.H+' мм',status:l.compatible?'✓ CONFIGURATION COMPATIBLE':'⚠ NEEDS REVIEW',mass:l.metrics.mass+' кг',power:l.metrics.power+' Вт',airflow:l.metrics.airflow+' м³/ч',floor:l.metrics.floorLoad+' кг/м²'};}
+function label(config){const l=derive(config),d=l.outer;return{dimensions:d.W+' × '+d.D+' × '+d.H+' мм',status:l.compatible?'✓ КОНФИГУРАЦИЯ СОВМЕСТИМА':'⚠ ТРЕБУЕТ ПРОВЕРКИ',mass:l.metrics.mass+' кг',power:l.metrics.power+' Вт',airflow:l.metrics.airflow+' м³/ч',floor:l.metrics.floorLoad+' кг/м²'};}
 g.SECRETBOX_LAYOUT={derive,label,catalog:CATALOG,version:'2.0.0'};
 })(window);
