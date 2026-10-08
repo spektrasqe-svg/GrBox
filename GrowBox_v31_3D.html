@@ -186,7 +186,7 @@ function applyMode(){
      else if(cut)o.visible=!/Фасад/.test(mod);
      else o.visible=true;
    }
-   if(expl&&o.userData&&o.userData.part){o.position.y+=mm(/ВЕРХНИЙ/.test(o.name)?100:/ТЕХНИЧ/.test(o.name)?-60:/ДВЕР/.test(o.name)?0:0)}
+   if(expl&&o.userData&&o.userData.part){const n=o.name;o.position.y+=mm(/ВЕРХНИЙ/.test(n)?110:/ТЕХНИЧ/.test(n)?-70:/СЕРВИС/.test(n)?-35:0)}
  });
  if(air){
    // визуальный тракт: тонкие золотые сегменты внутри корпуса
@@ -202,6 +202,7 @@ function updatePanel(s){
 }
 function setMode(m){mode=m;document.getElementById('modeName').textContent=({product:'ПРОДУКТ',engineering:'ИНЖЕНЕРИЯ',cutaway:'РАЗРЕЗ',exploded:'ВЗРЫВ-СХЕМА',airflow:'ВОЗДУХООБМЕН',light:'СВЕТ'})[m]||'ПРОДУКТ';document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));build()}
 let target=new THREE.Vector3(0,mm(200),0),spherical={r:3.8,theta:.65,phi:1.05},goal={...spherical};
+function clampGoal(){if(!P)return;const max=Math.max(P.outer.W,P.outer.H,P.outer.D)*U;goal.r=Math.max(max*.82,Math.min(max*4.8,goal.r));goal.phi=Math.max(.16,Math.min(2.86,goal.phi));}
 function frameCamera(kind){
  if(!P)return;
  const d=P.outer,max=Math.max(d.W,d.H,d.D)*U;
@@ -213,16 +214,16 @@ function frameCamera(kind){
  target.set(0,mm(d.H*.05),0);
 }
 function cameraTick(){
- spherical.r+=(goal.r-spherical.r)*.12;spherical.theta+=(goal.theta-spherical.theta)*.12;spherical.phi+=(goal.phi-spherical.phi)*.12;
+ clampGoal();spherical.r+=(goal.r-spherical.r)*.12;spherical.theta+=(goal.theta-spherical.theta)*.12;spherical.phi+=(goal.phi-spherical.phi)*.12;
  const r=spherical.r;camera.position.set(target.x+r*Math.sin(spherical.phi)*Math.cos(spherical.theta),target.y+r*Math.cos(spherical.phi),target.z+r*Math.sin(spherical.phi)*Math.sin(spherical.theta));camera.lookAt(target);
 }
 let active=new Map(),drag=null,lastTap=0,lastTapX=0,lastTapY=0,basePinch=0;
 function fitView(){frameCamera('iso');goal.r=Math.max(goal.r,Math.max(P.outer.W,P.outer.H,P.outer.D)*U*2.15)}
 cv.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&e.button!==0)return;cv.setPointerCapture(e.pointerId);active.set(e.pointerId,{x:e.clientX,y:e.clientY});if(active.size===1)drag={x:e.clientX,y:e.clientY,ox:e.clientX,oy:e.clientY,moved:0};else drag=null;e.preventDefault()},{passive:false});
-cv.addEventListener('pointermove',e=>{if(!active.has(e.pointerId))return;active.set(e.pointerId,{x:e.clientX,y:e.clientY});if(active.size===1&&drag){const dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.x=e.clientX;drag.y=e.clientY;drag.moved+=Math.hypot(dx,dy);goal.theta-=dx*.009;goal.phi=Math.max(.18,Math.min(2.72,goal.phi-dy*.007))}else if(active.size===2){const a=[...active.values()];if(!basePinch)basePinch=Math.max(1,Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y));const d=Math.max(1,Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y));goal.r=Math.max(.55,Math.min(12,goal.r*(basePinch/d)));}e.preventDefault()},{passive:false});
+cv.addEventListener('pointermove',e=>{if(!active.has(e.pointerId))return;active.set(e.pointerId,{x:e.clientX,y:e.clientY});if(active.size===1&&drag){const dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.x=e.clientX;drag.y=e.clientY;drag.moved+=Math.hypot(dx,dy);goal.theta-=dx*(mobile?.0065:.0085);goal.phi=Math.max(.18,Math.min(2.72,goal.phi-dy*(mobile?.0052:.007)) )}else if(active.size===2){const a=[...active.values()];if(!basePinch)basePinch=Math.max(1,Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y));const d=Math.max(1,Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y));goal.r=Math.max(.1,goal.r*(basePinch/d));}e.preventDefault()},{passive:false});
 cv.addEventListener('pointerup',e=>{active.delete(e.pointerId);if(active.size===0){basePinch=0;if(drag&&drag.moved<8){const now=Date.now();if(now-lastTap<320&&Math.hypot(e.clientX-lastTapX,e.clientY-lastTapY)<18){frameCamera('iso')}else pick(e.clientX,e.clientY);lastTap=now;lastTapX=e.clientX;lastTapY=e.clientY}drag=null}e.preventDefault()},{passive:false});
 cv.addEventListener('pointercancel',e=>{active.delete(e.pointerId);if(active.size===0){basePinch=0;drag=null}},{passive:false});
-cv.addEventListener('wheel',e=>{goal.r=Math.max(.55,Math.min(12,goal.r*(e.deltaY>0?1.08:.92)));e.preventDefault()},{passive:false});
+cv.addEventListener('wheel',e=>{goal.r=Math.max(.1,goal.r*(e.deltaY>0?1.08:.92));e.preventDefault()},{passive:false});
 function pick(x,y){
  const rect=cv.getBoundingClientRect(),mouse=new THREE.Vector2((x-rect.left)/rect.width*2-1,-(y-rect.top)/rect.height*2+1),ray=new THREE.Raycaster();ray.setFromCamera(mouse,camera);
  const hit=ray.intersectObjects(pickables,true)[0];if(!hit)return;
