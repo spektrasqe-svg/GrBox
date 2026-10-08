@@ -192,3 +192,21 @@
 ### Заметки
 - `agent-browser errors` показывает 41 пустую ошибку даже на `about:blank` — это шум инструмента, не баг страницы; реальные ошибки смотреть через `console`
 - Кэш Chromium маскирует правки CSS: для верификации нужен свежий браузер (`agent-browser close --all`)
+
+## Сессия 2026-10-09 (продолжение) — бэклог аудита: связность, SEO, шапка
+
+### Исправлено
+1. **builder.html**: JS-шаблон шага 02 не закрывал `<section>` (находка аудита оказалась внутри template-строк). Плюс реализован `?model=A|B|C` — пресеты (A/choco, B/champ, C/white) применяются из query; `product-state.js` теперь знает имена моделей (SECRET BOX A · FLAGSHIP / B · COMPACT / C · DUAL ZONE).
+2. **index.html**: карточки моделей A/B/C в секции #models (цены 190/150/175k, фото model_a/b/c) → product-a/b/c.html. Страницы больше не сироты.
+3. **SEO на всех 10 страницах**: meta description (добавлены недостающие: builder, documentation, 3D), og:type/locale/title/description/url/image, twitter:card, `assets/site/favicon.svg` (латунно-кремовый монограмм), visually-hidden h1 на 3D-странице.
+4. **Логотип в шапке**: убран `transform:scale(1.28/1.22)` — квадратный стэнсил больше не обрезается.
+5. **Мёртвый CSS старого нава** (index/calculators/growpedia): `nav{position:fixed;top:0...}` + `nav.scrolled`/`nav .wrap`/`nav .links`/`.nav-cta` — bare-селектор `nav` перехватывал `<nav class="sb-links">` шелла → пункты меню поверх логотипа на десктопе. Вычищено. Заодно удалены мёртвые JS-обработчики `#nav` (в calculators/growpedia — с гарантированным TypeError на скролле).
+
+### Проверки
+- Шапка: раскладка едина на всех страницах (brand 134–324, nav 336–1147, CTA 1159–1292), omni-разбор: логотип цел, наложений нет (десктоп + мобайл)
+- builder.html?model=B → state B/champ, label «SECRET BOX B · COMPACT» ✓; карточки index ведут на product-a/b/c ✓
+- Статический чекер по корневым страницам: 0 проблем (битых ссылок/мета-тегов/баланса тегов нет)
+- Мобайл 390: все страницы без переполнения, console чист (включая скролл-сценарии)
+
+### Осталось из аудита
+M3 тач-цели <44px · M4 a11y-база · M5 мёртвый 3d-bom-bridge.js · M6 three.js UMD/CDN · M7 свести цены · M8 README · L1–L3 типографика/крошки/preconnect · решение по cab_* картинкам · архив на Pages

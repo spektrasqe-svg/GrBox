@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SECRET BOX® — индивидуальные технические шкафы</title>
+<title>SECRET BOX® — индивидуальные технические шкафы</title><meta property="og:type" content="website"><meta property="og:locale" content="ru_RU"><meta property="og:title" content="SECRET BOX® — индивидуальные технические шкафы"><meta property="og:description" content="SECRET BOX® — индивидуальные технические шкафы: размеры, архитектура, вентиляция, свет, автоматизация и 3D-проект в одной конфигурации."><meta property="og:url" content="https://spektrasqe-svg.github.io/GrBox/"><meta property="og:image" content="https://spektrasqe-svg.github.io/GrBox/assets/site/hero.jpg"><meta name="twitter:card" content="summary-large_image"><link rel="icon" type="image/svg+xml" href="assets/site/favicon.svg">
 <meta name="description" content="SECRET BOX® — индивидуальные технические шкафы: размеры, архитектура, вентиляция, свет, автоматизация и 3D-проект в одной конфигурации.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;500;700&family=Unbounded:wght@300;400;600;800;900&display=swap" rel="stylesheet">
@@ -52,15 +52,6 @@ a{color:inherit;text-decoration:none}
   font-family:var(--disp);font-size:12px;font-weight:600;letter-spacing:.3em;color:var(--cream-2);
   border:1px solid var(--line-strong);padding:7px 12px;border-radius:100px;
 }
-
-/* ================= NAV ================= */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  transition:background .35s, border-color .35s;
-  border-bottom:1px solid transparent;
-}
-nav.scrolled{background:rgba(17,18,21,.97);border-color:var(--line)}
-nav .wrap{display:flex;align-items:center;gap:36px;height:74px}
 .brand{display:flex;align-items:center;gap:12px}
 .brand .mark{
   width:34px;height:34px;border:1.5px solid var(--cream);border-radius:8px;
@@ -70,23 +61,6 @@ nav .wrap{display:flex;align-items:center;gap:36px;height:74px}
 .brand:hover .mark{transform:rotate(-8deg)}
 .brand b{font-family:var(--disp);font-weight:800;font-size:15px;letter-spacing:.22em}
 .brand sup{font-size:8px;letter-spacing:0;opacity:.7}
-nav .links{display:flex;gap:30px;margin-left:22px}
-nav .links a{
-  font-size:11.5px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--cream-2);
-  position:relative;padding:6px 0;transition:color .25s;
-}
-nav .links a::after{
-  content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--brass);transition:width .3s;
-}
-nav .links a:hover{color:var(--cream)}
-nav .links a:hover::after{width:100%}
-.nav-cta{
-  margin-left:auto;display:inline-flex;align-items:center;gap:10px;
-  border:1px solid var(--line-strong);border-radius:100px;padding:11px 22px;
-  font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;
-  transition:all .3s;
-}
-.nav-cta:hover{background:var(--cream);color:var(--ink);border-color:var(--cream)}
 
 /* ================= HERO ================= */
 header.hero{position:relative;padding:150px 0 0;overflow:hidden}
@@ -357,7 +331,6 @@ footer{padding:84px 0 40px}
   .interior-grid{grid-template-columns:1fr}
   .interior-grid .cell{height:300px}
   .interior-grid .cell.tall{grid-row:auto}
-  nav .links{display:none}
 }
 @media(max-width:560px){
   .eng-grid,.tiles{grid-template-columns:1fr}
@@ -453,6 +426,10 @@ footer{padding:84px 0 40px}
 .shop-intro{border-left:1px solid var(--brass);padding:6px 0 6px 25px;max-width:480px}
 .shop-intro strong{font-family:var(--disp);font-size:20px}.shop-intro p{color:#a7a39b;line-height:1.7;margin-top:10px}
 .shop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:stretch}
+.product-card.mini .product-photo{height:240px;flex-basis:240px}
+.product-card.mini .product-info{padding:20px 20px 19px}
+.product-card.mini .product-info h3{font-size:26px;margin:14px 0 8px}
+.product-card.mini .product-info p{font-size:13px;line-height:1.6;color:var(--muted);margin:0}
 .product-card{background:#191a1d;border:1px solid #303136;transition:.45s;min-width:0;display:flex;flex-direction:column;height:100%}
 .product-card:hover{border-color:#72654f;transform:translateY(-6px)}
 .product-photo{display:block;height:430px;position:relative;overflow:hidden;background:#0b0c0e;flex:0 0 430px}
@@ -584,6 +561,30 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
       <div class="shop-intro"><strong>Один гибкий конфигуратор.</strong><p><strong>Один живой конфигуратор.</strong> Вы задаёте внешние размеры, а система пересчитывает внутренний объём, рабочую зону, технические отсеки, двери, оборудование и инженерные показатели. 3D строится из той же конфигурации.</p></div>
     </div>
     <div class="shop-grid">
+      <article class="product-card mini">
+        <a class="product-photo" href="product-a.html"><span class="product-badge">MODEL A · FLAGSHIP</span><img loading="lazy" decoding="async" src="assets/site/model_a.jpg" alt="SECRET BOX A — флагманская модель"></a>
+        <div class="product-info">
+          <h3>FLAGSHIP BOX A</h3>
+          <p>Большая камера роста и отдельная техническая зона.</p>
+          <div class="product-bottom"><div><small>СТАРТОВАЯ ЦЕНА</small><b>от 190 000 ₽</b></div><a href="product-a.html">ПОДРОБНЕЕ <i>→</i></a></div>
+        </div>
+      </article>
+      <article class="product-card mini">
+        <a class="product-photo" href="product-b.html"><span class="product-badge">MODEL B · SPACE SAVER</span><img loading="lazy" decoding="async" src="assets/site/model_b.jpg" alt="SECRET BOX B — компактная модель"></a>
+        <div class="product-info">
+          <h3>COMPACT BOX B</h3>
+          <p>Компактный вертикальный BOX для дома с полной автоматизацией.</p>
+          <div class="product-bottom"><div><small>СТАРТОВАЯ ЦЕНА</small><b>от 150 000 ₽</b></div><a href="product-b.html">ПОДРОБНЕЕ <i>→</i></a></div>
+        </div>
+      </article>
+      <article class="product-card mini">
+        <a class="product-photo" href="product-c.html"><span class="product-badge">MODEL C · DUAL ZONE</span><img loading="lazy" decoding="async" src="assets/site/model_c.jpg" alt="SECRET BOX C — двухсекционная модель"></a>
+        <div class="product-info">
+          <h3>DUAL ZONE BOX C</h3>
+          <p>Двухсекционная модель: камера роста плюс зона хранения.</p>
+          <div class="product-bottom"><div><small>СТАРТОВАЯ ЦЕНА</small><b>от 175 000 ₽</b></div><a href="product-c.html">ПОДРОБНЕЕ <i>→</i></a></div>
+        </div>
+      </article>
       <article class="product-card product-a" style="grid-column:1/-1">
         <a class="product-photo" href="builder.html"><span class="product-badge">ИНДИВИДУАЛЬНЫЙ · ПАРАМЕТРИЧЕСКИЙ</span><span class="product-label">СОЗДАЙТЕ СВОЙ ШКАФ</span><img loading="lazy" decoding="async" src="assets/site/model_a.jpg" alt="SECRET BOX custom configurator"></a>
         <div class="product-info">
@@ -943,8 +944,6 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
 
 <script>
 // nav при скролле
-var nav=document.getElementById('nav');
-addEventListener('scroll',function(){if(nav)nav.classList.toggle('scrolled',scrollY>24)},{passive:true});
 
 // появление блоков
 var io=new IntersectionObserver(function(es){
