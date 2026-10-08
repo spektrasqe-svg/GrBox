@@ -142,7 +142,8 @@ const mm=v=>v*U;
 function box(name,w,h,d,x,y,z,mat,opts={}){
  const g=new THREE.BoxGeometry(mm(Math.max(2,w)),mm(Math.max(2,h)),mm(Math.max(2,d)));
  const o=new THREE.Mesh(g,mat||M.inner);o.name=name;o.position.set(mm(x),mm(y),mm(z));o.castShadow=true;o.receiveShadow=true;
- o.userData.part={name,description:opts.description||name,module:opts.module||'Конструкция',dimensions:[Math.round(w),Math.round(h),Math.round(d)]};
+ o.userData.part={name,description:opts.description||name,module:opts.module||'Конструкция',dimensions:[Math.round(w),Math.round(h),Math.round(d)],scale:opts.scale||1};
+ if(opts.scale&&opts.scale!==1)o.scale.set(opts.scale,1,opts.scale);
  if(opts.click!==false)pickables.push(o);(opts.parent||root).add(o);return o;
 }
 function line(name,w,h,d,x,y,z,mat,opts){return box(name,w,h,d,x,y,z,mat,opts)}
@@ -188,7 +189,7 @@ function build(){
  // Оборудование никогда не выходит за внутренний габарит: при малом корпусе 3D ужимает только визуальное представление и сохраняет предупреждение в конфигураторе.
  const growLeft=P.zones.grow.x-P.zones.grow.w/2+24, growRight=P.zones.grow.x+P.zones.grow.w/2-24;
  const growFront=-P.zones.grow.d/2+24, growBack=P.zones.grow.d/2-24;
- const lightScale=Math.min(1,(growRight-growLeft)/L.w,(growBack-growFront)/L.d);
+ const lightScale=Math.max(.18,Math.min(1,(growRight-growLeft)/L.w,(growBack-growFront)/L.d,(P.zones.grow.h-90)/Math.max(1,L.h+90)));
  const lx=Math.max(growLeft+L.w*lightScale/2,Math.min(growRight-L.w*lightScale/2,P.anchors.light.x));
  const lz=Math.max(growFront+L.d*lightScale/2,Math.min(growBack-L.d*lightScale/2,0));
  box('СВЕТИЛЬНИК '+(s.equipment.light||''),L.w,L.h,L.d,lx,P.anchors.light.y,lz,M.cream,{module:'Оборудование',description:'Выбранный светильник Spider Farmer',scale:lightScale});
@@ -220,6 +221,7 @@ function build(){
  updatePanel(s);
 }
 function detailBox(name,w,h,d,x,y,z,mat,parent,module){return box(name,w,h,d,x,y,z,mat,{parent:parent||root,module:module||'Конструкция'})}
+/* Legacy helpers intentionally unused: the canonical parametric build creates these modules once. */
 function addRail(x,z,h){
  const rg=new THREE.Group(); rg.position.set(mm(x),0,mm(z)); rg.userData.part={name:'Регулируемая вертикальная рейка',module:'Крепление'};
  detailBox('ВЕРТИКАЛЬНАЯ РЕЙКА',22,h,18,0,0,0,M.steel,rg,'Крепление');
