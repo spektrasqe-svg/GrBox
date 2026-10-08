@@ -66,7 +66,21 @@ const hemi=new THREE.HemisphereLight(0xfff5df,0x16191b,2.2);scene.add(hemi);
 const key=new THREE.DirectionalLight(0xffedc9,3.2);key.position.set(4,6,5);key.castShadow=true;scene.add(key);
 const fill=new THREE.DirectionalLight(0xbfc8d4,1.4);fill.position.set(-5,3,-4);scene.add(fill);
 const root=new THREE.Group();scene.add(root);
-const pickables=[];let P=null,mode='product',selected=null;
+const pickables=[];let P=null,mode='product',selected=null,liveConfig=null;
+function getState(){return liveConfig||SECRETBOX.load()}
+function consumeHandoff(){
+  if(new URLSearchParams(location.search).get('config')!=='live')return;
+  try{
+    const raw=sessionStorage.getItem('secretbox.config.handoff.v1');
+    if(!raw)return;
+    const parsed=JSON.parse(raw);
+    if(parsed&&parsed.dimensions&&parsed.architecture&&parsed.equipment&&parsed.engineering){
+      liveConfig=parsed;
+      SECRETBOX.save(parsed);
+      sessionStorage.removeItem('secretbox.config.handoff.v1');
+    }
+  }catch(e){console.warn('SECRET BOX: не удалось прочитать handoff',e)}
+}
 const M={
  shell:new THREE.MeshStandardMaterial({color:0x25272a,roughness:.58,metalness:.25}),
  edge:new THREE.MeshStandardMaterial({color:0x6c7072,roughness:.34,metalness:.65}),
@@ -89,7 +103,7 @@ function box(name,w,h,d,x,y,z,mat,opts={}){
 function line(name,w,h,d,x,y,z,mat,opts){return box(name,w,h,d,x,y,z,mat,opts)}
 function clear(){while(root.children.length)root.remove(root.children[root.children.length-1]);pickables.length=0;selected=null}
 function build(){
- const s=SECRETBOX.load();P=SECRETBOX_LAYOUT.derive(s);clear();
+ const s=getState();P=SECRETBOX_LAYOUT.derive(s);clear();
  const o=P.outer,z=P.zones;
  // Корпус и несущий каркас
  const x=o.W/2-o.panel/2,y=o.H/2-o.panel/2,back=-o.D/2+o.panel/2;
@@ -203,7 +217,10 @@ document.querySelectorAll('[data-cam]').forEach(b=>b.onclick=()=>{document.query
 document.getElementById('reset').onclick=()=>{setMode('product');frameCamera('iso')};
 document.getElementById('export').onclick=()=>{const s=SECRETBOX.load(),l=SECRETBOX_LAYOUT.derive(s),payload={project:'SECRET BOX · параметрическая 3D-конфигурация',date:new Date().toISOString(),configuration:s,geometry:l};const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}));a.download='secret-box-parametric-config.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000)};
 let lastState='';
-function sync(){const s=SECRETBOX.load(),sig=JSON.stringify(s);if(sig!==lastState){lastState=sig;build();frameCamera('iso')}}SECRETBOX.subscribe(()=>{lastState=''});sync();
+function sync(){const s=getState(),sig=JSON.stringify(s);if(sig!==lastState){lastState=sig;build();frameCamera('iso')}}
+SECRETBOX.subscribe(()=>{liveConfig=null;lastState='';sync()});
+consumeHandoff();
+sync();
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight,false)});
 renderer.setSize(innerWidth,innerHeight,false);frameCamera('iso');
 document.getElementById('loader').style.display='none';
