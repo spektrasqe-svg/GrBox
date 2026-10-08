@@ -24,8 +24,11 @@ function derive(config){
  const doorT=clamp(n(a.doorSandwich,41),20,80);
  const innerW=W-panel*2,innerD=D-panel*2,innerH=H-plinth-panel*2;
  const growW=Math.max(300,innerW-tech-18),growD=Math.max(340,innerD);
- const growH=Math.max(600,innerH-topH-30);
- const topY=H/2-plinth-topH/2, growY=-H/2+plinth+growH/2;
+ const growBottom=-H/2+plinth+сервисGap+поддонH+24;
+ const growTop=H/2-plinth-topH-30;
+ const availableGrowH=growTop-growBottom;
+ const growH=Math.max(420,availableGrowH);
+ const topY=H/2-plinth-topH/2, growY=growBottom+growH/2;
  const поддонY=-H/2+plinth+поддонH/2+сервисGap;
  const scrogH=clamp(n(a.scrogH,650),300,Math.max(320,growH-260));
  const scrogY=Math.max(поддонY+220,-H/2+plinth+scrogH/2+120);
@@ -55,6 +58,7 @@ function derive(config){
  const add=(level,code,text,detail)=>L.checks.push({level,code,text,detail:detail||''});
  if(growW<light.w+70)add('error','LIGHT_WIDTH','Светильник не помещается по ширине Рабочая зона.','Нужна ширина '+(light.w+70)+' мм, доступно '+Math.round(growW)+' мм.');
  if(growD<light.d+60)add('error','LIGHT_DEPTH','Недостаточная глубина под выбранный светильник.','Нужна глубина '+(light.d+60)+' мм.');
+ if(availableGrowH<420)add('error','GROW_HEIGHT','Недостаточная высота рабочей камеры.','Доступно '+Math.round(availableGrowH)+' мм; минимально требуется 420 мм.');
  if(growH<light.h+scrogH+220)add('error','VERTICAL_COLLISION','Конфликт по высоте: свет / SCROG / сервис.','Увеличьте высоту или уменьшите SCROG.');
  if(tech<fan.w+150)add('warning','ТЕХНИКА_CLEARANCE','Техническая колонна почти без сервисного запаса.','Рекомендуется Техническая колонна не менее '+(fan.w+150)+' мм.');
  if(D<650)add('warning','DEPTH','Глубина ограничивает вентиляцию и сервисный доступ.');
