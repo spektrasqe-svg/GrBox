@@ -175,7 +175,15 @@ function build(){
  // Рабочая камера
  box('ЗАДНИЙ ЭКРАН РАБОЧЕЙ КАМЕРЫ',z.grow.w,z.grow.h,18,z.grow.x,z.grow.y,-z.grow.d/2+9,M.inner,{module:'Камера'});
  line('ВЫДВИЖНОЙ ПОДДОН',z.поддон.w,z.поддон.h,z.поддон.d,z.поддон.x,z.поддон.y,0,M.edge,{module:'Сервис'});
+ line('ПЕРЕДНИЙ БОРТ ПОДДОНА',z.поддон.w-36,Math.min(70,z.поддон.h*.55),18,z.поддон.x,z.поддон.y+z.поддон.h/2-22,o.D/2-24,M.shell,{module:'Сервис'});
+ line('НАПРАВЛЯЮЩАЯ ПОДДОНА ЛЕВАЯ',18,24,z.поддон.d-90,z.поддон.x-z.поддон.w/2+25,z.поддон.y,0,M.steel,{module:'Крепление'});
+ line('НАПРАВЛЯЮЩАЯ ПОДДОНА ПРАВАЯ',18,24,z.поддон.d-90,z.поддон.x+z.поддон.w/2-25,z.поддон.y,0,M.steel,{module:'Крепление'});
  // SCROG / регулируемые рейки
+ const sc=P.zones.scrog;
+ const L=P.equipment.light;
+ const growLeft=P.zones.grow.x-P.zones.grow.w/2+24, growRight=P.zones.grow.x+P.zones.grow.w/2-24;
+ const growFront=-P.zones.grow.d/2+24, growBack=P.zones.grow.d/2-24;
+ const lightScale=Math.max(.18,Math.min(1,(growRight-growLeft)/Math.max(1,L.w),(growBack-growFront)/Math.max(1,L.d),(P.zones.grow.h-90)/Math.max(1,L.h+90)));
  for(const side of [-1,1]){
    const rx=z.grow.x+side*(z.grow.w/2-24);
    line('РЕГУЛИРУЕМАЯ ВЕРТИКАЛЬНАЯ РЕЙКА',24,z.grow.h-80,24,rx,z.grow.y,0,M.steel,{module:'Регулируемое крепление'});
@@ -183,18 +191,15 @@ function build(){
    line('СТОПОР SCROG',42,12,30,rx,sc.y,0,M.steel,{module:'Регулируемое крепление'});
    line('СТОПОР СВЕТ',42,12,30,rx,P.anchors.light.y,0,M.steel,{module:'Регулируемое крепление'});
  }
- const sc=P.zones.scrog,grid=new THREE.Group();grid.name='SCROG';
+ const grid=new THREE.Group();grid.name='SCROG';
  line('ПОПЕРЕЧИНА КРЕПЛЕНИЯ SCROG',sc.w,18,28,sc.x,sc.y,0,M.steel,{module:'SCROG'});
- line('ПОПЕРЕЧИНА КРЕПЛЕНИЯ СВЕТ',Math.max(220,Math.min(sc.w,L.w*lightScale+100)),18,28,P.anchors.light.x,P.anchors.light.y+L.h/2+22,P.anchors.light.z,M.steel,{module:'Крепление'});
+ line('ПОПЕРЕЧИНА КРЕПЛЕНИЯ СВЕТ',Math.max(220,Math.min(sc.w,L.w*lightScale+100)),18,28,P.anchors.light.x,P.anchors.light.y+L.h*lightScale/2+22,P.anchors.light.z,M.steel,{module:'Крепление'});
  for(let i=0;i<=8;i++)line('SCROG ПОПЕРЕЧИНА',3,5,sc.d-18,sc.x-sc.w/2+i*sc.w/8,sc.y,0,M.brass,{parent:grid,module:'SCROG'});
  for(let i=0;i<=6;i++)line('SCROG ПРОДОЛЬНАЯ',sc.w-18,5,3,sc.x,sc.y,-sc.d/2+i*sc.d/6,M.brass,{parent:grid,module:'SCROG'});
  root.add(grid);
  // Реальное выбранное оборудование
  const L=P.equipment.light,F=P.equipment.fan;
  // Оборудование никогда не выходит за внутренний габарит: при малом корпусе 3D ужимает только визуальное представление и сохраняет предупреждение в конфигураторе.
- const growLeft=P.zones.grow.x-P.zones.grow.w/2+24, growRight=P.zones.grow.x+P.zones.grow.w/2-24;
- const growFront=-P.zones.grow.d/2+24, growBack=P.zones.grow.d/2-24;
- const lightScale=Math.max(.18,Math.min(1,(growRight-growLeft)/L.w,(growBack-growFront)/L.d,(P.zones.grow.h-90)/Math.max(1,L.h+90)));
  const lx=Math.max(growLeft+L.w*lightScale/2,Math.min(growRight-L.w*lightScale/2,P.anchors.light.x));
  const lz=Math.max(growFront+L.d*lightScale/2,Math.min(growBack-L.d*lightScale/2,0));
  box('СВЕТИЛЬНИК '+(s.equipment.light||''),L.w,L.h,L.d,lx,P.anchors.light.y,lz,M.cream,{module:'Оборудование',description:'Выбранный светильник Spider Farmer',scale:lightScale});
@@ -206,9 +211,11 @@ function build(){
    const rw=300,rh=430,rd=300;
    const rx=Math.max(-o.W/2+o.panel+rw/2+8,Math.min(o.W/2-o.panel-rw/2-8,P.anchors.reservoir.x));
    const rz=Math.max(-o.D/2+o.panel+rd/2+8,Math.min(o.D/2-o.panel-rd/2-8,P.anchors.reservoir.z));
-   const ry=Math.max(-o.H/2+o.plinth+rh/2+8,Math.min(o.H/2-o.panel-rh/2-8,P.anchors.reservoir.y));
+   const floorY=-o.H/2+o.plinth+rh/2+8;
+   const ceilingY=o.H/2-o.panel-rh/2-8;
    const trayTop=P.zones.поддон.y+P.zones.поддон.h/2;
-   const reservoirY=Math.min(ry,Math.max(ry,trayTop+rh/2+8));
+   const desiredY=Math.max(P.anchors.reservoir.y,trayTop+rh/2+8);
+   const reservoirY=Math.max(floorY,Math.min(ceilingY,desiredY));
    box('ОПОРНАЯ ПЛАТФОРМА РЕЗЕРВУАРА',rw+70,18,rd+70,rx,reservoirY-rh/2-10,rz,M.edge,{module:'Несущий крепёж'});
    box('РЕЗЕРВУАР 20 Л',rw,rh,rd,rx,reservoirY,rz,M.water,{module:'Водный контур'});
  }
@@ -253,7 +260,7 @@ function addTopNoise(){
 }
 function sideHinge(i,count,w){return i<Math.ceil(count/2)?-1:1}
 function toggleDoor(g){g.userData.target=g.userData.target>.5?0:1}
-function updateDoors(){doorGroups.forEach(g=>{const a=g.userData.target,cur=g.userData.open;g.userData.open=cur+(a-cur)*.16;const angle=(g.userData.hinge<0?-1:1)*g.userData.open*Math.PI*.52;g.rotation.y=angle;g.position.x=g.userData.baseX+g.userData.hinge*mm(P.doors.width*.42)*Math.sin(Math.abs(angle))})}
+function updateDoors(){doorGroups.forEach(g=>{const a=g.userData.target,cur=g.userData.open;g.userData.open=cur+(a-cur)*.16;const angle=(g.userData.hinge<0?-1:1)*g.userData.open*Math.PI*.52;g.rotation.y=angle;g.position.x=g.userData.baseX+g.userData.hinge*mm(w*.42)*Math.sin(Math.abs(angle))})}
 function applyMode(){
  const cut=mode==='cutaway',eng=mode==='engineering',expl=mode==='exploded',air=mode==='airflow',light=mode==='light';
  root.children.forEach(o=>{
