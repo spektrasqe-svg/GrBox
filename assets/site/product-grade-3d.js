@@ -43,7 +43,7 @@ function build(){
  var p=document.getElementById('sb3d-info');
  if(!p){p=document.createElement('div');p.id='sb3d-info';p.style.cssText='position:fixed;right:18px;bottom:18px;z-index:50;max-width:340px;background:rgba(15,17,18,.92);border:1px solid rgba(232,220,200,.22);border-radius:14px;padding:14px 16px;color:#eee8dd;font:12px/1.5 Manrope,sans-serif;backdrop-filter:blur(12px)';document.body.appendChild(p);}
  var er=L.checks.filter(function(x){return x.level==='error'}),wa=L.checks.filter(function(x){return x.level==='warning'});
- p.innerHTML='<b>SECRET BOX · ENGINEERING VIEW</b><br>'+d.W+' × '+d.D+' × '+d.H+' мм · '+L.metrics.mass+' кг<br><span style="color:#c5a46c">'+L.metrics.power+' W · '+L.metrics.airflow+' m³/h</span><br><span style="color:'+(er.length?'#ef655b':'#c5a46c')+'">'+(er.length?er.length+' critical conflict(s)':'✓ geometry compatible')+'</span>'+(wa.length?' · <span style="color:#e0cc8c">'+wa.length+' warning(s)</span>':'');
+ p.innerHTML='<b>SECRET BOX · ИНЖЕНЕРНЫЙ ВИД</b><br>'+d.W+' × '+d.D+' × '+d.H+' мм · '+L.metrics.mass+' кг<br><span style="color:#c5a46c">'+L.metrics.power+' W · '+L.metrics.airflow+' m³/h</span><br><span style="color:'+(er.length?'#ef655b':'#c5a46c')+'">'+(er.length?er.length+' критических конфликтов':'✓ геометрия совместима')+'</span>'+(wa.length?' · <span style="color:#e0cc8c">'+wa.length+' warning(s)</span>':'');
 }
 var last='';
 function tick(){var s=SECRETBOX.load(),sig=JSON.stringify(s);if(sig!==last){last=sig;build();}requestAnimationFrame(tick);}
