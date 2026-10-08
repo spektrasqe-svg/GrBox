@@ -47,7 +47,7 @@ function derive(config){
   fan:{x:-W/2+tech+18+growW-fan.w/2-35,y:growY+growH/2-fan.h/2-60,z:-D/2+fan.d/2+25},
   поддон:{x:-W/2+tech+18+growW/2,y:поддонY,z:0},
   tech:{x:-W/2+tech/2,y:-H/2+plinth+innerH/2,z:0},
-  reservoir:{x:-W/2+tech+18+Math.min(250,growW*.22),y:поддонY-220,z:-D/2+190}
+  reservoir:{x:-W/2+tech+18+Math.min(Math.max(150,growW*.22),Math.max(150,growW-150)),y:поддонY+поддонH/2+215,z:-D/2+150}
  },
  mounts:{rails:[-W/2+tech+42,-W/2+tech+growW-42],railTop:growY+growH/2-45,railBottom:growY-growH/2+45},
  checks:[]
