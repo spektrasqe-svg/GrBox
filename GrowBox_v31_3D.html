@@ -20,7 +20,35 @@
 .hint{left:12px;bottom:78px;color:var(--dim);font:10px Roboto Mono,monospace;background:rgba(11,12,14,.8);border:1px solid var(--line);padding:7px 9px;border-radius:4px}
 .loader{position:absolute;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:var(--bg);font:12px Roboto Mono,monospace;color:var(--dim)}
 .loader:after{content:"";width:28px;height:28px;margin-left:12px;border:2px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
-@media(max-width:760px){.top{top:74px;flex-direction:column;align-items:flex-start}.modes{top:145px;max-width:calc(100vw - 24px)}.modes button{padding:9px 10px}.info{top:auto;bottom:80px;right:8px;width:calc(100vw - 16px)}.hint{display:none}.cams{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap}.cams button{flex:0 0 auto}}
+@media(max-width:760px){
+  .top{top:68px;left:8px;right:8px;gap:6px;flex-direction:row;align-items:center}
+  .pill{padding:6px 8px;font-size:9px;border-radius:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pill b{font-size:9px}
+  #config{min-width:0;max-width:calc(100vw - 112px)}
+  .modes{
+    top:108px;left:8px;right:8px;max-width:none;
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:5px;pointer-events:auto
+  }
+  .modes button{
+    min-width:0;height:32px;padding:5px 4px;
+    font:9px Roboto Mono,monospace;white-space:nowrap;
+    overflow:hidden;text-overflow:ellipsis;border-radius:4px
+  }
+  .info{top:auto;bottom:58px;left:8px;right:8px;width:auto;padding:9px 10px;max-height:92px;overflow:auto}
+  .info h3{font-size:11px;margin-bottom:4px}
+  .info .meta,.checks{font-size:9px;line-height:1.35}
+  .cams{
+    left:8px;right:8px;bottom:0;padding:5px 0 calc(6px + env(safe-area-inset-bottom));
+    justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;gap:4px;
+    background:linear-gradient(to top,rgba(11,12,14,.98),rgba(11,12,14,.82))
+  }
+  .cams button{
+    flex:0 0 auto;height:29px;padding:5px 8px;
+    font:9px Roboto Mono,monospace;border-radius:4px
+  }
+  .hint{display:none}
+}
 </style>
 </head>
 <body class="sb-3d-page">
