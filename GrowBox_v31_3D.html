@@ -117,7 +117,7 @@ function box(name,w,h,d,x,y,z,mat,opts={}){
  if(opts.click!==false)pickables.push(o);(opts.parent||root).add(o);return o;
 }
 function line(name,w,h,d,x,y,z,mat,opts){return box(name,w,h,d,x,y,z,mat,opts)}
-function clear(){while(root.children.length)root.remove(root.children[root.children.length-1]);pickables.length=0;selected=null}
+function clear(){while(root.children.length)root.remove(root.children[root.children.length-1]);pickables.length=0;doorGroups.length=0;selected=null}
 function build(){
  const s=getState();P=SECRETBOX_LAYOUT.derive(s);clear();
  const o=P.outer,z=P.zones;
@@ -166,11 +166,11 @@ function build(){
  const doorH=P.doors.height,front=o.D/2+o.panel+4,openingLeft=-o.W/2+o.panel;
  for(let i=0;i<P.doors.count;i++){
    const w=Math.max(120,P.doors.width-P.doors.gap),cx=openingLeft+i*P.doors.width+P.doors.width/2;
-   const g=new THREE.Group();g.name='ДВЕРЬ '+(i+1);g.userData.baseX=mm(cx);g.userData.open=0;g.userData.target=0;g.userData.hinge=sideHinge(i,P.doors.count,w);g.position.set(mm(cx),0,mm(front));doorGroups.push(g);
+   const g=new THREE.Group();g.name='ДВЕРЬ '+(i+1);g.userData.baseX=mm(cx);g.userData.open=0;g.userData.target=0;g.userData.hinge=sideHinge(i,P.doors.count,w);g.position.set(mm(cx+g.userData.hinge*w/2),0,mm(front));doorGroups.push(g);
    box('ДВЕРНОЕ ПОЛОТНО '+(i+1),w,doorH,P.doors.thickness,0,-o.plinth/2,0,M.shell,{parent:g,module:'Фасад'});
-   g.children[0].position.x=(g.userData.hinge<0?1:-1)*w/2;
+   g.children[0].position.x=-g.userData.hinge*w/2;
    box('ВНУТРЕННЯЯ ПАНЕЛЬ ДВЕРИ '+(i+1),Math.max(90,w-36),Math.max(90,doorH-36),10,0,-o.plinth/2,-P.doors.thickness/2-5,M.inner,{parent:g,module:'Фасад',click:false});
-   box('РУЧКА '+(i+1),18,180,28,w/2-30,0,P.doors.thickness/2+12,M.steel,{parent:g,module:'Фасад'});
+   box('РУЧКА '+(i+1),18,180,28,g.userData.hinge<0?w/2-30:-w/2+30,0,P.doors.thickness/2+12,M.steel,{parent:g,module:'Фасад'});
    root.add(g);
  }
  // Задняя кабельная зона
@@ -180,7 +180,7 @@ function build(){
 }
 function sideHinge(i,count,w){return i<Math.ceil(count/2)?-1:1}
 function toggleDoor(g){g.userData.target=g.userData.target>.5?0:1}
-function updateDoors(){doorGroups.forEach(g=>{const a=g.userData.target,cur=g.userData.open;g.userData.open=cur+(a-cur)*.16;const angle=(g.userData.hinge<0?-1:1)*g.userData.open*Math.PI*.52;g.rotation.y=angle;g.position.x=g.userData.baseX+(g.userData.hinge<0?1:-1)*Math.sin(Math.abs(angle))*mm(P.doors.width*.42)})}
+function updateDoors(){doorGroups.forEach(g=>{const a=g.userData.target,cur=g.userData.open;g.userData.open=cur+(a-cur)*.16;const angle=(g.userData.hinge<0?-1:1)*g.userData.open*Math.PI*.52;g.rotation.y=angle;g.position.x=g.userData.baseX+g.userData.hinge*mm(P.doors.width*.42)*Math.sin(Math.abs(angle))})}
 function applyMode(){
  const cut=mode==='cutaway',eng=mode==='engineering',expl=mode==='exploded',air=mode==='airflow',light=mode==='light';
  root.children.forEach(o=>{
