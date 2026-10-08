@@ -187,7 +187,8 @@ function applyMode(){
    if(o.userData&&o.userData.part){
      const mod=o.userData.part.module;
      if(light)o.visible=/Оборудование|Крепление/.test(mod);
-     else if(cut)o.visible=!/Фасад/.test(mod);
+     else if(eng)o.visible=!/Фасад|Камера/.test(mod);
+     else if(cut){o.visible=!/Фасад/.test(mod);if(o.material&&o.material!==M.glass)o.material=o.material.clone(),o.material.transparent=true,o.material.opacity=/Акустика|Техническая колонна/.test(mod)?.34:.82;}
      else o.visible=true;
    }
    if(expl&&o.userData&&o.userData.part){const n=o.name;o.position.y+=mm(/ВЕРХНИЙ/.test(n)?110:/ТЕХНИЧ/.test(n)?-70:/СЕРВИС/.test(n)?-35:0)}
