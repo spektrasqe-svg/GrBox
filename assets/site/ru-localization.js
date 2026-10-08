@@ -18,7 +18,7 @@ var MAP={
 'DOOR':'ДВЕРЬ','WIDTH':'ШИРИНА','HEIGHT':'ВЫСОТА','DEPTH':'ГЛУБИНА','MASS':'МАССА','PRICE':'ЦЕНА','BOM':'СПЕЦИФИКАЦИЯ',
 'DIGITAL TWIN':'ЦИФРОВОЙ ДВОЙНИК','PLATFORM':'ПЛАТФОРМА','DESIGN':'ПРОЕКТ','PACKAGE':'КОМПЛЕКТАЦИЯ','CONFIGURATION':'КОНФИГУРАЦИЯ','STEALTH':'СКРЫТНОСТЬ','FULL CYCLE':'ПОЛНЫЙ ЦИКЛ','PRODUCT GRADE':'ПРОМЫШЛЕННЫЙ УРОВЕНЬ',
 'WATCHDOG':'КОНТРОЛЬ РЕЗЕРВА','LEAK PROTECTION':'ЗАЩИТА ОТ ПРОТЕЧЕК','UPS':'ИБП','SURGE':'ЗАЩИТА ОТ ИМПУЛЬСОВ','RCD':'УЗО',
-'RTSP CAMERA':'СЕТЕВАЯ КАМЕРА','SENSOR PACK':'НАБОР ДАТЧИКОВ','SMART LIFE':'УПРАВЛЕНИЕ СО СМАРТФОНА',
+'RTSP CAMERA':'СЕТЕВАЯ КАМЕРА','SENSOR PACK':'НАБОР ДАТЧИКОВ','SMART LIFE':'УПРАВЛЕНИЕ СО СМАРТФОНА','READY':'ГОТОВО','SPECIFICATION READY':'СПЕЦИФИКАЦИЯ ГОТОВА','AIR/NOISE':'ВОЗДУХ / ШУМ','TECHNICAL':'ТЕХНИЧЕСКИЙ','CUTAWAY':'РАЗРЕЗ','EXPLODED':'ВЗРЫВ-СХЕМА','ISOMETRIC':'ИЗОМЕТРИЯ','FRONT':'ФРОНТ','SIDE':'СБОКУ','TOP':'СВЕРХУ','PRODUCT VIEW':'ВИД ПРОДУКТА','LIGHT MODE':'РЕЖИМ СВЕТА','AIRFLOW MODE':'РЕЖИМ ВОЗДУХООБМЕНА','REVISION':'РЕВИЗИЯ','ARCHITECTURE':'АРХИТЕКТУРА','TECHNICAL COLUMN':'ТЕХНИЧЕСКАЯ КОЛОННА','CURRENT CONFIGURATION':'ТЕКУЩАЯ КОНФИГУРАЦИЯ','SPECIFICATION':'СПЕЦИФИКАЦИЯ',
 'GEOMETRY COMPATIBLE':'ГЕОМЕТРИЯ СОВМЕСТИМА','ACTIVE':'АКТИВНО','INACTIVE':'НЕ АКТИВНО','OPENING':'ПРОЁМ','DOOR WIDTH':'ШИРИНА ДВЕРИ'
 };
 var keys=Object.keys(MAP).sort(function(a,b){return b.length-a.length});
