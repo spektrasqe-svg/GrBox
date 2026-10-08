@@ -27,4 +27,4 @@ function render(s){const g=SB.geometry(s),m=SB.mass(s),l=SB.label(s),load=Math.r
 let rows=[];Object.keys(s.mods).forEach(k=>{if(s.mods[k])rows.push(['МОДУЛЬ',names.mods[k][0],'АКТИВНО',names.mods[k][1]])});Object.keys(s.equip).forEach(k=>{if(s.equip[k])rows.push(['ОБОРУДОВАНИЕ',names.equip[k][0],'АКТИВНО',names.equip[k][1]])});Object.keys(s.upg).forEach(k=>{if(s.upg[k])rows.push(['ДОПОЛНЕНИЯ',names.upg[k][0],'АКТИВНО',names.upg[k][1]])});document.getElementById('bom').innerHTML=rows.map(r=>'<tr><td><span class="tag">'+r[0]+'</span></td><td><b>'+r[1]+'</b></td><td>'+r[2]+'</td><td>'+r[3]+'</td></tr>').join('')}
 render(SB.load());SB.subscribe(render);
 })();
-</script></body></html>
+</script><script src="assets/site/ru-localization.js"></script></body></html>
