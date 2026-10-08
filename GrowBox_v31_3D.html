@@ -773,7 +773,7 @@ setTimeout(function(){
 (function(){
 'use strict';
 if(!window.SECRETBOX_LAYOUT || !window.SECRETBOX) return;
-var P=null, doors=[], mode='product';
+var P=null, doors=[], mode='product', buildSerial=0;
 var U=0.001;
 function mat(color,rough,metal,opacity){
   return new THREE.MeshStandardMaterial({color:color,roughness:rough||.55,metalness:metal||0,transparent:opacity<1,opacity:opacity==null?1:opacity,side:THREE.DoubleSide});
@@ -822,15 +822,17 @@ function addFrame(l){
 }
 function addDoors(l){
   var o=l.outer, d=l.doors, W=o.W,H=o.H,D=o.D,p=o.panel;
-  var front=D/2+3;
-  var gap=7;
+  var front=D/2+3, gap=d.gap||7;
+  /* Doors are generated from the actual inner opening. Nothing is fixed to the old 1250 mm model. */
+  var openingLeft=-W/2+p, doorH=H-o.plinth;
   for(var i=0;i<d.count;i++){
-    var w=d.width-gap;
-    var x=-W/2+p+i*d.width+d.width/2;
-    var g=new THREE.Group(); g.name='DOOR_'+i; g.position.set(mm(x),0,mm(front));
-    var slab=box('DOOR_PANEL_'+i,w,H-o.plinth,d.thickness,0,-o.plinth/2,0,M.shell,g);
-    box('DOOR_INNER_'+i,w-36,H-o.plinth-36,10,0,-o.plinth/2,-d.thickness/2-5,M.inner,g);
-    box('DOOR_HANDLE_'+i,18,180,28,w/2-32,0,d.thickness/2+10,M.steel,g);
+    var w=Math.max(120,d.width-gap);
+    var x=openingLeft+i*d.width+d.width/2;
+    var g=new THREE.Group(); g.name='DOOR_'+(i+1); g.userData={doorIndex:i+1,count:d.count,width:d.width};
+    g.position.set(mm(x),0,mm(front));
+    box('DOOR_PANEL_'+(i+1),w,doorH,d.thickness,0,-o.plinth/2,0,M.shell,g);
+    box('DOOR_INNER_'+(i+1),Math.max(90,w-36),Math.max(90,doorH-36),10,0,-o.plinth/2,-d.thickness/2-5,M.inner,g);
+    box('DOOR_HANDLE_'+(i+1),18,180,28,w/2-32,0,d.thickness/2+10,M.steel,g);
     G.add(g); doors.push(g);
   }
 }
@@ -891,8 +893,9 @@ function apply(config){
   if(window.camT){ camT.r=Math.max(4.2,maxDim*U*1.35); camT.ph=.98; camT.th=.65; }
   if(window.target) target.set(0,mm(P.outer.H*.06),0);
   var checks=P.checks.map(function(x){return x.level+': '+x.text}).join(' | ');
+  buildSerial++;
   var el=document.getElementById('secretbox-3d-config');
-  if(el) el.innerHTML='<b style="color:#c5a46c">LIVE PARAMETRIC</b> · '+P.outer.W+' × '+P.outer.D+' × '+P.outer.H+' мм · '+P.metrics.mass+' кг · '+P.metrics.power+' Вт'+(checks?' · ⚠ '+checks:' · ✓');
+  if(el) el.innerHTML='<b style="color:#c5a46c">LIVE PARAMETRIC v2.2</b> · '+P.outer.W+' × '+P.outer.D+' × '+P.outer.H+' мм · '+P.doors.count+' двери · '+Math.round(P.doors.width)+' мм/дверь · '+P.metrics.mass+' кг · '+P.metrics.power+' Вт'+(checks?' · ⚠ '+checks:' · ✓');
 }
 function setVisual(name){
   mode=name;
@@ -919,7 +922,8 @@ document.querySelectorAll('[data-mode]').forEach(function(b){
 document.querySelectorAll('[data-cam]').forEach(function(b){
   b.addEventListener('click',function(){setTimeout(function(){if(P&&window.camT)camT.r=Math.max(camT.r,P.outer.H*U*.72);},40);});
 });
-window.__SECRETBOX_PARAMETRIC={version:'2.1',apply:apply,get:function(){return P}};
+window.__SECRETBOX_PARAMETRIC={version:'2.2',apply:apply,get:function(){return P,buildSerial:buildSerial}};
+if(window.SECRETBOX&&SECRETBOX.subscribe) SECRETBOX.subscribe(function(s){ try{ apply(s); }catch(e){ console.error('SECRET BOX parametric rebuild',e); } });
 tick();
 })();
 </script>
