@@ -105,7 +105,7 @@ td{padding:10px 8px;border-bottom:1px dashed var(--line);color:var(--cream)}
 td b{font-family:var(--disp);font-size:13.5px}
 .tbl-note{margin-top:14px;font-size:12px;color:var(--cream-2);line-height:1.7}
 
-/* FAQ */
+/* ЧАСТЫЕ ВОПРОСЫ */
 .faq{margin:34px 0 80px}
 .faq details{border:1px solid var(--line);border-radius:10px;background:var(--ink-2);margin-bottom:12px;padding:20px 26px}
 .faq summary{cursor:pointer;list-style:none;font-family:var(--disp);font-weight:600;font-size:15.5px;display:flex;justify-content:space-between;gap:18px}
@@ -152,9 +152,9 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px}
   </div>
 </div>
 
-<!-- ================= CALC-01 ВЕНТИЛЯЦИЯ ================= -->
+<!-- ================= РАСЧЁТ 01 ВЕНТИЛЯЦИЯ ================= -->
 <section class="wrap calc" id="calc-vent">
-  <div class="c-num">CALC-01</div>
+  <div class="c-num">РАСЧЁТ 01</div>
   <h2>Вентиляция и шум · расход, сопротивление и тракт</h2>
   <p class="lead">Расход, скорость в трубе, сопротивление системы и — главное — сколько децибел дойдёт до решётки. В гроубоксе тишину решают щели и развязка, а не «мощный вентилятор».</p>
   <div class="calc-grid">
@@ -208,9 +208,9 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px}
   </details>
 </section>
 
-<!-- ================= CALC-02 СВЕТ ================= -->
+<!-- ================= РАСЧЁТ 02 СВЕТ ================= -->
 <section class="wrap calc" id="calc-light">
-  <div class="c-num">CALC-02</div>
+  <div class="c-num">РАСЧЁТ 02</div>
   <h2>Свет · PPFD и суточный DLI</h2>
   <p class="lead">Сколько фотонов достаётся канопе и сколько их набирается за сутки. Нормы Вт/м² по стадиям — чтобы не «пересветить» и не купить лишний светильник.</p>
   <div class="calc-grid">
@@ -260,9 +260,9 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px}
   </details>
 </section>
 
-<!-- ================= CALC-03 VPD ================= -->
+<!-- ================= РАСЧЁТ 03 VPD ================= -->
 <section class="wrap calc" id="calc-vpd">
-  <div class="c-num">CALC-03</div>
+  <div class="c-num">РАСЧЁТ 03</div>
   <h2>Микроклимат · VPD и размещение датчика</h2>
   <p class="lead">Дефицит давления пара — реальный «аппетит» растения. Именно его держит SensorPro в зоне канопы, а не «температура на стенке шкафа».</p>
   <div class="calc-grid">
@@ -298,9 +298,9 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px}
   </details>
 </section>
 
-<!-- ================= CALC-04 ТЕПЛО ================= -->
+<!-- ================= РАСЧЁТ 04 ТЕПЛО ================= -->
 <section class="wrap calc" id="calc-heat">
-  <div class="c-num">CALC-04</div>
+  <div class="c-num">РАСЧЁТ 04</div>
   <h2>Тепловой баланс · мощность превращается в тепло</h2>
   <p class="lead">481 Вт тепла в закрытой мебели — и куда его деть. Проверьте, на сколько градусов греет ваш комплект и когда включается автодимм.</p>
   <div class="calc-grid">
@@ -337,9 +337,9 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px}
   </details>
 </section>
 
-<!-- ================= CALC-05 ПОЛ ================= -->
+<!-- ================= РАСЧЁТ 05 ПОЛ ================= -->
 <section class="wrap calc" id="calc-floor">
-  <div class="c-num">CALC-05</div>
+  <div class="c-num">РАСЧЁТ 05</div>
   <h2>Нагрузка · масса шкафа и оборудования</h2>
   <p class="lead">358 кг собранного шкафа — главный риск проекта, и решают его до закупок, а не после доставки панелей в квартиру.</p>
   <div class="calc-grid">
@@ -413,9 +413,9 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px}
   </div>
 </div>
 
-<!-- ================= FAQ ================= -->
+<!-- ================= ЧАСТЫЕ ВОПРОСЫ ================= -->
 <div class="wrap faq">
-  <div class="c-num">FAQ</div>
+  <div class="c-num">ЧАСТЫЕ ВОПРОСЫ</div>
   <h2 style="font-weight:800;font-size:clamp(24px,3.4vw,38px);margin:14px 0 26px">Частые вопросы</h2>
   <details>
     <summary>Насколько точны расчёты?</summary>
@@ -478,7 +478,7 @@ function fmt(n){return Math.round(n).toLocaleString('ru-RU')}
 function set(id,html){var el=document.getElementById(id);if(el)el.innerHTML=html}
 function verdict(id,text,cls){var el=document.getElementById(id);if(!el)return;el.textContent=text;el.className='verdict '+(cls||'')}
 
-// ---------- CALC-01 ВЕНТИЛЯЦИЯ ----------
+// ---------- РАСЧЁТ 01 ВЕНТИЛЯЦИЯ ----------
 var V_IDS=['v-w','v-d','v-h','v-dia','v-q','v-el','v-filter','v-sil'];
 function calcVent(){
   var w=+document.getElementById('v-w').value||79.6,
@@ -522,7 +522,7 @@ function calcVent(){
 }
 V_IDS.forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',calcVent)});
 
-// ---------- CALC-02 СВЕТ ----------
+// ---------- РАСЧЁТ 02 СВЕТ ----------
 var L_IDS=['l-stage','l-area','l-w','l-ppe','l-hours'];
 function calcLight(){
   var st=document.getElementById('l-stage').value.split(',').map(Number),
@@ -553,7 +553,7 @@ function calcLight(){
 }
 L_IDS.forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',calcLight)});
 
-// ---------- CALC-03 VPD ----------
+// ---------- РАСЧЁТ 03 VPD ----------
 var T_IDS=['t-t','t-rh','t-stage'];
 function calcVpd(){
   var T=+document.getElementById('t-t').value,
@@ -575,7 +575,7 @@ function calcVpd(){
 }
 T_IDS.forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',calcVpd)});
 
-// ---------- CALC-04 ТЕПЛО ----------
+// ---------- РАСЧЁТ 04 ТЕПЛО ----------
 var H_IDS=['h-l','h-q','h-in'];
 function calcHeat(){
   var L=+document.getElementById('h-l').value,
@@ -599,7 +599,7 @@ function calcHeat(){
 }
 H_IDS.forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',calcHeat)});
 
-// ---------- CALC-05 ПОЛ ----------
+// ---------- РАСЧЁТ 05 ПОЛ ----------
 var F_IDS=['f-p','f-w','f-s','f-g','f-wm','f-dm','f-norm'];
 function calcFloor(){
   var m=(+document.getElementById('f-p').value||0)+(+document.getElementById('f-w').value||0)+(+document.getElementById('f-s').value||0)+(+document.getElementById('f-g').value||0),
