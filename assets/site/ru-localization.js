@@ -2,11 +2,11 @@
 (function(){
 'use strict';
 var MAP={
-'LIVE':'В РАБОТЕ','LIVE 3D':'ЖИВАЯ 3D','LIVE PROJECT':'ЖИВОЙ ПРОЕКТ','CUSTOM':'ИНДИВИДУАЛЬНЫЙ','CUSTOM BUILD':'ИНДИВИДУАЛЬНАЯ СБОРКА',
-'BUILD YOUR BOX':'СОБЕРИТЕ СВОЙ ШКАФ','BUILD':'СБОРКА','PROJECT':'ПРОЕКТ','FINAL PROJECT':'ГОТОВЫЙ ПРОЕКТ',
+'LIVE':'В РАБОТЕ','LIVE CONFIG':'ТЕКУЩАЯ КОНФИГУРАЦИЯ','LIVE PARAMETRIC':'ЖИВАЯ ПАРАМЕТРИЧЕСКАЯ МОДЕЛЬ','PARAMETRIC':'ПАРАМЕТРИЧЕСКИЙ','CONFIGURATOR':'КОНФИГУРАТОР','LIVE 3D':'ЖИВАЯ 3D','LIVE PROJECT':'ЖИВОЙ ПРОЕКТ','CUSTOM':'ИНДИВИДУАЛЬНЫЙ','CUSTOM BUILD':'ИНДИВИДУАЛЬНАЯ СБОРКА',
+'BUILD YOUR BOX':'СОБЕРИТЕ СВОЙ ШКАФ','BUILD':'СБОРКА','PROJECT':'ПРОЕКТ','FINAL PROJECT':'ГОТОВЫЙ ПРОЕКТ','SAVE PROJECT':'СОХРАНИТЬ ПРОЕКТ','DOWNLOAD PROJECT':'СКАЧАТЬ ПРОЕКТ','EXPORT CONFIGURATION':'ЭКСПОРТИРОВАТЬ КОНФИГУРАЦИЮ',
 'OPEN':'ОТКРЫТЬ','OPEN 3D':'ОТКРЫТЬ 3D','SAVE':'СОХРАНИТЬ','RESET':'СБРОСИТЬ','DOWNLOAD':'СКАЧАТЬ','EXPORT':'ЭКСПОРТИРОВАТЬ','COPY':'КОПИРОВАТЬ',
 'CHECK':'ПРОВЕРКА','CHECKS':'ПРОВЕРКИ','FINAL':'ИТОГ','NEXT':'ДАЛЕЕ','BACK':'НАЗАД','START':'НАЧАТЬ','DETAILS':'ПОДРОБНОСТИ',
-'ENGINEERING':'ИНЖЕНЕРИЯ','ENGINEERING VIEW':'ИНЖЕНЕРНЫЙ ВИД','VIEW':'ВИД','MODEL':'МОДЕЛЬ','MODELS':'МОДЕЛИ','SYSTEM':'СИСТЕМА','PRODUCT':'ПРОДУКТ',
+'ENGINEERING':'ИНЖЕНЕРИЯ','ENGINEERING VIEW':'ИНЖЕНЕРНЫЙ ВИД','VIEW':'ВИД','MODEL':'МОДЕЛЬ','MODELS':'МОДЕЛИ','SYSTEM':'СИСТЕМА','PRODUCT':'ПРОДУКТ','TECHNICAL':'ТЕХНИЧЕСКИЙ','CONFIG':'КОНФИГУРАЦИЯ','CURRENT':'ТЕКУЩИЙ','DETAIL':'ДЕТАЛЬ','PARTS':'ДЕТАЛИ',
 'COMPATIBLE':'СОВМЕСТИМО','CONFIGURATION COMPATIBLE':'КОНФИГУРАЦИЯ СОВМЕСТИМА','NEEDS REVIEW':'ТРЕБУЕТ ПРОВЕРКИ',
 'WARNING':'ПРЕДУПРЕЖДЕНИЕ','WARNINGS':'ПРЕДУПРЕЖДЕНИЯ','ERROR':'ОШИБКА','ERRORS':'ОШИБКИ','CRITICAL CONFLICT(S)':'КРИТИЧЕСКИХ КОНФЛИКТОВ',
 'BASE':'БАЗА','FULL':'ПОЛНЫЙ','PRO':'ПРО','STANDARD':'СТАНДАРТ','COMPACT':'КОМПАКТ','MODULAR':'МОДУЛЬНЫЙ','LOW':'НИЗКИЙ','TV':'ТВ-ФОРМАТ',
@@ -16,10 +16,10 @@ var MAP={
 'SMART DRIP':'АВТОПОЛИВ','SCROG GRID':'СЕТКА SCROG','TRAY':'ВЫДВИЖНОЙ ПОДДОН','MOUNT':'КРЕПЛЕНИЕ','MOUNTING':'МОНТАЖ',
 'CLEARANCE':'ЗАЗОР','POWER':'МОЩНОСТЬ','AIRFLOW':'ВОЗДУШНЫЙ ПОТОК','FLOOR LOAD':'НАГРУЗКА НА ПОЛ','HEAT':'ТЕПЛОВЫДЕЛЕНИЕ',
 'DOOR':'ДВЕРЬ','WIDTH':'ШИРИНА','HEIGHT':'ВЫСОТА','DEPTH':'ГЛУБИНА','MASS':'МАССА','PRICE':'ЦЕНА','BOM':'СПЕЦИФИКАЦИЯ',
-'DIGITAL TWIN':'ЦИФРОВОЙ ДВОЙНИК','PLATFORM':'ПЛАТФОРМА','DESIGN':'ПРОЕКТ','PACKAGE':'КОМПЛЕКТАЦИЯ','CONFIGURATION':'КОНФИГУРАЦИЯ',
+'DIGITAL TWIN':'ЦИФРОВОЙ ДВОЙНИК','PLATFORM':'ПЛАТФОРМА','DESIGN':'ПРОЕКТ','PACKAGE':'КОМПЛЕКТАЦИЯ','CONFIGURATION':'КОНФИГУРАЦИЯ','STEALTH':'СКРЫТНОСТЬ','FULL CYCLE':'ПОЛНЫЙ ЦИКЛ','PRODUCT GRADE':'ПРОМЫШЛЕННЫЙ УРОВЕНЬ',
 'WATCHDOG':'КОНТРОЛЬ РЕЗЕРВА','LEAK PROTECTION':'ЗАЩИТА ОТ ПРОТЕЧЕК','UPS':'ИБП','SURGE':'ЗАЩИТА ОТ ИМПУЛЬСОВ','RCD':'УЗО',
 'RTSP CAMERA':'СЕТЕВАЯ КАМЕРА','SENSOR PACK':'НАБОР ДАТЧИКОВ','SMART LIFE':'УПРАВЛЕНИЕ СО СМАРТФОНА',
-'GEOMETRY COMPATIBLE':'ГЕОМЕТРИЯ СОВМЕСТИМА','ACTIVE':'АКТИВНО','INACTIVE':'НЕ АКТИВНО'
+'GEOMETRY COMPATIBLE':'ГЕОМЕТРИЯ СОВМЕСТИМА','ACTIVE':'АКТИВНО','INACTIVE':'НЕ АКТИВНО','OPENING':'ПРОЁМ','DOOR WIDTH':'ШИРИНА ДВЕРИ'
 };
 var keys=Object.keys(MAP).sort(function(a,b){return b.length-a.length});
 function esc(s){return s.replace(/[.*+?^$()|[\]\\]/g,'\\$&')}
