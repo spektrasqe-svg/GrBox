@@ -109,7 +109,7 @@
 <script src="assets/site/project-engine.js"></script>
 <script>
 window.addEventListener('error',function(ev){const m=document.getElementById('main');if(m&&!m.dataset.builderError){m.dataset.builderError='1';m.insertAdjacentHTML('afterbegin','<div class="status bad" style="margin-bottom:12px">Конфигуратор не запустился. Перезагрузите страницу.</div>');console.error('SECRET BOX configurator:',ev.error||ev.message);}});
-(()=>{const S=SECRETBOX.load();try{const mp=(new URLSearchParams(location.search).get('model')||'').toUpperCase();if(mp==='A'||mp==='B'||mp==='C'){const preset={A:{model:'A',finish:'choco'},B:{model:'B',finish:'champ'},C:{model:'C',finish:'white'}}[mp];Object.assign(S,preset);SECRETBOX.set(preset)}}catch(e){}let step=0;
+(()=>{const S=SECRETBOX.load();let step=0;
 const defs=[
  ['01','Размер','dimensions'],['02','Архитектура','architecture'],['03','Оборудование','equipment'],['04','Инженерия','engineering'],['05','Проверка','check'],['06','Готовый проект','finish']];
 const esc=v=>String(v).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
