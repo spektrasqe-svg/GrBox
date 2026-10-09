@@ -6,7 +6,7 @@
  if(new URLSearchParams(location.search).has('bare')){document.body.classList.add('sb-bare');return;}
  const path=location.pathname.split('/').pop()||'index.html';
  const items=[
-  ['index.html#models','Проект','models'],
+  ['index.html#models','Модели','models'],
   ['index.html#interior','Внутри','interior'],
   ['GrowBox_v31_3D.html','3D','3d'],
   ['builder.html','Конфигуратор','builder'],
