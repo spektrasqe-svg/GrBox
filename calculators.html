@@ -122,6 +122,8 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px}
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="assets/site/classified-theme.css"><link rel="stylesheet" href="assets/site/site-system.css"></head>
 <body class="sb-platform-page">
 <script src="assets/site/product-state.js"></script>
+<script src="assets/site/parametric-layout.js"></script>
+<script src="assets/site/project-engine.js"></script>
 <script src="assets/site/platform-shell.js"></script>
 
 
@@ -442,9 +444,9 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px}
         </div>
         <div class="foot-col">
           <h5>Контакты</h5>
-          <a href="#">Москва · сборка под ключ</a>
-          <a href="#">Запросить расчёт</a>
-          <a href="#">Стать дилером</a>
+          <a href="index.html#order">Москва · сборка под ключ</a>
+          <a href="builder.html">Запросить расчёт</a>
+          <a href="index.html#order">Стать дилером</a>
         </div>
       </div>
     </div>
@@ -614,18 +616,33 @@ calcVent();calcСвет();calcVpd();calcHeat();calcFloor();
 <script id="secretbox:calculator-sync">
 (function(){
  if(!window.SECRETBOX)return;
+ function setVal(id,v){const e=document.getElementById(id);if(e&&v!==undefined&&v!==null&&isFinite(v))e.value=Math.round(v*10)/10}
  function apply(){
-  const s=SECRETBOX.load(),g=SECRETBOX.geometry(s),m=SECRETBOX.mass(s);
-  const vals={'f-p':Math.max(0,m-20-45),'f-w':s.upg.reserve?40:20,'f-s':45,'f-g':Math.max(0,m-(s.mods.a?45:0)-(s.mods.b?85:0)-(s.mods.c?143.7*s.cWidth/796:0)-20-45)};
-  Object.keys(vals).forEach(id=>{const e=document.getElementById(id);if(e)e.value=vals[id]});
-  const fw=document.getElementById('f-wm'),fd=document.getElementById('f-dm');
-  if(fw)fw.value=(g.width/10).toFixed(1);
-  if(fd)fd.value=(g.depth/10).toFixed(1);
+  const s=SECRETBOX.load(),g=SECRETBOX.geometry(s);
+  // массы берём из той же спецификации, что и сборщик: одна правда для всех страниц
+  let shell=0,gear=0;
+  if(window.SECRETBOX_PROJECT&&window.SECRETBOX_LAYOUT){
+   try{
+    const p=SECRETBOX_PROJECT.build(s);
+    p.rows.forEach(function(x){
+     const m=x.qty*x.mass;
+     if(x.category==='Корпус'||x.category==='Фасад')shell+=m; else gear+=m;
+    });
+   }catch(e){console.warn('SECRET BOX: не удалось собрать спецификацию для расчёта',e)}
+  }
+  const water=(s.equipment&&s.equipment.reservoir)?40:20;
+  setVal('f-p',Math.max(0,shell));
+  setVal('f-w',water);
+  setVal('f-g',Math.max(0,gear));
+  setVal('f-wm',g.width/10);
+  setVal('f-dm',g.depth/10);
   if(typeof calcFloor==='function')calcFloor();
  }
  const bar=document.createElement('div');bar.style.cssText='position:relative;margin:10px auto 0;width:min(1280px,92vw);padding:12px 16px;border:1px solid rgba(199,154,91,.35);border-radius:10px;background:rgba(199,154,91,.06);color:#c9c3b8;font:12px/1.5 Manrope,sans-serif;z-index:3';
  bar.innerHTML='<b style="color:#c5a46c">ЖИВАЯ КОНФИГУРАЦИЯ</b> · Нагрузка берёт массу и габариты из текущего Сборщика. <button id="sbApplyCalc" style="float:right;border:1px solid #c5a46c;background:transparent;color:#eee8dd;border-radius:999px;padding:5px 10px;cursor:pointer">Применить</button>';
- document.body.insertBefore(bar,document.querySelector('.chain')||document.body.firstChild);
+ const anchor=document.querySelector('.chain');
+ if(anchor&&anchor.parentNode)anchor.parentNode.insertBefore(bar,anchor);
+ else document.body.insertBefore(bar,document.body.firstChild);
  document.getElementById('sbApplyCalc').onclick=apply;apply();
  SECRETBOX.subscribe(apply);
 })();

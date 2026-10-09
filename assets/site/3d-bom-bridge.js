@@ -3,25 +3,29 @@
 'use strict';
 function matchBom(name){
  const n=String(name||'').toUpperCase();
- if(/LIGHT|SE3000|SE5000|G8600/.test(n))return ['Оборудование','Свет Spider Farmer'];
- if(/FAN|SF4|SF6|SF8/.test(n))return ['Оборудование','Вентилятор Spider Farmer'];
- if(/RESERVOIR|БАК/.test(n))return ['Оборудование','Бак 20 л'];
+ if(/ВИБРО|VIBRATION/.test(n))return ['Крепление','Виброопоры'];
+ if(/НАПРАВЛЯЮЩАЯ/.test(n))return ['Крепление','Направляющая поддона'];
+ if(/ПЛАТФОРМА|PLATFORM/.test(n))return ['Крепление','Монтажная платформа'];
+ if(/SE3000|SE5000|G8600|СВЕТИЛЬНИК|LIGHT/.test(n))return ['Оборудование','Свет Spider Farmer'];
+ if(/ВЕНТИЛЯТОР|FAN|SF4|SF6|SF8/.test(n))return ['Оборудование','Вентилятор Spider Farmer'];
+ if(/РЕЗЕРВУАР|БАК|RESERVOIR/.test(n))return ['Оборудование','Бак 20 л'];
  if(/DIN/.test(n))return ['Инженерия','DIN-панель'];
- if(/SILENCER/.test(n))return ['Акустика','Глушитель'];
- if(/NOISE|BAFFLE|AIR_CHAMBER/.test(n))return ['Акустика','Шумовой модуль / baffling'];
- if(/TRAY|ПОДДОН|PLATFORM/.test(n))return ['Сервис','Выдвижной поддон'];
+ if(/ГЛУШИТЕЛЬ|SILENCER/.test(n))return ['Акустика','Глушитель'];
+ if(/ШУМО|АКУСТ|ПЕРЕГОРОДКА|ВОЗДУШНАЯ КАМЕРА|NOISE|BAFFLE|AIR_CHAMBER/.test(n))return ['Акустика','Шумовой модуль / baffling'];
+ if(/ЭКРАН/.test(n))return ['Камера','Экран рабочей камеры'];
  if(/SCROG/.test(n))return ['Сервис','SCROG grid'];
- if(/VIBRATION/.test(n))return ['Крепление','Виброопоры'];
- if(/UPRIGHT|КАРЕТКА|RAIL/.test(n))return ['Крепление','Вертикальная монтажная рейка'];
- if(/TECH_COLUMN|SERVICE/.test(n))return ['Сервис','Техническая колонна / сервисная кассета'];
- if(/DOOR|ДВЕРЬ/.test(n))return ['Фасад','Дверь сэндвич'];
- if(/FRAME|PANEL|BACK|PLINTH|БОКОВИН|ДНО|ПОЛКА/.test(n))return ['Корпус','Панель корпуса'];
- if(/SENSOR/.test(n))return ['Датчики','Комплект датчиков'];
- if(/GGS|CONTROLLER/.test(n))return ['Оборудование','Контроллер GGS'];
+ if(/ПОДДОН|TRAY/.test(n))return ['Сервис','Выдвижной поддон'];
+ if(/РЕЙКА|КАРЕТКА|СТОПОР|ПОПЕРЕЧИНА|ПЕРЕКЛАДИНА|RAIL|UPRIGHT/.test(n))return ['Крепление','Монтажная рейка / каретка'];
+ if(/КАССЕТА|ТЕХНИЧ|СЕРВИСН|SERVICE|TECH_COLUMN/.test(n))return ['Сервис','Техническая колонна / сервисная кассета'];
+ if(/ДВЕР|РУЧКА|ПЕТЛЯ|DOOR/.test(n))return ['Фасад','Дверь сэндвич'];
+ if(/КАБЕЛЬ/.test(n))return ['Сервис','Кабельная трасса'];
+ if(/СТОЙКА|РАМА|ПАНЕЛЬ|ЦОКОЛЬ|FRAME|PANEL|BACK|PLINTH|БОКОВИН|ДНО|ПОЛКА/.test(n))return ['Корпус','Панель корпуса'];
+ if(/SENSOR|ДАТЧИК/.test(n))return ['Датчики','Комплект датчиков'];
+ if(/GGS|CONTROLLER|КОНТРОЛЛЕР/.test(n))return ['Оборудование','Контроллер GGS'];
  return ['—','Инженерная деталь'];
 }
 function install(){
- const info=document.getElementById('info'), iN=document.getElementById('iN');
+ const info=document.getElementById('info'), iN=document.getElementById('infoName');
  if(!info||!iN||info.dataset.bomBridge)return;
  info.dataset.bomBridge='1';
  const row=document.createElement('div'); row.id='bomLink'; row.className='dm'; row.style.color='#c5a46c';
@@ -42,6 +46,6 @@ function annotate(){
  }catch(e){}
 }
 install();annotate();
-setInterval(annotate,1000);
+if(window.SECRETBOX&&typeof window.SECRETBOX.subscribe==='function')window.SECRETBOX.subscribe(annotate);
 window.__SECRETBOX_BOM_BRIDGE={version:'1.0',matchBom};
 })();

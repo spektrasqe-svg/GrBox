@@ -5,10 +5,11 @@
  const D={
   mode:'custom', model:'CUSTOM', finish:'choco',
   dimensions:{W:1250,H:2060,D:741,plinth:55,panel:18},
-  architecture:{techColumn:400,topBoxH:300,serviceGap:40,doors:3,doorSandwich:41,trayH:120,scrogH:650},
+  // ключи архитектуры должны совпадать с тем, что читает parametric-layout.js и редактирует builder.html:
+  // поддонH / сервисGap (а не старые trayH / serviceGap)
+  architecture:{techColumn:400,topBoxH:300,сервисGap:40,doors:3,doorSandwich:41,поддонH:120,scrogH:650},
   equipment:{light:'SE3000',fan:'SF4',controller:'GGS',climate:'humidifier',irrigation:'smart-drip',reservoir:'20L',sensors:true,camera:false},
-  engineering:{silencer:true,vibration:true,leakProtection:true,ups:false,din:true,rkn:true},
-  finish:'choco'
+  engineering:{silencer:true,vibration:true,leakProtection:true,ups:false,din:true,rkn:true}
  };
  const clone=o=>JSON.parse(JSON.stringify(o));
  function merge(base,src){
@@ -27,15 +28,25 @@
    return merge(D,{model:'CUSTOM',dimensions:{W:g.width,H:g.height,D:g.depth},finish:old.finish||'choco'});
   }catch(e){return null}
  }
- function load(){
-  try{
-   const raw=JSON.parse(localStorage.getItem(KEY)||'null');
-   if(raw)return merge(D,raw);
-   return migrate()||clone(D);
-  }catch(e){return clone(D)}
- }
+ // старые сохранённые состояния использовали trayH/serviceGap — переносим их в живые ключи,
+  // чтобы ничего не терялось и не появлялось value="undefined" в полях конфигуратора
+  function normalize(o){
+   const a=o.architecture||{};
+   if(a.поддонH===undefined&&a.trayH!==undefined)a.поддонH=a.trayH;
+   if(a.сервисGap===undefined&&a.serviceGap!==undefined)a.сервисGap=a.serviceGap;
+   delete a.trayH;delete a.serviceGap;
+   o.architecture=a;
+   return o;
+  }
+  function load(){
+   try{
+    const raw=JSON.parse(localStorage.getItem(KEY)||'null');
+    if(raw)return normalize(merge(D,raw));
+    return normalize(migrate()||clone(D));
+   }catch(e){return clone(D)}
+  }
  function save(v){
-  const x=merge(D,v);
+  const x=normalize(merge(D,v));
   localStorage.setItem(KEY,JSON.stringify(x));
   window.dispatchEvent(new CustomEvent('secretbox:state',{detail:x}));
   return x;

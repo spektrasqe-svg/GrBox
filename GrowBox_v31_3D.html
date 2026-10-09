@@ -114,7 +114,7 @@ root=new THREE.Group();scene.add(root);
 const pickables=[];const doorGroups=[];let P=null,mode='product',selected=null,liveConfig=null;
 function getState(){return liveConfig||SECRETBOX.load()}
 function consumeHandoff(){
-  if(new URLSearchParams(location.search).get('config')!=='live')return;
+  if(new URLSearchParams(location.search).get('config')!=='live')return false;
   try{
     const raw=sessionStorage.getItem('secretbox.config.handoff.v1');
     if(!raw)return;
@@ -123,8 +123,18 @@ function consumeHandoff(){
       liveConfig=parsed;
       SECRETBOX.save(parsed);
       sessionStorage.removeItem('secretbox.config.handoff.v1');
+      return true;
     }
   }catch(e){console.warn('SECRET BOX: не удалось прочитать handoff',e)}
+  return false;
+}
+// карточки моделей ведут сюда с ?model=A|B|C — применяем тот же пресет, что и сборщик
+function consumeModelPreset(){
+  const mp=(new URLSearchParams(location.search).get('model')||'').toUpperCase();
+  if(mp!=='A'&&mp!=='B'&&mp!=='C')return false;
+  const preset={A:{model:'A',finish:'choco'},B:{model:'B',finish:'champ'},C:{model:'C',finish:'white'}}[mp];
+  try{SECRETBOX.set(preset)}catch(e){console.warn('SECRET BOX: не удалось применить пресет модели',e)}
+  return true;
 }
 const M={
  shell:new THREE.MeshStandardMaterial({color:0x25272a,roughness:.58,metalness:.25}),
@@ -298,7 +308,7 @@ function applyMode(){
 }
 function updatePanel(s){
  const d=P.outer, checks=P.checks||[],errors=checks.filter(x=>x.level==='error'),warns=checks.filter(x=>x.level==='warning');
- document.getElementById('config').innerHTML='<b>SECRET BOX · ИНДИВИДУАЛЬНЫЙ</b> · '+d.W+' × '+d.D+' × '+d.H+' мм · '+P.doors.count+' двери · рабочая зона '+Math.round(P.zones.grow.w)+' мм';
+ document.getElementById('config').innerHTML='<b>'+SECRETBOX.label(s).modelName+'</b> · '+d.W+' × '+d.D+' × '+d.H+' мм · '+P.doors.count+' двери · рабочая зона '+Math.round(P.zones.grow.w)+' мм';
  document.getElementById('infoMeta').innerHTML='Корпус: '+d.W+' × '+d.D+' × '+d.H+' мм<br>Рабочая камера: '+Math.round(P.zones.grow.w)+' × '+Math.round(P.zones.grow.d)+' × '+Math.round(P.zones.grow.h)+' мм<br>Верхний модуль: '+Math.round(P.zones.top.w)+' × '+Math.round(P.zones.top.d)+' × '+Math.round(P.zones.top.h)+' мм<br>Масса: '+P.metrics.mass+' кг · мощность: '+P.metrics.power+' Вт · воздух: '+P.metrics.airflow+' м³/ч';
  document.getElementById('checks').innerHTML=errors.length?'<span class="bad">⚠ '+errors.length+' критических конфликтов</span>':(warns.length?'<span class="warn">△ '+warns.length+' предупреждений</span>':'<span class="good">✓ Геометрия совместима</span>');
 }
@@ -343,7 +353,7 @@ document.getElementById('export').onclick=()=>{const s=getState(),l=SECRETBOX_LA
 let lastState='';
 function sync(){const s=getState(),sig=JSON.stringify(s);if(sig!==lastState){lastState=sig;build();frameCamera('iso')}}
 SECRETBOX.subscribe(()=>{liveConfig=null;lastState='';sync()});
-consumeHandoff();
+if(!consumeHandoff())consumeModelPreset();
 sync();
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight,false)});
 renderer.setSize(innerWidth,innerHeight,false);frameCamera('iso');
@@ -352,5 +362,7 @@ fitView();
 function loop(){requestAnimationFrame(loop);cameraTick();updateDoors();renderer.render(scene,camera)}loop();
 })();
 </script>
+<script src="assets/site/project-engine.js"></script>
+<script src="assets/site/3d-bom-bridge.js"></script>
 </body>
 </html>

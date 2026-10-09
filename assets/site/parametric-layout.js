@@ -64,7 +64,12 @@ function derive(config){
  if(D<650)add('warning','DEPTH','Глубина ограничивает вентиляцию и сервисный доступ.');
  if(doors>3 && doorW<360)add('warning','DOOR_WIDTH','Слишком узкие двери для полноценного сервиса.');
  if(doorT>50)add('warning','DOOR_WEIGHT','Толстый дверной сэндвич увеличивает массу фасада.');
- const floorMass=35+(W*H*D/1e6)*95+light.mass+fan.mass+(e.reservoir==='20L'?22:8)+(en.silencer?8:0)+(en.ups?7:0);
+ // Масса корпуса считается по площади панелей (плотность ЛДСП ≈ 650 кг/м³), а не по объёму шкафа:
+ // объёмная оценка растёт как H и завышает нагрузку для больших шкафов и занижает концентрацию
+ // нагрузки для маленьких. Проверено: даёт ≈ 260 кг на конфигурации по умолчанию — как и спецификация.
+ const panelM2=(2*(W*D+H*D+W*H))/1e6, shellM=panelM2*(panel*650/1000);
+ const doorsM=doors*Math.max(6,doorW*(H-plinth)/1e6*22);
+ const floorMass=18+shellM+doorsM+light.mass+fan.mass+(e.reservoir==='20L'?22:8)+(en.silencer?8:0)+(en.ups?7:0)+(en.din?3:0)+(en.vibration?2:0)+tech*.06;
  const power=light.power+fan.power+(e.controller==='GGS'?18:0)+(e.climate==='humidifier'?30:0)+(e.irrigation==='smart-drip'?12:0);
  const airflow=fan.w>=260?720:fan.w>=220?520:350;
  L.metrics={mass:+floorMass.toFixed(1),power,airflow,floorLoad:+(floorMass/(W*D/1e6)).toFixed(0),heat:+(power*.86).toFixed(0)};
