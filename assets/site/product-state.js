@@ -80,9 +80,9 @@
  }
  function label(s=load()){
   const g=geometry(s);
-  const names={CUSTOM:'SECRET BOX · CUSTOM',A:'SECRET BOX A · FLAGSHIP',B:'SECRET BOX B · COMPACT',C:'SECRET BOX C · DUAL ZONE'};
+  const names={CUSTOM:'SECRET BOX · ИНДИВИДУАЛЬНЫЙ'};
   const m=String(s.model||'CUSTOM').toUpperCase();
-  return{model:m,modelName:names[m]||('SECRET BOX · '+m),finish:{choco:'Шоколад',champ:'Шампань',white:'Белый'}[s.finish]||s.finish,
+  return{model:m,modelName:names[m]||'SECRET BOX · ИНДИВИДУАЛЬНЫЙ',finish:{choco:'Шоколад',champ:'Шампань',white:'Белый'}[s.finish]||s.finish,
    dimensions:g.width+' × '+g.depth+' × '+g.height+' мм',mass:mass(s),estimate:estimate(s)}
  }
  window.SECRETBOX={key:KEY,defaults:clone(D),load,save,set,reset:()=>{localStorage.removeItem(KEY);return save(D)},geometry,mass,estimate,label,

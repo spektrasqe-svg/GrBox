@@ -2,9 +2,11 @@
  const SB=window.SECRETBOX;
  const is3d=/GrowBox_v31_3D\.html$/i.test(location.pathname);
  document.body.classList.add(is3d?'sb-3d-page':'sb-platform-page');
+ // ?bare=1 — встраивание без шапки (живая 3D внутри конфигуратора/лендинга)
+ if(new URLSearchParams(location.search).has('bare')){document.body.classList.add('sb-bare');return;}
  const path=location.pathname.split('/').pop()||'index.html';
  const items=[
-  ['index.html#models','Модели','models'],
+  ['index.html#models','Проект','models'],
   ['index.html#interior','Внутри','interior'],
   ['GrowBox_v31_3D.html','3D','3d'],
   ['builder.html','Конфигуратор','builder'],

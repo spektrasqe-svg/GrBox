@@ -21,8 +21,7 @@
 .loader{position:absolute;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:var(--bg);font:12px Roboto Mono,monospace;color:var(--dim)}
 .loader:after{content:"";width:28px;height:28px;margin-left:12px;border:2px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
 @media(max-width:760px){
-  .top{top:68px;left:8px;right:8px;gap:6px;flex-direction:row;align-items:center}
-  .pill{padding:6px 8px;font-size:9px;border-radius:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .top{top:68px;left:8px;right:8px;gap:6px;flex-direction:row;align-items:center}  .pill{padding:6px 8px;font-size:9px;border-radius:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .pill b{font-size:9px}
   #config{min-width:0;max-width:calc(100vw - 112px)}
   .modes{
@@ -48,6 +47,15 @@
     font:9px Roboto Mono,monospace;border-radius:4px
   }
   .hint{display:none}
+}
+/* встраивание без шапки (конфигуратор/лендинг): UI прижат к верху iframe */
+.sb-bare .top{top:12px}
+.sb-bare .modes{top:60px}
+.sb-bare .info{top:60px}
+@media(max-width:760px){
+  .sb-bare .top{top:8px}
+  .sb-bare .modes{top:48px}
+  .sb-bare .info{top:auto}
 }
 </style>
 </head>
@@ -127,14 +135,6 @@ function consumeHandoff(){
     }
   }catch(e){console.warn('SECRET BOX: не удалось прочитать handoff',e)}
   return false;
-}
-// карточки моделей ведут сюда с ?model=A|B|C — применяем тот же пресет, что и сборщик
-function consumeModelPreset(){
-  const mp=(new URLSearchParams(location.search).get('model')||'').toUpperCase();
-  if(mp!=='A'&&mp!=='B'&&mp!=='C')return false;
-  const preset={A:{model:'A',finish:'choco'},B:{model:'B',finish:'champ'},C:{model:'C',finish:'white'}}[mp];
-  try{SECRETBOX.set(preset)}catch(e){console.warn('SECRET BOX: не удалось применить пресет модели',e)}
-  return true;
 }
 const M={
  shell:new THREE.MeshStandardMaterial({color:0x25272a,roughness:.58,metalness:.25}),
@@ -351,9 +351,15 @@ document.querySelectorAll('[data-cam]').forEach(b=>b.onclick=()=>{document.query
 document.getElementById('reset').onclick=()=>{setMode('product');frameCamera('iso')};
 document.getElementById('export').onclick=()=>{const s=getState(),l=SECRETBOX_LAYOUT.derive(s),payload={project:'SECRET BOX · параметрическая 3D-конфигурация',date:new Date().toISOString(),configuration:s,geometry:l};const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}));a.download='secret-box-parametric-config.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000)};
 let lastState='';
-function sync(){const s=getState(),sig=JSON.stringify(s);if(sig!==lastState){lastState=sig;build();frameCamera('iso')}}
+function sync(keepCam){const s=getState(),sig=JSON.stringify(s);if(sig!==lastState){lastState=sig;build();if(!keepCam)frameCamera('iso')}}
+// живое обновление из конфигуратора: родитель шлёт конфиг по postMessage, камеру при этом не сбрасываем
+addEventListener('message',function(ev){
+  const d=ev&&ev.data;
+  if(!d||d.type!=='secretbox:config'||!d.config||!d.config.dimensions||!d.config.architecture)return;
+  liveConfig=d.config;sync(true);
+});
 SECRETBOX.subscribe(()=>{liveConfig=null;lastState='';sync()});
-if(!consumeHandoff())consumeModelPreset();
+consumeHandoff();
 sync();
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight,false)});
 renderer.setSize(innerWidth,innerHeight,false);frameCamera('iso');

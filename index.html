@@ -446,6 +446,25 @@ footer{padding:84px 0 40px}
 .product-bottom small{display:block;font:8px var(--body);letter-spacing:.15em;color:#77736c}.product-bottom b{display:block;font:18px var(--disp);margin-top:4px}
 .product-bottom a{background:#eee8dd;color:#111215;padding:12px 13px;font:800 8px var(--body);letter-spacing:.12em;white-space:nowrap}.product-bottom a:hover{background:#c5a46c}.product-bottom i{font-style:normal;font-size:13px}
 .shop-note{margin-top:12px;border:1px solid #303136;padding:14px 16px;display:flex;gap:28px;align-items:center;font:8px var(--body);letter-spacing:.16em;color:#77736c}.shop-note a{margin-left:auto;color:#d0b27b}
+/* showcase вместо карточек товаров */
+.showcase{display:grid;grid-template-columns:1.02fr .98fr;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--ink-2)}
+.sc-media{position:relative;min-height:470px;overflow:hidden}
+.sc-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.1s cubic-bezier(.2,.7,.3,1)}
+.showcase:hover .sc-media img{transform:scale(1.04)}
+.sc-plate{position:absolute;left:20px;bottom:20px;background:rgba(17,18,21,.9);border:1px solid var(--line-strong);border-radius:100px;padding:11px 19px;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--cream)}
+.sc-plate b{color:var(--brass)}
+.sc-body{padding:42px 38px;display:flex;flex-direction:column;justify-content:center}
+.sc-kicker{font-family:var(--body);font-size:10px;font-weight:500;letter-spacing:.26em;text-transform:uppercase;color:var(--brass)}
+.sc-body h3{font-family:var(--disp);font-weight:800;font-size:clamp(26px,2.9vw,40px);line-height:1.08;letter-spacing:-.01em;margin:18px 0 16px}
+.sc-body h3 em{font-style:normal;color:transparent;-webkit-text-stroke:1px var(--cream)}
+.sc-body>p{color:var(--cream-2);font-size:15px;line-height:1.8;max-width:52ch}
+.sc-list{list-style:none;display:grid;margin:26px 0 30px}
+.sc-list li{display:flex;gap:18px;align-items:baseline;border-top:1px solid var(--line);padding:13px 0}
+.sc-list b{flex:0 0 118px;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--brass)}
+.sc-list span{color:var(--cream-2);font-size:13.5px;line-height:1.7}
+.sc-actions{display:flex;gap:14px;flex-wrap:wrap}
+@media(max-width:900px){.showcase{grid-template-columns:1fr}.sc-media{min-height:330px}.sc-body{padding:32px 26px}.sc-list li{flex-direction:column;gap:6px}.sc-list b{flex-basis:auto}}
+@media(max-width:560px){.sc-media{min-height:250px}.sc-body{padding:26px 20px}.sc-actions{width:100%}.sc-actions .btn{width:100%;justify-content:center}}
 .compare-mini{padding:65px 0;background:#191a1d;border-top:1px solid #303136}.compare-mini-head{display:flex;align-items:end;justify-content:space-between;margin-bottom:22px}.compare-mini h2{font-family:var(--disp);font-size:42px;margin-top:10px}
 .compare-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#303136;border:1px solid #303136}.compare-mini-grid a{background:#111215;padding:23px;display:grid;grid-template-columns:45px 1fr;grid-template-rows:auto auto;column-gap:12px}.compare-mini-grid a:hover{background:#222327}.compare-mini-grid b{grid-row:1/3;font:42px var(--disp);color:#c5a46c}.compare-mini-grid span{font-family:var(--disp);font-size:16px}.compare-mini-grid em{font:9px var(--body);letter-spacing:.14em;color:#77736c;margin-top:7px;font-style:normal}
 @media(max-width:900px){.shop-head{grid-template-columns:1fr;gap:25px}.shop-grid{grid-template-columns:1fr}.product-photo,.product-card:not(.product-a) .product-photo{height:390px;flex-basis:390px}.shop-note{flex-wrap:wrap}.shop-note a{margin-left:0}.compare-mini-head{display:block}.compare-mini-grid{grid-template-columns:1fr}}
@@ -511,7 +530,7 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
         </a>
       </div>
       <div class="hero-stats">
-        <div class="st"><b>3</b><span>модели корпуса</span></div>
+        <div class="st"><b>20+</b><span>параметров конфигурации</span></div>
         <div class="st"><b>100%</b><span>готов к сборке</span></div>
         <div class="st"><b>0</b><span>видимых проводов</span></div>
       </div>
@@ -520,7 +539,7 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
       <div class="corners"></div><div class="c2"></div>
       <div class="shot">
         <img decoding="async" fetchpriority="high" src="assets/site/hero.jpg" alt="Secret Box — шкаф снаружи">
-        <div class="plate">Модель A · <b>шоколад / паутина</b></div>
+        <div class="plate">Индивидуальный · <b>шоколад / паутина</b></div>
       </div>
     </div>
   </div>
@@ -558,43 +577,29 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
   <div class="wrap">
     <div class="shop-head">
       <div><div class="tag">SECRET BOX · ИНДИВИДУАЛЬНЫЙ ПРОЕКТ</div><h2>СОЗДАЙТЕ<br><span>СВОЙ BOX.</span></h2></div>
-      <div class="shop-intro"><strong>Один живой конфигуратор.</strong><p>Вы задаёте внешние размеры, а система пересчитывает внутренний объём, рабочую зону, технические отсеки, двери, оборудование и инженерные показатели. 3D строится из той же конфигурации.</p></div>
+      <div class="shop-intro"><strong>Один продукт. Один живой конфигуратор.</strong><p>Никаких готовых моделей и артикулов — вы задаёте внешние размеры, а система пересчитывает внутренний объём, рабочую зону, технические отсеки, двери, оборудование и инженерные показатели. 3D строится из той же конфигурации.</p></div>
     </div>
-    <div class="shop-grid">
-      <article class="product-card mini">
-        <a class="product-photo" href="product-a.html"><span class="product-badge">MODEL A · FLAGSHIP</span><img loading="lazy" decoding="async" src="assets/site/model_a.jpg" alt="SECRET BOX A — флагманская модель"></a>
-        <div class="product-info">
-          <h3>FLAGSHIP BOX A</h3>
-          <p>Большая камера роста и отдельная техническая зона.</p>
-          <div class="product-bottom"><div><small>СТАРТОВАЯ ЦЕНА</small><b>от 190 000 ₽</b></div><a href="product-a.html">ПОДРОБНЕЕ <i>→</i></a></div>
+    <div class="showcase reveal">
+      <div class="sc-media">
+        <img loading="lazy" decoding="async" src="assets/site/hero.jpg" alt="SECRET BOX — индивидуальный технический шкаф">
+        <div class="sc-plate">SECRET BOX · <b>индивидуальный проект</b></div>
+      </div>
+      <div class="sc-body">
+        <div class="sc-kicker">Один продукт · без готовых моделей</div>
+        <h3>Размер задаёте вы.<br><em>3D и расчёт следуют за ним.</em></h3>
+        <p>Ширина, высота, глубина, техническая колонна, верхний шумовой модуль, двери, свет, вентиляция, автоматика и инженерные системы собираются в одну конфигурацию. Спецификация, масса, нагрузка на пол и 3D пересчитываются из тех же чисел — без второго набора размеров.</p>
+        <ul class="sc-list">
+          <li><b>Геометрия</b><span>700–3000 мм по ширине, до 3200 мм по высоте, шаг в 1 мм</span></li>
+          <li><b>Оборудование</b><span>Реальные габариты Spider Farmer — конфликт видно сразу</span></li>
+          <li><b>Инженерия</b><span>Масса, нагрузка на пол, мощность и воздухообмен</span></li>
+        </ul>
+        <div class="sc-actions">
+          <a class="btn btn-solid" href="builder.html">ОТКРЫТЬ КОНФИГУРАТОР
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h12M9 3l5 5-5 5"/></svg>
+          </a>
+          <a class="btn btn-ghost" href="#3d">СМОТРЕТЬ В 3D</a>
         </div>
-      </article>
-      <article class="product-card mini">
-        <a class="product-photo" href="product-b.html"><span class="product-badge">MODEL B · SPACE SAVER</span><img loading="lazy" decoding="async" src="assets/site/model_b.jpg" alt="SECRET BOX B — компактная модель"></a>
-        <div class="product-info">
-          <h3>COMPACT BOX B</h3>
-          <p>Компактный вертикальный BOX для дома с полной автоматизацией.</p>
-          <div class="product-bottom"><div><small>СТАРТОВАЯ ЦЕНА</small><b>от 150 000 ₽</b></div><a href="product-b.html">ПОДРОБНЕЕ <i>→</i></a></div>
-        </div>
-      </article>
-      <article class="product-card mini">
-        <a class="product-photo" href="product-c.html"><span class="product-badge">MODEL C · DUAL ZONE</span><img loading="lazy" decoding="async" src="assets/site/model_c.jpg" alt="SECRET BOX C — двухсекционная модель"></a>
-        <div class="product-info">
-          <h3>DUAL ZONE BOX C</h3>
-          <p>Двухсекционная модель: камера роста плюс зона хранения.</p>
-          <div class="product-bottom"><div><small>СТАРТОВАЯ ЦЕНА</small><b>от 175 000 ₽</b></div><a href="product-c.html">ПОДРОБНЕЕ <i>→</i></a></div>
-        </div>
-      </article>
-      <article class="product-card product-a" style="grid-column:1/-1">
-        <a class="product-photo" href="builder.html"><span class="product-badge">ИНДИВИДУАЛЬНЫЙ · ПАРАМЕТРИЧЕСКИЙ</span><span class="product-label">СОЗДАЙТЕ СВОЙ ШКАФ</span><img loading="lazy" decoding="async" src="assets/site/model_a.jpg" alt="SECRET BOX custom configurator"></a>
-        <div class="product-info">
-          <div class="product-meta"><span>SECRET BOX · ИНДИВИДУАЛЬНЫЙ ПРОЕКТ</span><span>ИНЖЕНЕРНАЯ СИСТЕМА</span></div>
-          <h3>Размер задаёте вы.<br><em>3D и расчёт следуют за ним.</em></h3>
-          <p>Ширина, высота, глубина, Техническая колонна, верхний шумовой модуль, двери, свет, вентиляция, автоматика и инженерные системы собираются в одну конфигурацию.</p>
-          <div class="product-specs"><span>ПАРАМЕТРИЧЕСКИЙ</span><span>ЖИВАЯ 3D</span><span>Spider Farmer</span><span>СПЕЦИФИКАЦИЯ ГОТОВА</span></div>
-          <div class="product-bottom"><div><small>НАЧАТЬ</small><b>С НУЛЯ</b></div><a href="builder.html">ОТКРЫТЬ КОНФИГУРАТОР <i>→</i></a></div>
-        </div>
-      </article>
+      </div>
     </div>
     <div class="shop-note"><span>РЕАЛЬНЫЕ РАЗМЕРЫ</span><span>РЕАЛЬНОЕ ОБОРУДОВАНИЕ</span><span>ИНЖЕНЕРНАЯ ПРОВЕРКА</span><a href="builder.html">СОБРАТЬ СВОЙ BOX →</a></div>
   </div>
@@ -686,7 +691,7 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
     <div class="interior-grid reveal">
       <div class="cell tall">
         <img loading="lazy" decoding="async" src="assets/site/int_a.jpg" alt="Интерьер Secret Box A">
-        <div class="cap">Модель A · полный цикл</div>
+        <div class="cap">Полный цикл · свет и климат</div>
       </div>
       <div class="cell">
         <img loading="lazy" decoding="async" src="assets/site/int_b.jpg" alt="Интерьер Secret Box B">
@@ -720,9 +725,9 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
       <div class="cfg-body">
         <div class="cfg-opts-area">
           <div class="cfg-group">
-            <label>Корпус</label>
-            <div class="seg" data-group="body">
-              <button class="on">A · Флагман</button><button>B · Компакт</button><button>C · Двухсекционный</button>
+            <label>Размер корпуса</label>
+            <div class="seg" data-group="size">
+              <button>Компактный</button><button class="on">Стандартный</button><button>Большой</button>
             </div>
           </div>
           <div class="cfg-group">
@@ -831,7 +836,7 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
       <p>Параметрическая 3D-сборка, в которой геометрия следует за текущей конфигурацией. Тяните — вращение, щипок или колесо — зум, тап по детали — карточка узла.</p>
     </div>
     <div class="stage3d reveal">
-      <iframe src="GrowBox_v31_3D.html" title="3D-модель Secret Box" loading="lazy" allowfullscreen></iframe>
+      <iframe src="GrowBox_v31_3D.html?bare=1" title="3D-модель Secret Box" loading="lazy" allowfullscreen></iframe>
     </div>
     <div class="stage3d-hint">
       <span>Тяните — вращение · щипок / колесо — зум · тап по детали — карточка</span>
@@ -914,7 +919,7 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
       <div class="foot-cols">
         <div class="foot-col">
           <h5>Продукт</h5>
-          <a href="#models">Модели</a>
+          <a href="#models">Проект</a>
           <a href="#config">Конфигуратор</a>
           <a href="builder.html">Сборка с нуля</a>
           <a href="#flat">Разбор</a>
@@ -965,7 +970,7 @@ var cio=new IntersectionObserver(function(es){
 document.querySelectorAll('.cnt').forEach(function(el){cio.observe(el)});
 
 // конфигуратор
-var PRICES={body:[190000,150000,175000],finish:[25000,10000,0],sections:[0,15000],tank:[12000,6000,0],gear:[0,45000,85000],water:[18000,0]};
+var PRICES={size:[150000,175000,190000],finish:[25000,10000,0],sections:[0,15000],tank:[12000,6000,0],gear:[0,45000,85000],water:[18000,0]};
 function fmt(n){return n.toLocaleString('ru-RU')}
 function recalc(){
   var total=0;
