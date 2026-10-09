@@ -61,7 +61,11 @@
   }
 
   /* ── отправка ── */
-  function tme(){ var cfg = window.SB_CONFIG || {}; return (cfg.leads && cfg.leads.manager) || (cfg.contacts && cfg.contacts.telegram) || null; }
+  function tg(){ return (window.SB_CONTACTS && SB_CONTACTS.tgLink()) || null; }
+  function phoneHref(){
+    var c=(window.SB_CONFIG&&SB_CONFIG.contacts)||{};
+    return c.phone ? (c.phoneHref || c.phone.replace(/[^\d+]/g,'')) : null;
+  }
 
   function success(form, text, note){
     var box = form.querySelector('.lead-done');
@@ -69,8 +73,8 @@
     box.hidden = false;
     box.innerHTML = '<b>Заявка готова.</b> ' + note +
       '<div class="lead-done-actions">' +
-      (tme() ? '<a class="btn btn-solid" href="https://t.me/' + tme() + '" target="_blank" rel="noopener">ОТКРЫТЬ TELEGRAM</a>' : '') +
-      ((window.SB_CONFIG.contacts && SB_CONFIG.contacts.phone) ? '<a class="btn" href="tel:' + (SB_CONFIG.contacts.phoneHref || SB_CONFIG.contacts.phone.replace(/[^\d+]/g,'')) + '">ПОЗВОНИТЬ</a>' : '') +
+      (tg() ? '<a class="btn btn-solid" href="' + tg() + '" target="_blank" rel="noopener">ОТКРЫТЬ TELEGRAM</a>' : '') +
+      (phoneHref() ? '<a class="btn" href="tel:' + phoneHref() + '">ПОЗВОНИТЬ</a>' : '') +
       '<button type="button" class="btn" data-copy>СКОПИРОВАТЬ ЗАЯВКУ</button>' +
       '</div>';
     var cp = box.querySelector('[data-copy]');
@@ -107,7 +111,7 @@
       return;
     }
 
-    if((leads.mode === 'formspree' || leads.mode === 'webhook') && leads.endpoint){
+    if((leads.mode === 'formspree' || leads.mode === 'webhook' || leads.mode === 'telegram') && leads.endpoint){
       var btn = form.querySelector('[type="submit"]');
       if(btn){ btn.disabled = true; btn.textContent = 'ОТПРАВЛЯЕМ…'; }
       fetch(leads.endpoint, {
@@ -117,6 +121,7 @@
           : {'Content-Type':'application/json'},
         body: JSON.stringify({
           source: 'secretbox.ru',
+          text: text,
           name: (name && name.value) || '',
           phone: (form.querySelector('#lead-phone')||{}).value || '',
           telegram: (form.querySelector('#lead-telegram')||{}).value || '',
@@ -127,12 +132,11 @@
         })
       }).then(function(r){
         if(btn){ btn.disabled = false; btn.textContent = 'ОТПРАВИТЬ ЗАЯВКУ'; }
-        if(r.ok) success(form, text, 'Мы получили её и ответим в рабочее время.');
+        if(r.ok) success(form, text, 'Заявка ушла — ответим в рабочее время.');
         else if(err){ err.hidden = false; err.textContent = 'Не удалось отправить (код ' + r.status + '). Напишите нам напрямую — контакты ниже.'; }
       }).catch(function(){
         if(btn){ btn.disabled = false; btn.textContent = 'ОТПРАВИТЬ ЗАЯВКУ'; }
-        if(err){ err.hidden = false; err.textContent = 'Нет связи с формой. Скопируйте заявку и отправьте нам — контакты ниже.'; }
-        success(form, text, 'Отправьте её нам любым удобным способом.');
+        success(form, text, 'Отправьте её нам в Telegram — мы на связи.');
       });
       return;
     }
@@ -148,11 +152,12 @@
     // подстановка контактов в блок «Куда уходит заявка» (блок живёт в сайдбаре, не в форме)
     var dest = document.querySelector('.lead-dest');
     if(dest){
-      var c = cfg.contacts || {}, rows = [];
-      if(c.telegram) rows.push('<a href="https://t.me/' + c.telegram + '" target="_blank" rel="noopener">Telegram · @' + c.telegram + '</a>');
-      if(c.email)    rows.push('<a href="mailto:' + c.email + '">' + c.email + '</a>');
-      if(c.phone)    rows.push('<a href="tel:' + (c.phoneHref || c.phone.replace(/[^\d+]/g,'')) + '">' + c.phone + '</a>');
-      if(c.workHours)rows.push('<span class="muted">' + c.workHours + '</span>');
+      var rows = [];
+      var link = tg();
+      if(link) rows.push('<a href="' + link + '" target="_blank" rel="noopener">Telegram · ' + SB_CONTACTS.tgLabel() + '</a>');
+      if(cfg.contacts && cfg.contacts.email) rows.push('<a href="mailto:' + cfg.contacts.email + '">' + cfg.contacts.email + '</a>');
+      if(phoneHref()) rows.push('<a href="tel:' + phoneHref() + '">' + cfg.contacts.phone + '</a>');
+      if(cfg.contacts && cfg.contacts.workHours) rows.push('<span class="muted">' + cfg.contacts.workHours + '</span>');
       dest.innerHTML = rows.length ? rows.join('<br>') : '<span class="muted">Контакты подключаются — оставьте заявку, мы свяжемся.</span>';
     }
     // сводка конфигурации

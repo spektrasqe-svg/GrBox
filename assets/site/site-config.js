@@ -11,7 +11,8 @@
     contacts: {
       phone:     null,   // например '+7 999 123-45-67'  (то, что видит посетитель)
       phoneHref: null,   // например '+79991234567'      (то, что набирается по клику)
-      telegram:  null,   // например 'secretbox'          (без @)
+      telegram:  null,   // @username (без @), если есть — он приоритетнее номера
+      telegramPhone: '89521004044', // номер Telegram, если username нет: ссылка получается t.me/+7…
       email:     null,   // например 'sales@secretbox.ru'
       workHours: 'Пн–Сб · 10:00–20:00',
       address:   'Москва · сборка под ключ',
@@ -21,13 +22,16 @@
     /* ─────────────────────── ПРИЁМ ЗАЯВОК ───────────────────────
        mode 'links'     — без бэкенда: форма готовит текст заявки, отправка кнопками
                           (Telegram / почта / телефон) + копирование в буфер.
+       mode 'telegram'  — заявка падает в Telegram через свой релей (deploy/telegram-relay.js).
+                          Нужен endpoint = URL релея. Схема C.
        mode 'formspree' — POST на https://formspree.io/f/<id>  (нужен endpoint)
-       mode 'webhook'   — POST JSON на свой обработчик        (нужен endpoint) */
+       mode 'webhook'   — POST JSON на свой обработчик        (нужен endpoint)
+       Без endpoint любой режим молча откатывается в 'links' — форма не ломается. */
     leads: {
-      mode: 'links',
-      endpoint: null,
-      manager: null,      // куда уходят заявки: telegram-ник менеджера (без @) или null
-      privacyUrl: null,   // ссылка на политику обработки данных; null → текст без ссылки
+      mode: 'telegram',
+      endpoint: null,    // URL релея, например 'https://secretbox-relay.workers.dev'
+      manager: null,     // telegram-ник менеджера (без @); null → берём contacts.telegram
+      privacyUrl: null,  // ссылка на политику обработки данных; null → текст без ссылки
     },
 
     /* ─────────────────────────── ЦЕНЫ ─────────────────────────── */
@@ -36,11 +40,11 @@
       // false → на карточках и в смете везде «Цена по запросу»
       show: true,
       // Стартовые цены карточек товаров. null → «Цена по запросу».
-      // Плавающий прайс: ставь «от» цены минимальной комплектации.
+      // Якоря владельца: минимум 80 000 · база 150 000 · топ 300 000.
       products: {
-        A: { from: null, badge: 'FLAGSHIP' },
-        B: { from: null, badge: 'SPACE SAVER' },
-        C: { from: null, badge: 'DUAL ZONE' }
+        A: { from: 150000, badge: 'FLAGSHIP' },
+        B: { from: 80000,  badge: 'SPACE SAVER' },
+        C: { from: 300000, badge: 'DUAL ZONE' }
       },
       // Подпись под ценой на карточках
       priceLabel: 'СТАРТОВАЯ КОМПЛЕКТАЦИЯ',
@@ -48,42 +52,43 @@
       /* Мини-конфигуратор на главной: надбавки за опции, ₽.
          Порядок кнопок = порядок значений. Правь под реальный прайс. */
       quick: {
-        body:    [100000, 85000, 95000],   // A · Флагман / B · Компакт / C · Двухсекционный
-        finish:  [25000, 10000, 0],        // Шоколад / Шампань / Белый
-        sections:[0, 15000],               // Только гроу / Гроу + хранение
-        tank:    [12000, 6000, 0],         // Встроенный / Внешний / Без бака
-        gear:    [0, 45000, 85000],        // База / Полный цикл / Максимум
+        body:    [150000, 80000, 300000],  // A · Флагман / B · Компакт / C · Двухсекционный
+        finish:  [8000, 4000, 0],          // Шоколад / Шампань / Белый
+        sections:[0, 35000],               // Только гроу / Гроу + хранение
+        tank:    [6000, 3000, 0],          // Встроенный / Внешний / Без бака
+        gear:    [0, 45000, 120000],       // База / Полный цикл / Максимум
         water:   [18000, 0]                // Автополив / Без автополива
       },
       /* Тарифы расчётного движка (project-engine.js + product-state.js).
+         Откалиброваны под якоря: минимум ≈ 80 000 · база ≈ 150 000 · топ ≈ 300 000.
          Реальный прайс пришёл → правишь здесь, пересчитывается вся смета на сайте. */
       book: {
-        base: 72000,                  // база: корпус + сборка + пусконаладка
-        panelPerM2: 9000,             // раскрой и обработка панелей, ₽/м²
-        doorPerM2: 5000,              // дверь-сэндвич, ₽/м²
-        doorMin: 7000,
-        plinth: 4500,
-        rail: 1800,                   // монтажная рейка
-        carriage: 650,                // каретка + траверса
-        vibro: 180,                   // виброопора (за шт.)
-        vibration: 3500,              // виброизоляция комплектом (в смете оценки)
-        din: 5500,
-        rcd: 5500,
-        leak: 8000,
-        ups: 18000,
-        tray: 8500,
-        scrog: 3200,
-        silencer: 10000,
-        baffle: 9000,
-        sensors: 4500,
-        camera: 5500,
-        controller: 7000,
-        humidifier: 7000,
-        irrigation: 12000,
+        base: 47000,                  // база: корпус + сборка + пусконаладка
+        panelPerM2: 2500,             // раскрой и обработка панелей, ₽/м²
+        doorPerM2: 1600,              // дверь-сэндвич, ₽/м²
+        doorMin: 1500,
+        plinth: 800,
+        rail: 900,                    // монтажная рейка
+        carriage: 350,                // каретка + траверса
+        vibro: 120,                   // виброопора (за шт.)
+        vibration: 4000,              // виброизоляция комплектом (в смете оценки)
+        din: 4000,
+        rcd: 6000,
+        leak: 10000,
+        ups: 28000,
+        tray: 5000,
+        scrog: 2500,
+        silencer: 12000,
+        baffle: 4500,
+        sensors: 2500,
+        camera: 4500,
+        controller: 8000,
+        humidifier: 8000,
+        irrigation: 14000,
         reservoir: 4500,
-        equipment: { SE3000: 28000, SE5000: 42000, G8600: 56000 },
-        fan: { SF4: 9000, SF6: 13000, SF8: 18000 },
-        finish: { choco: 25000, champ: 10000, white: 0 }
+        equipment: { SE3000: 25000, SE5000: 55000, G8600: 110000 },
+        fan: { SF4: 8000, SF6: 22000, SF8: 45000 },
+        finish: { choco: 8000, champ: 4000, white: 0 }
       }
     }
   };
@@ -102,17 +107,35 @@
     return (t && t.from !== undefined) ? t.from : null;
   }
 
+  /* Ссылка на Telegram: @username → t.me/<username>, иначе номер → t.me/+<7XXXXXXXXXX> */
+  function tgLink(){
+    var c = CONFIG.contacts;
+    if(c.telegram) return 'https://t.me/' + String(c.telegram).replace(/^@/, '');
+    var d = String(c.telegramPhone || '').replace(/\D/g, '');
+    if(!d) return null;
+    if(d.length === 11 && d[0] === '8') d = '7' + d.slice(1);   // 8 952… → 7 952…
+    return 'https://t.me/+' + d;
+  }
+  function tgLabel(){
+    var c = CONFIG.contacts;
+    if(c.telegram) return '@' + String(c.telegram).replace(/^@/, '');
+    var s = String(c.telegramPhone || '').replace(/\D/g, '');
+    if(s.length === 11) return s[0] + ' ' + s.slice(1,4) + ' ' + s.slice(4,7) + '-' + s.slice(7,9) + '-' + s.slice(9);
+    return s;
+  }
+
   function contactsHTML(){
     var c = CONFIG.contacts, out = [];
     if(c.phone)     out.push('<a href="tel:' + (c.phoneHref || c.phone.replace(/[^\d+]/g,'')) + '">' + c.phone + '</a>');
-    if(c.telegram)  out.push('<a href="https://t.me/' + c.telegram + '" target="_blank" rel="noopener">Telegram · @' + c.telegram + '</a>');
+    var tg = tgLink();
+    if(tg)          out.push('<a href="' + tg + '" target="_blank" rel="noopener">Telegram · ' + tgLabel() + '</a>');
     if(c.email)     out.push('<a href="mailto:' + c.email + '">' + c.email + '</a>');
     return out.join('');
   }
 
   window.SB_CONFIG = CONFIG;
   window.SB_PRICE  = { fmt: fmt, html: priceHTML, product: productPrice, book: CONFIG.pricing.book };
-  window.SB_CONTACTS = { html: contactsHTML, config: CONFIG.contacts };
+  window.SB_CONTACTS = { html: contactsHTML, config: CONFIG.contacts, tgLink: tgLink, tgLabel: tgLabel };
 
   /* Автозаполнение: <span data-sb-price="A"></span>, <span data-sb-contacts></span> */
   function paint(){
