@@ -1,0 +1,106 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Личный кабинет — SECRET BOX</title><meta property="og:type" content="website"><meta property="og:locale" content="ru_RU"><meta property="og:title" content="Личный кабинет — SECRET BOX"><meta property="og:description" content="Мои данные, проекты, заявки и текущая конфигурация SECRET BOX."><meta property="og:url" content="https://spektrasqe-svg.github.io/GrBox/account"><meta property="og:image" content="https://spektrasqe-svg.github.io/GrBox/assets/site/hero.jpg"><meta name="twitter:card" content="summary-large_image"><link rel="icon" type="image/svg+xml" href="assets/site/favicon.svg"><meta name="description" content="Личный кабинет SECRET BOX: сохранённые проекты, история заявок, профиль и текущая конфигурация.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;500;700&family=Unbounded:wght@300;400;600;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/site/platform-shell.css"><link rel="stylesheet" href="assets/site/classified-theme.css"><link rel="stylesheet" href="assets/site/site-system.css">
+<style>
+:root{--bg:#111215;--panel:#191a1d;--paper:#eee8dd;--muted:#aaa69e;--gold:#c5a46c;--line:#303136}
+*{box-sizing:border-box}
+body{margin:0}
+.acc-head{padding:150px 0 30px}
+.ey{color:var(--gold);font:500 10px var(--sb-mono);letter-spacing:.28em;text-transform:uppercase}
+.acc-head h1{font:800 clamp(38px,7vw,78px)/.95 var(--sb-display);margin:18px 0 14px}
+.acc-head p{max-width:680px;color:var(--muted);font-size:17px;line-height:1.7}
+.acc-note{display:inline-flex;gap:9px;align-items:center;margin-top:16px;padding:10px 14px;border:1px solid var(--line);border-radius:3px;color:var(--muted);font:500 11px/1.5 var(--sb-mono)}
+.acc-note b{color:var(--gold)}
+.acc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding-bottom:80px;align-items:start}
+.acc-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--sb-radius);padding:26px}
+.acc-card h2{font:600 13px var(--sb-display);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:0 0 6px}
+.acc-card .sub{color:var(--muted);font-size:12.5px;line-height:1.65;margin:0 0 20px}
+.acc-field{margin-bottom:13px}
+.acc-field label{display:block;font:500 9px var(--sb-mono);letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.acc-field input{width:100%;padding:12px 13px;min-height:44px}
+.acc-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}
+.acc-btn{padding:12px 15px;border:1px solid var(--line);background:transparent;color:var(--paper);border-radius:3px;font:700 10px var(--sb-mono);letter-spacing:.13em;text-transform:uppercase;cursor:pointer}
+.acc-btn:hover{border-color:var(--gold);color:var(--gold)}
+.acc-btn.solid{background:var(--paper);color:#111215;border-color:var(--paper)}
+.acc-btn.solid:hover{background:#e0cc8c;border-color:#e0cc8c;color:#111215}
+.acc-btn.danger:hover{border-color:#d96d61;color:#d96d61}
+.acc-cfg{font:500 12px/1.9 var(--sb-mono);color:var(--paper)}
+.acc-cfg .muted,.acc-empty{color:var(--muted)}
+.acc-empty a,.acc-cfg a{color:var(--gold)}
+.acc-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.acc-row:last-child{border-bottom:0}
+.acc-row-main{min-width:0}
+.acc-row-main b{display:block;font-size:14px}
+.acc-meta{font:500 10px var(--sb-mono);color:var(--muted);letter-spacing:.06em}
+.acc-row-actions{display:flex;flex-wrap:wrap;gap:7px}
+.acc-lead{border-bottom:1px solid var(--line);padding:12px 0}
+.acc-lead:last-child{border-bottom:0}
+.acc-lead summary{display:flex;flex-wrap:wrap;gap:10px;align-items:center;cursor:pointer;font:500 11px var(--sb-mono);letter-spacing:.06em;list-style:none}
+.acc-lead summary::-webkit-details-marker{display:none}
+.acc-when{color:var(--gold)}
+.acc-type{color:var(--paper);flex:1;min-width:120px}
+.acc-status{color:var(--muted);text-transform:uppercase;font-size:9px;letter-spacing:.16em}
+.acc-text{white-space:pre-wrap;word-break:break-word;background:var(--bg);border:1px solid var(--line);border-radius:3px;padding:13px;font:500 11px/1.7 var(--sb-mono);color:var(--paper-2,#aaa69e);margin:12px 0}
+.acc-toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:9997;padding:13px 18px;background:var(--paper);color:#111215;border-radius:3px;font:700 11px var(--sb-mono);letter-spacing:.1em;text-transform:uppercase;box-shadow:0 14px 40px rgba(0,0,0,.4)}
+@media(max-width:900px){
+  .acc-grid{grid-template-columns:1fr}
+  .acc-head{padding:120px 0 22px}
+  .acc-card{padding:22px 18px}
+  .acc-row{align-items:flex-start;flex-direction:column}
+}
+</style></head><body class="sb-platform-page">
+<script src="assets/site/site-config.js"></script>
+<script src="assets/site/product-state.js"></script>
+<script src="assets/site/parametric-layout.js"></script>
+<script src="assets/site/project-engine.js"></script>
+<script src="assets/site/platform-shell.js"></script>
+
+<div class="wrap acc-head">
+  <div class="ey">Личный кабинет</div>
+  <h1>Ваши проекты<br>и заявки.</h1>
+  <p>Здесь хранятся собранные конфигурации, история заявок и контактные данные, чтобы не вводить их каждый раз. Войти никуда не нужно.</p>
+  <div class="acc-note"><b>Где хранятся данные</b> — в этом браузере, на вашем устройстве. Ничего не уходит на сервер без отправки заявки.</div>
+</div>
+
+<div class="wrap acc-grid">
+  <section class="acc-card">
+    <h2>Мои данные</h2>
+    <p class="sub">Подставляются в форму заявки автоматически.</p>
+    <div class="acc-field"><label for="prof-name">Имя</label><input id="prof-name" type="text" autocomplete="name" placeholder="Как к вам обращаться"></div>
+    <div class="acc-field"><label for="prof-phone">Телефон</label><input id="prof-phone" type="tel" autocomplete="tel" placeholder="+7 ___ ___-__-__"></div>
+    <div class="acc-field"><label for="prof-telegram">Telegram</label><input id="prof-telegram" type="text" placeholder="@username"></div>
+    <div class="acc-field"><label for="prof-email">E-mail</label><input id="prof-email" type="email" autocomplete="email" placeholder="you@mail.ru"></div>
+    <div class="acc-actions">
+      <button type="button" class="acc-btn solid" id="acc-save">СОХРАНИТЬ</button>
+      <button type="button" class="acc-btn" id="acc-reset">ОЧИСТИТЬ</button>
+    </div>
+  </section>
+
+  <section class="acc-card">
+    <h2>Текущая конфигурация</h2>
+    <p class="sub">То, что сейчас собрано в конфигураторе.</p>
+    <div class="acc-cfg" id="acc-current"></div>
+    <div class="acc-actions">
+      <a class="acc-btn solid" href="builder.html" style="text-decoration:none">ОТКРЫТЬ КОНФИГУРАТОР</a>
+      <a class="acc-btn" href="GrowBox_v31_3D.html" style="text-decoration:none">ОТКРЫТЬ 3D</a>
+      <a class="acc-btn" href="order.html" style="text-decoration:none">ЗАПРОСИТЬ РАСЧЁТ</a>
+    </div>
+  </section>
+
+  <section class="acc-card">
+    <h2>Мои проекты</h2>
+    <p class="sub">Сохранённые сборки: спецификация и файл проекта.</p>
+    <div id="acc-projects"></div>
+  </section>
+
+  <section class="acc-card">
+    <h2>Мои заявки</h2>
+    <p class="sub">История отправленных запросов на расчёт.</p>
+    <div id="acc-leads"></div>
+  </section>
+</div>
+
+<div class="acc-toast" hidden></div>
+<script src="assets/site/leads.js"></script>
+<script src="assets/site/account.js"></script>
+<script src="assets/site/ru-localization.js"></script>
+</body></html>

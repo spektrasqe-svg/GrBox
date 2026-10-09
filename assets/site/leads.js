@@ -17,6 +17,36 @@
 
   function pick(map, val){ return (map && map[val]) ? map[val] : null; }
 
+  /* ── история заявок (для личного кабинета) ── */
+  var LEADS='secretbox.leads', PROF='secretbox.profile';
+  function readJSON(k,d){ try{ return JSON.parse(localStorage.getItem(k)||'null') || d }catch(e){ return d } }
+  function remember(form,text,status){
+    try{
+      var list=readJSON(LEADS,[]);
+      var sel=form.querySelector('#lead-type');
+      list.push({
+        id:'L-'+Date.now()+'-'+Math.random().toString(36).slice(2,6),
+        at:new Date().toISOString(),
+        type:(sel&&sel.value)||'',
+        typeLabel:(sel&&sel.selectedIndex>-1)?sel.options[sel.selectedIndex].text:'',
+        status:status||'подготовлена',
+        text:text
+      });
+      while(list.length>50) list.shift();
+      localStorage.setItem(LEADS,JSON.stringify(list));
+    }catch(e){}
+  }
+  function saveProfile(form){
+    try{
+      var p=readJSON(PROF,{});
+      ['name','phone','telegram','email'].forEach(function(f){
+        var el=form.querySelector('#lead-'+f);
+        if(el&&String(el.value||'').trim()) p[f]=String(el.value).trim();
+      });
+      localStorage.setItem(PROF,JSON.stringify(p));
+    }catch(e){}
+  }
+
   /* ── сводка текущей конфигурации ── */
   function configLines(){
     var S = window.SECRETBOX;
@@ -67,7 +97,9 @@
     return c.phone ? (c.phoneHref || c.phone.replace(/[^\d+]/g,'')) : null;
   }
 
-  function success(form, text, note){
+  function success(form, text, note, status){
+    saveProfile(form);
+    remember(form, text, status);
     var box = form.querySelector('.lead-done');
     if(!box) return;
     box.hidden = false;
@@ -132,17 +164,17 @@
         })
       }).then(function(r){
         if(btn){ btn.disabled = false; btn.textContent = 'ОТПРАВИТЬ ЗАЯВКУ'; }
-        if(r.ok) success(form, text, 'Заявка ушла — ответим в рабочее время.');
+        if(r.ok) success(form, text, 'Заявка ушла — ответим в рабочее время.', 'отправлена');
         else if(err){ err.hidden = false; err.textContent = 'Не удалось отправить (код ' + r.status + '). Напишите нам напрямую — контакты ниже.'; }
       }).catch(function(){
         if(btn){ btn.disabled = false; btn.textContent = 'ОТПРАВИТЬ ЗАЯВКУ'; }
-        success(form, text, 'Отправьте её нам в Telegram — мы на связи.');
+        success(form, text, 'Отправьте её нам в Telegram — мы на связи.', 'подготовлена');
       });
       return;
     }
 
     // режим 'links': заявка готова, отправка кнопками
-    success(form, text, 'Скопируйте её и отправьте в Telegram, на почту или позвоните.');
+    success(form, text, 'Скопируйте её и отправьте в Telegram, на почту или позвоните.', 'подготовлена');
   }
 
   function init(){
@@ -168,6 +200,14 @@
         ? lines.map(function(x){ return '<div>' + x + '</div>'; }).join('')
         : '<div class="muted">Конфигурация не выбрана — подберём вместе.</div>';
     }
+    // подстановка данных профиля из личного кабинета
+    try{
+      var prof=readJSON(PROF,{});
+      ['name','phone','telegram','email'].forEach(function(f){
+        var el=form.querySelector('#lead-'+f);
+        if(el && !String(el.value||'').trim() && prof[f]) el.value=prof[f];
+      });
+    }catch(e){}
     form.addEventListener('submit', function(e){ e.preventDefault(); submit(form); });
     // ?type=dealer / ?type=model-a … — предвыбор типа запроса
     try{
