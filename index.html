@@ -483,6 +483,7 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
 
 </head>
 <body class="sb-platform-page">
+<script src="assets/site/site-config.js"></script>
 <script src="assets/site/product-state.js"></script>
 <script src="assets/site/platform-shell.js"></script>
 
@@ -566,7 +567,7 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
         <div class="product-info">
           <h3>FLAGSHIP BOX A</h3>
           <p>Большая камера роста и отдельная техническая зона.</p>
-          <div class="product-bottom"><div><small>СТАРТОВАЯ ЦЕНА</small><b>от 190 000 ₽</b></div><a href="product-a.html">ПОДРОБНЕЕ <i>→</i></a></div>
+          <div class="product-bottom"><div><small data-sb-price-label>СТАРТОВАЯ ЦЕНА</small><b data-sb-price="A">Цена по запросу</b></div><a href="product-a.html">ПОДРОБНЕЕ <i>→</i></a></div>
         </div>
       </article>
       <article class="product-card mini">
@@ -574,7 +575,7 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
         <div class="product-info">
           <h3>COMPACT BOX B</h3>
           <p>Компактный вертикальный BOX для дома с полной автоматизацией.</p>
-          <div class="product-bottom"><div><small>СТАРТОВАЯ ЦЕНА</small><b>от 150 000 ₽</b></div><a href="product-b.html">ПОДРОБНЕЕ <i>→</i></a></div>
+          <div class="product-bottom"><div><small data-sb-price-label>СТАРТОВАЯ ЦЕНА</small><b data-sb-price="B">Цена по запросу</b></div><a href="product-b.html">ПОДРОБНЕЕ <i>→</i></a></div>
         </div>
       </article>
       <article class="product-card mini">
@@ -582,7 +583,7 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
         <div class="product-info">
           <h3>DUAL ZONE BOX C</h3>
           <p>Двухсекционная модель: камера роста плюс зона хранения.</p>
-          <div class="product-bottom"><div><small>СТАРТОВАЯ ЦЕНА</small><b>от 175 000 ₽</b></div><a href="product-c.html">ПОДРОБНЕЕ <i>→</i></a></div>
+          <div class="product-bottom"><div><small data-sb-price-label>СТАРТОВАЯ ЦЕНА</small><b data-sb-price="C">Цена по запросу</b></div><a href="product-c.html">ПОДРОБНЕЕ <i>→</i></a></div>
         </div>
       </article>
       <article class="product-card product-a" style="grid-column:1/-1">
@@ -759,7 +760,7 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
         <aside class="cfg-summary">
           <div>
             <div class="lbl">Предварительная смета</div>
-            <div class="cfg-price" id="priceVal">≈ 254 000 <small>₽</small></div>
+            <div class="cfg-price" id="priceVal">Цена по запросу</div>
             <a href="builder.html" style="display:inline-block;margin-top:14px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);border-bottom:1px solid var(--brass);padding-bottom:2px">Или собрать с нуля по чертежам →</a>
             <ul class="cfg-list" id="cfgList">
               <li>Корпус и фурнитура премиум-класса</li>
@@ -767,7 +768,7 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
               <li>Сборка, пусконаладка, инструкция</li>
             </ul>
           </div>
-          <a class="btn btn-solid" href="builder.html">Запросить точный расчёт
+          <a class="btn btn-solid" href="order.html">Запросить точный расчёт
             <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h12M9 3l5 5-5 5"/></svg>
           </a>
         </aside>
@@ -900,8 +901,8 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
         <p>Выберите корпус, отделку и оснащение. Конфигуратор покажет состав системы и поможет подготовить запрос на точный расчёт.</p>
       </div>
       <div class="sales-actions">
-        <a class="btn btn-solid" href="builder.html">СОБРАТЬ СВОЙ BOX →</a>
-        <a class="btn btn-ghost" href="GrowBox_v31_3D.html">ОТКРЫТЬ 3D →</a>
+        <a class="btn btn-solid" href="order.html">ЗАПРОСИТЬ РАСЧЁТ →</a>
+        <a class="btn btn-ghost" href="builder.html">СОБРАТЬ СВОЙ BOX →</a>
       </div>
     </div>
   </div>
@@ -929,9 +930,9 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
         </div>
         <div class="foot-col">
           <h5>Контакты</h5>
-          <a href="#order">Москва · сборка под ключ</a>
-          <a href="builder.html">Запросить расчёт</a>
-          <a href="#order">Стать дилером</a>
+          <div data-sb-contacts></div>
+          <a href="order.html">Запросить расчёт</a>
+          <a href="order.html?type=dealer">Стать дилером</a>
         </div>
       </div>
     </div>
@@ -965,7 +966,8 @@ var cio=new IntersectionObserver(function(es){
 document.querySelectorAll('.cnt').forEach(function(el){cio.observe(el)});
 
 // конфигуратор
-var PRICES={body:[190000,150000,175000],finish:[25000,10000,0],sections:[0,15000],tank:[12000,6000,0],gear:[0,45000,85000],water:[18000,0]};
+var PC=(window.SB_CONFIG&&SB_CONFIG.pricing)||{};
+var PRICES=PC.quick||{};
 function fmt(n){return n.toLocaleString('ru-RU')}
 function recalc(){
   var total=0;
@@ -975,7 +977,9 @@ function recalc(){
     if(PRICES[key]&&PRICES[key][idx]!==undefined)total+=PRICES[key][idx];
   });
   var el=document.getElementById('priceVal');
-  if(el)el.innerHTML='≈ '+fmt(total)+' <small>₽</small>';
+  if(!el)return;
+  if(PC.show===false||!PRICES.body){el.textContent=PC.priceOnRequest||'Цена по запросу';return;}
+  el.innerHTML='≈ '+fmt(total)+' <small>'+(PC.currency||'₽')+'</small>';
 }
 document.querySelectorAll('.seg').forEach(function(g){
   g.addEventListener('click',function(e){

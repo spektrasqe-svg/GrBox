@@ -1,0 +1,140 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Запрос расчёта — SECRET BOX</title><meta property="og:type" content="website"><meta property="og:locale" content="ru_RU"><meta property="og:title" content="Запрос расчёта — SECRET BOX"><meta property="og:description" content="Оставьте заявку на SECRET BOX: подберём комплектацию, рассчитаем стоимость и сроки под ваш размер и бюджет."><meta property="og:url" content="https://spektrasqe-svg.github.io/GrBox/order"><meta property="og:image" content="https://spektrasqe-svg.github.io/GrBox/assets/site/hero.jpg"><meta name="twitter:card" content="summary-large_image"><link rel="icon" type="image/svg+xml" href="assets/site/favicon.svg"><meta name="description" content="Заявка на расчёт SECRET BOX: подбор комплектации, стоимость и сроки под ваш размер и бюджет.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;500;700&family=Unbounded:wght@300;400;600;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/site/platform-shell.css"><link rel="stylesheet" href="assets/site/classified-theme.css"><link rel="stylesheet" href="assets/site/site-system.css">
+<style>
+:root{--bg:#111215;--panel:#191a1d;--paper:#eee8dd;--muted:#aaa69e;--gold:#c5a46c;--line:#303136}
+*{box-sizing:border-box}
+body{margin:0}
+.lead-head{padding:150px 0 34px}
+.ey{color:var(--gold);font:500 10px var(--sb-mono);letter-spacing:.28em;text-transform:uppercase}
+.lead-head h1{font:800 clamp(38px,7vw,82px)/.94 var(--sb-display);margin:18px 0 14px}
+.lead-head p{max-width:660px;color:var(--muted);font-size:17px;line-height:1.7}
+.lead-grid{display:grid;grid-template-columns:1.35fr .85fr;gap:18px;padding-bottom:80px;align-items:start}
+.lead-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--sb-radius);padding:28px}
+.lead-card h2{font:600 15px var(--sb-display);letter-spacing:.12em;text-transform:uppercase;margin:0 0 4px;color:var(--gold)}
+.lead-card .sub{color:var(--muted);font-size:13px;margin:0 0 22px}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{margin-bottom:14px}
+.field label{display:block;font:500 9px var(--sb-mono);letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:7px}
+.field input,.field select,.field textarea{width:100%;padding:13px 14px;min-height:46px}
+.field textarea{min-height:110px;resize:vertical;line-height:1.6}
+.check{display:flex;gap:10px;align-items:flex-start;margin:18px 0 4px;color:var(--muted);font-size:12px;line-height:1.6}
+.check input{width:18px;height:18px;min-height:18px;flex:0 0 18px;margin-top:2px;accent-color:#c5a46c}
+.check a{color:var(--gold)}
+.lead-submit{width:100%;margin-top:18px;padding:17px;background:var(--paper);color:#111215;border:1px solid var(--paper);font:700 11px var(--sb-mono);letter-spacing:.18em;text-transform:uppercase}
+.lead-submit:hover{background:#e0cc8c;border-color:#e0cc8c}
+.lead-submit:disabled{opacity:.55;cursor:default}
+.lead-error{margin-top:14px;padding:12px 14px;border:1px solid #d96d61;border-radius:3px;color:#d96d61;font-size:13px}
+.lead-done{margin-top:16px;padding:16px;border:1px solid var(--gold);border-radius:3px;background:rgba(197,164,108,.07);font-size:13px;line-height:1.7}
+.lead-done b{color:var(--gold)}
+.lead-done-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px}
+.lead-done-actions .btn{padding:12px 15px;font:700 10px var(--sb-mono);letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--line);color:var(--paper);background:transparent}
+.lead-done-actions .btn.btn-solid{background:var(--paper);color:#111215;border-color:var(--paper)}
+.side-block{margin-bottom:16px}
+.side-block h3{font:600 11px var(--sb-display);letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:0 0 12px}
+.lead-config,.lead-dest{font:500 12px/1.85 var(--sb-mono);color:var(--paper)}
+.lead-config .muted,.lead-dest .muted{color:var(--muted)}
+.lead-config a,.lead-dest a{color:var(--gold)}
+.side-note{color:var(--muted);font-size:13px;line-height:1.7}
+.side-steps{list-style:none;margin:0;padding:0;counter-reset:s}
+.side-steps li{counter-increment:s;position:relative;padding:0 0 14px 34px;color:var(--muted);font-size:13px;line-height:1.65}
+.side-steps li:before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:1px;color:var(--gold);font:700 11px var(--sb-mono);letter-spacing:.1em}
+.lead-foot{border-top:1px solid var(--line);padding:30px 0 70px;display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center}
+.lead-foot .btn{padding:15px 19px;font:700 10px var(--sb-mono);letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--line);color:var(--paper)}
+.lead-foot .btn.solid{background:var(--paper);color:#111215;border-color:var(--paper)}
+@media(max-width:900px){
+  .lead-grid{grid-template-columns:1fr}
+  .lead-head{padding:120px 0 24px}
+  .f-row{grid-template-columns:1fr}
+  .lead-card{padding:22px 18px}
+}
+</style></head><body class="sb-platform-page">
+<script src="assets/site/site-config.js"></script>
+<script src="assets/site/product-state.js"></script>
+<script src="assets/site/platform-shell.js"></script>
+
+<div class="wrap lead-head">
+  <div class="ey">Запрос · расчёт стоимости</div>
+  <h1>Соберём BOX<br>под ваш бюджет.</h1>
+  <p>Размер, оборудование и инженерия подбираются под задачу и помещение. Оставьте заявку — вернёмся с комплектацией, сметой и сроками. Ни к чему не обязывает.</p>
+</div>
+
+<div class="wrap lead-grid">
+  <form class="lead-card" id="lead-form" novalidate>
+    <h2>Заявка на расчёт</h2>
+    <p class="sub">Заполните что есть — остальное уточним в переписке.</p>
+
+    <div class="f-row">
+      <div class="field"><label for="lead-name">Имя *</label><input id="lead-name" name="name" type="text" autocomplete="name" placeholder="Как к вам обращаться"></div>
+      <div class="field"><label for="lead-phone">Телефон</label><input id="lead-phone" name="phone" type="tel" autocomplete="tel" placeholder="+7 ___ ___-__-__"></div>
+    </div>
+    <div class="f-row">
+      <div class="field"><label for="lead-telegram">Telegram</label><input id="lead-telegram" name="telegram" type="text" placeholder="@username"></div>
+      <div class="field"><label for="lead-email">E-mail</label><input id="lead-email" name="email" type="email" autocomplete="email" placeholder="you@mail.ru"></div>
+    </div>
+
+    <div class="field">
+      <label for="lead-type">Что интересует</label>
+      <select id="lead-type" name="type">
+        <option value="custom">Индивидуальная сборка</option>
+        <option value="model-a">Готовая модель A · Flagship</option>
+        <option value="model-b">Готовая модель B · Space Saver</option>
+        <option value="model-c">Готовая модель C · Dual Zone</option>
+        <option value="consult">Консультация</option>
+        <option value="dealer">Дилерство</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="lead-comment">Задача, помещение, бюджет</label>
+      <textarea id="lead-comment" name="comment" placeholder="Например: кухня 12 м², нужна тихая работа ночью, бюджет до 150 000 ₽"></textarea>
+    </div>
+
+    <label class="check"><input type="checkbox" id="lead-agree" checked><span>Согласен на обработку персональных данных для ответа на заявку. <a href="#" data-privacy>Подробнее</a></span></label>
+
+    <button class="lead-submit" type="submit">ОТПРАВИТЬ ЗАЯВКУ</button>
+    <div class="lead-error" hidden></div>
+    <div class="lead-done" hidden></div>
+  </form>
+
+  <aside>
+    <div class="lead-card side-block">
+      <h3>Ваша конфигурация</h3>
+      <div class="lead-config"></div>
+      <p class="side-note" style="margin:14px 0 0">Изменить параметры — <a href="builder.html" style="color:var(--gold)">в конфигураторе</a>.</p>
+    </div>
+
+    <div class="lead-card side-block">
+      <h3>Куда уходит заявка</h3>
+      <div class="lead-dest"></div>
+    </div>
+
+    <div class="lead-card side-block">
+      <h3>Что дальше</h3>
+      <ol class="side-steps">
+        <li>Смотрим задачу и подбираем комплектацию под помещение и бюджет.</li>
+        <li>Присылаем смету с составом системы и сроками изготовления.</li>
+        <li>Согласовываем отделку, монтаж и пусконаладку.</li>
+      </ol>
+    </div>
+  </aside>
+</div>
+
+<div class="wrap lead-foot">
+  <div class="side-note">Цена зависит от размера, оборудования и отделки — поэтому считаем по конфигурации, а не по прайсу «одна цена на всё».</div>
+  <a class="btn solid" href="builder.html">СОБРАТЬ СВОЙ BOX →</a>
+</div>
+
+<script src="assets/site/leads.js"></script>
+<script src="assets/site/ru-localization.js"></script>
+<script>
+(function(){
+  var p=document.querySelector('[data-privacy]');
+  if(p)p.addEventListener('click',function(e){
+    e.preventDefault();
+    var url=(window.SB_CONFIG&&SB_CONFIG.leads&&SB_CONFIG.leads.privacyUrl)||null;
+    if(url)window.open(url,'_blank','noopener');
+    else alert('Политика обработки персональных данных публикуется отдельно. Данные заявки используются только для связи с вами.');
+  });
+})();
+</script>
+</body></html>

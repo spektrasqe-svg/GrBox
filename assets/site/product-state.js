@@ -62,20 +62,24 @@
   return Math.round(m*10)/10;
  }
  function estimate(s=load()){
-  let t=72000;
-  const eq={SE3000:28000,SE5000:42000,G8600:56000};
-  const fan={SF4:9000,SF6:13000,SF8:18000};
+  // цены — из site-config.js → SB_CONFIG.pricing.book (единый прайс на весь сайт)
+  const B=(window.SB_CONFIG&&SB_CONFIG.pricing&&SB_CONFIG.pricing.book)||{};
+  const bk=(k,d)=>(B[k]!==undefined&&B[k]!==null)?B[k]:d;
+  let t=bk('base',72000);
+  const eq=B.equipment||{SE3000:28000,SE5000:42000,G8600:56000};
+  const fan=B.fan||{SF4:9000,SF6:13000,SF8:18000};
+  const fin=B.finish||{choco:25000,champ:10000,white:0};
   if(eq[s.equipment?.light])t+=eq[s.equipment.light];
   if(fan[s.equipment?.fan])t+=fan[s.equipment.fan];
-  t+=s.equipment?.controller==='GGS'?7000:0;
-  t+=s.equipment?.climate==='humidifier'?7000:0;
-  t+=s.equipment?.irrigation==='smart-drip'?12000:0;
-  t+=s.engineering?.silencer?10000:0;
-  t+=s.engineering?.vibration?3500:0;
-  t+=s.engineering?.leakProtection?8000:0;
-  t+=s.engineering?.ups?18000:0;
-  t+=s.engineering?.rkn?5500:0;
-  t+=s.finish==='choco'?25000:s.finish==='champ'?10000:0;
+  t+=s.equipment?.controller==='GGS'?bk('controller',7000):0;
+  t+=s.equipment?.climate==='humidifier'?bk('humidifier',7000):0;
+  t+=s.equipment?.irrigation==='smart-drip'?bk('irrigation',12000):0;
+  t+=s.engineering?.silencer?bk('silencer',10000):0;
+  t+=s.engineering?.vibration?bk('vibration',3500):0;
+  t+=s.engineering?.leakProtection?bk('leak',8000):0;
+  t+=s.engineering?.ups?bk('ups',18000):0;
+  t+=s.engineering?.rkn?bk('rcd',5500):0;
+  t+=fin[s.finish]||0;
   return Math.round(t/500)*500;
  }
  function label(s=load()){
