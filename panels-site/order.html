@@ -19,6 +19,7 @@
       <a href="catalog.html">Каталог</a>
       <a href="calculator.html">Расчёт</a>
       <a href="montazh.html">Монтаж</a>
+      <a href="room-planner.html">Планировщик комнат</a>
       <a href="wall-builder.html">3D-сборка стены</a>
       <a href="index.html#cons">Расходники</a>
       <a href="index.html#contact">Контакты</a>
@@ -183,6 +184,17 @@
   var consumable = (C.consumables || []).find(function (x) { return x.id === consumableId; });
   var wall = params.has('wallMethod') ? { method: params.get('wallMethod'), finish: params.get('wallFinish') || 'wood', area: parseFloat(params.get('wallArea')), base: params.get('wallBase') || 'concrete', total: parseFloat(params.get('wallTotal')) } : null;
   if (wall && (!isFinite(wall.area) || wall.area < 0.5 || wall.area > 1000)) wall = null;
+  /* эскиз из 3D-планировщика комнат (room-planner.html) */
+  var room = params.has('roomWidth') ? {
+    w: parseFloat(params.get('roomWidth')),
+    d: parseFloat(params.get('roomDepth')),
+    h: parseFloat(params.get('roomHeight')),
+    area: parseFloat(params.get('wallArea')),
+    finish: params.get('wallFinish') || 'slat',
+    color: params.get('wallColor') || ''
+  } : null;
+  if (room && (!isFinite(room.area) || room.area < 0)) room.area = 0;
+  var finishLabel = { slat: 'Рейки / ламели', wood: 'Дерево', stone: 'Камень / бетон', fabric: 'Мягкие панели', smooth: 'Под покраску', soft: 'Мягкая панель' };
 
   /* сводка: категория + последний расчёт из калькулятора */
   var last = null;
@@ -194,8 +206,15 @@
   if (wall) {
     rows.push(['Конструкция', wall.method === 'frame' ? 'Каркас + ГКЛ' : 'Монтаж на клей']);
     rows.push(['Площадь', wall.area + ' м²']);
-    rows.push(['Панель', wall.finish === 'stone' ? 'Камень / бетон' : wall.finish === 'soft' ? 'Мягкая' : 'Дерево / ламели']);
+    rows.push(['Панель', finishLabel[wall.finish] || wall.finish]);
     rows.push(['Предварительный комплект', isFinite(wall.total) ? wall.total.toLocaleString('ru-RU') + ' ₽' : 'нужна проверка']);
+  }
+  if (room && !wall) {
+    rows.push(['Помещение', (isFinite(room.w) ? room.w : '?') + ' × ' + (isFinite(room.d) ? room.d : '?') + ' м · высота ' + (isFinite(room.h) ? room.h : '?') + ' м']);
+    rows.push(['Стены под панели', room.area ? room.area.toLocaleString('ru-RU') + ' м²' : 'уточним на замере']);
+    rows.push(['Фактура', finishLabel[room.finish] || room.finish]);
+    if (room.color) rows.push(['Цвет эскиза', room.color]);
+    rows.push(['Источник', '3D-планировщик комнат']);
   }
   if (last && last.area) {
     rows.push(['Площадь стен', last.area + ' м²']);
@@ -215,7 +234,11 @@
       var lines = ['ЗАЯВКА WALLFORM®', 'Тип: ' + (typeInput ? typeInput.value : '—')];
       if (cat) lines.push('Категория: ' + cat.name);
       if (consumable) lines.push('Интерес к расходнику: ' + consumable.name + ' — ориентир ' + consumable.price.toLocaleString('ru-RU') + ' ₽ / ' + consumable.unit);
-      if (wall) { lines.push('3D-сборка стены: ' + (wall.method === 'frame' ? 'каркас + ГКЛ' : 'без каркаса, на клей')); lines.push('Площадь: ' + wall.area + ' м²; панель: ' + wall.finish + '; основание: ' + wall.base); lines.push('Предварительный комплект: ' + (isFinite(wall.total) ? wall.total.toLocaleString('ru-RU') + ' ₽' : 'уточнить')); }
+      if (wall) { lines.push('3D-сборка стены: ' + (wall.method === 'frame' ? 'каркас + ГКЛ' : 'без каркаса, на клей')); lines.push('Площадь: ' + wall.area + ' м²; панель: ' + (finishLabel[wall.finish] || wall.finish) + '; основание: ' + wall.base); lines.push('Предварительный комплект: ' + (isFinite(wall.total) ? wall.total.toLocaleString('ru-RU') + ' ₽' : 'уточнить')); }
+      if (room && !wall) {
+        lines.push('Эскиз из 3D-планировщика: помещение ' + (isFinite(room.w) ? room.w : '?') + ' × ' + (isFinite(room.d) ? room.d : '?') + ' м, высота ' + (isFinite(room.h) ? room.h : '?') + ' м');
+        lines.push('Стены под панели: ' + (room.area ? room.area + ' м²' : 'уточнить') + '; фактура: ' + (finishLabel[room.finish] || room.finish) + (room.color ? '; цвет: ' + room.color : ''));
+      }
       if (last && last.area) {
         lines.push('Площадь: ' + last.area + ' м² · монтаж ' + (last.method === 'frame' ? 'на каркас' : 'на клей'));
         lines.push('Предв. расчёт: ' + last.total.toLocaleString('ru-RU') + ' ₽');
