@@ -1,11 +1,8 @@
-name: Deploy WALLFORM site
+name: Deploy GrBox + WALLFORM sites
 
 on:
   push:
     branches: [main]
-    paths:
-      - "panels-site/**"
-      - ".github/workflows/pages.yml"
   workflow_dispatch:
 
 permissions:
@@ -30,10 +27,19 @@ jobs:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload WALLFORM site
+      # Собираем публичное дерево целиком:
+      #   /            → гроубокс-сайт SECRET BOX (как раньше)
+      #   /panels-site/ → новый сайт WALLFORM
+      # В артефакт не попадают .git, .github и архив переписок chats/.
+      - name: Assemble full site
+        run: |
+          mkdir -p _site
+          rsync -a --exclude='.git' --exclude='.github' --exclude='chats' ./ _site/
+
+      - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: panels-site
+          path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment
