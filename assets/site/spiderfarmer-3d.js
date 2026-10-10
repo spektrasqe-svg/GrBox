@@ -152,6 +152,17 @@ function plateTex(THREE,text){
   x.fillText(text,w/2,h/2+4);
  });
 }
+/* Шильдик с паспортом изделия (на заднем рельсе) */
+function dataTex(THREE){
+ return canvasTex(THREE,512,160,(x,w,h)=>{
+  x.fillStyle='#c8ccd0';x.fillRect(0,0,w,h);
+  x.fillStyle='#22262a';x.font='bold 32px Arial';x.fillText('SPIDER FARMER SE3000',14,42);
+  x.font='21px Arial';
+  x.fillText('Input: 100-277V~ 50/60Hz 300W',14,80);
+  x.fillText('PPF 856 µmol/s · PPE 2.85 µmol/J',14,110);
+  x.fillText('S/N SF-SE3000 · CE · IP00',14,140);
+ });
+}
 function displayTex(THREE){
  return canvasTex(THREE,256,128,(x,w,h)=>{
   x.fillStyle='#0a1322';x.fillRect(0,0,w,h);
@@ -264,6 +275,19 @@ function buildLight(THREE,g,M,s){
  const railFaceY=railTop+1.7;
  texPlane(THREE,logoTex(THREE),Math.min(190,w*.315),Math.min(17,railD*.6),w*.09,railFaceY,podZ,-Math.PI/2,g,0);
  texPlane(THREE,plateTex(THREE,'SE 3000'),Math.min(88,w*.146),Math.min(21,railD*.75),w*.34,railFaceY,podZ,-Math.PI/2,g,0);
+ /* шильдик с паспортом — на верхней грани заднего рельса */
+ texPlane(THREE,dataTex(THREE),Math.min(120,w*.2),Math.min(24,railD*.8),-w*.33,railFaceY,-railZ,-Math.PI/2,g,0);
+ /* винты на кронштейнах драйвера и блоке управления */
+ for(const sx of [-1,1])for(const sz of [-1,1])
+  add(g,THREE,cylG(THREE,2.1,2.1,1.3,10),M.steel,sx*(drvW/2-4),drvBase+4.7,sz*(drvD/2-4));
+ for(const dx of [-podW*.42,podW*.42])for(const dz of [-podD*.34,podD*.34])
+  add(g,THREE,cylG(THREE,1.6,1.6,1,10),M.steel,podX+dx,podTop+.6,podZ+dz);
+ /* сетевой кабель: выходит с торца блока управления, идёт вдоль торца и вниз */
+ const cordX=podX-podW/2-4, cordY=podY-1;
+ wire(g,THREE,M.black,cordX-17,cordY,podZ,34,0,Math.PI/2);
+ wire(g,THREE,M.black,cordX-34,cordY-12,podZ-5,26,0,.12);
+ wire(g,THREE,M.black,cordX-38,cordY-32,podZ-10,20,Math.PI/2,.1);
+ add(g,THREE,boxG(THREE,14,9,7),M.black,cordX-38,cordY-32,podZ-24,0,.35,0);
  /* --- ушки подвеса по торцам рельсов --- */
  for(const sx of [-1,1])for(const sz of [-1,1]){
   const x=sx*(w/2-34), z=sz*railZ;
