@@ -1,5 +1,5 @@
 /* SECRET BOX classified engineering layer — texture & status accents (v2.0, unified) */
-:root{--sb-mil-bg:#111215;--sb-mil-panel:#191a1d;--sb-mil-paper:#eee8dd;--sb-mil-gold:#c5a46c;--sb-mil-red:#8b2e2e}
+:root{--sb-mil-bg:#2C2E33;--sb-mil-panel:#36383D;--sb-mil-paper:#E8DCC8;--sb-mil-gold:#B69A6B;--sb-mil-red:#8b2e2e}
 body{background-color:var(--sb-mil-bg)}
 .sb-classified-bg{background-image:repeating-linear-gradient(112deg,rgba(255,255,255,.014) 0 1px,transparent 1px 7px),repeating-linear-gradient(0deg,rgba(0,0,0,.07) 0 2px,transparent 2px 5px)}
 /* paper grain over the page — single promoted layer, no filters */
