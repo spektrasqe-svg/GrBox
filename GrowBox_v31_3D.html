@@ -365,6 +365,8 @@ addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updat
 renderer.setSize(innerWidth,innerHeight,false);frameCamera('iso');
 document.getElementById('loader').style.display='none';
 fitView();
+// Встраиваемый разбор на главной сразу показывает шкаф с раскрытыми в разные стороны дверями.
+if(new URLSearchParams(location.search).get('presentation')==='1')doorGroups.forEach(g=>{g.userData.target=1});
 function loop(){requestAnimationFrame(loop);cameraTick();updateDoors();renderer.render(scene,camera)}loop();
 })();
 </script>
