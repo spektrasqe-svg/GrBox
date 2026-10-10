@@ -36,7 +36,7 @@
   <div class="wrap">
     <div class="crumbs"><a href="index.html">Главная</a> / Расчёт</div>
     <h1>КАЛЬКУЛЯТОР<br>СМЕТЫ</h1>
-    <p class="lead">Считает по реальным нормам расхода: панели с запасом на подрез, клей и крепёж по площади, профили по периметру, работы по тарифу бригады. Итог — предварительный; точная смета фиксируется после бесплатного замера.</p>
+    <p class="lead">Показывает предварительный ориентир по площади, материалу и выбранным опциям. Стартовые цены и нормы расхода нужно подтвердить для конкретной коллекции; итог зависит от замера и выбранных комплектующих.</p>
   </div>
 </header>
 
@@ -46,12 +46,12 @@
       <!-- ---------- ВХОД ---------- -->
       <div class="calc-panel">
         <h3>Параметры стен</h3>
-        <p class="hint">Если стен несколько — укажите суммарную площадь: длина × высота каждой стены.</p>
+        <p class="hint">Введите суммарную площадь всех стен: длина × высота каждой стены, затем сложите результаты.</p>
 
         <div class="field">
-          <label>Площадь стен, м²</label>
+          <label>Площадь стен, м²</label><div class="calc-quick" aria-label="Быстрый выбор площади"><button type="button" data-area="10">10 м²</button><button type="button" data-area="20">20 м²</button><button type="button" data-area="30">30 м²</button><button type="button" data-area="50">50 м²</button></div>
           <div class="two">
-            <input type="number" name="area" value="24" min="1" max="10000" step="0.5">
+            <input type="number" name="area" value="24" min="0.5" max="1000" step="0.5" inputmode="decimal">
             <select name="category" id="catSelect"></select>
           </div>
         </div>
@@ -203,7 +203,14 @@
   }
 
   function run() {
-    var area = parseFloat(host.querySelector('[name=area]').value) || 0;
+    var areaInput = host.querySelector('[name=area]');
+    var area = parseFloat(areaInput.value);
+    if (!isFinite(area) || area < 0.5 || area > 1000) {
+      last = null;
+      out.innerHTML = '<div class="mono">предварительная смета</div><div class="calc-invalid">Введите площадь от 0,5 до 1 000 м², чтобы рассчитать ориентировочную стоимость.</div>';
+      try { localStorage.removeItem('wf_last_calc'); } catch (e) {}
+      return;
+    }
     var method = host.querySelector('[name=method]').value;
     var opts = {
       prep: host.querySelector('[name=prep]').checked,
@@ -225,7 +232,7 @@
       '</div>' +
       rows(last.consumables.items, 'расходники по позициям') +
       rows(last.works.items, 'работы по позициям') +
-      '<div class="note">Расчёт по нормам расхода. Итоговая смета фиксируется после замера и не меняется по ходу работ.</div>' +
+      '<div class="note">Ориентировочная оценка по стартовым ценам и расчётным нормам. Проверьте стоимость выбранной коллекции и условия монтажа перед заказом.</div>' +
       '<div class="btn-row"><a class="btn btn-solid" href="#lead">Заказать замер</a></div>';
 
     try { localStorage.setItem('wf_last_calc', JSON.stringify({ area: area, category: sel.value, method: method, opts: opts, total: last.total })); } catch (e) {}
@@ -234,6 +241,12 @@
   host.addEventListener('input', run);
   host.addEventListener('change', run);
   document.getElementById('recalc').addEventListener('click', run);
+  document.querySelectorAll('[data-area]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      host.querySelector('[name=area]').value = button.getAttribute('data-area');
+      run();
+    });
+  });
 
   /* чипсы способа монтажа */
   document.querySelectorAll('[data-chips]').forEach(function (g) {
