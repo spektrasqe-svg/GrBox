@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SECRET BOX — Параметрическое 3D</title><meta property="og:type" content="website"><meta property="og:locale" content="ru_RU"><meta property="og:title" content="SECRET BOX — Параметрическое 3D"><meta property="og:description" content="Интерактивная 3D-модель SECRET BOX: вращение, режимы, детали и живая спецификация из конфигурации."><meta property="og:url" content="https://spektrasqe-svg.github.io/GrBox/GrowBox_v31_3D"><meta property="og:image" content="https://spektrasqe-svg.github.io/GrBox/assets/site/hero.jpg"><meta name="twitter:card" content="summary-large_image"><link rel="icon" type="image/svg+xml" href="assets/site/favicon.svg"><meta name="description" content="Интерактивная 3D-модель SECRET BOX: вращение, режимы, детали и живая спецификация из конфигурации.">
+<link rel="stylesheet" href="assets/site/classified-theme.css">
+<link rel="stylesheet" href="assets/site/site-system.css">
+<link rel="stylesheet" href="assets/site/platform-shell.css">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500;700&family=Unbounded:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e7e3da;--panel:#f5f1e8;--panel2:#e8e2d6;--line:#c8c0b1;--txt:#292b29;--dim:#686a63;--gold:#9a7948;--gold2:#b69a6b;--ok:#5d795b;--bad:#a95349}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font-family:Manrope,sans-serif}
+#app{position:fixed;inset:0}canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}canvas:active{cursor:grabbing}
+.ui{position:absolute;z-index:20;pointer-events:none}.top{top:88px;left:12px;right:12px;display:flex;justify-content:space-between;gap:10px}.pill,.panel{background:rgba(247,244,237,.94);border:1px solid rgba(159,150,133,.62);border-radius:7px;box-shadow:0 12px 35px rgba(55,48,37,.12);backdrop-filter:blur(12px)}
+.pill{padding:9px 12px;font:11px Roboto Mono,monospace;color:var(--dim)}.pill b{color:var(--gold);font-family:Unbounded,sans-serif;font-size:11px}
+#config{max-width:650px}.modes{top:136px;left:12px;display:flex;flex-wrap:wrap;gap:7px;pointer-events:auto;max-width:700px}.modes button,.cams button{font:11px Roboto Mono,monospace;color:var(--txt);background:rgba(247,244,237,.94);border:1px solid var(--line);border-radius:5px;padding:10px 12px;cursor:pointer;box-shadow:0 4px 14px rgba(55,48,37,.08)}.modes button.on,.cams button.on{background:#343a36;color:#f4eee2;border-color:#343a36;font-weight:700}
+.info{right:12px;top:136px;width:min(360px,calc(100vw - 24px));padding:14px;pointer-events:none}.info h3{margin:0 0 8px;font:600 14px Unbounded}.info .meta{color:var(--dim);font:11px/1.5 Roboto Mono,monospace}.checks{margin-top:10px;font-size:11px;line-height:1.5}.good{color:var(--ok)}.warn{color:var(--gold2)}.bad{color:var(--bad)}
+.cams{left:12px;right:12px;bottom:0;padding:10px 12px calc(12px + env(safe-area-inset-bottom));display:flex;justify-content:center;flex-wrap:wrap;gap:7px;background:linear-gradient(to top,rgba(231,227,218,.98),rgba(231,227,218,0));pointer-events:auto}
+.hint{left:12px;bottom:78px;color:var(--dim);font:10px Roboto Mono,monospace;background:rgba(247,244,237,.92);border:1px solid var(--line);padding:7px 9px;border-radius:5px}
+.loader{position:absolute;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:var(--bg);font:12px Roboto Mono,monospace;color:var(--dim)}
+.loader:after{content:"";width:28px;height:28px;margin-left:12px;border:2px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.stage-tools{position:absolute;z-index:24;right:12px;bottom:82px;display:flex;gap:6px;pointer-events:auto}.stage-tools button,.part-menu button{background:rgba(247,244,237,.97);border:1px solid #c8c0b1;color:#292b29;border-radius:5px;padding:9px 11px;font:10px Roboto Mono,monospace;cursor:pointer;box-shadow:0 5px 18px rgba(55,48,37,.12)}.stage-tools button.on{background:#343a36;color:#f4eee2;border-color:#343a36}.part-menu{position:fixed;z-index:80;display:none;min-width:190px;padding:7px;background:rgba(247,244,237,.98);border:1px solid #b8ad98;border-radius:8px;box-shadow:0 16px 48px #35302525}.part-menu.show{display:grid;gap:5px}.part-menu .menu-title{padding:6px 8px;font:10px Roboto Mono,monospace;color:#8b6c3d;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.part-menu button{text-align:left;padding:10px 9px}#toast{position:absolute;z-index:30;left:50%;top:50%;transform:translate(-50%,-50%);padding:9px 12px;background:#f7f4edee;border:1px solid #b8ad98;border-radius:6px;color:#292b29;box-shadow:0 8px 30px #35302522;font:10px Roboto Mono,monospace;pointer-events:none;opacity:0}#toast.show{opacity:1}@media(max-width:760px){.stage-tools{right:8px;bottom:49px;gap:4px}.stage-tools button{padding:7px 8px;font-size:9px}.part-menu{min-width:175px}}
+@media(max-width:760px){
+  .top{top:68px;left:8px;right:8px;gap:6px;flex-direction:row;align-items:center}  .pill{padding:6px 8px;font-size:9px;border-radius:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pill b{font-size:9px}
+  #config{min-width:0;max-width:calc(100vw - 112px)}
+  .modes{
+    top:108px;left:8px;right:8px;max-width:none;
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:5px;pointer-events:auto
+  }
+  .modes button{
+    min-width:0;height:32px;padding:5px 4px;
+    font:9px Roboto Mono,monospace;white-space:nowrap;
+    overflow:hidden;text-overflow:ellipsis;border-radius:4px
+  }
+  .info{top:auto;bottom:58px;left:8px;right:8px;width:auto;padding:9px 10px;max-height:92px;overflow:auto}
+  .info h3{font-size:11px;margin-bottom:4px}
+  .info .meta,.checks{font-size:9px;line-height:1.35}
+  .cams{
+    left:8px;right:8px;bottom:0;padding:5px 0 calc(6px + env(safe-area-inset-bottom));
+    justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;gap:4px;
+    background:linear-gradient(to top,rgba(231,227,218,.98),rgba(231,227,218,.82))
+  }
+  .cams button{
+    flex:0 0 auto;height:29px;padding:5px 8px;
+    font:9px Roboto Mono,monospace;border-radius:4px
+  }
+  .hint{display:none}
+}
+/* встраивание без шапки (конфигуратор/лендинг): UI прижат к верху iframe */
+.sb-bare .top{top:12px}
+.sb-bare .modes{top:60px}
+.sb-bare .info{top:60px}
+@media(max-width:760px){
+  .sb-bare .top{top:8px}
+  .sb-bare .modes{top:48px}
+  .sb-bare .info{top:auto}
+}
+</style>
+</head>
+<body class="sb-3d-page">
+<script src="assets/site/site-config.js"></script><script src="assets/site/product-state.js"></script>
+<script src="assets/site/parametric-layout.js"></script>
+<script src="assets/site/platform-shell.js"></script>
+<div id="app">
+  <h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">SECRET BOX — параметрическая 3D-модель</h1><div id="loader" class="loader">Построение параметрической модели</div>
+  <canvas id="cv"></canvas>
+  <div class="ui top">
+    <div id="config" class="pill"><b>SECRET BOX · ИНДИВИДУАЛЬНЫЙ</b></div>
+    <div class="pill">режим: <span id="modeName">ПРОДУКТ</span></div>
+  </div>
+  <div id="modes" class="ui modes">
+    <button data-mode="product" class="on">ПРОДУКТ</button>
+    <button data-mode="engineering">ИНЖЕНЕРИЯ</button>
+    <button data-mode="cutaway">РАЗРЕЗ</button>
+    <button data-mode="exploded">ВЗРЫВ-СХЕМА</button>
+    <button data-mode="airflow">ВОЗДУХООБМЕН</button>
+    <button data-mode="light">СВЕТ</button>
+  </div>
+  <div id="info" class="ui panel info">
+    <h3 id="infoName">Параметрическая модель</h3>
+    <div id="infoMeta" class="meta"></div>
+    <div id="checks" class="checks"></div>
+  </div>
+  <div class="ui hint">ЛКМ / свайп — вращение · колесо / щипок — масштаб · тап по детали — паспорт · ПКМ — меню детали</div><div class="ui stage-tools"><button id="gridToggle" class="on">СЕТКА</button><button id="doorsToggle">ДВЕРИ</button><button id="homeView">В РАКУРС</button></div><div id="partMenu" class="part-menu"><div id="partMenuTitle" class="menu-title">ДЕТАЛЬ</div><button data-part-action="hide">Скрыть деталь</button><button data-part-action="transparent">Сделать прозрачной</button><button data-part-action="open">Открыть / закрыть</button><button data-part-action="restore">Вернуть скрытые детали</button></div><div id="toast"></div>
+  <div id="cams" class="ui cams">
+    <button data-cam="iso" class="on">Изометрия</button><button data-cam="front">Фронт</button><button data-cam="side">Сбоку</button><button data-cam="rear">Сзади</button><button data-cam="top">Сверху</button><button id="reset">Сброс</button><button id="export">Экспорт JSON</button>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script>
+(function(){
+'use strict';
+const U=.001, cv=document.getElementById('cv');
+let scene,camera,renderer,root,hemi,key,fill;
+const mobile=matchMedia('(max-width:760px)').matches || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+function show3DError(message){
+  const l=document.getElementById('loader');
+  l.style.display='flex';
+  l.style.flexDirection='column';
+  l.style.gap='12px';
+  l.innerHTML='<b style="color:#eee8dd">3D не запустился</b><span style="max-width:320px;text-align:center;line-height:1.5">'+message+'</span><button id="retry3d" style="padding:11px 16px;border:1px solid #c5a46c;background:#c5a46c;color:#111215;border-radius:5px;font-weight:700">Повторить</button>';
+  document.getElementById('retry3d').onclick=()=>location.reload();
+}
+try{
+ if(typeof THREE==='undefined') throw new Error('THREE_NOT_LOADED');
+ scene=new THREE.Scene();
+ scene.background=new THREE.Color(0xd9dcde);
+ camera=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,.01,100);
+ renderer=new THREE.WebGLRenderer({canvas:cv,antialias:!mobile,alpha:false,preserveDrawingBuffer:false});
+ renderer.setPixelRatio(Math.min(devicePixelRatio,mobile?1.15:1.8));renderer.outputColorSpace=THREE.SRGBColorSpace;
+ renderer.shadowMap.enabled=!mobile;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+}catch(err){
+ show3DError(err&&err.message==='THREE_NOT_LOADED'?'Не удалось загрузить библиотеку 3D. Проверьте интернет-соединение и перезагрузите страницу.':'Браузер не смог создать WebGL-контекст. Попробуйте Chrome/Firefox, отключите режим экономии энергии и перезагрузите страницу.');
+ return;
+}
+hemi=new THREE.HemisphereLight(0xfffbef,0x77766e,mobile?1.9:2.4);scene.add(hemi);
+key=new THREE.DirectionalLight(0xfff1d7,mobile?2.3:3.1);key.position.set(4,6,5);key.castShadow=!mobile;scene.add(key);
+fill=new THREE.DirectionalLight(0xd9e1e4,mobile?1.1:1.5);fill.position.set(-5,3,-4);scene.add(fill);
+root=new THREE.Group();scene.add(root);
+const pickables=[];const doorGroups=[];let P=null,mode='product',selected=null,liveConfig=null,stageGrid=null,gridVisible=true,contextTarget=null;const hiddenParts=new Set(),transparentParts=new Set();
+function getState(){return liveConfig||SECRETBOX.load()}
+function consumeHandoff(){
+  if(new URLSearchParams(location.search).get('config')!=='live')return false;
+  try{
+    const raw=sessionStorage.getItem('secretbox.config.handoff.v1');
+    if(!raw)return;
+    const parsed=JSON.parse(raw);
+    if(parsed&&parsed.dimensions&&parsed.architecture&&parsed.equipment&&parsed.engineering){
+      liveConfig=parsed;
+      SECRETBOX.save(parsed);
+      sessionStorage.removeItem('secretbox.config.handoff.v1');
+      return true;
+    }
+  }catch(e){console.warn('SECRET BOX: не удалось прочитать handoff',e)}
+  return false;
+}
+const M={
+ shell:new THREE.MeshStandardMaterial({color:0x62666a,roughness:.62,metalness:.16}),
+ edge:new THREE.MeshStandardMaterial({color:0x92979a,roughness:.38,metalness:.42}),
+ inner:new THREE.MeshStandardMaterial({color:0xaeb3b5,roughness:.76,metalness:.06}),
+ dark:new THREE.MeshStandardMaterial({color:0x393d40,roughness:.7,metalness:.12}),
+ steel:new THREE.MeshStandardMaterial({color:0x929a9e,roughness:.34,metalness:.6}),
+ brass:new THREE.MeshStandardMaterial({color:0x999b98,roughness:.4,metalness:.38}),
+ cream:new THREE.MeshStandardMaterial({color:0xd6dadd,roughness:.5,metalness:.06}),
+ glass:new THREE.MeshStandardMaterial({color:0x9baaa5,roughness:.25,metalness:.12,transparent:true,opacity:.24,depthWrite:false}),
+ water:new THREE.MeshStandardMaterial({color:0x64878b,roughness:.3,metalness:.12,transparent:true,opacity:.7}),
+ red:new THREE.MeshStandardMaterial({color:0xc87c6b,roughness:.42,metalness:.08,transparent:true,opacity:.25}),
+ acoustic:new THREE.MeshStandardMaterial({color:0x777d80,roughness:.86,metalness:.02})
+
+};
+const mm=v=>v*U;
+function box(name,w,h,d,x,y,z,mat,opts={}){
+ const g=new THREE.BoxGeometry(mm(Math.max(2,w)),mm(Math.max(2,h)),mm(Math.max(2,d)));
+ const o=new THREE.Mesh(g,mat||M.inner);o.name=name;o.position.set(mm(x),mm(y),mm(z));o.castShadow=true;o.receiveShadow=true;
+ o.userData.part={name,description:opts.description||name,module:opts.module||'Конструкция',dimensions:[Math.round(w),Math.round(h),Math.round(d)],scale:opts.scale||1};
+ if(opts.scale&&opts.scale!==1)o.scale.set(opts.scale,1,opts.scale);
+ if(opts.click!==false)pickables.push(o);(opts.parent||root).add(o);return o;
+}
+function line(name,w,h,d,x,y,z,mat,opts){return box(name,w,h,d,x,y,z,mat,opts)}
+function clear(){while(root.children.length)root.remove(root.children[root.children.length-1]);pickables.length=0;doorGroups.length=0;selected=null}
+function build(){
+ const s=getState();P=SECRETBOX_LAYOUT.derive(s);clear();updateStage();
+ const o=P.outer,z=P.zones;
+ // Корпус и несущий каркас
+ const x=o.W/2-o.panel/2,y=o.H/2-o.panel/2,back=-o.D/2+o.panel/2;
+ line('ЛЕВАЯ НЕСУЩАЯ СТОЙКА',o.panel,o.H,o.D,-x,0,0,M.shell,{module:'Несущий корпус'});
+ line('ПРАВАЯ НЕСУЩАЯ СТОЙКА',o.panel,o.H,o.D,x,0,0,M.shell,{module:'Несущий корпус'});
+ line('ВЕРХНЯЯ РАМА',o.W,o.panel,o.D,0,y,0,M.shell,{module:'Несущий корпус'});
+ line('НИЖНЯЯ РАМА',o.W,o.panel,o.D,0,-o.H/2+o.plinth+o.panel/2,0,M.shell,{module:'Несущий корпус'});
+ line('ЗАДНЯЯ ПАНЕЛЬ',o.W-2*o.panel,o.H-2*o.panel,o.panel,0,0,back,M.shell,{module:'Корпус'});
+ line('ЦОКОЛЬ',o.W+18,o.plinth,o.D+18,0,-o.H/2+o.plinth/2,0,M.edge,{module:'Корпус'});
+ // Наружные мебельные боковины: ровные плоскости и тонкая кромка вместо «голого» каркаса
+ const sideH=Math.max(80,o.H-o.plinth-o.panel*2),sideY=-o.H/2+o.plinth+sideH/2+o.panel;
+ box('ЛЕВАЯ НАРУЖНАЯ БОКОВИНА',12,sideH,Math.max(80,o.D-o.panel),-o.W/2+6,sideY,0,M.shell,{module:'Мебельный корпус',description:'Наружная мебельная панель с матовой фактурой'});
+ box('ПРАВАЯ НАРУЖНАЯ БОКОВИНА',12,sideH,Math.max(80,o.D-o.panel),o.W/2-6,sideY,0,M.shell,{module:'Мебельный корпус',description:'Наружная мебельная панель с матовой фактурой'});
+ line('КРОМКА ЛЕВОЙ БОКОВИНЫ',3,sideH,Math.max(80,o.D-o.panel),-o.W/2+13,sideY,0,M.edge,{module:'Мебельная отделка'});
+ line('КРОМКА ПРАВОЙ БОКОВИНЫ',3,sideH,Math.max(80,o.D-o.panel),o.W/2-13,sideY,0,M.edge,{module:'Мебельная отделка'});
+ // Тонкий фасадный пояс визуально собирает верхний шумозащитный блок с корпусом
+ line('ФАСАДНЫЙ ПОЯС ВЕРХНЕГО МОДУЛЯ',Math.max(80,o.W-o.panel*2),18,10,0,o.H/2-o.panel-12,o.D/2-4,M.edge,{module:'Мебельная отделка'});
+ // Техническая колонна
+ box('ТЕХНИЧЕСКАЯ КОЛОННА',z.tech.w,z.tech.h,Math.max(18,z.tech.d),z.tech.x,z.tech.y,-o.D/2+Math.max(9,o.panel/2),M.dark,{module:'Техническая колонна',description:'Несущая сервисная зона для DIN, насосов, автоматики и коммуникаций'});
+ [0.18,.38,.58,.78].forEach((q,i)=>line('СЕРВИСНАЯ ПОЛКА '+(i+1),z.tech.w-36,8,z.tech.d-28,z.tech.x,-o.H/2+o.plinth+z.tech.h*q,0,M.edge,{module:'Техническая колонна'}));
+ box('DIN-ПАНЕЛЬ',Math.max(160,z.tech.w-70),220,34,z.tech.x,z.tech.y+z.tech.h*.24,o.D/2-38,M.dark,{module:'Электрика'});
+ box('СЕРВИСНАЯ КАССЕТА',Math.max(160,z.tech.w-70),250,Math.max(200,z.tech.d-70),z.tech.x,z.tech.y-z.tech.h*.24,0,M.inner,{module:'Сервис'});
+ // Верхний шумовой модуль — всегда часть параметрической геометрии
+ box('ВЕРХНИЙ ШУМОЗАЩИТНЫЙ МОДУЛЬ',z.top.w,z.top.h,z.top.d,0,z.top.y,0,M.dark,{module:'Акустика',description:'Верхний технический объём с перегородками и воздушной камерой'});
+ line('АКУСТИЧЕСКАЯ ПЕРЕГОРОДКА A',z.top.w-90,z.top.h-65,18,0,z.top.y,-z.top.d/2+45,M.edge,{module:'Акустика'});
+ line('АКУСТИЧЕСКАЯ ПЕРЕГОРОДКА B',z.top.w-140,z.top.h-110,18,65,z.top.y,0,M.edge,{module:'Акустика'});
+ box('ВОЗДУШНАЯ КАМЕРА',Math.max(160,z.top.w-130),Math.max(100,z.top.h-100),Math.max(120,z.top.d-90),0,z.top.y,20,M.dark,{module:'Воздухообмен'});
+ const silW=Math.min(300,z.top.w-120),silH=Math.min(150,z.top.h-80),silD=Math.min(300,z.top.d-120);
+ box('ГЛУШИТЕЛЬ',silW,silH,silD,Math.min(z.top.w*.22,z.top.w/2-70),z.top.y,0,M.steel,{module:'Акустика'});
+ // Внутренняя отделка: мягкие акустические панели, сервисные профили и аккуратный свет
+ const linerH=Math.max(80,z.grow.h-28),linerD=Math.max(80,z.grow.d-32);
+ const linerY=z.grow.y,linerZ=z.grow.z||0;
+ box('ВНУТРЕННЯЯ ЛИНИНГ-ПАНЕЛЬ ЛЕВАЯ',8,linerH,linerD,z.grow.x-z.grow.w/2+8,linerY,linerZ,M.acoustic,{module:'Акустическая отделка'});
+ box('ВНУТРЕННЯЯ ЛИНИНГ-ПАНЕЛЬ ПРАВАЯ',8,linerH,linerD,z.grow.x+z.grow.w/2-8,linerY,linerZ,M.acoustic,{module:'Акустическая отделка'});
+ line('ВЕРТИКАЛЬНЫЙ СВЕТОВОЙ ПРОФИЛЬ ЛЕВЫЙ',8,linerH,12,z.grow.x-z.grow.w/2+22,linerY,z.grow.d/2-22,M.cream,{module:'Внутреннее освещение'});
+ line('ВЕРТИКАЛЬНЫЙ СВЕТОВОЙ ПРОФИЛЬ ПРАВЫЙ',8,linerH,12,z.grow.x+z.grow.w/2-22,linerY,z.grow.d/2-22,M.cream,{module:'Внутреннее освещение'});
+ // Технологические вентиляционные прорези на фасадной кромке верхнего модуля
+ const ventCount=Math.max(4,Math.min(12,Math.floor((o.W-100)/42)));
+ for(let i=0;i<ventCount;i++){
+   const vx=-Math.min(o.W*.38,(ventCount-1)*18)/2+i*Math.min(36,o.W*.76/(ventCount-1||1));
+   line('ВЕНТИЛЯЦИОННАЯ ПРОРЕЗЬ '+(i+1),Math.min(22,o.W/ventCount*.38),3,4,vx,o.H/2-o.panel-28,o.D/2-10,M.steel,{module:'Вентиляция'});
+ }
+ // Рабочая камера
+ box('ЗАДНИЙ ЭКРАН РАБОЧЕЙ КАМЕРЫ',z.grow.w,z.grow.h,18,z.grow.x,z.grow.y,-z.grow.d/2+9,M.inner,{module:'Камера'});
+ line('ВЫДВИЖНОЙ ПОДДОН',z.поддон.w,z.поддон.h,z.поддон.d,z.поддон.x,z.поддон.y,0,M.edge,{module:'Сервис'});
+ line('ПЕРЕДНИЙ БОРТ ПОДДОНА',z.поддон.w-36,Math.min(70,z.поддон.h*.55),18,z.поддон.x,z.поддон.y+z.поддон.h/2-22,o.D/2-24,M.shell,{module:'Сервис'});
+ line('НАПРАВЛЯЮЩАЯ ПОДДОНА ЛЕВАЯ',18,24,z.поддон.d-90,z.поддон.x-z.поддон.w/2+25,z.поддон.y,0,M.steel,{module:'Крепление'});
+ line('НАПРАВЛЯЮЩАЯ ПОДДОНА ПРАВАЯ',18,24,z.поддон.d-90,z.поддон.x+z.поддон.w/2-25,z.поддон.y,0,M.steel,{module:'Крепление'});
+ // SCROG / регулируемые рейки
+ const sc=P.zones.scrog;
+ const L=P.equipment.light;
+ const growLeft=P.zones.grow.x-P.zones.grow.w/2+24, growRight=P.zones.grow.x+P.zones.grow.w/2-24;
+ const growFront=-P.zones.grow.d/2+24, growBack=P.zones.grow.d/2-24;
+ const lightScale=Math.max(.05,Math.min(1,(growRight-growLeft)/Math.max(1,L.w),(growBack-growFront)/Math.max(1,L.d),(P.zones.grow.h-90)/Math.max(1,L.h+90)));
+ const lightY=Math.max(P.zones.grow.y-P.zones.grow.h/2+L.h*lightScale/2+12,Math.min(P.zones.grow.y+P.zones.grow.h/2-L.h*lightScale/2-12,P.anchors.light.y));
+ for(const side of [-1,1]){
+   const rx=z.grow.x+side*(z.grow.w/2-24);
+   line('РЕГУЛИРУЕМАЯ ВЕРТИКАЛЬНАЯ РЕЙКА',24,z.grow.h-80,24,rx,z.grow.y,0,M.steel,{module:'Регулируемое крепление'});
+   for(let i=0;i<9;i++)line('КАРЕТКА '+(i+1),58,16,20,rx,z.grow.y-z.grow.h/2+45+i*(z.grow.h-90)/8,0,M.brass,{module:'Регулируемое крепление'});
+   line('СТОПОР SCROG',42,12,30,rx,sc.y,0,M.steel,{module:'Регулируемое крепление'});
+   line('СТОПОР СВЕТ',42,12,30,rx,lightY,0,M.steel,{module:'Регулируемое крепление'});
+ }
+ const grid=new THREE.Group();grid.name='SCROG';
+ line('ПОПЕРЕЧИНА КРЕПЛЕНИЯ SCROG',sc.w,18,28,sc.x,sc.y,0,M.steel,{module:'SCROG'});
+ line('ПОПЕРЕЧИНА КРЕПЛЕНИЯ СВЕТ',Math.max(220,Math.min(sc.w,L.w*lightScale+100)),18,28,P.anchors.light.x,lightY+L.h*lightScale/2+22,P.anchors.light.z,M.steel,{module:'Крепление'});
+ for(let i=0;i<=8;i++)line('SCROG ПОПЕРЕЧИНА',3,5,sc.d-18,sc.x-sc.w/2+i*sc.w/8,sc.y,0,M.brass,{parent:grid,module:'SCROG'});
+ for(let i=0;i<=6;i++)line('SCROG ПРОДОЛЬНАЯ',sc.w-18,5,3,sc.x,sc.y,-sc.d/2+i*sc.d/6,M.brass,{parent:grid,module:'SCROG'});
+ root.add(grid);
+ // Реальное выбранное оборудование
+ const F=P.equipment.fan; // L объявлен выше (тот же P.equipment.light)
+ // Оборудование никогда не выходит за внутренний габарит: при малом корпусе 3D ужимает только визуальное представление и сохраняет предупреждение в конфигураторе.
+ const lx=Math.max(growLeft+L.w*lightScale/2,Math.min(growRight-L.w*lightScale/2,P.anchors.light.x));
+ const lz=Math.max(growFront+L.d*lightScale/2,Math.min(growBack-L.d*lightScale/2,0));
+ const lightW=L.w*lightScale,lightH=L.h*lightScale,lightD=L.d*lightScale;
+ box('СВЕТИЛЬНИК '+(s.equipment.light||''),lightW,lightH,lightD,lx,lightY,lz,M.cream,{module:'Оборудование',description:'Выбранный светильник Spider Farmer'});
+ line('ПЛАТФОРМА СВЕТИЛЬНИКА',lightW+Math.min(90,o.W*.08),12,lightD+Math.min(90,o.D*.08),lx,lightY+lightH/2+Math.min(30,o.H*.025),lz,M.edge,{module:'Крепление'});
+ // Вентилятор масштабируется и удерживается в зоне верхнего техотсека при компактных размерах
+ const fanScale=Math.max(.05,Math.min(1,(z.top.w-36)/Math.max(1,F.w),(z.top.h-28)/Math.max(1,F.h),(z.top.d-36)/Math.max(1,F.d)));
+ const fanW=F.w*fanScale,fanH=F.h*fanScale,fanD=F.d*fanScale;
+ const fanX=Math.max(-z.top.w/2+fanW/2+12,Math.min(z.top.w/2-fanW/2-12,P.anchors.fan.x));
+ const fanY=Math.max(z.top.y-z.top.h/2+fanH/2+10,Math.min(z.top.y+z.top.h/2-fanH/2-10,P.anchors.fan.y));
+ const fanZ=Math.max(-z.top.d/2+fanD/2+12,Math.min(z.top.d/2-fanD/2-12,P.anchors.fan.z));
+ box('ВЕНТИЛЯТОР '+(s.equipment.fan||''),fanW,fanH,fanD,fanX,fanY,fanZ,M.dark,{module:'Оборудование',description:'Выбранный вентилятор Spider Farmer'});
+ box('СЕРДЦЕВИНА ВЕНТИЛЯТОРА',fanW*.5,fanH*.5,fanD*.5,fanX,fanY,fanZ+fanD*.28,M.brass,{module:'Оборудование',click:false});
+ line('ВИБРОИЗОЛИРОВАННАЯ ПЛАТФОРМА',fanW+Math.min(120,o.W*.1),18,fanD+Math.min(100,o.D*.1),fanX,fanY-fanH/2-12,fanZ,M.edge,{module:'Виброизоляция'});
+ if(s.equipment.reservoir){
+   const reservoirScale=Math.max(.05,Math.min(1,(o.W-2*o.panel-40)/300,(o.D-2*o.panel-40)/300,(o.H-o.plinth-2*o.panel-40)/430));
+   const rw=300*reservoirScale,rh=430*reservoirScale,rd=300*reservoirScale;
+   const rx=Math.max(-o.W/2+o.panel+rw/2+8,Math.min(o.W/2-o.panel-rw/2-8,P.anchors.reservoir.x));
+   const rz=Math.max(-o.D/2+o.panel+rd/2+8,Math.min(o.D/2-o.panel-rd/2-8,P.anchors.reservoir.z));
+   const floorY=-o.H/2+o.plinth+rh/2+8;
+   const ceilingY=o.H/2-o.panel-rh/2-8;
+   const trayTop=P.zones.поддон.y+P.zones.поддон.h/2;
+   const desiredY=Math.max(P.anchors.reservoir.y,trayTop+rh/2+8);
+   const reservoirY=Math.max(floorY,Math.min(ceilingY,desiredY));
+   box('ОПОРНАЯ ПЛАТФОРМА РЕЗЕРВУАРА',rw+Math.min(70,o.W*.06),18,rd+Math.min(70,o.D*.06),rx,reservoirY-rh/2-10,rz,M.edge,{module:'Несущий крепёж'});
+   box('РЕЗЕРВУАР 20 Л',rw,rh,rd,rx,reservoirY,rz,M.water,{module:'Водный контур'});
+ }
+ // Двери рассчитываются от реального чистого проёма: одинаковые зазоры, точные петли, без перекрытий.
+ const doorH=Math.max(60,Math.min(P.doors.height,o.H-o.plinth-o.panel*2)),front=o.D/2+o.panel+4;
+ const openingLeft=-o.W/2+o.panel,openingRight=o.W/2-o.panel;
+ const gap=Math.max(2,Math.min(8,P.doors.gap));
+ const clearW=Math.max(40,openingRight-openingLeft-gap*(P.doors.count-1));
+ const leafW=Math.max(30,clearW/P.doors.count);
+ for(let i=0;i<P.doors.count;i++){
+   const cx=openingLeft+leafW/2+i*(leafW+gap);
+   const w=leafW;
+   const hinge=sideHinge(i,P.doors.count,w);
+   const pivotX=cx+hinge*w/2;
+   const g=new THREE.Group();
+   g.name='ДВЕРЬ '+(i+1);
+   g.userData.baseX=mm(pivotX);
+   g.userData.open=0;
+   g.userData.target=0;
+   g.userData.hinge=hinge;
+   g.userData.width=w;
+   g.position.set(mm(pivotX),0,mm(front));
+   doorGroups.push(g);
+   box('ДВЕРНОЕ ПОЛОТНО '+(i+1),w,doorH,P.doors.thickness,0,-o.plinth/2,0,M.shell,{parent:g,module:'Фасад'});
+   g.children[0].position.x=-hinge*w/2;
+   box('ВНУТРЕННЯЯ ПАНЕЛЬ ДВЕРИ '+(i+1),Math.max(90,w-36),Math.max(90,doorH-36),10,-hinge*18,-o.plinth/2,-P.doors.thickness/2-5,M.inner,{parent:g,module:'Фасад',click:false});
+   box('РУЧКА '+(i+1),18,180,28,-hinge*(w/2-30),0,P.doors.thickness/2+12,M.steel,{parent:g,module:'Фасад'});
+   box('ПЕТЛЯ НИЖНЯЯ '+(i+1),12,70,24,hinge*(w/2-18),-doorH/2+70,P.doors.thickness/2+8,M.brass,{parent:g,module:'Фасад'});
+   box('ПЕТЛЯ ВЕРХНЯЯ '+(i+1),12,70,24,hinge*(w/2-18),doorH/2-70,P.doors.thickness/2+8,M.brass,{parent:g,module:'Фасад'});
+   root.add(g);
+ }
+ // Задняя кабельная зона
+ for(let i=0;i<4;i++)line('ЗАДНИЙ КАБЕЛЬНЫЙ КАНАЛ '+(i+1),24,o.H-160,18,-o.W/2+100+i*42,0,-o.D/2+o.panel+12,M.dark,{module:'Кабельная трасса'});
+ applyMode();
+ updatePanel(s);
+}
+function updateStage(){if(stageGrid){scene.remove(stageGrid);stageGrid.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material&&!Array.isArray(o.material))o.material.dispose()})}stageGrid=new THREE.Group();stageGrid.name='Рабочая сетка';const span=Math.max(P.outer.W,P.outer.H,P.outer.D)*U*3.2,y=-P.outer.H*U/2-.012;const floor=new THREE.Mesh(new THREE.PlaneGeometry(span,span),new THREE.MeshStandardMaterial({color:0xb9bec0,roughness:.96,metalness:.01}));floor.rotation.x=-Math.PI/2;floor.position.y=y-.004;floor.receiveShadow=true;stageGrid.add(floor);const grid=new THREE.GridHelper(span,Math.max(20,Math.min(60,Math.round(span/.1))),0x858b8e,0xaab0b2);grid.position.y=y;grid.material.transparent=true;grid.material.opacity=.62;stageGrid.add(grid);stageGrid.visible=gridVisible;scene.add(stageGrid)}
+function detailBox(name,w,h,d,x,y,z,mat,parent,module){return box(name,w,h,d,x,y,z,mat,{parent:parent||root,module:module||'Конструкция'})}
+/* Legacy helpers intentionally unused: the canonical parametric build creates these modules once. */
+function addRail(x,z,h){
+ const rg=new THREE.Group(); rg.position.set(mm(x),0,mm(z)); rg.userData.part={name:'Регулируемая вертикальная рейка',module:'Крепление'};
+ detailBox('ВЕРТИКАЛЬНАЯ РЕЙКА',22,h,18,0,0,0,M.steel,rg,'Крепление');
+ for(let yy=-h/2+55;yy<h/2;yy+=90) detailBox('КАРЕТКА',48,28,28,0,mm(yy),mm(12),M.steel,rg,'Крепление');
+ root.add(rg); pickables.push(rg); return rg;
+}
+function addTray(d){
+ const tg=new THREE.Group(); tg.position.y=mm(P.zones.tray.y+P.zones.tray.h/2); tg.userData.part={name:'Выдвижной сервисный поддон',module:'Сервис'};
+ detailBox('ПОДДОН',P.zones.grow.w-36,18,d-55,0,0,0,M.steel,tg,'Сервис');
+ detailBox('ПЕРЕДНЯЯ ПАНЕЛЬ ПОДДОНА',P.zones.grow.w-36,80,18,0,mm(-40),mm(d/2-27),M.shell,tg,'Сервис');
+ detailBox('НАПРАВЛЯЮЩАЯ ЛЕВАЯ',18,24,d-90,-mm(P.zones.grow.w/2-25),0,0,M.steel,tg,'Крепление');
+ detailBox('НАПРАВЛЯЮЩАЯ ПРАВАЯ',18,24,d-90,mm(P.zones.grow.w/2-25),0,0,M.steel,tg,'Крепление');
+ root.add(tg); pickables.push(tg);
+}
+function addTopNoise(){
+ const t=P.zones.top, tg=new THREE.Group(); tg.position.y=mm(t.y+t.h/2); tg.userData.part={name:'Верхний шумозащитный модуль',module:'Акустика'};
+ detailBox('ВЕРХНИЙ ШУМОЗАЩИТНЫЙ МОДУЛЬ',t.w,t.h,t.d,0,0,0,M.shell,tg,'Акустика');
+ detailBox('АКУСТИЧЕСКАЯ ПЕРЕГОРОДКА',t.w-50,t.h-70,18,0,0,mm(-t.d/2+25),M.acoustic,tg,'Акустика');
+ detailBox('ВОЗДУШНАЯ КАМЕРА',t.w-80,t.h-95,60,0,0,mm(t.d/2-55),M.acoustic,tg,'Акустика');
+ root.add(tg); pickables.push(tg);
+}
+function sideHinge(i,count,w){return i<Math.ceil(count/2)?-1:1}
+function toggleDoor(g){g.userData.target=g.userData.target>.5?0:1}
+function updateDoors(){doorGroups.forEach(g=>{const a=g.userData.target,cur=g.userData.open;g.userData.open=cur+(a-cur)*.16;const angle=(g.userData.hinge<0?-1:1)*g.userData.open*Math.PI*.52;g.rotation.y=angle;g.position.x=g.userData.baseX})}
+function applyMode(){
+ const cut=mode==='cutaway',eng=mode==='engineering',expl=mode==='exploded',air=mode==='airflow',light=mode==='light';
+ root.children.forEach(o=>{
+   if(o.userData&&o.userData.part){
+     const mod=o.userData.part.module;
+     if(light)o.visible=/Оборудование|Крепление/.test(mod);
+     else if(eng)o.visible=!/Фасад|Камера/.test(mod);
+     else if(cut){o.visible=!/Фасад/.test(mod);if(o.material&&o.material!==M.glass)o.material=o.material.clone(),o.material.transparent=true,o.material.opacity=/Акустика|Техническая колонна/.test(mod)?.34:.82;}
+     else o.visible=true;
+   }
+   if(expl&&o.userData&&o.userData.part){const n=o.name;o.position.y+=mm(/ВЕРХНИЙ/.test(n)?110:/ТЕХНИЧ/.test(n)?-70:/СЕРВИС/.test(n)?-35:0)}
+ });
+ if(air){
+   // визуальный тракт: тонкие золотые сегменты внутри корпуса
+   const pts=[new THREE.Vector3(mm(P.anchors.fan.x),mm(P.anchors.fan.y),mm(P.anchors.fan.z)),new THREE.Vector3(mm(P.zones.top.x),mm(P.zones.top.y),mm(P.zones.top.z||0)),new THREE.Vector3(0,mm(P.outer.H*.36),0)];
+   const geo=new THREE.BufferGeometry().setFromPoints(pts),mat=new THREE.LineBasicMaterial({color:0xc5a46c}),line=new THREE.Line(geo,mat);line.name='ВОЗДУШНЫЙ ТРАКТ';root.add(line);
+ }
+}
+function updatePanel(s){
+ const d=P.outer, checks=P.checks||[],errors=checks.filter(x=>x.level==='error'),warns=checks.filter(x=>x.level==='warning');
+ document.getElementById('config').innerHTML='<b>'+SECRETBOX.label(s).modelName+'</b> · '+d.W+' × '+d.D+' × '+d.H+' мм · '+P.doors.count+' двери · рабочая зона '+Math.round(P.zones.grow.w)+' мм';
+ document.getElementById('infoMeta').innerHTML='Корпус: '+d.W+' × '+d.D+' × '+d.H+' мм<br>Рабочая камера: '+Math.round(P.zones.grow.w)+' × '+Math.round(P.zones.grow.d)+' × '+Math.round(P.zones.grow.h)+' мм<br>Верхний модуль: '+Math.round(P.zones.top.w)+' × '+Math.round(P.zones.top.d)+' × '+Math.round(P.zones.top.h)+' мм<br>Масса: '+P.metrics.mass+' кг · мощность: '+P.metrics.power+' Вт · воздух: '+P.metrics.airflow+' м³/ч';
+ document.getElementById('checks').innerHTML=errors.length?'<span class="bad">⚠ '+errors.length+' критических конфликтов</span>':(warns.length?'<span class="warn">△ '+warns.length+' предупреждений</span>':'<span class="good">✓ Геометрия совместима</span>');
+}
+function setMode(m){mode=m;document.getElementById('modeName').textContent=({product:'ПРОДУКТ',engineering:'ИНЖЕНЕРИЯ',cutaway:'РАЗРЕЗ',exploded:'ВЗРЫВ-СХЕМА',airflow:'ВОЗДУХООБМЕН',light:'СВЕТ'})[m]||'ПРОДУКТ';document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));build()}
+let target=new THREE.Vector3(0,mm(200),0),spherical={r:3.8,theta:.65,phi:1.05},goal={...spherical};
+function clampGoal(){if(!P)return;const max=Math.max(P.outer.W,P.outer.H,P.outer.D)*U;goal.r=Math.max(max*.82,Math.min(max*4.8,goal.r));goal.phi=Math.max(.16,Math.min(2.86,goal.phi));}
+function frameCamera(kind){
+ if(!P)return;
+ const d=P.outer,max=Math.max(d.W,d.H,d.D)*U;
+ if(kind==='front'){goal.theta=0;goal.phi=1.52;goal.r=Math.max(max*2.15,.1)}
+ if(kind==='rear'){goal.theta=Math.PI;goal.phi=1.52;goal.r=Math.max(max*2.15,.1)}
+ if(kind==='side'){goal.theta=Math.PI/2;goal.phi=1.52;goal.r=Math.max(max*2.15,.1)}
+ if(kind==='top'){goal.theta=.65;goal.phi=.25;goal.r=Math.max(max*2.3,.1)}
+ if(kind==='iso'){goal.theta=.65;goal.phi=1.03;goal.r=Math.max(max*2.0,.1)}
+ target.set(0,mm(d.H*.05),0);
+}
+function cameraTick(){
+ if(!P)return;
+ clampGoal();spherical.r+=(goal.r-spherical.r)*.12;spherical.theta+=(goal.theta-spherical.theta)*.12;spherical.phi+=(goal.phi-spherical.phi)*.12;
+ const r=spherical.r;camera.position.set(target.x+r*Math.sin(spherical.phi)*Math.cos(spherical.theta),target.y+r*Math.cos(spherical.phi),target.z+r*Math.sin(spherical.phi)*Math.sin(spherical.theta));camera.lookAt(target);
+}
+let active=new Map(),drag=null,lastTap=0,lastTapX=0,lastTapY=0,basePinch=0;
+function fitView(){frameCamera('iso');goal.r=Math.max(goal.r,Math.max(P.outer.W,P.outer.H,P.outer.D)*U*2.15)}
+cv.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&e.button!==0)return;hidePartMenu();cv.setPointerCapture(e.pointerId);active.set(e.pointerId,{x:e.clientX,y:e.clientY});if(active.size===1)drag={x:e.clientX,y:e.clientY,ox:e.clientX,oy:e.clientY,moved:0};else drag=null;e.preventDefault()},{passive:false});
+cv.addEventListener('pointermove',e=>{if(!active.has(e.pointerId))return;active.set(e.pointerId,{x:e.clientX,y:e.clientY});if(active.size===1&&drag){const dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.x=e.clientX;drag.y=e.clientY;drag.moved+=Math.hypot(dx,dy);goal.theta-=dx*(mobile?.0065:.0085);goal.phi=Math.max(.18,Math.min(2.72,goal.phi-dy*(mobile?.0052:.007)) )}else if(active.size===2){const a=[...active.values()];if(!basePinch)basePinch=Math.max(1,Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y));const d=Math.max(1,Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y));goal.r=Math.max(.1,goal.r*(basePinch/d));}e.preventDefault()},{passive:false});
+cv.addEventListener('pointerup',e=>{active.delete(e.pointerId);if(active.size===0){basePinch=0;if(drag&&drag.moved<8){const now=Date.now();if(now-lastTap<320&&Math.hypot(e.clientX-lastTapX,e.clientY-lastTapY)<18){frameCamera('iso')}else pick(e.clientX,e.clientY);lastTap=now;lastTapX=e.clientX;lastTapY=e.clientY}drag=null}e.preventDefault()},{passive:false});
+cv.addEventListener('pointercancel',e=>{active.delete(e.pointerId);if(active.size===0){basePinch=0;drag=null}},{passive:false});
+cv.addEventListener('wheel',e=>{goal.r=Math.max(.1,goal.r*(e.deltaY>0?1.08:.92));e.preventDefault()},{passive:false});
+function pickHit(x,y){const rect=cv.getBoundingClientRect(),mouse=new THREE.Vector2((x-rect.left)/rect.width*2-1,-(y-rect.top)/rect.height*2+1),ray=new THREE.Raycaster();ray.setFromCamera(mouse,camera);return ray.intersectObjects(pickables,true).find(h=>h.object.visible)}
+function pick(x,y){
+ const rect=cv.getBoundingClientRect(),mouse=new THREE.Vector2((x-rect.left)/rect.width*2-1,-(y-rect.top)/rect.height*2+1),ray=new THREE.Raycaster();ray.setFromCamera(mouse,camera);
+ const hit=pickHit(x,y);if(!hit)return;
+ let o=hit.object;while(o&&!o.userData.part)o=o.parent;
+ if(!o)return;
+ let dg=o;while(dg&&!(dg.name||'').startsWith('ДВЕРЬ '))dg=dg.parent;
+ if(dg){toggleDoor(dg);document.getElementById('infoName').textContent=dg.name;document.getElementById('infoMeta').innerHTML='Нажмите ещё раз, чтобы закрыть дверь<br>Угол открытия: до 94°';return}
+ selected=o;document.getElementById('infoName').textContent=o.userData.part.name;document.getElementById('infoMeta').innerHTML=o.userData.part.description+'<br>Модуль: '+o.userData.part.module+'<br>Габарит: '+o.userData.part.dimensions.join(' × ')+' мм';
+}
+function hidePartMenu(){document.getElementById('partMenu').classList.remove('show');contextTarget=null}
+function showPartMenu(x,y){const hit=pickHit(x,y);if(!hit){hidePartMenu();return}let o=hit.object;while(o&&!o.userData.part)o=o.parent;if(!o){hidePartMenu();return}contextTarget=o;const m=document.getElementById('partMenu');document.getElementById('partMenuTitle').textContent=o.userData.part.name||o.name||'ДЕТАЛЬ';m.classList.add('show');m.style.left=Math.max(8,Math.min(innerWidth-205,x))+'px';m.style.top=Math.max(8,Math.min(innerHeight-220,y))+'px'}
+function notify(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('show');clearTimeout(notify.timer);notify.timer=setTimeout(()=>e.classList.remove('show'),1300)}
+cv.addEventListener('contextmenu',e=>{e.preventDefault();showPartMenu(e.clientX,e.clientY)});
+document.addEventListener('pointerdown',e=>{if(!e.target.closest('#partMenu'))hidePartMenu()});
+document.querySelectorAll('[data-part-action]').forEach(b=>b.onclick=()=>{const o=contextTarget;if(!o)return;const a=b.dataset.partAction;if(a==='hide'){o.visible=false;hiddenParts.add(o);notify('Деталь скрыта')}if(a==='transparent'){if(!transparentParts.has(o)){o.userData.originalMaterial=o.material;o.material=Array.isArray(o.material)?o.material.map(m=>m.clone()):o.material.clone();(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{m.transparent=true;m.opacity=.18;m.depthWrite=false});transparentParts.add(o);notify('Прозрачность включена')}else{o.material=o.userData.originalMaterial||o.material;transparentParts.delete(o);notify('Прозрачность снята')}}if(a==='open'){let g=o;while(g&&!(g.name||'').startsWith('ДВЕРЬ '))g=g.parent;if(g){toggleDoor(g);notify('Дверь переключена')}else notify('Эта деталь не открывается')}if(a==='restore'){hiddenParts.forEach(p=>p.visible=true);hiddenParts.clear();notify('Скрытые детали возвращены')}hidePartMenu()});
+document.getElementById('gridToggle').onclick=()=>{gridVisible=!gridVisible;if(stageGrid)stageGrid.visible=gridVisible;document.getElementById('gridToggle').classList.toggle('on',gridVisible)};
+document.getElementById('doorsToggle').onclick=()=>{const open=doorGroups.some(g=>g.userData.target<.5);doorGroups.forEach(g=>g.userData.target=open?1:0);document.getElementById('doorsToggle').classList.toggle('on',open)};
+document.getElementById('homeView').onclick=()=>{frameCamera('iso');document.querySelectorAll('[data-cam]').forEach(x=>x.classList.toggle('on',x.dataset.cam==='iso'))};
+document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+document.querySelectorAll('[data-cam]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-cam]').forEach(x=>x.classList.remove('on'));b.classList.add('on');frameCamera(b.dataset.cam)});
+document.getElementById('reset').onclick=()=>{setMode('product');frameCamera('iso')};
+document.getElementById('export').onclick=()=>{const s=getState(),l=SECRETBOX_LAYOUT.derive(s),payload={project:'SECRET BOX · параметрическая 3D-конфигурация',date:new Date().toISOString(),configuration:s,geometry:l};const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}));a.download='secret-box-parametric-config.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000)};
+let lastState='';
+function sync(keepCam){const s=getState(),sig=JSON.stringify(s);if(sig!==lastState){lastState=sig;build();if(!keepCam)frameCamera('iso')}}
+// живое обновление из конфигуратора: родитель шлёт конфиг по postMessage, камеру при этом не сбрасываем
+addEventListener('message',function(ev){
+  const d=ev&&ev.data;
+  if(!d||d.type!=='secretbox:config'||!d.config||!d.config.dimensions||!d.config.architecture)return;
+  liveConfig=d.config;sync(true);
+});
+SECRETBOX.subscribe(()=>{liveConfig=null;lastState='';sync()});
+consumeHandoff();
+sync();
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight,false)});
+renderer.setSize(innerWidth,innerHeight,false);frameCamera('iso');
+document.getElementById('loader').style.display='none';
+fitView();
+// Встраиваемый разбор на главной сразу показывает шкаф с раскрытыми в разные стороны дверями.
+if(new URLSearchParams(location.search).get('presentation')==='1')doorGroups.forEach(g=>{g.userData.target=1});
+function loop(){requestAnimationFrame(loop);cameraTick();updateDoors();renderer.render(scene,camera)}loop();
+})();
+</script>
+<script src="assets/site/project-engine.js"></script>
+<script src="assets/site/3d-bom-bridge.js"></script>
+</body>
+</html>

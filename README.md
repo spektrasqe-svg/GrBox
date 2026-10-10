@@ -13,7 +13,9 @@
 ├── account.html                # Личный кабинет: профиль, проекты, история заявок (данные в localStorage)
 ├── product.html                # Продукт: один параметрический BOX + три комплектации + живая 3D
 ├── product-a/b/c.html          # Редиректы на product.html (старые адреса)
-├── GrowBox_v31_3D.html         # Полноэкранный 3D-вьюер (вращение, touch, камеры, BOM по деталям)
+├── GrowBox_v31_3D.html         # Главный 3D-вьюер: 85 деталей, 7 режимов (PRODUCT / ENGINEERING / CUTAWAY / EXPLODED / AIRFLOW / LIGHT),
+│                               #   жесты, экспорт JSON, ?bare=1 (iframe), ?presentation=1, мост builder→3D (postMessage + handoff)
+├── GrowBox_v31_parametric.html # Старый параметрический вьюер (запасной; three.js с CDN)
 ├── engineering.html            # Инженерный расчёт: метрики + СПЕЦИФИКАЦИЯ из живой конфигурации
 ├── calculators.html            # Калькуляторы: вентиляция, свет, тепло, нагрузка на пол
 ├── growpedia.html              # Гровпедия
