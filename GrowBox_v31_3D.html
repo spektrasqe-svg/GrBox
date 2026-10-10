@@ -126,6 +126,7 @@ window.GB_PARTS = [{"n":"01_Боковина_левая_B-C","m":"B+C","k":"де
 window.GB_PARAMS = {"W":1250,"D":700,"H":2000,"T":18,"T12":12,"T_BACK_IN":12,"T_BACK_OUT":8,"D_CHANNEL":80,"MOD_A_H":300,"B_W":400,"C_W":796,"FOOT":60,"FOOT_SIZE":80,"DOOR_T":18,"FRONT_OVER":0,"TRAY_H":60,"TRAY_RIM":50,"TRAY_L":750,"TRAY_W":590,"PLATFORM_TRAVEL":240,"POT_D":320,"POT_H":250,"SCROG_L":700,"SCROG_W":500,"SCROG_LEVELS":4,"SCROG_STEP":180,"SCROG_Z0":350,"LIGHT_L":603,"LIGHT_W":585,"LIGHT_T":71,"LIGHT_Z":1400,"LIGHT_TRAVEL":300,"UV_L":600,"UV_W":60,"UV_T":40,"FILTER_D":250,"FILTER_L":350,"FAN_D":250,"FAN_L":240,"SIL_D":250,"SIL_L":330,"PLENUM_L":220,"GRILLE_L":400,"GRILLE_W":300,"TANK_L":350,"TANK_W":250,"TANK_H":230,"HUMID_L":300,"HUMID_W":220,"HUMID_H":300,"DIN_PANEL":[400,340,10],"SHELF_FRAME":30};
 
 </script>
+<script src="assets/site/spiderfarmer-3d.js"></script>
 <script>
 (function(){
 "use strict";
@@ -270,6 +271,36 @@ var root = new THREE.Group(); scene.add(root);
 var groups = {}, meshes = [], clickable = [];
 var SPREAD = {A:[0,0.55,0], B:[-0.62,0,0], C:[0.62,0,0], 'B+C':[0,0,0]};
 
+/* ---------- реальные модели оборудования (spiderfarmer-3d.js) ---------- */
+var SF3D = window.SPIDERFARMER3D || null;
+var SF_MODELS = {'25_SE3000': 'SE3000'};   // пока только светильник; SF4/фильтр/GGS — следующим шагом
+var equip = [], glowMats = [];
+
+function buildEquip(p, b, sfId){
+  var g = null;
+  try{ g = SF3D.build(THREE, sfId); }catch(e){ g = null; }
+  if (!g) return false;
+  g.scale.setScalar(0.001);   // мм из библиотеки -> метры сцены
+  g.position.set(px(b[0]+b[3]/2), py(b[2]+b[5]/2), pz(b[1]+b[4]/2));
+  g.traverse(function(o){
+    if (!o.isMesh) return;
+    o.castShadow = true; o.receiveShadow = true;
+    o.userData = {part:p, mod:(p.m||'').split('+')[0], sf:1};
+    clickable.push(o);
+    var mats = Array.isArray(o.material) ? o.material : [o.material];
+    mats.forEach(function(mt){
+      if (!mt || !mt.emissive) return;
+      if (mt.emissiveMap || mt.emissive.getHex() !== 0){
+        var known = glowMats.some(function(x){ return x.mat === mt; });
+        if (!known) glowMats.push({mat:mt, i:mt.emissiveIntensity || 1});
+      }
+    });
+  });
+  root.add(g);
+  equip.push({group:g, part:p, mod:(p.m||'').split('+')[0], base:g.position.clone()});
+  return true;
+}
+
 function makeMaterial(p){
   return new THREE.MeshStandardMaterial({
     color: new THREE.Color(p.c),
@@ -280,6 +311,8 @@ function makeMaterial(p){
 
 PARTS.forEach(function(p){
   var b = p.b, geom, mesh;
+  var sfId = SF_MODELS[p.n];
+  if (sfId && SF3D && buildEquip(p, b, sfId)) return;   // настоящая модель вместо бокса
   if (p.s === 'cyl' && p.cy){
     geom = new THREE.CylinderGeometry(p.cy.r/1000, p.cy.r/1000, p.cy.h/1000, 26);
     mesh = new THREE.Mesh(geom, makeMaterial(p));
@@ -455,10 +488,25 @@ function pickAt(cx,cy){
   document.getElementById('iD').textContent = descFor(p.n);
   document.getElementById('iM').textContent = 'Габарит: '+p.b[3]+' × '+p.b[4]+' × '+p.b[5]+' мм · позиция X'+p.b[0]+' Y'+p.b[1]+' Z'+p.b[2];
   info.style.display = 'block';
-  if (selected && selected.material.emissive) selected.material.emissive.setHex(0x000000);
-  selected = hits[0].object;
-  if (selected.material.emissive) selected.material.emissive.setHex(0x3a2c14);
+  unhighlight();
+  highlight(hits[0].object);
   saveState();
+}
+/* подсветка выбора: материал клонируется, чтобы не тянуть общие материалы моделей */
+function unhighlight(){
+  if (selected && selected.userData.prevMat){
+    selected.material = selected.userData.prevMat;
+    delete selected.userData.prevMat;
+  }
+  selected = null;
+}
+function highlight(mesh){
+  if (mesh.material && mesh.material.emissive){
+    mesh.userData.prevMat = mesh.material;
+    mesh.material = mesh.material.clone();
+    mesh.material.emissive.setHex(0x3a2c14);
+  }
+  selected = mesh;
 }
 
 /* ---------- режимы ---------- */
@@ -486,8 +534,11 @@ function applyCut(on){
 }
 function applyLight(on){
   chamberLight.intensity = on ? 1.7 : 0;
+  glowMats.forEach(function(g){
+    g.mat.emissiveIntensity = on ? g.i*3 : g.i;   // платы и диоды SE3000 светятся
+  });
   meshes.forEach(function(m){
-    if (m.userData.part.n.indexOf('25_SE3000') === 0){
+    if (m.userData.part.n.indexOf('25_SE3000') === 0 && m.material.emissive){
       m.material.emissive = new THREE.Color(on ? 0xfff2cf : 0x000000);
       m.material.emissiveIntensity = on ? 0.95 : 0;
     }
@@ -503,6 +554,13 @@ function applyExplode(on){
       return;
     }
     m.position.set(b.x + (on ? sp[0] : 0), b.y + (on ? sp[1] : 0), b.z + (on ? sp[2] : 0));
+  });
+  equip.forEach(function(e){   // оборудование единым узлом, как и боксы
+    var sp = SPREAD[e.mod] || [0,0,0];
+    e.group.position.set(
+      e.base.x + (on ? sp[0] : 0),
+      e.base.y + (on ? sp[1] : 0),
+      e.base.z + (on ? sp[2] : 0));
   });
   ['doorB','doorC1','doorC2','liftA','liftB'].forEach(function(g){
     var gr = groups[g]; if (!gr) return;
@@ -531,8 +589,7 @@ function resetAll(){
   setCam(3.7, 0.72, 1.16, 1.02);
   target.set(0, 1.02, 0);
   document.getElementById('info').style.display = 'none';
-  if (selected && selected.material.emissive) selected.material.emissive.setHex(0x000000);
-  selected = null;
+  unhighlight();
 }
 document.querySelectorAll('[data-mode]').forEach(function(b){
   b.addEventListener('click', function(){ setMode(b.dataset.mode); });
@@ -651,7 +708,18 @@ function applyConfig(cfg){
 window.__gb3d = {
   applyConfig: applyConfig,
   setMode: function(m){ if (MODES[m]) setMode(m); },
-  getState: function(){ return {mode: mode, cam: {r:camT.r, th:camT.th, ph:camT.ph}, scale: {x:root.scale.x, y:root.scale.y, z:root.scale.z}}; }
+  getState: function(){ return {mode: mode, cam: {r:camT.r, th:camT.th, ph:camT.ph}, scale: {x:root.scale.x, y:root.scale.y, z:root.scale.z}}; },
+  equipInfo: function(){
+    return equip.map(function(e){
+      var n = 0;
+      e.group.traverse(function(o){ if (o.isMesh) n++; });
+      var sz = new THREE.Vector3();
+      new THREE.Box3().setFromObject(e.group).getSize(sz);
+      return {part: e.part.n, meshes: n,
+        sizeMm: [Math.round(sz.x*1000), Math.round(sz.y*1000), Math.round(sz.z*1000)],
+        pos: [+e.group.position.x.toFixed(3), +e.group.position.y.toFixed(3), +e.group.position.z.toFixed(3)]};
+    });
+  }
 };
 addEventListener('message', function(ev){
   var d = ev && ev.data;
