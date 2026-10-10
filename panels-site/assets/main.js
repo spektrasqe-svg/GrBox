@@ -123,12 +123,13 @@
 
   /* ---------- рендер расходников ---------- */
   function consumables() {
+    function esc(value) { return String(value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;'); }
     var host = document.getElementById('consList');
     if (!host || !C.consumables) return;
     host.innerHTML = C.consumables.map(function (it) {
-      return '<div class="row"><b>' + it.name + '</b>' +
-        '<span>' + it.unit + (it.note ? ' · ' + it.note : '') + '</span>' +
-        '<span class="p">' + it.price.toLocaleString('ru-RU') + ' ₽</span></div>';
+      return '<div class="row"><b>' + esc(it.name) + '</b>' +
+        '<span>' + esc(it.unit) + (it.note ? ' · ' + esc(it.note) : '') + '</span>' +
+        '<span class="p">ориентир ' + Number(it.price || 0).toLocaleString('ru-RU') + ' ₽</span></div>';
     }).join('');
   }
 
