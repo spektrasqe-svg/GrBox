@@ -36,13 +36,28 @@
   <div class="wrap">
     <div class="crumbs"><a href="index.html">Главная</a> / Каталог</div>
     <h1>КАТАЛОГ<br>ПАНЕЛЕЙ</h1>
-    <p class="lead">Восемь категорий под разные задачи: от рельефного гипса до фасадных панелей. Все цены — за материал; монтаж, расходники и доставка считаются в <a class="hl" href="calculator.html">калькуляторе</a>. Привозим образцы на бесплатный замер.</p>
+    <p class="lead">Восемь категорий под разные задачи: от рельефного гипса до фасадных панелей. Цены на сайте — ориентир за материал; монтаж, расходники и доставка считаются в <a class="hl" href="calculator.html">калькуляторе</a>. Способ монтажа и итоговую стоимость уточняем по параметрам проекта.</p>
   </div>
 </header>
 
 <section class="tight">
   <div class="wrap">
-    <div class="grid-3" id="catalogGrid"></div>
+    <div class="catalog-tools">
+      <label class="catalog-search"><span class="sr-only">Поиск по каталогу</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 4 4"></path></svg>
+        <input id="catalogSearch" type="search" placeholder="Найти панель по названию или фактуре…" autocomplete="off">
+      </label>
+      <div class="catalog-filters" role="group" aria-label="Фильтр каталога">
+        <button type="button" class="catalog-filter active" data-catalog-filter="all" aria-pressed="true">Все панели</button>
+        <button type="button" class="catalog-filter" data-catalog-filter="wood" aria-pressed="false">Дерево и ламели</button>
+        <button type="button" class="catalog-filter" data-catalog-filter="stone" aria-pressed="false">Камень и бетон</button>
+        <button type="button" class="catalog-filter" data-catalog-filter="soft" aria-pressed="false">Мягкие</button>
+        <button type="button" class="catalog-filter" data-catalog-filter="other" aria-pressed="false">Другие</button>
+      </div>
+      <div class="catalog-meta"><span id="catalogCount">8 категорий</span><span>Цены предварительные · ₽/м² за материал</span></div>
+    </div>
+    <div class="grid-3" id="catalogGrid" aria-live="polite"></div>
+    <p id="catalogEmpty" class="catalog-empty" hidden>По вашему запросу ничего не найдено. Попробуйте изменить поиск или фильтр.</p>
   </div>
 </section>
 
@@ -59,7 +74,7 @@
       <div class="card"><div class="k">01</div><h3>Где стена?</h3><p>Сухое помещение, влажная зона или фасад — от этого зависит материал и способ монтажа.</p></div>
       <div class="card"><div class="k">02</div><h3>Какая нагрузка?</h3><p>Декоративная стена или проходная зона: от этого зависит износостойкость и класс покрытия.</p></div>
       <div class="card"><div class="k">03</div><h3>Нужна акустика?</h3><p>Для спален и переговорных подойдут мягкие панели и ламели с подложкой.</p></div>
-      <div class="card"><div class="k">04</div><h3>Какой бюджет?</h3><p>Панели под покраску — от 1 200 ₽/м²; премиальные фактуры — от 4 500 ₽/м².</p></div>
+      <div class="card"><div class="k">04</div><h3>Какой бюджет?</h3><p>Сравните стартовые цены в каталоге и заложите запас на подрезку. Стоимость зависит от выбранной коллекции и производителя.</p></div>
     </div>
   </div>
 </section>
