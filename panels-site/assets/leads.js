@@ -43,7 +43,7 @@
       return Promise.reject(new Error('phone'));
     }
 
-    var text = (extra && extra.text) ? extra.text : '';
+    var text = (typeof extra === 'string') ? extra : ((extra && extra.text) ? extra.text : '');
     if (!text) {
       text = 'ЗАЯВКА WALLFORM®\nИмя: ' + (contact.name || '—') +
              '\nТелефон: ' + contact.phone +
