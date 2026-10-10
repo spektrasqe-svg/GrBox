@@ -325,7 +325,7 @@ function buildFan(THREE,g,M,s){
  const duct=s.duct||100;
  const R=w/2;
  const L=d;
- const bodyR=Math.min(R*.91,h*.46);
+ const bodyR=R*.96;
  const bodyLen=L*.49;
  const bellLen=(L-bodyLen)*.48;
  const zBody=bodyLen/2;
