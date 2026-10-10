@@ -816,75 +816,32 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
   </div>
 </section>
 
-<section class="light" id="flat">
+<section class="light sb-unified-section" id="flat">
   <div class="wrap">
     <div class="sec-head">
-      <div>
-        <div class="tag">Разбор</div>
-        <h2>Интерактивный разбор корпуса</h2>
-      </div>
-      <p>Интерактивный инженерный слой: камера показывает корпус, рабочую зону, технические модули и сервисные элементы. В конфигураторе меняете размер — здесь должна появиться та же геометрия.</p>
+      <div><div class="tag">Инженерный просмотр</div><h2>Один разбор. Все зоны шкафа.</h2></div>
+      <p>Переключайте ракурс и функциональные зоны в одном окне. Схема помогает изучить конструкцию и оборудование; привязка к пользовательским размерам будет подключена к геометрии конфигуратора отдельным этапом.</p>
     </div>
-    <div class="reveal">
-      <div class="xbar" id="viewbar">
-        <button class="xbtn active" data-view="iso">ИЗОМЕТРИЯ</button>
-        <button class="xbtn" data-view="front">СПЕРЕДИ</button>
-        <button class="xbtn" data-view="side">СБОКУ</button>
-        <button class="xbtn" data-view="top">СВЕРХУ</button>
-        <button class="xbtn" data-view="open">ОТКРЫТЬ</button>
-      </div>
-      <div class="xbar" id="zonebar">
-        <button class="xbtn active" data-zone="all">ВСЕ</button>
-        <button class="xbtn" data-zone="a">A · ВОЗДУХ / ШУМ</button>
-        <button class="xbtn" data-zone="b">B · ТЕХНИЧЕСКАЯ ЗОНА</button>
-        <button class="xbtn" data-zone="c">C · РАБОЧАЯ ЗОНА</button>
-      </div>
-      <div class="viewer">
-        <div class="cabinet" id="cab">
-          <div class="cface cfront"></div>
-          <div class="cface ctop"></div>
-          <div class="cface cside"></div>
-          <div class="cinner">
-            <div class="zone za" data-z="a"><b>A · ВОЗДУХ / ШУМ</b>SF4 · угольный фильтр · глушитель · пленум</div>
-            <div class="zone zb" data-z="b"><b>B · ТЕХНИЧЕСКАЯ КОЛОННА</b>20L · сервис · humidifier · DIN · reserve</div>
-            <div class="zone zc" data-z="c"><b>C · РАБОЧАЯ ЗОНА КАМЕРА</b>поддон · 2×15L · SCROG · SE3000 · sensors</div>
-          </div>
+    <div class="sb-unified-viewer">
+      <div class="sb-unified-toolbar">
+        <div class="sb-toolbar-group" id="viewbar" role="group" aria-label="Ракурс чертежа">
+          <span class="sb-toolbar-label">РАКУРС</span>
+          <button class="sb-view-btn active" type="button" data-view="front" aria-pressed="true">Спереди</button>
+          <button class="sb-view-btn" type="button" data-view="side" aria-pressed="false">Сбоку</button>
+          <button class="sb-view-btn" type="button" data-view="top" aria-pressed="false">Сверху</button>
+          <button class="sb-view-btn" type="button" data-view="open" aria-pressed="false">Открытый шкаф</button>
         </div>
-        <div class="hint" id="hint">выберите вид или функциональную зону</div>
+        <div class="sb-toolbar-group" id="zonebar" role="group" aria-label="Функциональная зона">
+          <span class="sb-toolbar-label">ЗОНА</span>
+          <button class="sb-zone-btn active" type="button" data-zone="all" aria-pressed="true">Все узлы</button>
+          <button class="sb-zone-btn" type="button" data-zone="a" aria-pressed="false">A · Воздух и шум</button>
+          <button class="sb-zone-btn" type="button" data-zone="b" aria-pressed="false">B · Техколонна</button>
+          <button class="sb-zone-btn" type="button" data-zone="c" aria-pressed="false">C · Рабочая камера</button>
+        </div>
       </div>
-      <div class="xgrid">
-        <div class="xcard"><div class="t-num">A · ВОЗДУХ / ШУМ</div><p>SF 4" · угольный фильтр · двухкамерный глушитель · пленум 600×250</p></div>
-        <div class="xcard"><div class="t-num">B · ТЕХНИЧЕСКАЯ КОЛОННА</div><p>20 л · сервис · увлажнитель · DIN-панель · резервный бак</p></div>
-        <div class="xcard"><div class="t-num">C · РАБОЧАЯ ЗОНА КАМЕРА</div><p>поддон · 2×15 л · SCROG · SE3000 · датчики</p></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="drawing" class="drawing-section">
-  <div class="wrap">
-    <div class="sec-head">
-      <div>
-        <div class="tag">Чертёж · устройство шкафа</div>
-        <h2>Видно, что находится внутри — без тяжёлой 3D-сцены.</h2>
-      </div>
-      <p>Плоский инженерный вид шкафа: выберите слой, чтобы отдельно рассмотреть корпус, дверь, рабочую камеру и оборудование. Дверь показана одной створкой, открытой в одну сторону; это схема устройства, не размерная модель заказа.</p>
-    </div>
-    <div class="drawing-board cutaway-board">
-      <div class="drawing-topline"><span>SECRET BOX® / УСТРОЙСТВО КОРПУСА</span><span>АКСОНОМЕТРИЧЕСКАЯ СХЕМА</span></div>
-      <div class="sb-plan-controls" role="group" aria-label="Переключение слоёв чертежа">
-        <button type="button" data-plan-view="all" aria-pressed="true">Общий вид</button>
-        <button type="button" data-plan-view="cabinet" aria-pressed="false">Корпус</button>
-        <button type="button" data-plan-view="door" aria-pressed="false">Дверь</button>
-        <button type="button" data-plan-view="work" aria-pressed="false">Рабочая зона</button>
-        <button type="button" data-plan-view="technical" aria-pressed="false">Техзона</button>
-        <button type="button" data-plan-view="light" aria-pressed="false">Свет</button>
-        <button type="button" data-plan-view="labels" aria-pressed="false">Подписи</button>
-      </div>
-      <p class="sb-plan-status" aria-live="polite">Показаны все узлы шкафа.</p>
-      <div class="cutaway-layout">
-        <div class="cutaway-visual">
-          <svg class="sb-flat-plan" data-active-view="all" viewBox="0 0 760 570" role="img" aria-label="Интерактивный плоский чертёж шкафа SECRET BOX с переключением корпуса, рабочих и технических зон">
+      <div class="sb-unified-canvas">
+        <div class="sb-canvas-meta"><span>SECRET BOX® / ИНЖЕНЕРНАЯ СХЕМА</span><span id="sb-view-caption">ПЕРЕДНИЙ ВИД · ОТКРЫТАЯ ДВЕРЬ</span></div>
+        <div class="sb-canvas-svg"><svg class="sb-flat-plan" data-active-view="all" data-active-zone="all" data-plan-angle="front" viewBox="0 0 760 570" role="img" aria-label="Единая интерактивная плоская схема шкафа SECRET BOX. Переключаются ракурсы и функциональные зоны.">
   <defs>
     <pattern id="sb-grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#c7beaf" stroke-opacity=".34" stroke-width=".6"/></pattern>
     <marker id="sb-arrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#8b7042"/></marker>
@@ -949,43 +906,18 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
     <text x="382" y="550" text-anchor="middle">ШИРИНА КОРПУСА</text><text x="654" y="275" transform="rotate(90 654 275)" text-anchor="middle">ВЫСОТА</text>
     <text x="382" y="567" text-anchor="middle" font-size="9">ПЛОСКИЙ ИНЖЕНЕРНЫЙ ВИД · СХЕМА НЕ В МАСШТАБЕ</text>
   </g>
-</svg>
-        </div>
-        <aside class="cutaway-legend">
-          <div class="cutaway-legend-head"><span>УСТРОЙСТВО ШКАФА</span><small>07 УЗЛОВ</small></div>
-          <div class="cutaway-item"><b>01</b><div><strong>Верхний технический модуль</strong><p>Шумоподавление, воздуховоды и скрытые инженерные узлы.</p></div></div>
-          <div class="cutaway-item"><b>02</b><div><strong>Световой модуль</strong><p>Располагается над рабочей зоной, с местом для обслуживания.</p></div></div>
-          <div class="cutaway-item"><b>03</b><div><strong>Рабочая камера</strong><p>Полки и направляющие для настройки внутренней компоновки.</p></div></div>
-          <div class="cutaway-item"><b>04</b><div><strong>Вентиляционный тракт</strong><p>Фильтр, вентилятор и канал отвода воздуха.</p></div></div>
-          <div class="cutaway-item"><b>05</b><div><strong>Техническая колонна</strong><p>Сервисная зона для управления, электрики и водного узла.</p></div></div>
-          <div class="cutaway-item"><b>06</b><div><strong>Поддон и основание</strong><p>Нижняя зона и опорная часть корпуса.</p></div></div>
-          <div class="cutaway-item"><b>07</b><div><strong>Открывающаяся дверь</strong><p>Показывает доступ к внутренним зонам и оборудованию.</p></div></div>
-          <div class="cutaway-note">Оборудование показано внутри мебельного корпуса. Точная геометрия и привязка размеров будут связаны с конфигуратором отдельным этапом.</div>
-        </aside>
+</svg></div>
+        <div class="sb-unified-hint" id="sb-view-hint" aria-live="polite">Показаны корпус, верхний техотсек, рабочая камера и сервисная колонна.</div>
       </div>
-      <div class="drawing-foot"><span>Схема показывает принцип устройства, не размеры конкретного заказа</span><a href="builder.html">Настроить свой шкаф →</a></div>
-    </div>    <div class="stage3d-hint"><span>Нужна объёмная проверка? 3D-просмотр остаётся доступен отдельно.</span><a href="GrowBox_v31_3D.html" target="_blank" rel="noopener">Открыть 3D-просмотр →</a></div>
+      <div class="sb-unified-legend">
+        <article class="sb-zone-card" data-zone-card="a"><b>A</b><div><strong>Воздух и шум</strong><p>Верхний технический отсек, вентилятор и место для акустического тракта.</p></div></article>
+        <article class="sb-zone-card" data-zone-card="b"><b>B</b><div><strong>Техническая колонна</strong><p>Управление, электрика и сервисные узлы с доступом для обслуживания.</p></div></article>
+        <article class="sb-zone-card" data-zone-card="c"><b>C</b><div><strong>Рабочая камера</strong><p>Свет, направляющие, SCROG и нижний поддон внутри мебельного корпуса.</p></div></article>
+      </div>
+      <div class="sb-unified-foot"><span>Схема поясняющая, не в масштабе. Фактическая компоновка зависит от размеров и комплектации.</span><a href="builder.html">Перейти к настройке размеров →</a></div>
+    </div>
   </div>
-<style>
-.sb-plan-controls{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
-.sb-plan-controls button{appearance:none;border:1px solid #b9ad99;background:#f2ece2;color:#353630;border-radius:3px;padding:9px 13px;font-family:inherit;font-size:12px;font-weight:600;line-height:1.2;cursor:pointer;transition:background .18s,color .18s,border-color .18s}
-.sb-plan-controls button[aria-pressed="true"]{background:#30332f;color:#f1e7d7;border-color:#30332f}
-.sb-plan-controls button:focus-visible{outline:2px solid #9a7848;outline-offset:2px}
-.sb-plan-status{font-size:12px;color:#766b5d;margin:-4px 0 12px}
-.sb-flat-plan [data-layer]{transition:opacity .18s ease}
-.sb-flat-plan[data-active-view]:not([data-active-view="all"]) [data-layer]{opacity:.12}
-.sb-flat-plan[data-active-view="cabinet"] [data-layer="cabinet"],
-.sb-flat-plan[data-active-view="door"] [data-layer="door"],
-.sb-flat-plan[data-active-view="work"] [data-layer="work"],
-.sb-flat-plan[data-active-view="technical"] [data-layer="technical"],
-.sb-flat-plan[data-active-view="technical"] [data-layer="labels"],
-.sb-flat-plan[data-active-view="light"] [data-layer="light"],
-.sb-flat-plan[data-active-view="labels"] [data-layer="labels"],
-.sb-flat-plan[data-active-view="cabinet"] [data-layer="dimensions"]{opacity:1}
-@media(max-width:640px){.sb-plan-controls{gap:6px}.sb-plan-controls button{padding:8px 10px;font-size:11px}.sb-plan-status{font-size:11px}}
-</style><script>
-(()=>{const root=document.querySelector('#drawing');if(!root||root.dataset.planControlsReady)return;root.dataset.planControlsReady='1';const svg=root.querySelector('.sb-flat-plan');const buttons=[...root.querySelectorAll('[data-plan-view]')];const status=root.querySelector('.sb-plan-status');const names={all:'Показаны все узлы шкафа.',cabinet:'Выделен корпус, боковая стенка и основание.',door:'Выделена мебельная дверь и её рамка.',work:'Выделены рабочая камера, направляющие, сетка и поддон.',technical:'Выделены верхний техотсек и сервисная колонна.',light:'Выделен световой модуль и его зона освещения.',labels:'Выделены подписи узлов и размерные ориентиры.'};buttons.forEach(btn=>btn.addEventListener('click',()=>{const view=btn.dataset.planView;svg.dataset.activeView=view;buttons.forEach(b=>b.setAttribute('aria-pressed',String(b===btn)));status.textContent=names[view]||names.all;}));})();
-</script></section>
+</section>
 
 
 <section id="eng">
@@ -1153,5 +1085,41 @@ function setXZone(z){
 }
 document.querySelectorAll('#zonebar .xbtn').forEach(function(b){b.addEventListener('click',function(){setXZone(b.getAttribute('data-zone'))})});
 </script>
-<script src="assets/site/ru-localization.js"></script></body>
+<script src="assets/site/ru-localization.js"></script><style>
+.sb-unified-section .sec-head{margin-bottom:32px}
+.sb-unified-viewer{border:1px solid rgba(232,220,200,.18);background:#e9e1d4;color:#34352f;overflow:hidden}
+.sb-unified-toolbar{padding:16px;display:grid;gap:14px;border-bottom:1px solid #c8bdab;background:#f0e8dc}
+.sb-toolbar-group{display:flex;align-items:center;flex-wrap:wrap;gap:7px}
+.sb-toolbar-label{font:700 10px/1.2 'Roboto Mono',monospace;letter-spacing:.15em;color:#8b7042;margin-right:8px;min-width:56px}
+.sb-view-btn,.sb-zone-btn{border:1px solid #b9ad99;background:transparent;color:#353630;border-radius:2px;padding:9px 12px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:background .18s,color .18s,border-color .18s}
+.sb-view-btn[aria-pressed=true],.sb-zone-btn[aria-pressed=true]{background:#30332f;color:#f1e7d7;border-color:#30332f}
+.sb-view-btn:focus-visible,.sb-zone-btn:focus-visible{outline:2px solid #9a7848;outline-offset:2px}
+.sb-unified-canvas{padding:0 14px 14px}
+.sb-canvas-meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px 2px 8px;font:700 9px/1.4 'Roboto Mono',monospace;letter-spacing:.12em;color:#796b56}
+.sb-canvas-svg{width:100%;max-width:920px;margin:0 auto}
+.sb-canvas-svg svg{display:block;width:100%;height:auto;max-height:680px}
+.sb-unified-hint{font-size:12px;color:#6e6558;border-top:1px solid #c8bdab;padding:10px 2px 0}
+.sb-unified-legend{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:1px solid #c8bdab}
+.sb-zone-card{display:flex;gap:12px;padding:18px;border-right:1px solid #c8bdab;transition:background .18s,opacity .18s}
+.sb-zone-card:last-child{border-right:0}
+.sb-zone-card> b{display:grid;place-items:center;width:30px;height:30px;flex:0 0 30px;border:1px solid #8b7042;border-radius:50%;font:700 12px 'Roboto Mono',monospace;color:#80683f}
+.sb-zone-card strong{display:block;font-size:13px;color:#33342f}
+.sb-zone-card p{font-size:12px;line-height:1.6;color:#756b5d;margin-top:4px}
+.sb-zone-card.is-active{background:#ded2bf}
+.sb-zone-card.is-muted{opacity:.48}
+.sb-unified-foot{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border-top:1px solid #c8bdab;padding:13px 18px;font-size:11px;color:#756b5d}
+.sb-unified-foot a{font-weight:800;color:#57432c}
+.sb-flat-plan [data-layer]{transition:opacity .2s ease}
+.sb-flat-plan[data-active-zone="a"] [data-layer="cabinet"],.sb-flat-plan[data-active-zone="a"] [data-layer="door"],.sb-flat-plan[data-active-zone="a"] [data-layer="work"],.sb-flat-plan[data-active-zone="a"] [data-layer="light"],.sb-flat-plan[data-active-zone="b"] [data-layer="cabinet"],.sb-flat-plan[data-active-zone="b"] [data-layer="door"],.sb-flat-plan[data-active-zone="b"] [data-layer="work"],.sb-flat-plan[data-active-zone="b"] [data-layer="light"],.sb-flat-plan[data-active-zone="c"] [data-layer="cabinet"],.sb-flat-plan[data-active-zone="c"] [data-layer="door"],.sb-flat-plan[data-active-zone="c"] [data-layer="dimensions"]{opacity:.15}
+.sb-flat-plan[data-active-zone="a"] [data-layer="technical"],.sb-flat-plan[data-active-zone="b"] [data-layer="technical"],.sb-flat-plan[data-active-zone="c"] [data-layer="work"],.sb-flat-plan[data-active-zone="c"] [data-layer="light"]{opacity:1}
+.sb-flat-plan[data-plan-angle="side"]{transform:perspective(1100px) rotateY(-15deg) scaleX(.83);transform-origin:center;filter:contrast(.97)}
+.sb-flat-plan[data-plan-angle="top"]{transform:perspective(1000px) rotateX(17deg) scale(.88);transform-origin:center;filter:contrast(.96)}
+.sb-flat-plan[data-plan-angle="open"]{transform:perspective(1100px) rotateY(-5deg) scale(1.02);transform-origin:center}
+.sb-canvas-svg svg{transition:transform .25s ease,filter .25s ease}
+@media(max-width:700px){.sb-unified-toolbar{padding:11px;gap:11px}.sb-toolbar-group{gap:5px}.sb-toolbar-label{width:100%;margin:0 0 2px}.sb-view-btn,.sb-zone-btn{padding:8px 9px;font-size:11px}.sb-unified-canvas{padding:0 8px 10px}.sb-canvas-meta{font-size:8px}.sb-unified-legend{grid-template-columns:1fr}.sb-zone-card{padding:13px;border-right:0;border-bottom:1px solid #c8bdab}.sb-zone-card:last-child{border-bottom:0}.sb-unified-foot{padding:12px;font-size:10px}}
+@media(prefers-reduced-motion:reduce){.sb-flat-plan [data-layer],.sb-canvas-svg svg,.sb-zone-card{transition:none}}
+</style>
+<script>
+(()=>{const root=document.querySelector('#flat');if(!root||root.dataset.ready==='1')return;root.dataset.ready='1';const svg=root.querySelector('.sb-flat-plan');const hint=root.querySelector('#sb-view-hint');const caption=root.querySelector('#sb-view-caption');const viewButtons=[...root.querySelectorAll('[data-view]')];const zoneButtons=[...root.querySelectorAll('[data-zone]')];const names={front:['Передний вид','ПЕРЕДНИЙ ВИД · КОРПУС И ВНУТРЕННИЕ УЗЛЫ'],side:['Вид сбоку','БОКОВОЙ РАКУРС · ГЛУБИНА КОРПУСА'],top:['Вид сверху','ВИД СВЕРХУ · ПЛАНИРОВКА'],open:['Открытый шкаф','ОТКРЫТЫЙ ШКАФ · ДОСТУП К УЗЛАМ']};const zoneNames={all:'Показаны все узлы шкафа.',a:'Зона A: верхний технический отсек и узлы вентиляции/шумоподавления.',b:'Зона B: техническая колонна, управление и сервисные узлы.',c:'Зона C: рабочая камера, свет, направляющие, SCROG и поддон.'};function setView(v){svg.dataset.planAngle=v;viewButtons.forEach(b=>{const on=b.dataset.view===v;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on))});caption.textContent=(names[v]||names.front)[1];hint.textContent=(names[v]||names.front)[0]+'. Схематический ракурс; размеры и компоновка пока не перестраиваются автоматически.'}function setZone(z){svg.dataset.activeZone=z;zoneButtons.forEach(b=>{const on=b.dataset.zone===z;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on))});root.querySelectorAll('[data-zone-card]').forEach(c=>{c.classList.toggle('is-active',z!=='all'&&c.dataset.zoneCard===z);c.classList.toggle('is-muted',z!=='all'&&c.dataset.zoneCard!==z)});hint.textContent=zoneNames[z]||zoneNames.all}viewButtons.forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));zoneButtons.forEach(b=>b.addEventListener('click',()=>setZone(b.dataset.zone)));setView('front');setZone('all')})();
+</script></body>
 </html>
