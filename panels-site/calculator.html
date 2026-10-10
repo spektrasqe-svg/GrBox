@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Калькулятор сметы — WALLFORM®</title>
+<meta name="description" content="Расчёт стоимости стеновых панелей: материалы, расходники и монтаж в одной смете. Предварительный расчёт за 30 секунд, точная смета после замера.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;500;700&family=Unbounded:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark">W</span><b data-brand>WALLFORM<sup>®</sup></b></a>
+    <nav class="nav">
+      <a href="catalog.html">Каталог</a>
+      <a href="calculator.html" class="active">Расчёт</a>
+      <a href="montazh.html">Монтаж</a>
+      <a href="index.html#cons">Расходники</a>
+      <a href="index.html#contact">Контакты</a>
+      <a href="order.html">Заявка</a>
+    </nav>
+    <div class="top-cta">
+      <a class="top-phone" data-phone-link href="#"><span data-phone>+7 (000) 000-00-00</span></a>
+      <a class="btn btn-solid btn-sm" href="order.html">Оставить заявку</a>
+      <button class="burger" aria-label="Меню"><span></span></button>
+    </div>
+  </div>
+</div>
+
+<header class="page-head">
+  <div class="hero-bg"></div>
+  <div class="wrap">
+    <div class="crumbs"><a href="index.html">Главная</a> / Расчёт</div>
+    <h1>КАЛЬКУЛЯТОР<br>СМЕТЫ</h1>
+    <p class="lead">Считает по реальным нормам расхода: панели с запасом на подрез, клей и крепёж по площади, профили по периметру, работы по тарифу бригады. Итог — предварительный; точная смета фиксируется после бесплатного замера.</p>
+  </div>
+</header>
+
+<section class="tight">
+  <div class="wrap">
+    <div class="calc" id="fullCalc">
+      <!-- ---------- ВХОД ---------- -->
+      <div class="calc-panel">
+        <h3>Параметры стен</h3>
+        <p class="hint">Если стен несколько — укажите суммарную площадь: длина × высота каждой стены.</p>
+
+        <div class="field">
+          <label>Площадь стен, м²</label>
+          <div class="two">
+            <input type="number" name="area" value="24" min="1" max="10000" step="0.5">
+            <select name="category" id="catSelect"></select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Способ монтажа</label>
+          <div class="chips" data-chips>
+            <button type="button" class="chip on" data-value="glue">На клей</button>
+            <button type="button" class="chip" data-value="frame">На каркас</button>
+          </div>
+          <input type="hidden" name="method" value="glue">
+        </div>
+
+        <div class="field">
+          <label>Что включить в работу</label>
+          <div style="display:grid;gap:14px">
+            <label class="switch"><input type="checkbox" name="prep" checked><span class="track-sw"></span><span class="lbl">Подготовка стен (грунтовка, выравнивание)</span></label>
+            <label class="switch"><input type="checkbox" name="demo"><span class="track-sw"></span><span class="lbl">Демонтаж старого покрытия</span></label>
+            <label class="switch"><input type="checkbox" name="consumables" checked><span class="track-sw"></span><span class="lbl">Расходники (клей, крепёж, герметик)</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Дополнительно</label>
+          <div class="two">
+            <div>
+              <input type="number" name="skirtingMl" min="0" step="0.5" placeholder="Плинтус, пог.м" value="12">
+              <div class="mono" style="margin-top:8px">теневой плинтус + монтаж</div>
+            </div>
+            <div>
+              <input type="number" name="electricMl" min="0" step="0.5" placeholder="Подсветка, пог.м" value="0">
+              <div class="mono" style="margin-top:8px">разводка подсветки в панелях</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-solid" type="button" id="recalc">Пересчитать
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <a class="btn btn-ghost" href="order.html">Отправить в работу</a>
+        </div>
+      </div>
+
+      <!-- ---------- ВЫХОД ---------- -->
+      <div class="calc-out" id="calcOut"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= СМЕТА → ЗАЯВКА ================= -->
+<section class="sec-line" id="lead">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="tag">смета → объект</span>
+        <h2>Зафиксировать расчёт и заказать замер</h2>
+      </div>
+      <p>Расчёт из калькулятора прикладывается к заявке автоматически — <span data-manager>менеджер</span> проверит его и свяжется с вами.</p>
+    </div>
+    <div class="form-card">
+      <form data-lead>
+        <div class="form-grid">
+          <div class="field"><label>Как вас зовут</label><input type="text" name="name" placeholder="Имя"></div>
+          <div class="field"><label>Телефон *</label><input type="tel" name="phone" placeholder="+7 (___) ___-__-__" required></div>
+          <div class="field full"><label>Город / адрес объекта</label><input type="text" name="city" placeholder="Например: Москва, Хамовники"></div>
+          <div class="field full"><label>Комментарий</label><textarea name="comment" rows="3" placeholder="Сроки, пожелания по фактуре, особые условия объекта…"></textarea></div>
+          <div class="full consent">
+            <input type="checkbox" id="c1" required>
+            <label for="c1" style="text-transform:none;letter-spacing:0;font-size:12px;font-weight:400;color:var(--cream-2)">Согласен на обработку персональных данных и получение звонка от специалиста WALLFORM®.</label>
+          </div>
+          <div class="full btn-row">
+            <button class="btn btn-solid" type="submit">Отправить заявку с расчётом
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          </div>
+        </div>
+        <div class="form-ok">Заявка принята вместе с расчётом. Спасибо! Свяжемся в ближайшее рабочее время.</div>
+      </form>
+      <div id="sendPanel" style="display:none;margin-top:26px;border-top:1px solid var(--line);padding-top:26px">
+        <div class="mono" style="margin-bottom:12px">Заявка собрана — отправьте её удобным способом:</div>
+        <textarea id="sendText" rows="8" readonly style="width:100%;background:rgba(0,0,0,.18);border:1px solid var(--line-strong);border-radius:10px;padding:14px;font-family:var(--mono);font-size:12.5px"></textarea>
+        <div class="btn-row" style="margin-top:16px">
+          <a class="btn btn-solid" data-send="telegram" target="_blank" rel="noopener">Telegram</a>
+          <a class="btn btn-ghost" data-send="whatsapp" target="_blank" rel="noopener">WhatsApp</a>
+          <button class="btn btn-ghost" data-copy type="button">Скопировать текст</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="index.html"><span class="mark">W</span><b data-brand>WALLFORM<sup>®</sup></b></a>
+        <p style="margin-top:16px" data-tagline>Стеновые панели · продажа и монтаж</p>
+        <p data-city>Москва и Московская область</p>
+      </div>
+      <div>
+        <h4>Разделы</h4>
+        <a href="catalog.html">Каталог панелей</a>
+        <a href="calculator.html">Калькулятор сметы</a>
+        <a href="montazh.html">Монтаж под ключ</a>
+        <a href="index.html#cons">Расходники</a>
+      </div>
+      <div>
+        <h4>Клиентам</h4>
+        <a href="order.html">Оставить заявку</a>
+        <a href="index.html#calc">Предварительный расчёт</a>
+        <a href="index.html#contact">Контакты</a>
+      </div>
+      <div data-hide-if-empty>
+        <h4>Связь</h4>
+        <a data-phone-link href="#"><span data-phone>+7 (000) 000-00-00</span></a>
+        <a data-email href="#">info@example.ru</a>
+        <p data-hours>Пн–Сб 09:00–20:00</p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span data-year>2026</span> WALLFORM®. Все права защищены.</span>
+      <span>Расчёт предварительный и не является публичной офертой.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/site-config.js"></script>
+<script src="assets/calc-engine.js"></script>
+<script src="assets/leads.js"></script>
+<script src="assets/main.js"></script>
+<script>
+(function () {
+  var host = document.getElementById('fullCalc');
+  var out = document.getElementById('calcOut');
+  var sel = document.getElementById('catSelect');
+  var C = window.SITE_CONFIG;
+
+  sel.innerHTML = C.categories.map(function (c) {
+    return '<option value="' + c.id + '">' + c.name + ' — от ' + c.price.toLocaleString('ru-RU') + ' ₽/м²</option>';
+  }).join('');
+
+  var last = null;
+
+  function rows(items, title) {
+    if (!items.length) return '';
+    return '<div class="mono" style="margin:18px 0 6px">' + title + '</div>' +
+      items.map(function (i) {
+        return '<div class="r"><span>' + i.name + ' · ' + i.qty + ' ' + i.unit + '</span><b>' + i.sum.toLocaleString('ru-RU') + ' ₽</b></div>';
+      }).join('');
+  }
+
+  function run() {
+    var area = parseFloat(host.querySelector('[name=area]').value) || 0;
+    var method = host.querySelector('[name=method]').value;
+    var opts = {
+      prep: host.querySelector('[name=prep]').checked,
+      demo: host.querySelector('[name=demo]').checked,
+      consumables: host.querySelector('[name=consumables]').checked,
+      skirtingMl: parseFloat(host.querySelector('[name=skirtingMl]').value) || 0,
+      electricMl: parseFloat(host.querySelector('[name=electricMl]').value) || 0,
+    };
+    last = window.CalcEngine.compute(area, sel.value, method, opts);
+
+    out.innerHTML =
+      '<div class="mono">предварительная смета</div>' +
+      '<div class="big">' + (area > 0 ? last.total.toLocaleString('ru-RU') + ' ₽' : '—') +
+      '<small>' + (area > 0 ? '≈ ' + last.perM2.toLocaleString('ru-RU') + ' ₽/м² · площадь ' + last.area + ' м²' : 'укажите площадь стен') + '</small></div>' +
+      '<div class="brk">' +
+      '<div class="r"><span>Панели · ' + last.grossArea + ' м² (с запасом 10%)</span><b>' + last.materials.sum.toLocaleString('ru-RU') + ' ₽</b></div>' +
+      '<div class="r"><span>Расходники</span><b>' + last.consumables.sum.toLocaleString('ru-RU') + ' ₽</b></div>' +
+      '<div class="r"><span>Работы</span><b>' + last.works.sum.toLocaleString('ru-RU') + ' ₽</b></div>' +
+      '</div>' +
+      rows(last.consumables.items, 'расходники по позициям') +
+      rows(last.works.items, 'работы по позициям') +
+      '<div class="note">Расчёт по нормам расхода. Итоговая смета фиксируется после замера и не меняется по ходу работ.</div>' +
+      '<div class="btn-row"><a class="btn btn-solid" href="#lead">Заказать замер</a></div>';
+
+    try { localStorage.setItem('wf_last_calc', JSON.stringify({ area: area, category: sel.value, method: method, opts: opts, total: last.total })); } catch (e) {}
+  }
+
+  host.addEventListener('input', run);
+  host.addEventListener('change', run);
+  document.getElementById('recalc').addEventListener('click', run);
+
+  /* чипсы способа монтажа */
+  document.querySelectorAll('[data-chips]').forEach(function (g) {
+    var hidden = host.querySelector('[name=method]');
+    g.addEventListener('click', function (e) {
+      var b = e.target.closest('.chip'); if (!b) return;
+      g.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('on'); });
+      b.classList.add('on');
+      hidden.value = b.dataset.value;
+      run();
+    });
+  });
+
+  /* прикладываем расчёт к заявке */
+  var form = document.querySelector('form[data-lead]');
+  if (form) {
+    form.__extraText = function () {
+      return last ? window.CalcEngine.toText(last, {
+        name: (form.querySelector('[name=name]') || {}).value,
+        phone: (form.querySelector('[name=phone]') || {}).value,
+        city: (form.querySelector('[name=city]') || {}).value,
+        comment: (form.querySelector('[name=comment]') || {}).value,
+      }) : null;
+    };
+  }
+
+  run();
+})();
+</script>
+</body>
+</html>

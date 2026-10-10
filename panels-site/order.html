@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Заявка и бесплатный замер — WALLFORM®</title>
+<meta name="description" content="Оставьте заявку на стеновые панели и монтаж: бесплатный замер с образцами, смета до начала работ, договор с фиксированной ценой.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;500;700&family=Unbounded:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark">W</span><b data-brand>WALLFORM<sup>®</sup></b></a>
+    <nav class="nav">
+      <a href="catalog.html">Каталог</a>
+      <a href="calculator.html">Расчёт</a>
+      <a href="montazh.html">Монтаж</a>
+      <a href="index.html#cons">Расходники</a>
+      <a href="index.html#contact">Контакты</a>
+      <a href="order.html">Заявка</a>
+    </nav>
+    <div class="top-cta">
+      <a class="top-phone" data-phone-link href="#"><span data-phone>+7 (000) 000-00-00</span></a>
+      <a class="btn btn-solid btn-sm" href="order.html">Оставить заявку</a>
+      <button class="burger" aria-label="Меню"><span></span></button>
+    </div>
+  </div>
+</div>
+
+<header class="page-head">
+  <div class="hero-bg"></div>
+  <div class="wrap">
+    <div class="crumbs"><a href="index.html">Главная</a> / Заявка</div>
+    <h1>ЗАЯВКА<br>И ЗАМЕР</h1>
+    <p class="lead">Заполните форму — <span data-manager>менеджер</span> перезвонит в течение рабочего дня, уточнит задачу и согласует время бесплатного выезда замерщика с образцами.</p>
+  </div>
+</header>
+
+<section class="tight">
+  <div class="wrap">
+    <div class="grid-2" style="align-items:start;gap:26px">
+
+      <!-- ---------- ФОРМА ---------- -->
+      <div class="form-card">
+        <h3>Данные для связи</h3>
+        <p class="hint">Телефон — обязательное поле. Всё остальное можно устно замерщику.</p>
+
+        <div class="field">
+          <label>Тип запроса</label>
+          <div class="chips" data-chips>
+            <button type="button" class="chip on" data-value="Частный объект">Частный объект</button>
+            <button type="button" class="chip" data-value="Коммерческий объект">Коммерческий объект</button>
+            <button type="button" class="chip" data-value="Только материал">Только материал</button>
+            <button type="button" class="chip" data-value="Дилер / опт">Дилер / опт</button>
+          </div>
+          <input type="hidden" name="type" value="Частный объект">
+        </div>
+
+        <form data-lead>
+          <div class="form-grid">
+            <div class="field"><label>Как вас зовут</label><input type="text" name="name" placeholder="Имя"></div>
+            <div class="field"><label>Телефон *</label><input type="tel" name="phone" placeholder="+7 (___) ___-__-__" required></div>
+            <div class="field full"><label>Город / адрес объекта</label><input type="text" name="city" placeholder="Например: Москва, Хамовники"></div>
+            <div class="field full"><label>Задача</label><textarea name="comment" rows="4" placeholder="Что отделываем, сроки, пожелания по фактуре…"></textarea></div>
+            <div class="full consent">
+              <input type="checkbox" id="c1" required>
+              <label for="c1" style="text-transform:none;letter-spacing:0;font-size:12px;font-weight:400;color:var(--cream-2)">Согласен на обработку персональных данных и получение звонка от специалиста WALLFORM®.</label>
+            </div>
+            <div class="full btn-row">
+              <button class="btn btn-solid" type="submit">Отправить заявку
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+            </div>
+          </div>
+          <div class="form-ok">Заявка принята. Спасибо! Свяжемся в ближайшее рабочее время и согласуем замер.</div>
+        </form>
+
+        <div id="sendPanel" style="display:none;margin-top:26px;border-top:1px solid var(--line);padding-top:26px">
+          <div class="mono" style="margin-bottom:12px">Заявка собрана — отправьте её удобным способом:</div>
+          <textarea id="sendText" rows="8" readonly style="width:100%;background:rgba(0,0,0,.18);border:1px solid var(--line-strong);border-radius:10px;padding:14px;font-family:var(--mono);font-size:12.5px"></textarea>
+          <div class="btn-row" style="margin-top:16px">
+            <a class="btn btn-solid" data-send="telegram" target="_blank" rel="noopener">Telegram</a>
+            <a class="btn btn-ghost" data-send="whatsapp" target="_blank" rel="noopener">WhatsApp</a>
+            <button class="btn btn-ghost" data-copy type="button">Скопировать текст</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---------- СВОДКА ---------- -->
+      <div class="calc-out" id="orderSummary">
+        <div class="mono">сводка запроса</div>
+        <div class="big" style="margin-top:10px">Бесплатный замер<small>выезд · обмер · образцы · смета</small></div>
+        <div class="brk" id="summaryRows"></div>
+        <div class="note">
+          Если вы уже собирали расчёт в <a class="hl" href="calculator.html">калькуляторе</a> — он приложится к заявке автоматически.
+          Смета фиксируется после замера и не меняется по ходу работ.
+        </div>
+        <div class="btn-row">
+          <a class="btn btn-ghost" href="calculator.html">Собрать расчёт</a>
+          <a class="btn btn-ghost" data-phone-link href="#"><span data-phone>Позвонить</span></a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="sec-line tight">
+  <div class="wrap">
+    <div class="grid-3">
+      <div class="card"><div class="k">01</div><h3>Звонок менеджера</h3><p>Уточняем задачу, тип объекта и удобное время выезда. Никаких скриптов продаж — по делу.</p></div>
+      <div class="card"><div class="k">02</div><h3>Замер с образцами</h3><p>Замерщик приезжает с образцами фактур, снимает размеры, оценивает основание и узлы.</p></div>
+      <div class="card"><div class="k">03</div><h3>Смета и договор</h3><p>Присылаем смету по позициям. Согласовали — подписываем договор с фиксированной ценой.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="index.html"><span class="mark">W</span><b data-brand>WALLFORM<sup>®</sup></b></a>
+        <p style="margin-top:16px" data-tagline>Стеновые панели · продажа и монтаж</p>
+        <p data-city>Москва и Московская область</p>
+      </div>
+      <div>
+        <h4>Разделы</h4>
+        <a href="catalog.html">Каталог панелей</a>
+        <a href="calculator.html">Калькулятор сметы</a>
+        <a href="montazh.html">Монтаж под ключ</a>
+        <a href="index.html#cons">Расходники</a>
+      </div>
+      <div>
+        <h4>Клиентам</h4>
+        <a href="order.html">Оставить заявку</a>
+        <a href="index.html#calc">Предварительный расчёт</a>
+        <a href="index.html#contact">Контакты</a>
+      </div>
+      <div data-hide-if-empty>
+        <h4>Связь</h4>
+        <a data-phone-link href="#"><span data-phone>+7 (000) 000-00-00</span></a>
+        <a data-email href="#">info@example.ru</a>
+        <p data-hours>Пн–Сб 09:00–20:00</p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span data-year>2026</span> WALLFORM®. Все права защищены.</span>
+      <span>Отправляя форму, вы соглашаетесь на обработку персональных данных.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/site-config.js"></script>
+<script src="assets/calc-engine.js"></script>
+<script src="assets/leads.js"></script>
+<script src="assets/main.js"></script>
+<script>
+(function () {
+  var C = window.SITE_CONFIG;
+  var form = document.querySelector('form[data-lead]');
+  var typeInput = document.querySelector('[name=type]');
+  var rowsHost = document.getElementById('summaryRows');
+
+  /* чипсы типа запроса */
+  document.querySelectorAll('[data-chips]').forEach(function (g) {
+    g.addEventListener('click', function (e) {
+      var b = e.target.closest('.chip'); if (!b) return;
+      g.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('on'); });
+      b.classList.add('on');
+      if (typeInput) typeInput.value = b.dataset.value;
+    });
+  });
+
+  /* предвыбор категории из ?cat= */
+  var q = new URLSearchParams(location.search).get('cat');
+  var cat = (C.categories || []).find(function (c) { return c.id === q; });
+
+  /* сводка: категория + последний расчёт из калькулятора */
+  var last = null;
+  try { last = JSON.parse(localStorage.getItem('wf_last_calc') || 'null'); } catch (e) {}
+
+  var rows = [];
+  if (cat) rows.push(['Категория', cat.name + ' — от ' + cat.price.toLocaleString('ru-RU') + ' ₽/м²']);
+  if (last && last.area) {
+    rows.push(['Площадь стен', last.area + ' м²']);
+    rows.push(['Монтаж', last.method === 'frame' ? 'на каркас' : 'на клей']);
+    rows.push(['Предв. расчёт', last.total.toLocaleString('ru-RU') + ' ₽']);
+  }
+  if (!rows.length) rows.push(['Параметры', 'уточним на замере']);
+  rows.push(['Замер и смета', 'бесплатно']);
+  rows.push(['Гарантия на монтаж', '2 года']);
+
+  rowsHost.innerHTML = rows.map(function (r) {
+    return '<div class="r"><span>' + r[0] + '</span><b>' + r[1] + '</b></div>';
+  }).join('');
+
+  /* прикладываем сводку к заявке */
+  if (form) {
+    form.__extraText = function () {
+      var lines = ['ЗАЯВКА WALLFORM®', 'Тип: ' + (typeInput ? typeInput.value : '—')];
+      if (cat) lines.push('Категория: ' + cat.name);
+      if (last && last.area) {
+        lines.push('Площадь: ' + last.area + ' м² · монтаж ' + (last.method === 'frame' ? 'на каркас' : 'на клей'));
+        lines.push('Предв. расчёт: ' + last.total.toLocaleString('ru-RU') + ' ₽');
+      }
+      return lines.join('\n');
+    };
+  }
+})();
+</script>
+</body>
+</html>
