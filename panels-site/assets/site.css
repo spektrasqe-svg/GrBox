@@ -440,3 +440,38 @@ a.card:hover{
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+
+/* Catalog discovery and calculator UX */
+.catalog-tools{margin:0 0 28px;padding:22px;border:1px solid var(--line);border-radius:16px;background:rgba(0,0,0,.12)}
+.catalog-search{display:flex;align-items:center;gap:12px;max-width:620px;margin-bottom:18px}
+.catalog-search svg{width:20px;height:20px;flex:none;color:var(--brass)}
+.catalog-search input{width:100%;min-width:0;background:rgba(0,0,0,.18);border:1px solid var(--line-strong);border-radius:10px;padding:15px 16px;color:var(--cream);font:inherit;outline:none}
+.catalog-search input:focus{border-color:var(--brass);box-shadow:0 0 0 3px rgba(182,154,107,.10)}
+.catalog-search input::placeholder{color:rgba(232,220,200,.5)}
+.catalog-filters{display:flex;flex-wrap:wrap;gap:8px}
+.catalog-filter,.calc-quick button{border:1px solid var(--line-strong);border-radius:999px;background:transparent;color:var(--cream-2);padding:10px 15px;font:600 11px var(--body);cursor:pointer;transition:all .2s}
+.catalog-filter:hover,.catalog-filter.active,.calc-quick button:hover{background:var(--cream);border-color:var(--cream);color:var(--ink)}
+.catalog-meta{display:flex;justify-content:space-between;gap:12px;margin-top:18px;padding-top:14px;border-top:1px solid var(--line);font:11px var(--mono);color:var(--cream-2)}
+.catalog-meta span:first-child{color:var(--brass)}
+.catalog-card .thumb{height:230px}
+.catalog-card .price{font-size:21px}
+.catalog-card .go{letter-spacing:.12em}
+.catalog-empty{padding:36px 0;color:var(--cream-2)}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.calc-quick{display:flex;flex-wrap:wrap;gap:8px;margin:-2px 0 12px}
+.calc-invalid{margin-top:20px;padding:18px;border:1px solid rgba(176,106,90,.65);border-radius:10px;color:var(--cream-2);line-height:1.6}
+.calc-out .note{padding:14px 16px;border-left:2px solid var(--brass);background:rgba(182,154,107,.06);border-radius:0 8px 8px 0}
+@media(max-width:760px){
+ .catalog-tools{padding:15px;margin-bottom:20px}
+ .catalog-search{max-width:none}
+ .catalog-filters{gap:7px}
+ .catalog-filter{padding:10px 12px;font-size:10px}
+ .catalog-meta{flex-direction:column;gap:6px;font-size:10px}
+ .catalog-card .thumb{height:clamp(190px,58vw,280px)}
+ .calc{grid-template-columns:1fr}
+ .calc-panel,.calc-out{padding:22px;border-radius:14px}
+ .calc-out{position:static;top:auto}
+ .field .two{grid-template-columns:1fr}
+ .calc-quick button{min-height:40px}
+}
