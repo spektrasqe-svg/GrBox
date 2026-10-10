@@ -343,6 +343,23 @@ footer{padding:84px 0 40px}
 .stage3d-hint a{color:var(--brass);transition:opacity .25s}
 .stage3d-hint a:hover{opacity:.75}
 
+
+/* EXPLAINABLE AXONOMETRIC CUTAWAY */
+.cutaway-board{background:#e8dfd0}
+.cutaway-layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(255px,.75fr);gap:0;background:#e8dfd0}
+.cutaway-visual{min-width:0;border-right:1px solid #c7beaf;display:flex;align-items:center}
+.cutaway-visual svg{display:block;width:100%;height:auto;max-height:690px}
+.cutaway-legend{padding:20px 18px 16px;background:#e2d8c8}
+.cutaway-legend-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:14px;border-bottom:1px solid #c7beaf;font:700 10px var(--body);letter-spacing:.13em;color:#5a3a2e}
+.cutaway-legend-head small{font:9px var(--mono);color:#8d7b63}
+.cutaway-item{display:grid;grid-template-columns:29px minmax(0,1fr);gap:10px;padding:14px 0;border-bottom:1px solid #cfc5b5}
+.cutaway-item>b{display:flex;align-items:center;justify-content:center;width:26px;height:26px;border:1px solid #b89a68;color:#795b32;font:700 10px var(--mono)}
+.cutaway-item strong{display:block;color:#242320;font-size:12px;line-height:1.45}
+.cutaway-item p{margin:4px 0 0;color:#645b4f;font-size:11px;line-height:1.55}
+.cutaway-note{padding-top:15px;color:#746a5c;font-size:10px;line-height:1.6}
+@media(max-width:900px){.cutaway-layout{grid-template-columns:1fr}.cutaway-visual{border-right:0;border-bottom:1px solid #c7beaf}.cutaway-visual svg{max-height:none}.cutaway-legend{display:grid;grid-template-columns:1fr 1fr;column-gap:18px}.cutaway-legend-head,.cutaway-note{grid-column:1/-1}}
+@media(max-width:560px){.cutaway-legend{display:block;padding:16px}.cutaway-visual svg{min-height:250px}.cutaway-item{padding:11px 0}.cutaway-board .drawing-topline{align-items:flex-start;flex-direction:column;gap:6px}}
+
 /* PRODUCT-FIRST HOME + LIGHTWEIGHT TECHNICAL DRAWING */
 .drawing-section{background:#eee8dd;color:#111215}
 .drawing-section .sec-head p{color:#5c5346}
@@ -848,77 +865,117 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
   <div class="wrap">
     <div class="sec-head">
       <div>
-        <div class="tag">Чертёж · три проекции</div>
-        <h2>Сначала понятная схема. Потом — изготовление.</h2>
+        <div class="tag">Чертёж · устройство шкафа</div>
+        <h2>Видно, что находится внутри — без тяжёлой 3D-сцены.</h2>
       </div>
-      <p>Вместо тяжёлой 3D-сцены показываем главное: внешний контур, внутренние зоны и принцип компоновки. Точные габариты задаются в конфигураторе и фиксируются в проекте перед изготовлением.</p>
+      <p>Объёмная схема с открытой дверью и выносками показывает, где находятся свет, рабочая камера, верхний шумовой модуль, вентиляция и техническая колонна. Это чертёжное объяснение конструкции, а не декоративный рендер.</p>
     </div>
-    <div class="drawing-board">
-      <div class="drawing-topline"><span>SECRET BOX® / СХЕМА КОРПУСА</span><span>ЭСКИЗ · НЕ В МАСШТАБЕ</span></div>
-      <div class="drawing-views">
-        <article class="drawing-view">
-          <div class="drawing-view-title"><b>01</b> Вид спереди</div>
-          <svg viewBox="0 0 300 310" role="img" aria-label="Чертёж гроубокса спереди">
-            <defs><marker id="arr-front" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto-start-reverse"><path d="M0,0 L6,3 L0,6 z" fill="#c5a46c"/></marker></defs>
-            <rect x="57" y="43" width="150" height="225" fill="#1c1e22" stroke="#eee8dd" stroke-width="1.5"/>
-            <rect x="67" y="53" width="130" height="205" fill="none" stroke="#7b7d80" stroke-dasharray="4 4"/>
-            <line x1="132" y1="43" x2="132" y2="268" stroke="#7b7d80"/>
-            <rect x="70" y="55" width="124" height="26" fill="#c5a46c" fill-opacity=".12" stroke="#c5a46c"/>
-            <text x="132" y="71" text-anchor="middle" fill="#e0cc8c" font-size="8">ВЕРХНИЙ ТЕХ. МОДУЛЬ</text>
-            <rect x="75" y="92" width="114" height="152" fill="#9fb58b" fill-opacity=".06" stroke="#9fb58b" stroke-opacity=".8"/>
-            <text x="132" y="159" text-anchor="middle" fill="#c5d7b8" font-size="10">РАБОЧАЯ ЗОНА</text>
-            <text x="132" y="174" text-anchor="middle" fill="#aaa69e" font-size="8">полки / свет / сервис</text>
-            <line x1="39" y1="43" x2="39" y2="268" stroke="#c5a46c" marker-start="url(#arr-front)" marker-end="url(#arr-front)"/>
-            <line x1="44" y1="43" x2="57" y2="43" stroke="#c5a46c"/><line x1="44" y1="268" x2="57" y2="268" stroke="#c5a46c"/>
-            <text x="25" y="156" transform="rotate(-90 25 156)" text-anchor="middle" fill="#c5a46c" font-size="10">ВЫСОТА</text>
-            <line x1="57" y1="285" x2="207" y2="285" stroke="#c5a46c" marker-start="url(#arr-front)" marker-end="url(#arr-front)"/>
-            <text x="132" y="301" text-anchor="middle" fill="#c5a46c" font-size="10">ШИРИНА</text>
+    <div class="drawing-board cutaway-board">
+      <div class="drawing-topline"><span>SECRET BOX® / УСТРОЙСТВО КОРПУСА</span><span>АКСОНОМЕТРИЧЕСКАЯ СХЕМА</span></div>
+      <div class="cutaway-layout">
+        <div class="cutaway-visual">
+          <svg viewBox="0 0 760 570" role="img" aria-label="Объёмная чертёжная схема открытого гроубокса SECRET BOX с обозначением рабочих и технических зон">
+            <defs>
+              <pattern id="blueprint-grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#c7beaf" stroke-opacity=".35" stroke-width=".6"/></pattern>
+              <marker id="air-arrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#8ea681"/></marker>
+              <marker id="dim-arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto-start-reverse"><path d="M0 0L6 3L0 6Z" fill="#a27e45"/></marker>
+            </defs>
+            <rect width="760" height="570" fill="url(#blueprint-grid)"/>
+            <!-- Cabinet carcass: open front, visible side and top -->
+            <polygon points="248,124 493,64 625,128 375,197" fill="#d4c8b6" fill-opacity=".45" stroke="#4b4944" stroke-width="2"/>
+            <polygon points="493,64 625,128 625,425 493,364" fill="#c2b6a4" fill-opacity=".7" stroke="#4b4944" stroke-width="2"/>
+            <polygon points="248,124 493,64 493,364 248,426" fill="#ece3d5" fill-opacity=".55" stroke="#4b4944" stroke-width="2"/>
+            <!-- Inner back and floor -->
+            <polygon points="270,145 483,94 483,342 270,394" fill="#e9e0d1" stroke="#7c766c" stroke-width="1.5"/>
+            <polygon points="270,394 483,342 605,398 386,457" fill="#d0c4b1" fill-opacity=".8" stroke="#7c766c" stroke-width="1.5"/>
+            <!-- Upper technical / acoustic box -->
+            <polygon points="270,145 483,94 483,155 270,208" fill="#b99a64" fill-opacity=".48" stroke="#947342" stroke-width="1.5"/>
+            <polygon points="483,94 605,151 605,211 483,155" fill="#a98a58" fill-opacity=".5" stroke="#947342" stroke-width="1.5"/>
+            <path d="M292 164L460 124M292 178L460 138M292 192L460 152" stroke="#8c6c39" stroke-width="1" stroke-dasharray="4 4"/>
+            <!-- Light fixture under upper module -->
+            <polygon points="304,220 446,185 475,198 333,235" fill="#f5edce" stroke="#9e8d5c" stroke-width="1.5"/>
+            <path d="M318 224L449 192M327 229L458 197" stroke="#d7bd73" stroke-width="2"/>
+            <path d="M333 239L333 263M357 233L357 257M381 227L381 251M405 221L405 245M429 215L429 239" stroke="#b49b62" stroke-width="1" stroke-dasharray="3 3"/>
+            <!-- Work zone rear rails and SCROG -->
+            <path d="M282 258L472 212M282 274L472 228M282 290L472 244" stroke="#8b9f7e" stroke-width="2"/>
+            <path d="M300 249L300 305M329 242L329 298M358 235L358 291M387 228L387 284M416 221L416 277M445 215L445 271" stroke="#8b9f7e" stroke-width="1" stroke-dasharray="3 3"/>
+            <!-- Tray -->
+            <polygon points="284,333 466,288 487,299 305,346" fill="#9bad91" fill-opacity=".5" stroke="#5f7857" stroke-width="1.5"/>
+            <polygon points="305,346 487,299 487,311 305,359" fill="#7d9272" fill-opacity=".6" stroke="#5f7857" stroke-width="1.2"/>
+            <!-- Technical column on right interior -->
+            <polygon points="445,174 478,166 478,331 445,340" fill="#b4b8b3" fill-opacity=".9" stroke="#666c68" stroke-width="1.5"/>
+            <polygon points="478,166 505,179 505,343 478,331" fill="#959c96" fill-opacity=".9" stroke="#666c68" stroke-width="1.5"/>
+            <rect x="452" y="190" width="20" height="25" rx="2" fill="#4c5550" stroke="#d4d6d0" stroke-width="1"/>
+            <circle cx="462" cy="198" r="2" fill="#d4c17c"/><circle cx="462" cy="206" r="2" fill="#8ea681"/>
+            <rect x="452" y="230" width="20" height="37" rx="2" fill="#e0d7c8" stroke="#6f746e" stroke-width="1"/>
+            <path d="M456 238H468M456 245H468M456 252H468" stroke="#858a83" stroke-width="1.5"/>
+            <!-- Reservoir in lower tech zone -->
+            <path d="M451 284Q451 278 463 276L480 284Q480 289 468 292L451 286Z" fill="#d7e1e0" stroke="#6e8985" stroke-width="1.2"/>
+            <path d="M451 284L451 312Q465 320 480 312L480 284" fill="#a9c6c3" fill-opacity=".8" stroke="#6e8985" stroke-width="1.2"/>
+            <ellipse cx="465.5" cy="284" rx="14.5" ry="5" fill="#dbe9e7" stroke="#6e8985" stroke-width="1.2"/>
+            <!-- Fan/filter and airflow path in upper tech area -->
+            <circle cx="531" cy="132" r="18" fill="#e3dacb" stroke="#746a5d" stroke-width="1.5"/>
+            <circle cx="531" cy="132" r="5" fill="#746a5d"/>
+            <path d="M531 127C514 110 511 133 526 134C512 151 536 154 536 137C553 151 556 128 537 128" fill="none" stroke="#746a5d" stroke-width="1.4"/>
+            <path d="M532 151L532 172L571 191L571 217" fill="none" stroke="#8ea681" stroke-width="4" stroke-linecap="round" marker-end="url(#air-arrow)"/>
+            <!-- Door open to the left -->
+            <polygon points="248,124 129,88 129,376 248,426" fill="#d7c9b5" fill-opacity=".7" stroke="#4b4944" stroke-width="2"/>
+            <polygon points="235,143 146,116 146,357 235,393" fill="none" stroke="#9b8e7c" stroke-width="1.2"/>
+            <path d="M222 257L231 260" stroke="#8b7a65" stroke-width="3" stroke-linecap="round"/>
+            <!-- Cabinet base and feet -->
+            <path d="M248 426L386 457L625 425" fill="none" stroke="#4b4944" stroke-width="3"/>
+            <path d="M268 426L268 443M470 405L470 429M600 414L600 436" stroke="#4b4944" stroke-width="5"/>
+            <!-- Callout leaders -->
+            <g fill="none" stroke="#8b6b3e" stroke-width="1.4">
+              <path d="M333 142L215 77L92 77"/><path d="M369 220L226 220L92 220"/>
+              <path d="M354 293L226 325L92 325"/><path d="M465 300L551 320L667 320"/>
+              <path d="M531 132L583 89L667 89"/><path d="M449 365L547 408L667 408"/>
+              <path d="M176 242L104 270L62 270"/>
+            </g>
+            <g fill="#5a3a2e" font-family="Arial,sans-serif" font-size="11" font-weight="700">
+              <text x="18" y="61">01 · ВЕРХНИЙ ТЕХБЛОК</text>
+              <text x="18" y="204">02 · СВЕТ</text>
+              <text x="18" y="309">03 · РАБОЧАЯ ЗОНА</text>
+              <text x="582" y="73">04 · ВЕНТИЛЯЦИЯ</text>
+              <text x="563" y="304">05 · ТЕХКОЛОННА</text>
+              <text x="564" y="393">06 · ПОДДОН / ОСНОВАНИЕ</text>
+              <text x="18" y="254">07 · ДВЕРЬ</text>
+            </g>
+            <g fill="#756b5d" font-family="Arial,sans-serif" font-size="9">
+              <text x="18" y="75">шумоподавление и каналы</text>
+              <text x="18" y="218">светильник над зоной</text>
+              <text x="18" y="323">полки, направляющие, SCROG</text>
+              <text x="563" y="86">фильтр и воздушный тракт</text>
+              <text x="563" y="336">сервис, электрика, вода</text>
+              <text x="563" y="424">поддон и нижняя опора</text>
+              <text x="18" y="268">открывается для доступа</text>
+            </g>
+            <!-- Blueprint dimensions (illustrative only) -->
+            <g fill="none" stroke="#a27e45" stroke-width="1">
+              <path d="M248 472L625 472M248 465L248 480M625 465L625 480"/>
+              <path d="M660 128L660 425M653 128L667 128M653 425L667 425"/>
+            </g>
+            <g fill="#a27e45" font-family="Arial,sans-serif" font-size="10" letter-spacing="1">
+              <text x="436" y="490" text-anchor="middle">ШИРИНА КОРПУСА</text>
+              <text x="683" y="278" transform="rotate(90 683 278)" text-anchor="middle">ВЫСОТА</text>
+              <text x="382" y="536" text-anchor="middle" font-size="9">СХЕМА ПРИНЦИПА УСТРОЙСТВА · НЕ В МАСШТАБЕ</text>
+            </g>
           </svg>
-          <p>Фасад, двери и верхний технический отсек.</p>
-        </article>
-        <article class="drawing-view">
-          <div class="drawing-view-title"><b>02</b> Вид сбоку</div>
-          <svg viewBox="0 0 300 310" role="img" aria-label="Чертёж гроубокса сбоку">
-            <defs><marker id="arr-side" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto-start-reverse"><path d="M0,0 L6,3 L0,6 z" fill="#c5a46c"/></marker></defs>
-            <rect x="76" y="43" width="104" height="225" fill="#1c1e22" stroke="#eee8dd" stroke-width="1.5"/>
-            <rect x="84" y="53" width="88" height="205" fill="none" stroke="#7b7d80" stroke-dasharray="4 4"/>
-            <rect x="87" y="55" width="82" height="26" fill="#c5a46c" fill-opacity=".12" stroke="#c5a46c"/>
-            <rect x="92" y="91" width="72" height="65" fill="#9fb58b" fill-opacity=".07" stroke="#9fb58b" stroke-opacity=".8"/>
-            <rect x="92" y="164" width="72" height="80" fill="#9fb58b" fill-opacity=".04" stroke="#9fb58b" stroke-opacity=".5"/>
-            <line x1="59" y1="43" x2="59" y2="268" stroke="#c5a46c" marker-start="url(#arr-side)" marker-end="url(#arr-side)"/>
-            <line x1="64" y1="43" x2="76" y2="43" stroke="#c5a46c"/><line x1="64" y1="268" x2="76" y2="268" stroke="#c5a46c"/>
-            <text x="45" y="156" transform="rotate(-90 45 156)" text-anchor="middle" fill="#c5a46c" font-size="10">ВЫСОТА</text>
-            <line x1="76" y1="285" x2="180" y2="285" stroke="#c5a46c" marker-start="url(#arr-side)" marker-end="url(#arr-side)"/>
-            <text x="128" y="301" text-anchor="middle" fill="#c5a46c" font-size="10">ГЛУБИНА</text>
-            <text x="128" y="124" text-anchor="middle" fill="#c5d7b8" font-size="8">ОБОРУД.</text>
-            <text x="128" y="203" text-anchor="middle" fill="#c5d7b8" font-size="8">СЕРВИС</text>
-          </svg>
-          <p>Глубина корпуса и разделение внутренних зон.</p>
-        </article>
-        <article class="drawing-view">
-          <div class="drawing-view-title"><b>03</b> Вид сверху</div>
-          <svg viewBox="0 0 300 310" role="img" aria-label="Чертёж гроубокса сверху">
-            <defs><marker id="arr-top" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto-start-reverse"><path d="M0,0 L6,3 L0,6 z" fill="#c5a46c"/></marker></defs>
-            <rect x="48" y="72" width="180" height="118" fill="#1c1e22" stroke="#eee8dd" stroke-width="1.5"/>
-            <rect x="58" y="82" width="160" height="98" fill="#9fb58b" fill-opacity=".05" stroke="#9fb58b" stroke-opacity=".7" stroke-dasharray="4 4"/>
-            <rect x="58" y="82" width="34" height="98" fill="#c5a46c" fill-opacity=".12" stroke="#c5a46c"/>
-            <text x="75" y="131" text-anchor="middle" transform="rotate(-90 75 131)" fill="#e0cc8c" font-size="8">ТЕХ. КОЛОННА</text>
-            <rect x="102" y="95" width="102" height="72" fill="none" stroke="#9fb58b"/>
-            <text x="153" y="129" text-anchor="middle" fill="#c5d7b8" font-size="9">РАБОЧАЯ</text>
-            <text x="153" y="142" text-anchor="middle" fill="#c5d7b8" font-size="9">ЗОНА</text>
-            <line x1="48" y1="211" x2="228" y2="211" stroke="#c5a46c" marker-start="url(#arr-top)" marker-end="url(#arr-top)"/>
-            <text x="138" y="228" text-anchor="middle" fill="#c5a46c" font-size="10">ШИРИНА</text>
-            <line x1="247" y1="72" x2="247" y2="190" stroke="#c5a46c" marker-start="url(#arr-top)" marker-end="url(#arr-top)"/>
-            <line x1="228" y1="72" x2="242" y2="72" stroke="#c5a46c"/><line x1="228" y1="190" x2="242" y2="190" stroke="#c5a46c"/>
-            <text x="266" y="131" transform="rotate(-90 266 131)" text-anchor="middle" fill="#c5a46c" font-size="10">ГЛУБИНА</text>
-            <text x="138" y="258" text-anchor="middle" fill="#aaa69e" font-size="9">Внутренняя компоновка</text>
-          </svg>
-          <p>Планировка рабочей и технической зон.</p>
-        </article>
+        </div>
+        <aside class="cutaway-legend">
+          <div class="cutaway-legend-head"><span>УСТРОЙСТВО ШКАФА</span><small>07 УЗЛОВ</small></div>
+          <div class="cutaway-item"><b>01</b><div><strong>Верхний технический модуль</strong><p>Шумоподавление, воздуховоды и скрытые инженерные узлы.</p></div></div>
+          <div class="cutaway-item"><b>02</b><div><strong>Световой модуль</strong><p>Располагается над рабочей зоной, с местом для обслуживания.</p></div></div>
+          <div class="cutaway-item"><b>03</b><div><strong>Рабочая камера</strong><p>Полки и направляющие для настройки внутренней компоновки.</p></div></div>
+          <div class="cutaway-item"><b>04</b><div><strong>Вентиляционный тракт</strong><p>Фильтр, вентилятор и канал отвода воздуха.</p></div></div>
+          <div class="cutaway-item"><b>05</b><div><strong>Техническая колонна</strong><p>Сервисная зона для управления, электрики и водного узла.</p></div></div>
+          <div class="cutaway-item"><b>06</b><div><strong>Поддон и основание</strong><p>Нижняя зона и опорная часть корпуса.</p></div></div>
+          <div class="cutaway-item"><b>07</b><div><strong>Открывающаяся дверь</strong><p>Показывает доступ к внутренним зонам и оборудованию.</p></div></div>
+          <div class="cutaway-note">Это объясняющая схема: окончательное расположение деталей зависит от габаритов и выбранной комплектации.</div>
+        </aside>
       </div>
-      <div class="drawing-foot"><span>Размеры задаются индивидуально</span><a href="builder.html">Задать габариты и комплектацию →</a></div>
-    </div>
-    <div class="stage3d-hint"><span>Нужна объёмная проверка? 3D-просмотр остаётся доступен отдельно.</span><a href="GrowBox_v31_3D.html" target="_blank" rel="noopener">Открыть 3D-просмотр →</a></div>
+      <div class="drawing-foot"><span>Схема показывает принцип устройства, не размеры конкретного заказа</span><a href="builder.html">Настроить свой шкаф →</a></div>
+    </div>    <div class="stage3d-hint"><span>Нужна объёмная проверка? 3D-просмотр остаётся доступен отдельно.</span><a href="GrowBox_v31_3D.html" target="_blank" rel="noopener">Открыть 3D-просмотр →</a></div>
   </div>
 </section>
 
