@@ -129,7 +129,8 @@
     host.innerHTML = C.consumables.map(function (it) {
       return '<div class="row"><b>' + esc(it.name) + '</b>' +
         '<span>' + esc(it.unit) + (it.note ? ' · ' + esc(it.note) : '') + '</span>' +
-        '<span class="p">ориентир ' + Number(it.price || 0).toLocaleString('ru-RU') + ' ₽</span></div>';
+        '<span class="p">ориентир ' + Number(it.price || 0).toLocaleString('ru-RU') + ' ₽</span>' +
+        '<a class="cons-buy" href="order.html?consumable=' + encodeURIComponent(it.id) + '">Запросить</a></div>';
     }).join('');
   }
 
