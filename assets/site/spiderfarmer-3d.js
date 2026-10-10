@@ -223,7 +223,7 @@ function buildLight(THREE,g,M,s){
  const ctlD=Math.max(7,railW*.42);
  const ctlX=-(w/2+ctlD*.28);
  const ctlY=railY+railH*.48;
- const ctlZ=-d*.22;
+ const ctlZ=-d*.28;
  add(g,THREE,boxG(THREE,ctlD,ctlH,ctlW),M.black,ctlX,ctlY,ctlZ);
  add(g,THREE,boxG(THREE,2,ctlH+3,ctlW+3),M.dark,ctlX-ctlD/2-1,ctlY,ctlZ);
  /* PlaneGeometry lies in XY; rotate around Y so its face points toward -X. */
