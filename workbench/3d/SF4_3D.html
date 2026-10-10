@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Spider Farmer SF4 — отдельная 3D-модель | SECRET BOX</title>
+<style>
+:root{--bg:#101316;--panel:rgba(20,24,27,.9);--line:#30383d;--txt:#e9eef0;--dim:#9aa9af;--acc:#f28a32}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}canvas:active{cursor:grabbing}
+.ui{position:absolute;z-index:10}
+.top{top:10px;left:10px;right:10px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;pointer-events:none}
+.pill{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:7px 11px;font-size:11.5px;backdrop-filter:blur(8px);max-width:65vw}
+.pill b{color:var(--acc)}.topbtns{display:flex;gap:6px;pointer-events:auto}
+button{font:inherit;color:var(--txt);background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 11px;cursor:pointer;min-height:36px;white-space:nowrap}
+button.on{background:var(--acc);border-color:var(--acc);color:#21170e;font-weight:700}
+#info{top:58px;left:10px;width:min(260px,calc(100vw - 150px));background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:10px 12px;backdrop-filter:blur(8px)}
+#info h3{margin:0 0 5px;font-size:12.5px}#info .d{font-size:11px;color:#c1cbd0;line-height:1.5;display:none}#info.open .d{display:block}
+#info .dm{margin-top:7px;font:10.5px/1.6 ui-monospace,monospace;color:var(--dim)}
+#info .more{margin-top:7px;font-size:10px;color:var(--acc);cursor:pointer;user-select:none}
+#ref{top:58px;right:10px;width:145px;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:9px;backdrop-filter:blur(8px)}
+#ref .cap{font-size:10px;line-height:1.45;color:var(--dim);text-align:center}
+#ref a{display:block;margin-top:7px;text-align:center;color:var(--acc);font-size:10px;text-decoration:none}
+.bar{left:0;right:0;bottom:0;padding:8px 10px calc(8px + env(safe-area-inset-bottom));display:flex;flex-wrap:nowrap;overflow-x:auto;gap:6px;justify-content:flex-start;background:linear-gradient(to top,rgba(16,19,22,.96),rgba(16,19,22,0));scrollbar-width:none}
+.bar::-webkit-scrollbar{display:none}.bar button{flex:0 0 auto;font-size:11px;padding:9px 13px;min-height:38px}
+body.ui-hidden #info,body.ui-hidden #ref,body.ui-hidden .bar{display:none}
+@media(max-width:640px){.pill{font-size:10px;padding:7px 9px;max-width:52vw}.topbtns button{font-size:10px;padding:7px 8px;min-height:34px}#ref{width:116px;top:54px;padding:7px}#info{top:54px;width:min(205px,calc(100vw - 135px));padding:8px 10px}#info .dm{font-size:9.5px}.bar button{font-size:10px;padding:8px 10px;min-height:36px}}
+</style>
+</head>
+<body>
+<canvas id="cv" aria-label="Интерактивная 3D-модель вентилятора Spider Farmer SF4"></canvas>
+<div class="ui top">
+ <div class="pill"><b>SPIDER FARMER SF4</b> · отдельная 3D-модель</div>
+ <div class="topbtns"><button id="infoBtn" class="on">Паспорт</button><button id="refBtn" class="on">Справка</button><button id="uiBtn">Скрыть UI</button></div>
+</div>
+<section class="ui" id="info">
+ <h3>Spider Farmer SF4 · 4″</h3>
+ <div class="d">Интерактивная процедурная модель канального вентилятора. Перетаскивайте, чтобы вращать; прокручивайте или используйте щипок двумя пальцами для масштаба.</div>
+ <div class="dm">ГАБАРИТЫ 303 × 202 × 190 мм<br>ПАТРУБОК Ø 101 мм<br>МОЩНОСТЬ 27 Вт<br>ПОТОК 205 CFM<br>СКОРОСТЬ 3000 об/мин</div>
+ <div class="more" id="more">подробнее ▾</div>
+</section>
+<section class="ui" id="ref">
+ <div class="cap">Официальные характеристики SF4 и фото изделия доступны на сайте производителя.</div>
+ <a href="https://www.spider-farmer.com/products/spider-farmer-4-inch-inline-duct-fan-with-speed-controller/" target="_blank" rel="noopener">Открыть оригинал ↗</a>
+</section>
+<nav class="ui bar" aria-label="Ракурсы модели">
+ <button data-view="iso" class="on">Изометрия</button><button data-view="front">Спереди</button><button data-view="side">Сбоку</button><button data-view="rear">Сзади</button><button data-view="top">Сверху</button><button data-view="bottom">Снизу</button><button id="spinBtn" class="on">Автовращение: вкл</button><button id="resetBtn">Сбросить вид</button>
+</nav>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="../../assets/site/spiderfarmer-3d.js"></script>
+<script>
+(function(){
+'use strict';
+const cv=document.getElementById('cv');
+if(typeof THREE==='undefined'||!window.SPIDERFARMER3D){
+ document.body.innerHTML='<div style="padding:28px;font-family:system-ui,sans-serif;max-width:560px;color:#e9eef0;background:#101316;height:100%">Не удалось загрузить 3D-библиотеки. Проверьте интернет-соединение и обновите страницу.</div>';return;
+}
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x101316);
+const camera=new THREE.PerspectiveCamera(36,innerWidth/innerHeight,.01,60);
+const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:false});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+scene.add(new THREE.HemisphereLight(0xe8f0f2,0x1a1f22,1.35));
+const key=new THREE.DirectionalLight(0xfff3e0,2.5);key.position.set(1.8,2.6,2.2);key.castShadow=true;key.shadow.mapSize.set(1024,1024);scene.add(key);
+const fill=new THREE.DirectionalLight(0xbcd2dc,1.15);fill.position.set(-2.2,1.4,-1.8);scene.add(fill);
+const rim=new THREE.DirectionalLight(0xf28a32,.65);rim.position.set(.4,.8,-2.6);scene.add(rim);
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(30,30),new THREE.MeshStandardMaterial({color:0x171c20,roughness:.96}));
+ground.rotation.x=-Math.PI/2;ground.position.y=-.16;ground.receiveShadow=true;scene.add(ground);
+const spec=SPIDERFARMER3D.spec('SF4');
+const model=SPIDERFARMER3D.build(THREE,'SF4');model.scale.setScalar(.001);
+const bb=new THREE.Box3().setFromObject(model),size=new THREE.Vector3(),center=new THREE.Vector3();bb.getSize(size);bb.getCenter(center);model.position.sub(center);
+const pivot=new THREE.Group();pivot.add(model);scene.add(pivot);
+const target=new THREE.Vector3(0,0,0);const sph={r:1.22,theta:.72,phi:1.12},goal=Object.assign({},sph);
+function applyCamera(){
+ sph.r+=(goal.r-sph.r)*.16;sph.theta+=(goal.theta-sph.theta)*.16;sph.phi+=(goal.phi-sph.phi)*.16;
+ camera.position.set(target.x+sph.r*Math.sin(sph.phi)*Math.cos(sph.theta),target.y+sph.r*Math.cos(sph.phi),target.z+sph.r*Math.sin(sph.phi)*Math.sin(sph.theta));camera.lookAt(target);
+}
+const VIEWS={iso:{theta:.72,phi:1.12},front:{theta:0,phi:1.52},side:{theta:Math.PI/2,phi:1.52},rear:{theta:Math.PI,phi:1.52},top:{theta:.72,phi:.28},bottom:{theta:.72,phi:2.72}};
+document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{Object.assign(goal,VIEWS[b.dataset.view]||VIEWS.iso);document.querySelectorAll('[data-view]').forEach(x=>x.classList.toggle('on',x===b));}));
+let spin=true,drag=null;
+const spinBtn=document.getElementById('spinBtn');
+spinBtn.onclick=()=>{spin=!spin;spinBtn.classList.toggle('on',spin);spinBtn.textContent='Автовращение: '+(spin?'вкл':'выкл')};
+document.getElementById('resetBtn').onclick=()=>{Object.assign(goal,{r:1.22,theta:.72,phi:1.12});spin=true;spinBtn.classList.add('on');spinBtn.textContent='Автовращение: вкл';};
+const info=document.getElementById('info');
+document.getElementById('more').onclick=()=>{info.classList.toggle('open');document.getElementById('more').textContent=info.classList.contains('open')?'свернуть ▴':'подробнее ▾'};
+document.getElementById('infoBtn').onclick=e=>{const on=info.style.display!=='none';info.style.display=on?'none':'';e.currentTarget.classList.toggle('on',!on)};
+const ref=document.getElementById('ref');
+document.getElementById('refBtn').onclick=e=>{const on=ref.style.display!=='none';ref.style.display=on?'none':'';e.currentTarget.classList.toggle('on',!on)};
+document.getElementById('uiBtn').onclick=()=>{document.body.classList.toggle('ui-hidden');document.getElementById('uiBtn').textContent=document.body.classList.contains('ui-hidden')?'Показать UI':'Скрыть UI'};
+cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY};cv.setPointerCapture(e.pointerId)});
+cv.addEventListener('pointermove',e=>{if(!drag)return;goal.theta-=(e.clientX-drag.x)*.008;goal.phi=Math.max(.2,Math.min(2.85,goal.phi-(e.clientY-drag.y)*.006));drag={x:e.clientX,y:e.clientY}});
+cv.addEventListener('pointerup',()=>{drag=null});cv.addEventListener('pointercancel',()=>{drag=null});
+cv.addEventListener('wheel',e=>{goal.r=Math.max(.48,Math.min(3.5,goal.r*(e.deltaY>0?1.08:.92)));e.preventDefault()},{passive:false});
+let pinch=null;
+cv.addEventListener('touchstart',e=>{if(e.touches.length===2)pinch=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY)},{passive:true});
+cv.addEventListener('touchmove',e=>{if(e.touches.length===2&&pinch){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);if(d>0)goal.r=Math.max(.48,Math.min(3.5,goal.r*(pinch/d)));pinch=d}},{passive:true});
+cv.addEventListener('touchend',()=>{pinch=null},{passive:true});
+function resize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight,false)}
+addEventListener('resize',resize);resize();
+function tick(){requestAnimationFrame(tick);if(spin&&!drag)goal.theta+=.0022;applyCamera();renderer.render(scene,camera)}
+tick();
+window.__SF4_3D={renderer,scene,camera,pivot,spec,stats:()=>{renderer.render(scene,camera);const c=document.createElement('canvas');c.width=240;c.height=150;const x=c.getContext('2d');x.drawImage(renderer.domElement,0,0,240,150);const d=x.getImageData(0,0,240,150).data;let lit=0;for(let i=0;i<d.length;i+=4)if(d[i]>40||d[i+1]>48||d[i+2]>52)lit++;return{litPixels:lit,total:240*150}}};
+})();
+</script>
+</body>
+</html>
