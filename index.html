@@ -834,24 +834,100 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
       </div>
       <div class="sb-unified-canvas">
         <div class="sb-canvas-meta"><span>SECRET BOX® / ИНЖЕНЕРНАЯ СХЕМА</span><span>ПСЕВДОИЗОМЕТРИЯ · ОТКРЫТЫЙ КОРПУС</span></div>
-        <div class="sb-canvas-svg"><svg class="sb-flat-plan" data-active-zone="all" viewBox="0 0 760 570" role="img" aria-label="Псевдоизометрическая схема шкафа SECRET BOX с открытой дверью и внутренними узлами">
-<defs><pattern id="sb-grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#c7beaf" stroke-opacity=".25"/></pattern><linearGradient id="sb-front" x2="1" y2="1"><stop stop-color="#f1e9dd"/><stop offset="1" stop-color="#c9bdab"/></linearGradient><linearGradient id="sb-side"><stop stop-color="#b7aa97"/><stop offset="1" stop-color="#8d8375"/></linearGradient><linearGradient id="sb-door" x2="1" y2="1"><stop stop-color="#e8dac5"/><stop offset="1" stop-color="#bba98f"/></linearGradient><linearGradient id="sb-metal" x2="0" y2="1"><stop stop-color="#c0c7bd"/><stop offset="1" stop-color="#758176"/></linearGradient><filter id="sb-shadow" x="-25%" y="-25%" width="160%" height="170%"><feDropShadow dx="3" dy="7" stdDeviation="5" flood-color="#45392c" flood-opacity=".2"/></filter></defs>
-<rect width="760" height="570" fill="url(#sb-grid)"/><ellipse cx="380" cy="460" rx="210" ry="24" fill="#665b4d" opacity=".14"/>
+        <div class="sb-canvas-svg"><svg class="sb-flat-plan" data-active-zone="all" viewBox="0 0 760 570" role="img" aria-label="Инженерный вид шкафа SECRET BOX: прямоугольный корпус, две раскрытые двери и оборудование внутри">
+<defs>
+ <pattern id="sb-grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#b9b1a5" stroke-opacity=".24"/></pattern>
+ <linearGradient id="sb-front" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#42464a"/><stop offset="1" stop-color="#24272b"/></linearGradient>
+ <linearGradient id="sb-side" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#35393d"/><stop offset="1" stop-color="#1d2023"/></linearGradient>
+ <linearGradient id="sb-door" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#555a5d"/><stop offset="1" stop-color="#2d3034"/></linearGradient>
+ <linearGradient id="sb-interior" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ddd7cc"/><stop offset="1" stop-color="#b9b1a4"/></linearGradient>
+ <linearGradient id="sb-metal" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c9cfc8"/><stop offset="1" stop-color="#68716c"/></linearGradient>
+ <linearGradient id="sb-light" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff4c8"/><stop offset="1" stop-color="#e9bd63"/></linearGradient>
+ <filter id="sb-shadow" x="-30%" y="-20%" width="170%" height="170%"><feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#161719" flood-opacity=".23"/></filter>
+</defs>
+<rect width="760" height="570" fill="url(#sb-grid)"/>
+<ellipse cx="390" cy="448" rx="205" ry="22" fill="#242424" opacity=".13"/>
+<!-- корпус: ровные вертикали и прямые углы -->
 <g data-layer="cabinet" filter="url(#sb-shadow)">
-<path d="M255 87H474L534 122H315Z" fill="#f0e6d6" stroke="#343733" stroke-width="3"/><path d="M474 87L534 122V421L474 389Z" fill="url(#sb-side)" stroke="#343733" stroke-width="3"/><path d="M255 87H474V389L255 421Z" fill="url(#sb-front)" stroke="#343733" stroke-width="3"/>
-<path d="M273 108H456V370L273 395Z" fill="#898174" stroke="#55574f" stroke-width="2.5"/><path d="M285 120H445V357L285 380Z" fill="#d8cfc1" stroke="#777267" stroke-width="1.5"/><path d="M296 132H434V345L296 365Z" fill="#eee6d9" stroke="#b4a999" stroke-width="1.3"/>
-<path d="M255 421L474 389L534 421L315 456Z" fill="#c2b5a2" stroke="#343733" stroke-width="3"/><path d="M315 456L534 421V439L315 474Z" fill="#8f8575" stroke="#343733" stroke-width="2"/><path d="M336 461V474M510 425V440" stroke="#343733" stroke-width="5" stroke-linecap="round"/>
+ <path d="M275 91H474L523 62H324Z" fill="#686d70" stroke="#1f2224" stroke-width="2.5"/>
+ <path d="M474 91L523 62V382L474 412Z" fill="url(#sb-side)" stroke="#1c1f21" stroke-width="2.5"/>
+ <rect x="275" y="91" width="199" height="321" rx="1" fill="url(#sb-front)" stroke="#1c1f21" stroke-width="2.5"/>
+ <rect x="287" y="103" width="175" height="297" fill="#16191b" stroke="#777a78" stroke-width="1.5"/>
+ <rect x="297" y="113" width="155" height="277" fill="url(#sb-interior)" stroke="#8f8a80" stroke-width="1.5"/>
+ <!-- основание и регулируемые опоры -->
+ <path d="M275 412H474L523 382H324Z" fill="#55595b" stroke="#1f2224" stroke-width="2"/>
+ <path d="M275 412H474V430H275Z" fill="#292c2f" stroke="#1f2224" stroke-width="2"/>
+ <path d="M474 412L523 382V400L474 430Z" fill="#1c1f21" stroke="#1f2224" stroke-width="2"/>
+ <path d="M300 430V440M449 430V440M500 414V424" stroke="#333638" stroke-width="7" stroke-linecap="round"/>
 </g>
+<!-- верхний технический отсек -->
 <g data-layer="technical">
-<path d="M296 132H434V180L296 199Z" fill="#c5ac7e" stroke="#80683f" stroke-width="2"/><path d="M296 132L434 132L452 143L314 143Z" fill="#ddc89f" stroke="#80683f" stroke-width="1.3"/><path d="M306 148H424M306 160H424M306 172H424M306 184H424" stroke="#8b7042" stroke-dasharray="5 4"/>
-<path d="M310 142L355 142V178L310 184Z" fill="#eadfc9" stroke="#9c8050" stroke-width="1.5"/><circle cx="404" cy="155" r="16" fill="#e6ddce" stroke="#766b5d" stroke-width="2"/><circle cx="404" cy="155" r="3" fill="#766b5d"/><path d="M404 151C393 140 390 159 400 160C392 172 413 174 413 160C425 170 428 153 409 151" fill="none" stroke="#766b5d" stroke-width="1.5"/>
-<path d="M401 202L431 198V337L401 342Z" fill="url(#sb-metal)" stroke="#59635b" stroke-width="1.7"/><path d="M401 202L431 198L443 205L413 210Z" fill="#c0c8bf" stroke="#59635b"/><path d="M408 216L424 214V242L408 245Z" fill="#454e47" stroke="#d8d7ce"/><circle cx="413" cy="225" r="2.5" fill="#d5c17b"/><circle cx="420" cy="224" r="2.5" fill="#8ca783"/><path d="M408 253L424 250V280L408 283Z" fill="#e3dacb" stroke="#737971"/><path d="M411 260L421 258M411 267L421 265M411 274L421 272" stroke="#858a82" stroke-width="1.4"/><path d="M406 293L426 289V320L406 324Z" fill="#b5cecb" stroke="#6b8984" stroke-width="1.5"/><path d="M406 293L415 298L435 294L426 289Z" fill="#dbe9e7" stroke="#6b8984"/><path d="M415 298V328L435 324V294" fill="#9cbab5" stroke="#6b8984"/></g>
-<g data-layer="light"><path d="M311 207L389 196L410 208L331 220Z" fill="#f6edca" stroke="#a38d58" stroke-width="2"/><path d="M322 209L399 199M327 214L404 204" stroke="#d2b66a" stroke-width="2"/><path d="M326 224L303 286M397 214L417 278" stroke="#d8bd72" stroke-opacity=".5" stroke-width="2" stroke-dasharray="5 5"/></g>
-<g data-layer="work"><path d="M302 218V354M389 207V341" stroke="#65765e" stroke-width="4"/><path d="M299 239L392 228M299 263L392 252M299 287L392 276M299 311L392 300M299 335L392 324" stroke="#829777" stroke-width="2"/><path d="M313 240L379 232V271L313 279Z" fill="#a8b59c" fill-opacity=".24" stroke="#6e8665" stroke-width="1.6"/><path d="M330 238V277M347 236V275M364 234V273M313 253L379 245M313 266L379 258" stroke="#7e9272" stroke-width="1.2"/><path d="M299 344L390 332L412 345L320 359Z" fill="#a6b49a" stroke="#607657" stroke-width="1.7"/><path d="M320 359L412 345V354L320 369Z" fill="#849878" stroke="#607657" stroke-width="1.3"/><path d="M303 301L392 290M303 324L392 313" stroke="#8e9d85" stroke-width="2.2"/></g>
-<g data-layer="door" filter="url(#sb-shadow)"><path d="M255 87L166 124V420L255 421Z" fill="url(#sb-door)" stroke="#343733" stroke-width="3"/><path d="M242 111L181 136V399L242 401Z" fill="none" stroke="#9b8b75" stroke-width="2.5"/><path d="M232 128L192 144V382L232 383Z" fill="#ded2bf" fill-opacity=".45" stroke="#b2a28c" stroke-width="1.4"/><path d="M225 258L239 254" stroke="#625b50" stroke-width="4" stroke-linecap="round"/><path d="M251 113L259 116M251 390L259 392" stroke="#62665e" stroke-width="4" stroke-linecap="round"/></g>
-<g data-layer="labels" fill="none" stroke="#8b7042" stroke-width="1.2"><path d="M355 155L235 60H18M365 207L232 184H18M349 260L230 300H18M405 155L556 80H744M417 258L559 270H744M355 354L557 420H744M202 252L117 241H18"/></g>
-<g data-layer="labels" fill="#563b2e" font-family="Arial,sans-serif" font-size="10.5" font-weight="700"><text x="16" y="43">01 · ВЕРХНИЙ ТЕХОТСЕК</text><text x="16" y="169">02 · СВЕТ</text><text x="16" y="286">03 · РАБОЧАЯ КАМЕРА</text><text x="559" y="62">04 · ВОЗДУХ / ШУМ</text><text x="559" y="251">05 · ТЕХКОЛОННА</text><text x="559" y="407">06 · ПОДДОН</text><text x="16" y="226">07 · ДВЕРЬ</text></g>
-<g data-layer="dimensions" fill="none" stroke="#a27e45" stroke-width="1.2"><path d="M255 497L476 465M255 490V505M476 458V473M570 124V423M563 124H577M563 423H577"/></g><g data-layer="dimensions" fill="#a27e45" font-family="Arial,sans-serif" font-size="10" letter-spacing=".6"><text x="368" y="508" text-anchor="middle">ШИРИНА КОРПУСА</text><text x="592" y="275" transform="rotate(90 592 275)" text-anchor="middle">ВЫСОТА</text><text x="380" y="550" text-anchor="middle" font-size="9">ПСЕВДОИЗОМЕТРИЯ · НЕ В МАСШТАБЕ</text></g></svg></div>
+ <rect x="297" y="113" width="155" height="55" fill="#a99d89" stroke="#655e53" stroke-width="1.5"/>
+ <path d="M305 121H444V160H305Z" fill="#8c8578" stroke="#5c5a53" stroke-width="1"/>
+ <path d="M312 129H377V151H312Z" fill="#303638" stroke="#171a1c" stroke-width="1.5"/>
+ <path d="M317 133H372M317 138H372M317 143H372" stroke="#89918d" stroke-width="1.5"/>
+ <circle cx="416" cy="140" r="16" fill="#d4d0c6" stroke="#4e5552" stroke-width="2"/>
+ <circle cx="416" cy="140" r="4" fill="#69716c"/>
+ <path d="M416 124L420 136L432 140L420 144L416 156L412 144L400 140L412 136Z" fill="#7e8781"/>
+ <!-- техническая колонна справа -->
+ <rect x="411" y="179" width="33" height="176" rx="2" fill="#555c59" stroke="#343a37" stroke-width="1.5"/>
+ <rect x="416" y="188" width="23" height="28" rx="2" fill="#252a2b" stroke="#929b93"/>
+ <circle cx="427.5" cy="197" r="3" fill="#d5b36b"/><circle cx="427.5" cy="207" r="2" fill="#7fc39a"/>
+ <path d="M417 229H438M417 234H438M417 239H438" stroke="#aab0a9" stroke-width="1.2"/>
+ <rect x="416" y="250" width="23" height="42" fill="#353b3b" stroke="#7c847d"/>
+ <path d="M420 258H435M420 265H435M420 272H435M420 279H435" stroke="#a8b0a8" stroke-width="1.4"/>
+ <!-- подвесы и светильник -->
+ <path d="M319 171V194M380 171V194" stroke="#4d514d" stroke-width="2"/>
+ <rect x="310" y="192" width="82" height="15" rx="3" fill="#343a38" stroke="#181c1c" stroke-width="1.5"/>
+ <rect x="316" y="203" width="70" height="5" rx="2" fill="url(#sb-light)" stroke="#c7a65d" stroke-width=".7"/>
+ <path d="M316 211L386 211" stroke="#e9bd63" stroke-width="3" opacity=".32"/>
+ <!-- направляющие -->
+ <path d="M305 224V350M398 224V350" stroke="#68716c" stroke-width="4"/>
+ <path d="M305 224V350M398 224V350" stroke="#d2d6ce" stroke-width="1"/>
+ <g fill="#929a92" stroke="#414844" stroke-width="1">
+  <rect x="301" y="242" width="12" height="8" rx="1"/><rect x="392" y="242" width="12" height="8" rx="1"/>
+  <rect x="301" y="286" width="12" height="8" rx="1"/><rect x="392" y="286" width="12" height="8" rx="1"/>
+  <rect x="301" y="330" width="12" height="8" rx="1"/><rect x="392" y="330" width="12" height="8" rx="1"/>
+ </g>
+ <!-- рабочая зона / сетка SCROG -->
+ <g data-layer="work">
+  <path d="M314 252H393V313H314Z" fill="#d5cec1" fill-opacity=".2" stroke="#747c73" stroke-width="1.4"/>
+  <path d="M327 252V313M340 252V313M353 252V313M366 252V313M379 252V313M314 264H393M314 276H393M314 288H393M314 300H393" stroke="#69776c" stroke-width="1" opacity=".85"/>
+  <!-- выдвижной поддон -->
+  <path d="M306 352H402L414 361H318Z" fill="#b6b0a4" stroke="#5f655f" stroke-width="1.5"/>
+  <path d="M318 361H414V369H318Z" fill="#85877f" stroke="#555b55" stroke-width="1"/>
+  <path d="M322 356H399" stroke="#e7e0d4" stroke-width="1.2"/>
+ </g>
+ <!-- кабель-канал без хаотичных проводов -->
+ <path d="M446 173V374H433" fill="none" stroke="#353b39" stroke-width="4" stroke-linecap="round"/>
+ <path d="M446 173V374H433" fill="none" stroke="#a5ada4" stroke-width="1" stroke-linecap="round"/>
+</g>
+<!-- две распашные двери: левая открыта влево, правая вправо -->
+<g data-layer="door" filter="url(#sb-shadow)">
+ <path d="M275 108L205 133V397L275 412Z" fill="url(#sb-door)" stroke="#1e2123" stroke-width="2.5"/>
+ <path d="M264 124L218 141V382L264 394Z" fill="none" stroke="#858987" stroke-width="1.2"/>
+ <path d="M250 151L250 367" stroke="#6e7471" stroke-width="1"/>
+ <rect x="240" y="245" width="5" height="32" rx="2" fill="#b9b8ad" stroke="#232728" stroke-width="1"/>
+ <path d="M474 108L535 91V365L474 412Z" fill="url(#sb-door)" stroke="#1e2123" stroke-width="2.5"/>
+ <path d="M484 124L524 113V352L484 382Z" fill="none" stroke="#858987" stroke-width="1.2"/>
+ <path d="M493 151V362" stroke="#6e7471" stroke-width="1"/>
+ <rect x="501" y="236" width="5" height="32" rx="2" fill="#b9b8ad" stroke="#232728" stroke-width="1"/>
+</g>
+<!-- размерные линии и подписи -->
+<g data-layer="dimensions" fill="#5c5d58" stroke="#77776f" stroke-width="1" font-family="Arial,sans-serif" font-size="11">
+ <path d="M275 466H474M275 460V472M474 460V472" fill="none"/><text x="374" y="483" text-anchor="middle" stroke="none">ШИРИНА</text>
+ <path d="M555 91V412M549 91H561M549 412H561" fill="none"/><text x="570" y="252" transform="rotate(90 570 252)" text-anchor="middle" stroke="none">ВЫСОТА</text>
+</g>
+<g data-layer="labels" font-family="Arial,sans-serif">
+ <g><path d="M300 135H183L164 119" fill="none" stroke="#77776f" stroke-width="1.2"/><circle cx="300" cy="135" r="3" fill="#c49d57"/><text x="157" y="113" text-anchor="end" font-size="11" font-weight="700" fill="#444741">ТЕХОТСЕК</text><text x="157" y="127" text-anchor="end" font-size="9" fill="#77776f">фильтр · шумоглушение</text></g>
+ <g><path d="M427 202H555L575 184" fill="none" stroke="#77776f" stroke-width="1.2"/><circle cx="427" cy="202" r="3" fill="#c49d57"/><text x="582" y="178" font-size="11" font-weight="700" fill="#444741">ТЕХКОЛОННА</text><text x="582" y="192" font-size="9" fill="#77776f">управление · сервис</text></g>
+ <g><path d="M356 202L356 174L254 174" fill="none" stroke="#77776f" stroke-width="1.2"/><circle cx="356" cy="202" r="3" fill="#c49d57"/><text x="247" y="170" text-anchor="end" font-size="10" font-weight="700" fill="#444741">СВЕТ</text></g>
+ <g><path d="M352 284H222L201 301" fill="none" stroke="#77776f" stroke-width="1.2"/><circle cx="352" cy="284" r="3" fill="#c49d57"/><text x="194" y="299" text-anchor="end" font-size="10" font-weight="700" fill="#444741">SCROG / РЕЛЬСЫ</text><text x="194" y="312" text-anchor="end" font-size="9" fill="#77776f">регулируемая рабочая зона</text></g>
+ <g><path d="M360 358H460L480 374" fill="none" stroke="#77776f" stroke-width="1.2"/><circle cx="360" cy="358" r="3" fill="#c49d57"/><text x="487" y="374" font-size="10" font-weight="700" fill="#444741">ВЫДВИЖНОЙ ПОДДОН</text></g>
+</g>
+<text x="36" y="36" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="1.4" fill="#555750">SECRET BOX® / КОНСТРУКЦИЯ</text>
+<text x="724" y="36" text-anchor="end" font-family="Arial,sans-serif" font-size="10" letter-spacing=".7" fill="#8a887f">РАЗРЕЗ · ФРОНТ + БОКОВАЯ ГРАНЬ</text>
+</svg></div>
         <div class="sb-unified-hint" id="sb-view-hint" aria-live="polite">Показаны корпус, верхний техотсек, рабочая камера и сервисная колонна.</div>
       </div>
       <div class="sb-unified-legend">
