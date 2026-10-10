@@ -414,6 +414,8 @@ function applyDimensions(w,d,h){
   chamberLight.position.set(paramBase.light.x*sx,floorY+(paramBase.light.y-floorY)*sy,paramBase.light.z*sz);
   target.set(0,Math.max(0.8,Math.min(1.45,1.02*sy)),0);
   setCam(Math.max(2.8,3.7*Math.max(sx,sy,sz)),camT.th,camT.ph,target.y);
+  airGroup.scale.set(sx,sy,sz);
+  airTube.scale.set(sx,sy,sz);
   boxSize={w:w,d:d,h:h};
   var outside=checkEquipmentFit(w,d,h);
   var compact=(w<1250||d<700||h<2000);
@@ -467,9 +469,9 @@ function makeLabel(text, x, y, z){
   sp.scale.set(0.6, 0.15, 1); sp.position.set(x, y, z); sp.renderOrder = 999;
   scene.add(sp); labels.push(sp); return sp;
 }
-makeLabel('A · ТЕХМОДУЛЬ 1250×700×300', 0,      py(2110), 0.52);
-makeLabel('B · ТЕХ-КОЛОННА 400×600',    px(218), py(1560), 0.52);
-makeLabel('C · КАМЕРА РОСТА 796×600',   px(834), py(1250), 0.52);
+makeLabel('A · ВЕРХНИЙ ТЕХМОДУЛЬ', 0,      py(2110), 0.52);
+makeLabel('B · ТЕХНИЧЕСКАЯ КОЛОННА',    px(218), py(1560), 0.52);
+makeLabel('C · ОСНОВНАЯ КАМЕРА',   px(834), py(1250), 0.52);
 
 /* ---------- свет камеры ---------- */
 var chamberLight = new THREE.PointLight(0xffe6b0, 0, 3.4);
