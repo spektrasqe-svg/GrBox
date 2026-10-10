@@ -320,130 +320,101 @@ function buildLight(THREE,g,M,s){
  * Axis Z. All dimensions in mm. Model is procedural, not manufacturer CAD.
  */
 function buildFan(THREE,g,M,s){
- const w=s.w,d=s.d,h=s.h;
- const isSF4=s.label&&/SF4/.test(s.label);
- const duct=s.duct||100;
- const R=w/2;
- const L=d;
- const bodyR=Math.min(R*.91,h*.46);
- const bodyLen=L*.49;
- const bellLen=(L-bodyLen)*.48;
- const zBody=bodyLen/2;
- const black=new THREE.MeshStandardMaterial({color:0x17191b,roughness:.42,metalness:.12});
- const shell=new THREE.MeshStandardMaterial({color:0x242629,roughness:.48,metalness:.12});
- const orange=new THREE.MeshStandardMaterial({color:0xf36b21,roughness:.38,metalness:.08});
- const inside=new THREE.MeshStandardMaterial({color:0x0b0d0e,roughness:.75,metalness:.02});
- const bladeMat=new THREE.MeshStandardMaterial({color:isSF4?0xe85e1c:0x34383b,roughness:.42,metalness:.04,side:THREE.DoubleSide});
- const screwMat=new THREE.MeshStandardMaterial({color:0xb7b9b8,roughness:.32,metalness:.65});
- const cyl=(r1,r2,len,seg=48,open=false)=>cylG(THREE,r1,r2,len,seg,open);
- const ringAt=(z,r,t,mat)=>ring(g,THREE,mat,r,t,0,0,z);
- const addCylZ=(r1,r2,len,mat,z,seg=48,open=false)=>add(g,THREE,cyl(r1,r2,len,seg,open),mat,0,0,z,Math.PI/2);
- /* Main motor can: short, broad cylindrical housing */
- addCylZ(bodyR,bodyR,bodyLen,black,0,64);
- addCylZ(bodyR*.985,bodyR*.985,bodyLen*.88,shell,0,64);
- /* Subtle molded seams and the two distinctive orange retaining bands */
- for(const z of [-bodyLen*.34,bodyLen*.34]){
-  ringAt(z,bodyR+2.8,3.2,orange);
-  ringAt(z+(z<0?-3:3),bodyR+1.5,1.1,black);
+ const w=s.w,d=s.d,h=s.h,isSF4=/SF4/.test(s.label||''),duct=s.duct||100;
+ const R=Math.min(w/2-3,h/2-3),L=d,bodyLen=L*.49,bellLen=(L-bodyLen)*.49,neckR=duct/2;
+ const black=new THREE.MeshStandardMaterial({color:0x151719,roughness:.43,metalness:.14});
+ const shell=new THREE.MeshStandardMaterial({color:0x24272a,roughness:.5,metalness:.16});
+ const dark=new THREE.MeshStandardMaterial({color:0x0b0d0f,roughness:.72,metalness:.03});
+ const orange=new THREE.MeshStandardMaterial({color:0xf36b21,roughness:.4,metalness:.08});
+ const bladeMat=new THREE.MeshStandardMaterial({color:0x272b2e,roughness:.46,metalness:.08,side:THREE.DoubleSide});
+ const screwMat=new THREE.MeshStandardMaterial({color:0x969c9f,roughness:.34,metalness:.7});
+ const cyl=(a,b,len,n=48,open=false)=>cylG(THREE,a,b,len,n,open);
+ const addZ=(r1,r2,len,mat,z,n=48,open=false)=>add(g,THREE,cyl(r1,r2,len,n,open),mat,0,0,z,Math.PI/2);
+ const ringZ=(z,r,t,mat)=>ring(g,THREE,mat,r,t,0,0,z);
+ const bodyR=Math.min(R*.94,h*.455);
+ /* Main cylindrical motor housing; its axis is the duct axis (Z). */
+ addZ(bodyR,bodyR,bodyLen,black,0,64);
+ addZ(bodyR*.985,bodyR*.985,bodyLen*.88,shell,0,64);
+ /* Fine mould seams and shallow ventilation ribs on the motor shell. */
+ for(const z of [-bodyLen*.39,-bodyLen*.32,bodyLen*.32,bodyLen*.39]) ringZ(z,bodyR+1.1,1.1,black);
+ for(let i=0;i<22;i++){
+  const a=i*Math.PI*2/22;
+  const x=Math.cos(a)*(bodyR+0.6),y=Math.sin(a)*(bodyR+0.6);
+  for(const z of [-bodyLen*.22,bodyLen*.22]){
+   const rib=add(g,THREE,boxG(THREE,1.7,4.2,bodyLen*.12),M.dark,x,y,z);
+   rib.rotation.z=a;
+  }
  }
- /* Tapered inlet/outlet bells; neck opening is the actual 4-inch duct size */
- const neckR=duct/2;
+ /* Two distinctive orange retaining bands, seated on the fan shell. */
+ for(const z of [-bodyLen*.34,bodyLen*.34]){
+  ringZ(z,bodyR+2.1,3.5,orange);
+  ringZ(z+(z<0?-4:4),bodyR+1.3,1.0,black);
+ }
+ /* Tapered intake and exhaust bells, with moulded orange accent rings and real hollow throats. */
  for(const side of [-1,1]){
   const z=side*(bodyLen/2+bellLen/2-1);
   add(g,THREE,cyl(bodyR*.99,neckR,bellLen,64,true),black,0,0,z,Math.PI/2);
-  /* outer molded lip at the duct mouth */
-  const endZ=side*(L/2-2.5);
-  ringAt(endZ,neckR+1.5,3.2,black);
-  ringAt(side*(L/2-bellLen*.08),neckR+3,1.5,shell);
-  /* recessed dark throat makes the mouth read as hollow */
-  addCylZ(neckR*.985,neckR*.985,2,inside,side*(L/2-5),48,true);
+  const mouthZ=side*(L/2-3);
+  ringZ(mouthZ,neckR+2.1,3.2,black);
+  ringZ(side*(L/2-bellLen*.1),neckR+3,1.4,shell);
+  addZ(neckR*.985,neckR*.985,2,dark,side*(L/2-5),48,true);
+  /* inner step at the mouth gives the duct collar some wall thickness */
+  ringZ(side*(L/2-9),neckR-1.2,1.4,black);
  }
- /* Front impeller visible down the inlet throat (+Z face) */
- const rotorZ=L/2-bellLen*.40;
- addCylZ(neckR*.29,neckR*.29,8,black,rotorZ-5,32);
- addCylZ(neckR*.21,neckR*.21,2.4,orange,rotorZ,32);
+ /* Inlet rotor: seven swept, curved blades around a central hub, recessed inside the bell. */
+ const rotorZ=L/2-bellLen*.46;
+ addZ(neckR*.29,neckR*.29,8,black,rotorZ-4,32);
+ addZ(neckR*.22,neckR*.22,2.5,orange,rotorZ,32);
  for(let i=0;i<7;i++){
-  const a=i*Math.PI*2/7;
+  const a=i*Math.PI*2/7,r0=neckR*.19,r1=neckR*.86;
   const shape=new THREE.Shape();
-  const r0=neckR*.20,r1=neckR*.88;
   shape.moveTo(Math.cos(a)*r0,Math.sin(a)*r0);
-  shape.quadraticCurveTo(Math.cos(a+.22)*r1*.48,Math.sin(a+.22)*r1*.48,Math.cos(a+.48)*r1,Math.sin(a+.48)*r1);
-  shape.quadraticCurveTo(Math.cos(a+.70)*r1*.72,Math.sin(a+.70)*r1*.72,Math.cos(a+.28)*r0,Math.sin(a+.28)*r0);
+  shape.quadraticCurveTo(Math.cos(a+.15)*r1*.42,Math.sin(a+.15)*r1*.42,Math.cos(a+.42)*r1,Math.sin(a+.42)*r1);
+  shape.quadraticCurveTo(Math.cos(a+.66)*r1*.73,Math.sin(a+.66)*r1*.73,Math.cos(a+.3)*r0,Math.sin(a+.3)*r0);
   shape.closePath();
-  const blade=new THREE.Mesh(new THREE.ShapeGeometry(shape,12),bladeMat);
-  blade.position.z=rotorZ+1.5;
-  g.add(blade);
+  const blade=new THREE.Mesh(new THREE.ShapeGeometry(shape,14),bladeMat);
+  blade.position.z=rotorZ+1.6;g.add(blade);
  }
- /* Side motor/service cover on the visible flank, with four real fasteners */
- const coverX=bodyR*.97;
- add(g,THREE,cyl(48,48,5,48),black,coverX,0,0,0,0,Math.PI/2);
- add(g,THREE,cyl(43,43,1.6,48),shell,coverX+3,0,0,0,0,Math.PI/2);
- for(let i=0;i<4;i++){
-  const a=Math.PI/4+i*Math.PI/2;
-  add(g,THREE,cyl(3.1,3.1,2.1,12),screwMat,coverX+4,Math.cos(a)*35,Math.sin(a)*35,0,0,Math.PI/2);
+ /* Side motor cover and screw heads on the service flank. */
+ const coverX=bodyR*.965;
+ add(g,THREE,cyl(46,46,5,48),black,coverX,0,0,0,0,Math.PI/2);
+ add(g,THREE,cyl(40,40,1.6,48),shell,coverX+3,0,0,0,0,Math.PI/2);
+ ring(g,THREE,screwMat,36,1.1,coverX+4,0,0,0,Math.PI/2);
+ for(let i=0;i<6;i++){
+  const a=i*Math.PI/3;
+  add(g,THREE,cyl(2.8,2.8,2,12),screwMat,coverX+4,Math.cos(a)*34,Math.sin(a)*34,0,0,Math.PI/2);
  }
- /* Orange Spider Farmer wordmark on circular side plate */
+ /* Orange manufacturer wordmark on the round side plate. */
  const mark=canvasTex(THREE,512,128,(ctx,W,H)=>{
-  ctx.clearRect(0,0,W,H);ctx.fillStyle='#f36b21';ctx.font='bold 48px Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.fillText('Spider Farmer',W/2,H/2);
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#f36b21';ctx.font='bold 47px Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('Spider Farmer',W/2,H/2);
  });
  if(mark){
   const mat=new THREE.MeshBasicMaterial({map:mark,transparent:true,side:THREE.DoubleSide,depthWrite:false});
-  const plane=new THREE.Mesh(new THREE.PlaneGeometry(67,17),mat);
-  plane.position.set(coverX+5,0,0);plane.rotation.y=Math.PI/2;g.add(plane);
+  const plane=new THREE.Mesh(new THREE.PlaneGeometry(64,16),mat);plane.position.set(coverX+5,0,0);plane.rotation.y=Math.PI/2;g.add(plane);
  }
- /* Orange support straps / cradles and two orange mounting feet */
+ /* Two compact underside mounting cradles and slotted feet. */
  for(const z of [-bodyLen*.34,bodyLen*.34]){
-  add(g,THREE,boxG(THREE,bodyR*.34,8,18),orange,0,-bodyR*.91,z);
+  add(g,THREE,boxG(THREE,bodyR*.88,8,17),orange,0,-bodyR*.91,z);
+  add(g,THREE,boxG(THREE,bodyR*.56,5,27),black,0,-h/2+5,z);
   for(const sx of [-1,1]){
-   add(g,THREE,boxG(THREE,8,14,18),orange,sx*bodyR*.64,-bodyR*.91-7,z);
-   add(g,THREE,boxG(THREE,bodyR*.52,5,25),orange,sx*bodyR*.50,-h/2+4,z);
-   add(g,THREE,cyl(3.2,3.2,2,12),screwMat,sx*bodyR*.50,-h/2+6.6,z,Math.PI/2);
+   add(g,THREE,boxG(THREE,7,11,17),orange,sx*bodyR*.34,-bodyR*.91-5,z);
+   add(g,THREE,cyl(2.8,2.8,2,12),screwMat,sx*bodyR*.34,-h/2+7,z,Math.PI/2);
   }
  }
- /* Hanging strap eyelets above each orange band */
- for(const z of [-bodyLen*.34,bodyLen*.34]){
-  for(const sx of [-1,1]){
-   add(g,THREE,boxG(THREE,7,17,13),orange,sx*bodyR*.48,bodyR*.88,z);
-   ring(g,THREE,screwMat,6.3,1.6,sx*bodyR*.48,bodyR*.88+10,z);
-  }
- }
- /* Wired speed controller: separate compact remote with rotary dial */
- const ctrlX=bodyR+43,ctrlY=-h*.38,ctrlZ=bodyLen*.08;
- add(g,THREE,boxG(THREE,52,68,17),black,ctrlX,ctrlY,ctrlZ,0,0,0);
- add(g,THREE,boxG(THREE,48,64,2),shell,ctrlX,ctrlY,ctrlZ+9.2);
- add(g,THREE,cyl(13,13,7,32),black,ctrlX,ctrlY-7,ctrlZ+14,Math.PI/2);
- add(g,THREE,cyl(4,4,2,20),orange,ctrlX+1,ctrlY-7,ctrlZ+18.5,Math.PI/2);
- /* cable from motor to remote: restrained segmented curve, not a dangling straight rod */
+ /* Separate wired speed dial, modelled as the supplied accessory rather than part of fan dimensions. */
+ const ctrlX=bodyR+34,ctrlY=-h*.32,ctrlZ=bodyLen*.05;
+ add(g,THREE,boxG(THREE,42,62,16),black,ctrlX,ctrlY,ctrlZ);
+ add(g,THREE,boxG(THREE,38,56,1.6),shell,ctrlX,ctrlY,ctrlZ+8.8);
+ add(g,THREE,cyl(12,12,6,32),black,ctrlX,ctrlY-8,ctrlZ+13,Math.PI/2);
+ add(g,THREE,cyl(3.6,3.6,2,20),orange,ctrlX+0.8,ctrlY-8,ctrlZ+17,Math.PI/2);
+ /* Restrained curved cable between fan and dial; no unrealistic long wire loops. */
  const cableMat=black;
- const pts=[
-  new THREE.Vector3(coverX+4,-bodyR*.48,bodyLen*.15),
-  new THREE.Vector3(coverX+20,-bodyR*.70,bodyLen*.18),
-  new THREE.Vector3(ctrlX-12,ctrlY+18,ctrlZ),
-  new THREE.Vector3(ctrlX,ctrlY+15,ctrlZ)
- ];
- const curve=new THREE.CatmullRomCurve3(pts);
- add(g,THREE,new THREE.TubeGeometry(curve,24,2.2,8,false),cableMat);
- /* Power lead exits rear motor section; visible cable remains neatly routed */
- const powerPts=[
-  new THREE.Vector3(-bodyR*.55,-bodyR*.28,-bodyLen*.22),
-  new THREE.Vector3(-bodyR*.72,-bodyR*.58,-bodyLen*.28),
-  new THREE.Vector3(-bodyR*.65,-h*.44,-bodyLen*.30),
-  new THREE.Vector3(-bodyR*.50,-h*.47,-bodyLen*.30)
- ];
- add(g,THREE,new THREE.TubeGeometry(new THREE.CatmullRomCurve3(powerPts),18,2.5,8,false),black);
+ const pts=[new THREE.Vector3(coverX+4,-bodyR*.42,bodyLen*.15),new THREE.Vector3(coverX+15,-bodyR*.62,bodyLen*.18),new THREE.Vector3(ctrlX-10,ctrlY+16,ctrlZ),new THREE.Vector3(ctrlX,ctrlY+14,ctrlZ)];
+ add(g,THREE,new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),24,1.8,8,false),cableMat);
+ const powerPts=[new THREE.Vector3(-bodyR*.48,-bodyR*.25,-bodyLen*.23),new THREE.Vector3(-bodyR*.66,-bodyR*.48,-bodyLen*.27),new THREE.Vector3(-bodyR*.58,-h*.43,-bodyLen*.3)];
+ add(g,THREE,new THREE.TubeGeometry(new THREE.CatmullRomCurve3(powerPts),18,2.1,8,false),black);
 }
-/* ================= FILTER: угольный фильтр 4" ================= */
-/* ================= FILTER: угольный фильтр Spider Farmer 4" =================
- * По фото-оригиналу (spider-farmer.com, Carbon Filter 4", Australian Charcoal 1200+):
- *  — корпус Ø175: перфорированная нержавеющая обечайка, под ней тёмный угольный слой;
- *  — чёрные глянцевые ступенчатые крышки с обеих сторон, снизу центральная заглушка;
- *  — сверху патрубок-фланец Ø101 (4") с кольцевым буртом;
- *  — проволочная петля подвеса на монтажной полосе с двумя винтами;
- *  — оранжевая надпись SPIDER FARMER вдоль корпуса (с двух сторон);
- *  — винты крепления крышки по окружности шва.
- * Ось корпуса — Z (как у вентилятора), центр модели в нуле. Габарит: ~Ø175 × 300 мм.
- */
+
 function buildFilter(THREE,g,M,s){
  const w=s.w,d=s.d,R=w/2,bodyLen=d*0.82,capH=12,zBody=bodyLen/2;
  const capMat=new THREE.MeshStandardMaterial({color:0x17191b,roughness:.36,metalness:.28});
