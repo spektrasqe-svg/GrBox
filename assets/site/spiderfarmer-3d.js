@@ -26,8 +26,8 @@ const SPECS={
    desc:'Канальный вентилятор Spider Farmer SF6 6" (150 мм): цилиндрический корпус, крыльчатка, крепёжная площадка, пульт с диммером'},
  SF8:{kind:'fan',label:'Spider Farmer SF8',w:260,d:260,h:370,power:60,duct:200,
    desc:'Канальный вентилятор Spider Farmer SF8 8" (200 мм): цилиндрический корпус, крыльчатка, крепёжная площадка, пульт с диммером'},
- FILTER4:{kind:'filter',label:'Фильтр угольный Spider Farmer 4"',w:220,d:300,h:220,
-   desc:'Угольный фильтр Spider Farmer 4" (100 мм): сетчатый корпус, активированный уголь, фланцы, стяжные ремни'},
+ FILTER4:{kind:'filter',label:'Фильтр угольный Spider Farmer 4"',w:175,d:300,h:175,duct:100,
+   desc:'Угольный фильтр Spider Farmer 4" (100 мм): перфорированная нержавеющая обечайка Ø175 с угольным слоем, чёрные ступенчатые крышки, патрубок-фланец Ø101 сверху, проволочная петля подвеса на полосе с винтами, оранжевая надпись Spider Farmer вдоль корпуса'},
  GGS:{kind:'controller',label:'Spider Farmer GGS Controller',w:168,d:36,h:112,
    desc:'Контроллер Spider Farmer GGS: сенсорный экран, энкодер, порты RJ12 — единая точка управления экосистемой'},
  UVIR:{kind:'uvbar',label:'Spider Farmer UV30 + IR16',w:600,d:48,h:36,
@@ -150,6 +150,24 @@ function plateTex(THREE,text){
   x.strokeRect(9,9,w-18,h-18);
   x.fillStyle='#e8722a';x.font='bold 74px Arial';x.textAlign='center';x.textBaseline='middle';
   x.fillText(text,w/2,h/2+4);
+ });
+}
+/* Надпись на угольном фильтре: оранжевый Spider Farmer + значок-паучок, вдоль корпуса */
+function filterTex(THREE){
+ return canvasTex(THREE,1024,256,(x,w,h)=>{
+  x.clearRect(0,0,w,h);
+  x.fillStyle='#e8722a';
+  x.beginPath();x.ellipse(92,h/2,17,25,0,0,Math.PI*2);x.fill();
+  x.beginPath();x.arc(92,h/2-33,11,0,Math.PI*2);x.fill();
+  x.lineWidth=7;x.strokeStyle='#e8722a';x.lineCap='round';
+  for(const s of [-1,1])for(let i=0;i<4;i++){
+   x.beginPath();x.moveTo(92+s*12,h/2-23+i*12);
+   x.quadraticCurveTo(92+s*48,h/2-40+i*17,92+s*78,h/2-28+i*16);x.stroke();
+  }
+  x.font='bold 148px Arial';x.textBaseline='middle';
+  x.fillText('SPIDER FARMER',210,h/2-8);
+  x.font='bold 44px Arial';x.fillStyle='#5a6066';
+  x.fillText('CARBON FILTER 4"',214,h/2+82);
  });
 }
 /* Шильдик с паспортом изделия (на заднем рельсе) */
@@ -351,27 +369,81 @@ function buildFan(THREE,g,M,s){
 }
 
 /* ================= FILTER: угольный фильтр 4" ================= */
+/* ================= FILTER: угольный фильтр Spider Farmer 4" =================
+ * По фото-оригиналу (spider-farmer.com, Carbon Filter 4", Australian Charcoal 1200+):
+ *  — корпус Ø175: перфорированная нержавеющая обечайка, под ней тёмный угольный слой;
+ *  — чёрные глянцевые ступенчатые крышки с обеих сторон, снизу центральная заглушка;
+ *  — сверху патрубок-фланец Ø101 (4") с кольцевым буртом;
+ *  — проволочная петля подвеса на монтажной полосе с двумя винтами;
+ *  — оранжевая надпись SPIDER FARMER вдоль корпуса (с двух сторон);
+ *  — винты крепления крышки по окружности шва.
+ * Ось корпуса — Z (как у вентилятора), центр модели в нуле. Габарит: ~Ø175 × 300 мм.
+ */
 function buildFilter(THREE,g,M,s){
- const w=s.w,d=s.d,r=w/2-16;
- /* корпус: сетка + сукно */
- add(g,THREE,cylG(THREE,r,r,d-42,28),M.felt,0,0,0,Math.PI/2);
- add(g,THREE,cylG(THREE,r+5,r+5,d-36,28,true),M.steel,0,0,0,Math.PI/2);
- /* крышки и фланцы */
- for(const side of [-1,1]){
-  add(g,THREE,cylG(THREE,r+8,r+8,22,28),M.aluDark,0,0,side*(d/2-11),Math.PI/2);
-  add(g,THREE,cylG(THREE,52,52,26,24,true),M.steel,0,0,side*(d/2+8),Math.PI/2);
-  ring(g,THREE,M.steel,52,3,0,0,side*(d/2+18));
+ const w=s.w,d=s.d,R=w/2,bodyLen=d*0.82,capH=12,zBody=bodyLen/2;
+ const capMat=new THREE.MeshStandardMaterial({color:0x17191b,roughness:.36,metalness:.28});
+ /* угольный слой под перфорацией (тёмный, с глубиной под отверстиями) */
+ add(g,THREE,cylG(THREE,R-7,R-7,bodyLen-2,30),M.felt,0,0,0,Math.PI/2);
+ /* перфорированная обечайка: дырки с тенями-углублениями */
+ const perf=canvasTex(THREE,512,512,(x,cw,ch)=>{
+  x.fillStyle='#c3c9ce';x.fillRect(0,0,cw,ch);
+  const step=26,rad=8.5;
+  for(let yy=0;yy<=ch;yy+=step){for(let xx=0;xx<=cw;xx+=step){
+   const gx=xx+(((yy/step)|0)%2?step/2:0);
+   /* мягкая тень-углубление */
+   const gr=x.createRadialGradient(gx,yy,rad*.25,gx,yy,rad*1.5);
+   gr.addColorStop(0,'rgba(28,32,36,.95)');gr.addColorStop(.62,'rgba(40,46,52,.85)');gr.addColorStop(1,'rgba(40,46,52,0)');
+   x.fillStyle=gr;x.beginPath();x.arc(gx,yy,rad*1.5,0,Math.PI*2);x.fill();
+   /* блик на кромке */
+   x.fillStyle='rgba(255,255,255,.28)';x.beginPath();x.arc(gx-rad*.32,yy-rad*.32,rad*.36,0,Math.PI*2);x.fill();
+  }}
+ });
+ let shellMat=M.steel;
+ if(perf){
+  perf.wrapS=THREE.RepeatWrapping;perf.wrapT=THREE.RepeatWrapping;perf.repeat.set(6,3);
+  shellMat=new THREE.MeshStandardMaterial({map:perf,roughness:.5,metalness:.32});
  }
- /* стяжные ремни */
- for(const zc of [-d*.3,0,d*.3]){
-  ring(g,THREE,M.aluDark,r+7,5,0,0,zc);
-  for(let i=0;i<4;i++){
-   const a=i*Math.PI/2+Math.PI/4;
-   add(g,THREE,boxG(THREE,12,8,14),M.dark,Math.cos(a)*(r+9),Math.sin(a)*(r+9),zc);
-  }
+ add(g,THREE,cylG(THREE,R,R,bodyLen,44),shellMat,0,0,0,Math.PI/2);
+ /* шовные кольца по краям обечайки */
+ for(const sz of [-1,1])ring(g,THREE,M.dark,R-1,3,0,0,sz*(zBody-1.5));
+ /* крышки: чёрные ступенчатые, снизу — с центральной заглушкой */
+ for(const sz of [-1,1]){
+  add(g,THREE,cylG(THREE,R+2,R+2,capH,40),capMat,0,0,sz*(zBody+capH/2),Math.PI/2);
+  add(g,THREE,cylG(THREE,R-16,R-24,9,34),capMat,0,0,sz*(zBody+capH+3.5),Math.PI/2);
+  ring(g,THREE,capMat,R+1,2.6,0,0,sz*zBody);
  }
- /* ручка */
- add(g,THREE,torG(THREE,26,4,Math.PI),M.steel,0,r+8,0,0,0,0);
+ add(g,THREE,cylG(THREE,R*.32,R*.32,8,24),M.dark,0,0,-(zBody+capH+7),Math.PI/2);
+ /* патрубок-фланец Ø101: чёткий выступ-труба с буртом и ступенькой */
+ const fZ=zBody+capH+6;
+ add(g,THREE,cylG(THREE,50.5,55,10,32),capMat,0,0,fZ+5,Math.PI/2);      /* распорка-ступенька */
+ add(g,THREE,cylG(THREE,50.5,50.5,34,32,true),capMat,0,0,fZ+27,Math.PI/2); /* сама труба */
+ add(g,THREE,cylG(THREE,44,44,34,28,true),M.aluDark,0,0,fZ+27,Math.PI/2); /* внутренняя гильза */
+ ring(g,THREE,M.steel,50.5,3.4,0,0,fZ+43);                              /* бурт на конце */
+ ring(g,THREE,M.steel,50.5,2.6,0,0,fZ+12);
+ /* червячный хомут на стыке патрубка: лента + корпус с винтом */
+ ring(g,THREE,M.aluDark,53,4.2,0,0,fZ+12);
+ add(g,THREE,boxG(THREE,16,10,12),M.aluDark,0,53,fZ+12);
+ add(g,THREE,cylG(THREE,2.6,2.6,16,8),M.steel,0,53,fZ+12,Math.PI/2);
+ add(g,THREE,boxG(THREE,4,7,7),M.steel,8,53,fZ+12);
+ /* проволочная петля подвеса: тонкая дуга + монтажная полоса с винтами */
+ const hangY=R+4, hangZ=zBody*0.55;
+ add(g,THREE,boxG(THREE,30,3,26),M.steel,0,hangY-1,hangZ);
+ for(const sx of [-1,1]){
+  add(g,THREE,cylG(THREE,2,2,22,8),M.steel,sx*12,hangY+10,hangZ-9,0,0,sx*0.35);
+  add(g,THREE,cylG(THREE,2,2,22,8),M.steel,sx*12,hangY+10,hangZ+9,0,0,sx*0.35);
+  add(g,THREE,cylG(THREE,2,2,20,8),M.steel,sx*12,hangY+20,hangZ,Math.PI/2);
+  add(g,THREE,cylG(THREE,3.4,3.4,5,10),M.steel,sx*11,hangY+2.5,hangZ);
+ }
+ /* винты крепления крышки по окружности шва */
+ for(const sz of [-1,1])for(const a of [0,Math.PI]){
+  const sx=Math.cos(a)*(R+2),sy=Math.sin(a)*(R+2);
+  add(g,THREE,cylG(THREE,3,3,5,10),M.black,sx,sy,sz*zBody,0,0,a-Math.PI/2);
+ }
+ /* надпись SPIDER FARMER вдоль корпуса, с двух сторон */
+ const t1=texPlane(THREE,filterTex(THREE),bodyLen*.9,72,R+1.2,0,0,0,g,Math.PI/2);
+ if(t1)t1.rotation.x=Math.PI/2;
+ const t2=texPlane(THREE,filterTex(THREE),bodyLen*.9,72,-(R+1.2),0,0,0,g,-Math.PI/2);
+ if(t2)t2.rotation.x=Math.PI/2;
 }
 
 /* ================= GGS: контроллер ================= */

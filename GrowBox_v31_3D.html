@@ -273,14 +273,20 @@ var SPREAD = {A:[0,0.55,0], B:[-0.62,0,0], C:[0.62,0,0], 'B+C':[0,0,0]};
 
 /* ---------- реальные модели оборудования (spiderfarmer-3d.js) ---------- */
 var SF3D = window.SPIDERFARMER3D || null;
-var SF_MODELS = {'25_SE3000': 'SE3000'};   // пока только светильник; SF4/фильтр/GGS — следующим шагом
+/* Карта деталей -> модели: {id, rot:[x,y,z]}. Остальное оборудование — следующий шаг. */
+var SF_MODELS = {
+  '25_SE3000': 'SE3000',
+  '16_Корпус_фильтра_SF4': {id:'FILTER4', rot:[0, Math.PI/2, 0]}
+};
 var equip = [], glowMats = [];
 
-function buildEquip(p, b, sfId){
+function buildEquip(p, b, spec){
+  var sfId = typeof spec === 'string' ? spec : spec.id;
   var g = null;
   try{ g = SF3D.build(THREE, sfId); }catch(e){ g = null; }
   if (!g) return false;
   g.scale.setScalar(0.001);   // мм из библиотеки -> метры сцены
+  if (spec.rot) g.rotation.set(spec.rot[0]||0, spec.rot[1]||0, spec.rot[2]||0);
   g.position.set(px(b[0]+b[3]/2), py(b[2]+b[5]/2), pz(b[1]+b[4]/2));
   g.traverse(function(o){
     if (!o.isMesh) return;
