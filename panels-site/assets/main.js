@@ -69,22 +69,56 @@
   function catalog() {
     var host = document.getElementById('catalogGrid');
     if (!host || !C.categories) return;
+    var search = document.getElementById('catalogSearch');
+    var filters = Array.prototype.slice.call(document.querySelectorAll('[data-catalog-filter]'));
+    var count = document.getElementById('catalogCount');
+    var empty = document.getElementById('catalogEmpty');
+    var active = 'all';
 
-    var html = C.categories.map(function (cat) {
-      return '<a class="card" href="order.html?cat=' + cat.id + '">' +
-        '<div class="thumb ph ' + (cat.finish || 'ph-stone') + '" data-label="' + cat.name + '"></div>' +
-        '<div class="k">' + (cat.unit === 'м²' ? 'панели' : cat.unit) + '</div>' +
-        '<h3>' + cat.name + '</h3>' +
-        '<p>' + (cat.note || '') + '</p>' +
-        '<div class="price">от ' + cat.price.toLocaleString('ru-RU') + ' ₽<small>/ м²</small></div>' +
-        '<span class="go">Рассчитать <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>' +
-        '</a>';
-    }).join('');
-
-    host.innerHTML = html +
-      '<a class="card card-cta" href="order.html"><div class="k">индивидуальный подбор</div><h3>Не нашли нужную панель?</h3>' +
+    function group(cat) {
+      if (cat.id === 'lamella' || cat.id === 'bamboo') return 'wood';
+      if (cat.id === 'gypsum3d' || cat.id === 'flexstone' || cat.id === 'spc') return 'stone';
+      if (cat.id === 'soft') return 'soft';
+      return 'other';
+    }
+    function esc(value) {
+      return String(value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function render() {
+      var q = (search ? search.value : '').trim().toLocaleLowerCase('ru-RU');
+      var visible = C.categories.filter(function (cat) {
+        var haystack = [cat.name, cat.note, cat.id].join(' ').toLocaleLowerCase('ru-RU');
+        return (active === 'all' || group(cat) === active) && (!q || haystack.indexOf(q) !== -1);
+      });
+      host.innerHTML = visible.map(function (cat) {
+        var label = esc(cat.name);
+        return '<a class="card catalog-card" href="order.html?cat=' + encodeURIComponent(cat.id) + '">' +
+          '<div class="thumb ph ' + esc(cat.finish || 'ph-stone') + '" role="img" aria-label="Пример фактуры: ' + label + '"></div>' +
+          '<div class="k">категория · ' + group(cat) + '</div>' +
+          '<h3>' + label + '</h3><p>' + esc(cat.note) + '</p>' +
+          '<div class="price">от ' + cat.price.toLocaleString('ru-RU') + ' ₽<small>/ м² · материал</small></div>' +
+          '<span class="go">Выбрать и рассчитать <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>';
+      }).join('') +
+      '<a class="card card-cta catalog-custom" href="order.html"><div class="k">индивидуальный подбор</div><h3>Не нашли нужную панель?</h3>' +
       '<p>Опишите задачу — поможем сузить выбор по фактуре, формату, условиям эксплуатации и бюджету.</p>' +
       '<span class="go">Обсудить проект <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>';
+      if (count) count.textContent = visible.length + ' категорий';
+      if (empty) empty.hidden = visible.length !== 0;
+      host.style.display = visible.length ? '' : 'none';
+    }
+    filters.forEach(function (button) {
+      button.addEventListener('click', function () {
+        active = button.getAttribute('data-catalog-filter');
+        filters.forEach(function (item) {
+          var on = item === button;
+          item.classList.toggle('active', on);
+          item.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+        render();
+      });
+    });
+    if (search) search.addEventListener('input', render);
+    render();
   }
 
   /* ---------- рендер расходников ---------- */
