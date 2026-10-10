@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Spider Farmer — 3D-модели оборудования</title>
+<style>
+:root{--bg:#14171a;--panel:rgba(22,26,29,.92);--line:#2a3237;--txt:#e8eef0;--dim:#93a4ab;--acc:#c9f27f}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+canvas:active{cursor:grabbing}
+.top{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;gap:8px;pointer-events:none}
+.pill{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-size:12px;backdrop-filter:blur(8px)}
+.pill b{color:var(--acc)}
+.list{position:absolute;left:12px;top:58px;bottom:12px;width:210px;overflow:auto;display:flex;flex-direction:column;gap:6px;padding-right:4px}
+.list button{font:inherit;font-size:12px;text-align:left;color:var(--txt);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}
+.list button.on{background:var(--acc);border-color:var(--acc);color:#13200c;font-weight:650}
+.list .grp{margin:10px 2px 2px;font-size:10px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase}
+#info{position:absolute;right:12px;bottom:12px;width:min(360px,calc(100vw - 260px));background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:13px 15px;backdrop-filter:blur(8px)}
+#info h3{margin:0 0 6px;font-size:13.5px}
+#info .d{font-size:12px;color:#b7c6cc;line-height:1.55}
+#info .dm{margin-top:8px;font:11px/1.6 ui-monospace,monospace;color:var(--dim)}
+#hint{position:absolute;right:12px;top:58px;font-size:11px;color:var(--dim)}
+@media(max-width:760px){
+ .list{width:132px;top:52px}
+ .list button{padding:8px 9px;font-size:10.5px}
+ #info{left:152px;right:8px;bottom:8px;width:auto}
+ #info h3{font-size:12px}#info .d{font-size:11px}
+ #hint{display:none}
+}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="top"><div class="pill"><b>SPIDER FARMER</b> · процедурные 3D-модели</div><div class="pill">SECRET BOX · workbench</div></div>
+<div class="list" id="list"></div>
+<div id="hint">перетаскивание — вращение · колесо / щипок — масштаб</div>
+<div id="info"><h3 id="iName">—</h3><div class="d" id="iDesc">—</div><div class="dm" id="iDims">—</div></div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="../../assets/site/spiderfarmer-3d.js"></script>
+<script>
+(function(){
+'use strict';
+const cv=document.getElementById('cv');
+if(typeof THREE==='undefined'){document.body.innerHTML='<div style="padding:30px;font-family:sans-serif">Не удалось загрузить three.js</div>';return}
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x14171a);
+const camera=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,.01,60);
+const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+scene.add(new THREE.HemisphereLight(0xdfe8ea,0x23282c,1.15));
+const key=new THREE.DirectionalLight(0xfff2df,2.2);key.position.set(2.2,3.2,2.6);key.castShadow=true;key.shadow.mapSize.set(1024,1024);scene.add(key);
+const fill=new THREE.DirectionalLight(0xbfd4dd,1.0);fill.position.set(-2.6,1.6,-2.2);scene.add(fill);
+const rim=new THREE.DirectionalLight(0xc9f27f,.55);rim.position.set(0,1.2,-3);scene.add(rim);
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(40,40),new THREE.MeshStandardMaterial({color:0x1b2024,roughness:.95}));
+ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;scene.add(ground);
+
+const GROUPS=[['Светильники',['SE3000','SE5000','G8600','UVIR']],['Вентиляция',['SF4','SF6','SF8','FILTER4']],['Экосистема',['GGS','AC10','HUMID']]];
+const holder=new THREE.Group();scene.add(holder);
+let currentId=null,spin=true;
+function clearHolder(){while(holder.children.length){const c=holder.children.pop();c.traverse&&c.traverse(o=>{if(o.geometry)o.geometry.dispose()})}}
+function place(id){
+ clearHolder();
+ const g=SPIDERFARMER3D.build(THREE,id);
+ g.scale.setScalar(.001);
+ holder.add(g);
+ const s=SPIDERFARMER3D.spec(id);
+ const box=new THREE.Box3().setFromObject(g),size=new THREE.Vector3();box.getSize(size);
+ const center=new THREE.Vector3();box.getCenter(center);
+ g.position.sub(center).add(new THREE.Vector3(0,size.y/2,-size.y/2*0));
+ holder.position.y=0;
+ const span=Math.max(size.x,size.y,size.z);
+ camera.position.set(span*1.35,span*1.05,span*1.6);
+ camera.lookAt(0,size.y*.42,0);
+ document.getElementById('iName').textContent=s.label;
+ document.getElementById('iDesc').textContent=s.desc;
+ document.getElementById('iDims').textContent='Габарит: '+s.w+' × '+s.h+' × '+s.d+' мм'+(s.power?' · '+s.power+' Вт':'')+(s.duct?' · труба Ø'+s.duct+' мм':'');
+ currentId=id;
+}
+/* витрина: все модели в ряд */
+function placeAll(){
+ clearHolder();
+ const n=SPIDERFARMER3D.ids.length,gap=1.15;
+ let x=-(n-1)*gap/2,maxY=0;
+ SPIDERFARMER3D.ids.forEach(id=>{
+  const g=SPIDERFARMER3D.build(THREE,id);
+  g.scale.setScalar(.001);
+  const box=new THREE.Box3().setFromObject(g),size=new THREE.Vector3(),center=new THREE.Vector3();
+  box.getSize(size);box.getCenter(center);
+  g.position.set(x-center.x,-box.min.y,-center.z);
+  holder.add(g);
+  maxY=Math.max(maxY,size.y);
+  x+=gap;
+ });
+ holder.position.y=0;
+ camera.position.set(0,2.2,7.6);camera.lookAt(0,1,0);
+ document.getElementById('iName').textContent='Вся линейка';
+ document.getElementById('iDesc').textContent='Процедурные модели оборудования Spider Farmer для 3D-сцены SECRET BOX: точные габариты из каталога, примитивы three.js, без внешних ассетов.';
+ document.getElementById('iDims').textContent=SPIDERFARMER3D.ids.length+' моделей · масштаб 1:1';
+ currentId='all';
+}
+/* меню */
+const list=document.getElementById('list');
+const allBtn=document.createElement('button');allBtn.textContent='Вся линейка';allBtn.onclick=()=>{setActive(allBtn);placeAll()};list.appendChild(allBtn);
+GROUPS.forEach(([name,ids])=>{
+ const h=document.createElement('div');h.className='grp';h.textContent=name;list.appendChild(h);
+ ids.forEach(id=>{
+  const b=document.createElement('button');
+  b.textContent=SPIDERFARMER3D.label(id).replace('Spider Farmer ','').replace('Spider Farmer','SF');
+  b.onclick=()=>{setActive(b);place(id)};
+  list.appendChild(b);
+ });
+});
+function setActive(b){[...list.querySelectorAll('button')].forEach(x=>x.classList.toggle('on',x===b))}
+setActive(allBtn);
+
+/* управление */
+let drag=null;
+cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY};cv.setPointerCapture(e.pointerId);spin=false});
+cv.addEventListener('pointermove',e=>{
+ if(!drag)return;
+ holder.rotation.y+=(e.clientX-drag.x)*.008;
+ holder.rotation.x=Math.max(-.5,Math.min(.5,holder.rotation.x+(e.clientY-drag.y)*.004));
+ drag={x:e.clientX,y:e.clientY};
+});
+cv.addEventListener('pointerup',()=>{drag=null;setTimeout(()=>spin=true,2600)});
+cv.addEventListener('wheel',e=>{
+ const dir=Math.sign(e.deltaY),p=camera.position.clone().multiplyScalar(dir>0?1.09:.92);
+ if(p.length()>.6&&p.length()<26)camera.position.copy(p);
+ e.preventDefault();
+},{passive:false});
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight,false)});
+
+renderer.setSize(innerWidth,innerHeight,false);
+function tick(){
+ requestAnimationFrame(tick);
+ if(spin&&!drag)holder.rotation.y+=.0022;
+ renderer.render(scene,camera);
+}
+placeAll();tick();
+/* отладочный хук: проверка рендера и поворот для скриншотов */
+window.__SF_PREVIEW={
+ holder,camera,renderer,scene,place,placeAll,
+ stats:function(){
+  renderer.render(scene,camera);
+  const c2=document.createElement('canvas');c2.width=240;c2.height=150;
+  const ctx=c2.getContext('2d');ctx.drawImage(renderer.domElement,0,0,240,150);
+  const d=ctx.getImageData(0,0,240,150).data;let lit=0,sum=0;
+  for(let i=0;i<d.length;i+=4){sum+=d[i]+d[i+1]+d[i+2];if(d[i]>40||d[i+1]>48||d[i+2]>52)lit++}
+  return {litPixels:lit,total:240*150,avg:Math.round(sum/(240*150*3))};
+ },
+ view:function(id,rotY,rotX,dist){
+  if(id&&id!=='all')place(id);else if(id==='all')placeAll();
+  holder.rotation.y=rotY||0;holder.rotation.x=rotX||0;
+  if(dist){camera.position.set(dist*1.35,dist*1.05,dist*1.6);camera.lookAt(0,dist*.42,0)}
+  spin=false;renderer.render(scene,camera);
+  return true;
+ }
+};
+})();
+</script>
+</body>
+</html>

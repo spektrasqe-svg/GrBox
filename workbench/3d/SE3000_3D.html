@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Spider Farmer SE3000 — 3D-модель</title>
+<style>
+:root{--bg:#101316;--panel:rgba(20,24,27,.9);--line:#283035;--txt:#e9eef0;--dim:#93a4ab;--acc:#c9f27f}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--txt);
+ font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+canvas:active{cursor:grabbing}
+.top{position:absolute;top:14px;left:16px;right:16px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;pointer-events:none}
+.pill{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:9px 14px;font-size:12.5px;backdrop-filter:blur(9px)}
+.pill b{color:var(--acc)}
+#info{position:absolute;left:16px;bottom:86px;width:min(330px,calc(100vw - 32px));background:var(--panel);
+ border:1px solid var(--line);border-radius:14px;padding:15px 17px;backdrop-filter:blur(9px)}
+#info h3{margin:0 0 8px;font-size:15px}
+#info .d{font-size:12.5px;color:#b9c7cd;line-height:1.6}
+#info .dm{margin-top:10px;font:11.5px/1.7 ui-monospace,monospace;color:var(--dim)}
+.bar{position:absolute;left:0;right:0;bottom:0;padding:11px 16px calc(11px + env(safe-area-inset-bottom));
+ display:flex;flex-wrap:wrap;gap:7px;justify-content:center;
+ background:linear-gradient(to top,rgba(16,19,22,.97),rgba(16,19,22,0))}
+.bar button{font:inherit;font-size:12px;color:var(--txt);background:var(--panel);border:1px solid var(--line);
+ border-radius:10px;padding:10px 15px;cursor:pointer;min-height:42px}
+.bar button.on{background:var(--acc);border-color:var(--acc);color:#13200c;font-weight:650}
+#hint{position:absolute;right:16px;bottom:86px;font-size:11.5px;color:var(--dim);text-align:right}
+@media(max-width:700px){
+ #info{left:10px;right:10px;bottom:78px;width:auto}
+ #hint{display:none}
+ .top{left:10px;right:10px}
+}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="top">
+ <div class="pill"><b>SPIDER FARMER SE3000</b> · интерактивная 3D-модель</div>
+ <div class="pill">SECRET BOX · workbench</div>
+</div>
+<div id="info">
+ <h3>Spider Farmer SE3000</h3>
+ <div class="d">Светодиодный светильник полного цикла: 4 алюминиевых LED-бара, 3 ряда диодов на бар,
+ встроенный драйвер с диммером, тросовый подвес с блоками. Модель построена процедурно
+ на примитивах three.js — точные габариты из каталога.</div>
+ <div class="dm">
+  Габарит: 610 × 410 × 55 мм (без подвеса)<br>
+  Мощность: 300 Вт · PPF 856 µmol/s · PPE 2.85<br>
+  Элементов сцены: 100 · масштаб 1:1
+ </div>
+</div>
+<div id="hint">перетаскивание — вращение<br>колесо / щипок — масштаб</div>
+<div class="bar" id="bar">
+ <button data-view="iso" class="on">Изометрия</button>
+ <button data-view="bottom">Снизу (диоды)</button>
+ <button data-view="front">Спереди</button>
+ <button data-view="side">Сбоку</button>
+ <button data-view="rear">Сзади</button>
+ <button id="spinBtn" class="on">Вращение: вкл</button>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script>/* SECRET BOX — Spider Farmer: библиотека процедурных 3D-моделей оборудования v1.0
+ *
+ * Модели строятся из примитивов three.js (без внешних ассетов), геометрия — в миллиметрах,
+ * центр модели в начале координат. Масштаб и позиция задаются вызывающим кодом.
+ *
+ * API:
+ *   SPIDERFARMER3D.ids                    -> ['SE3000','SE5000','G8600','SF4','SF6','SF8','FILTER4','GGS','UVIR','AC10','HUMID']
+ *   SPIDERFARMER3D.spec(id)               -> {kind,label,w,d,h,…} | null
+ *   SPIDERFARMER3D.build(THREE, id)       -> THREE.Group (габариты = spec.w × spec.h × spec.d, мм)
+ *   SPIDERFARMER3D.build(THREE, id, {})   -> то же, с переопределением габаритов {w,d,h}
+ */
+(function(global){
+'use strict';
+
+/* ---------- паспорта моделей (мм) ---------- */
+const SPECS={
+ SE3000:{kind:'light',label:'Spider Farmer SE3000',w:610,d:410,h:55,bars:4,power:300,
+   desc:'Светодиодный светильник Spider Farmer SE3000, 300 Вт: 4 алюминиевых LED-бара, диодные платы, драйвер с диммером и тросовый подвес'},
+ SE5000:{kind:'light',label:'Spider Farmer SE5000',w:1090,d:590,h:55,bars:6,power:480,
+   desc:'Светодиодный светильник Spider Farmer SE5000, 480 Вт: 6 алюминиевых LED-баров, диодные платы, драйвер с диммером и тросовый подвес'},
+ G8600:{kind:'light',label:'Spider Farmer G8600',w:1100,d:660,h:58,bars:8,power:860,
+   desc:'Светодиодный светильник Spider Farmer G8600, 860 Вт: 8 алюминиевых LED-баров, диодные платы, драйвер с диммером и тросовый подвес'},
+ SF4:{kind:'fan',label:'Spider Farmer SF4',w:200,d:200,h:280,power:35,duct:100,
+   desc:'Канальный вентилятор Spider Farmer SF4 4" (100 мм): цилиндрический корпус, крыльчатка, крепёжная площадка, пульт с диммером'},
+ SF6:{kind:'fan',label:'Spider Farmer SF6',w:220,d:320,h:320,power:45,duct:150,
+   desc:'Канальный вентилятор Spider Farmer SF6 6" (150 мм): цилиндрический корпус, крыльчатка, крепёжная площадка, пульт с диммером'},
+ SF8:{kind:'fan',label:'Spider Farmer SF8',w:260,d:260,h:370,power:60,duct:200,
+   desc:'Канальный вентилятор Spider Farmer SF8 8" (200 мм): цилиндрический корпус, крыльчатка, крепёжная площадка, пульт с диммером'},
+ FILTER4:{kind:'filter',label:'Фильтр угольный Spider Farmer 4"',w:220,d:300,h:220,
+   desc:'Угольный фильтр Spider Farmer 4" (100 мм): сетчатый корпус, активированный уголь, фланцы, стяжные ремни'},
+ GGS:{kind:'controller',label:'Spider Farmer GGS Controller',w:168,d:36,h:112,
+   desc:'Контроллер Spider Farmer GGS: сенсорный экран, энкодер, порты RJ12 — единая точка управления экосистемой'},
+ UVIR:{kind:'uvbar',label:'Spider Farmer UV30 + IR16',w:600,d:48,h:36,
+   desc:'Досветка Spider Farmer UV30 + IR16: UV-A 365 нм и IR 730 нм в одном баре, отдельное управление'},
+ AC10:{kind:'power',label:'Spider Farmer AC10',w:70,d:70,h:210,
+   desc:'Умная сетевая колодка Spider Farmer AC10: 10 розеток с независимым контролем и защитой'},
+ HUMID:{kind:'humidifier',label:'Увлажнитель Spider Farmer 5 л',w:260,d:260,h:330,
+   desc:'Увлажнитель Spider Farmer 5 л: бак, ультразвуковой генератор тумана, панель управления'}
+};
+
+/* ---------- материалы (кэш на экземпляр THREE) ---------- */
+let cachedTHREE=null,cachedMats=null;
+function getMats(THREE){
+ if(cachedTHREE===THREE&&cachedMats)return cachedMats;
+ cachedTHREE=THREE;
+ cachedMats={
+  alu:new THREE.MeshStandardMaterial({color:0x9ba2a7,roughness:.36,metalness:.78}),
+  aluDark:new THREE.MeshStandardMaterial({color:0x63686c,roughness:.5,metalness:.62}),
+  steel:new THREE.MeshStandardMaterial({color:0x8c9498,roughness:.38,metalness:.66}),
+  dark:new THREE.MeshStandardMaterial({color:0x2b2f32,roughness:.62,metalness:.22}),
+  black:new THREE.MeshStandardMaterial({color:0x1c1f21,roughness:.56,metalness:.18}),
+  rubber:new THREE.MeshStandardMaterial({color:0x16181a,roughness:.94,metalness:.02}),
+  board:new THREE.MeshStandardMaterial({color:0xb4bab5,roughness:.55,metalness:.08}),
+  diode:new THREE.MeshStandardMaterial({color:0xf1e9cf,roughness:.28,metalness:.05,emissive:0x79683b,emissiveIntensity:.55}),
+  diodeUV:new THREE.MeshStandardMaterial({color:0x6a4ea6,roughness:.3,metalness:.05,emissive:0x3c2976,emissiveIntensity:.85}),
+  diodeIR:new THREE.MeshStandardMaterial({color:0x8b3326,roughness:.3,metalness:.05,emissive:0x5a140b,emissiveIntensity:.85}),
+  gold:new THREE.MeshStandardMaterial({color:0xaf8c51,roughness:.42,metalness:.68}),
+  glass:new THREE.MeshStandardMaterial({color:0x11171b,roughness:.18,metalness:.1,emissive:0x1b2932,emissiveIntensity:.6}),
+  felt:new THREE.MeshStandardMaterial({color:0x32373a,roughness:.95,metalness:.02}),
+  tank:new THREE.MeshStandardMaterial({color:0x9db3b8,roughness:.16,metalness:.05,transparent:true,opacity:.55,depthWrite:false}),
+  white:new THREE.MeshStandardMaterial({color:0xd7dada,roughness:.6,metalness:.05})
+ };
+ return cachedMats;
+}
+
+/* ---------- геометрические помощники ---------- */
+function boxG(THREE,w,h,d){return new THREE.BoxGeometry(Math.max(.01,w),Math.max(.01,h),Math.max(.01,d))}
+function cylG(THREE,rt,rb,h,seg,open){return new THREE.CylinderGeometry(Math.max(.01,rt),Math.max(.01,rb),Math.max(.01,h),seg||24,1,!!open)}
+function torG(THREE,r,tube,arc){return new THREE.TorusGeometry(Math.max(.01,r),Math.max(.01,tube),8,26,arc||Math.PI*2)}
+function add(parent,THREE,geo,mat,x,y,z,rx,ry,rz){
+ const m=new THREE.Mesh(geo,mat);
+ if(x!==undefined)m.position.set(x,y,z);
+ if(rx)m.rotation.x=rx;
+ if(ry)m.rotation.y=ry;
+ if(rz)m.rotation.z=rz;
+ parent.add(m);return m;
+}
+/* инстансы диодов: одна геометрия, много точек — дёшево по draw calls */
+function diodeRow(parent,THREE,mat,pts,w,h,d,y){
+ const im=new THREE.InstancedMesh(boxG(THREE,w,h,d),mat,pts.length);
+ const mtx=new THREE.Matrix4();
+ pts.forEach((p,i)=>{mtx.setPosition(p[0],y,p[1]);im.setMatrixAt(i,mtx)});
+ im.instanceMatrix.needsUpdate=true;
+ parent.add(im);return im;
+}
+/* кольцо вокруг оси Z (как у канальных элементов) */
+function ring(parent,THREE,mat,r,tube,x,y,z){return add(parent,THREE,torG(THREE,r,tube),mat,x,y,z)}
+function wire(parent,THREE,mat,x,y,z,h,rx,rz){return add(parent,THREE,cylG(THREE,1.8,1.8,h,8),mat,x,y,z,rx||0,0,rz||0)}
+
+/* ================= LIGHT: SE3000 / SE5000 / G8600 ================= */
+function buildLight(THREE,g,M,s){
+ const w=s.w,d=s.d,h=s.h,bars=s.bars;
+ const railW=Math.min(30,w*.048), railH=h*.42, railY=-h/2+3+railH/2;
+ /* несущие продольные планки (по глубине) */
+ for(const side of [-1,1]){
+  add(g,THREE,boxG(THREE,railW,railH,d*.98),M.alu,side*(w/2-railW/2),railY,0);
+  add(g,THREE,boxG(THREE,railW*.55,6,d*.9),M.steel,side*(w/2-railW/2),railY+railH/2+3,0);
+  add(g,THREE,boxG(THREE,railW+7,12,12),M.aluDark,side*(w/2-railW/2),railY+railH/2+2,d/2-8);
+  add(g,THREE,boxG(THREE,railW+7,12,12),M.aluDark,side*(w/2-railW/2),railY+railH/2+2,-d/2+8);
+  /* крепёжные точки на планке */
+  for(const q of [-.32,0,.32])add(g,THREE,cylG(THREE,3,3,2,10),M.dark,side*(w/2-railW/2),railY+railH/2+1,q*d);
+ }
+ /* LED-бары */
+ const margin=railW+12, usable=w-2*margin;
+ const barW=Math.min(88,usable/(bars*1.6));
+ const barH=Math.min(20,h*.36), barBaseY=-h/2+5.5;
+ for(let i=0;i<bars;i++){
+  const x=bars===1?0:-usable/2+barW/2+i*(usable-barW)/(bars-1);
+  /* алюминиевый профиль с рёбрами охлаждения */
+  add(g,THREE,boxG(THREE,barW,barH,d-16),M.alu,x,barBaseY+barH/2,0);
+  for(const sx of [-1,1])add(g,THREE,boxG(THREE,3.2,barH*.72,d-26),M.steel,x+sx*(barW/2-1.8),barBaseY+barH/2,0);
+  /* плата с отражающей кромкой */
+  add(g,THREE,boxG(THREE,barW-6,2.6,d-28),M.board,x,barBaseY-1.3,0);
+  for(const sx of [-1,1])add(g,THREE,boxG(THREE,2.2,1.8,d-28),M.white,x+sx*(barW/2-4),barBaseY-1.2,0);
+  /* диоды: три ряда */
+  const n=Math.max(5,Math.min(12,Math.round((d-58)/42)));
+  for(const [rowX,mat] of [[-barW*.28,M.diode],[0,M.diode],[barW*.28,M.diode]]){
+   const pts=[];
+   for(let k=0;k<n;k++)pts.push([x+rowX,-d/2+30+(k+.5)*(d-60)/n]);
+   diodeRow(g,THREE,mat,pts,Math.min(8,barW*.18),2.2,Math.min(10,(d-60)/n*.52),-h/2+1.2);
+  }
+  /* торцевые заглушки бара и винты */
+  add(g,THREE,boxG(THREE,barW+5,barH+4,9),M.aluDark,x,barBaseY+barH/2,d/2-9);
+  add(g,THREE,boxG(THREE,barW+5,barH+4,9),M.aluDark,x,barBaseY+barH/2,-d/2+9);
+  add(g,THREE,cylG(THREE,2.6,2.6,2,8),M.steel,x,barBaseY+barH+1,d*.28);
+  add(g,THREE,cylG(THREE,2.6,2.6,2,8),M.steel,x,barBaseY+barH+1,-d*.28);
+ }
+ /* поперечные траверсы по краям */
+ for(const zz of [-1,1])add(g,THREE,boxG(THREE,w-railW*1.2,14,16),M.alu,0,barBaseY+barH-6,zz*(d/2-16));
+ /* драйвер на корпусе */
+ const baseY=-h/2+3+railH;
+ const driverH=Math.max(16,h-baseY-h*.06), driverW=Math.min(w*.52,430), driverD=Math.min(d*.34,235);
+ const dcy=baseY+driverH/2+2;
+ add(g,THREE,boxG(THREE,driverW,driverH*.7,driverD),M.aluDark,0,dcy,0);
+ add(g,THREE,boxG(THREE,driverW+10,driverH*.3,driverD+10),M.alu,0,dcy+driverH*.5,0);
+ /* вентиляционные прорези по бокам */
+ for(const side of [-1,1])for(let i=0;i<4;i++)
+  add(g,THREE,boxG(THREE,2.2,driverH*.2,driverD*.12),M.dark,side*(driverW/2+5.2),dcy+driverH*.08,-driverD*.3+i*driverD*.2);
+ /* рёбра охлаждения */
+ for(let i=0;i<5;i++)add(g,THREE,boxG(THREE,driverW*.9,4,7),M.steel,-driverW*.36+i*driverW*.18,dcy+driverH*.66,0);
+ /* шильдики */
+ add(g,THREE,boxG(THREE,driverW*.38,1.8,driverD*.44),M.gold,0,dcy+driverH*.74,0);
+ add(g,THREE,boxG(THREE,driverW*.22,1.2,driverD*.16),M.white,0,dcy+driverH*.77,0);
+ /* диммер, порты RJ12, выключатель */
+ add(g,THREE,cylG(THREE,9.5,9.5,10,18),M.dark,driverW/2+5,dcy-driverH*.06,0,0,0,Math.PI/2);
+ add(g,THREE,cylG(THREE,3,3,2,10),M.gold,driverW/2+11,dcy-driverH*.06,0,0,0,Math.PI/2);
+ for(let i=0;i<3;i++)add(g,THREE,boxG(THREE,6,10,13),M.dark,-driverW/2-3,dcy-driverH*.18,-driverD*.22+i*driverD*.22);
+ add(g,THREE,boxG(THREE,6,13,20),M.black,-driverW/2-3,dcy+driverH*.18,0);
+ /* кабель питания */
+ wire(g,THREE,M.black,-driverW/2-8,dcy-driverH*.58,driverD*.28,58,0,.4);
+ /* тросовый подвес: блок, трос, карабин */
+ for(const xx of [-w*.3,w*.3]){
+  add(g,THREE,boxG(THREE,16,8,12),M.aluDark,xx,h/2+2,2);
+  add(g,THREE,cylG(THREE,7,7,9,14),M.steel,xx,h/2+12,2,0,0,Math.PI/2);
+  wire(g,THREE,M.steel,xx,h/2+16,2,12);
+  add(g,THREE,torG(THREE,7,2.2),M.steel,xx,h/2+28,2,0);
+ }
+}
+
+/* ================= FAN: SF4 / SF6 / SF8 ================= */
+function buildFan(THREE,g,M,s){
+ const w=s.w,d=s.d,h=s.h;
+ const r=w/2, bodyY=-h/2+42+r, flange=20, bodyLen=d-2*flange-14;
+ /* корпус */
+ add(g,THREE,cylG(THREE,r,r,bodyLen,32),M.black,0,bodyY,0,Math.PI/2);
+ /* центральная лента мотора */
+ add(g,THREE,cylG(THREE,r+10,r+10,Math.max(40,d*.26),32),M.dark,0,bodyY,0,Math.PI/2);
+ /* рёбра-кольца */
+ ring(g,THREE,M.dark,r+5,5,0,bodyY,-d*.27);
+ ring(g,THREE,M.dark,r+5,5,0,bodyY,d*.27);
+ /* фланцы + внутренняя гильза */
+ for(const side of [-1,1]){
+  add(g,THREE,cylG(THREE,r+17,r+17,flange,32),M.dark,0,bodyY,side*(d/2-flange/2),Math.PI/2);
+  add(g,THREE,cylG(THREE,r-2,r-2,26,32,true),M.steel,0,bodyY,side*(d/2-flange-6),Math.PI/2);
+  ring(g,THREE,M.steel,r+17,3.5,0,bodyY,side*(d/2-flange));
+ }
+ /* решётка на входе */
+ const gz=d/2-flange-2;
+ ring(g,THREE,M.steel,r-3,5,0,bodyY,gz+8);
+ add(g,THREE,cylG(THREE,r*.17,r*.17,14,20),M.dark,0,bodyY,gz+6,Math.PI/2);
+ for(let i=0;i<8;i++){
+  const a=i*Math.PI/8;
+  const sp=add(g,THREE,boxG(THREE,(r-4)*2,6,4),M.steel,0,bodyY,gz+6,0,0,a);
+ }
+ /* крыльчатка за решёткой */
+ for(let i=0;i<7;i++){
+  const a=i*Math.PI*2/7, br=r*.34;
+  const bx=Math.cos(a)*br, by=bodyY+Math.sin(a)*br;
+  add(g,THREE,boxG(THREE,r*.34,r*.24,3),M.aluDark,bx,by,gz-24,0,.55,a);
+ }
+ add(g,THREE,cylG(THREE,r*.2,r*.2,Math.max(30,bodyLen*.42),20),M.dark,0,bodyY,-d*.12,Math.PI/2);
+ /* крепёжная площадка и лапки */
+ add(g,THREE,boxG(THREE,w*1.2,14,d*.55),M.dark,0,-h/2+8,0);
+ for(const sx of [-1,1])for(const sz of [-1,1]){
+  add(g,THREE,cylG(THREE,15,16,12,14),M.rubber,sx*w*.42,-h/2+6,sz*d*.2);
+  add(g,THREE,boxG(THREE,w*.62,14,30),M.aluDark,0,-h/2+42+6,sz*d*.21);
+ }
+ /* подвесные скобы */
+ for(const sx of [-1,1]){
+  add(g,THREE,boxG(THREE,10,Math.max(30,h*.22),22),M.aluDark,sx*w*.3,(bodyY+r+h/2-12)/2,0);
+  ring(g,THREE,M.steel,8,2.6,sx*w*.3,h/2-8,0);
+ }
+ /* пульт с диммером на корпусе */
+ const cx=r+13,cy=bodyY+6,cz=-d*.14;
+ add(g,THREE,boxG(THREE,26,92,52),M.dark,cx,cy,cz);
+ add(g,THREE,boxG(THREE,3,26,30),M.glass,cx+14,cy+22,cz);
+ add(g,THREE,cylG(THREE,9,9,9,16),M.black,cx+16,cy-16,cz,0,0,Math.PI/2);
+ add(g,THREE,cylG(THREE,3,3,2,10),M.gold,cx+21,cy-16,cz,0,0,Math.PI/2);
+ wire(g,THREE,M.black,cx-2,cy-58,cz,56,0,0);
+ /* шильдик */
+ add(g,THREE,boxG(THREE,2,22,34),M.gold,cx+14,cy-16,cz+0.1);
+}
+
+/* ================= FILTER: угольный фильтр 4" ================= */
+function buildFilter(THREE,g,M,s){
+ const w=s.w,d=s.d,r=w/2-16;
+ /* корпус: сетка + сукно */
+ add(g,THREE,cylG(THREE,r,r,d-42,28),M.felt,0,0,0,Math.PI/2);
+ add(g,THREE,cylG(THREE,r+5,r+5,d-36,28,true),M.steel,0,0,0,Math.PI/2);
+ /* крышки и фланцы */
+ for(const side of [-1,1]){
+  add(g,THREE,cylG(THREE,r+8,r+8,22,28),M.aluDark,0,0,side*(d/2-11),Math.PI/2);
+  add(g,THREE,cylG(THREE,52,52,26,24,true),M.steel,0,0,side*(d/2+8),Math.PI/2);
+  ring(g,THREE,M.steel,52,3,0,0,side*(d/2+18));
+ }
+ /* стяжные ремни */
+ for(const zc of [-d*.3,0,d*.3]){
+  ring(g,THREE,M.aluDark,r+7,5,0,0,zc);
+  for(let i=0;i<4;i++){
+   const a=i*Math.PI/2+Math.PI/4;
+   add(g,THREE,boxG(THREE,12,8,14),M.dark,Math.cos(a)*(r+9),Math.sin(a)*(r+9),zc);
+  }
+ }
+ /* ручка */
+ add(g,THREE,torG(THREE,26,4,Math.PI),M.steel,0,r+8,0,0,0,0);
+}
+
+/* ================= GGS: контроллер ================= */
+function buildController(THREE,g,M,s){
+ const w=s.w,h=s.h,d=s.d;
+ add(g,THREE,boxG(THREE,w,h*.84,d*.62),M.dark,0,0,0);
+ add(g,THREE,boxG(THREE,w*.96,h*.8,d*.2),M.black,0,0,d*.36);
+ add(g,THREE,boxG(THREE,w*.5,h*.32,2.4),M.glass,0,h*.16,d*.5);
+ add(g,THREE,boxG(THREE,w*.3,1.6,d*.36),M.gold,0,h*.36,d*.3);
+ /* энкодер и кнопки */
+ add(g,THREE,cylG(THREE,13,13,12,20),M.black,w*.27,-h*.14,d*.52,Math.PI/2);
+ add(g,THREE,cylG(THREE,3.2,3.2,2,10),M.gold,w*.27,-h*.14,d*.6,Math.PI/2);
+ for(let i=0;i<4;i++)add(g,THREE,cylG(THREE,6,6,5,12),M.black,-w*.28+i*w*.13,-h*.2,d*.5,Math.PI/2);
+ /* порты RJ12 снизу */
+ for(let i=0;i<6;i++)add(g,THREE,boxG(THREE,13,9,9),M.black,-w*.36+i*w*.145,-h*.46,0);
+ /* кабель */
+ wire(g,THREE,M.black,w*.38,-h*.5,0,52,0,.25);
+}
+
+/* ================= UV30 + IR16: бар досветки ================= */
+function buildUvBar(THREE,g,M,s){
+ const w=s.w,d=s.d,h=s.h;
+ add(g,THREE,boxG(THREE,w*.98,h*.62,d*.82),M.alu,0,h*.1,0);
+ add(g,THREE,boxG(THREE,w*.92,h*.14,d*.62),M.board,0,-h*.28,0);
+ /* диоды: чередование warm / UV / IR */
+ const n=Math.max(8,Math.min(18,Math.round(w/46)));
+ const warm=[],uv=[],ir=[];
+ for(let i=0;i<n;i++){
+  const x=-w*.44+(i+.5)*(w*.88)/n;
+  (i%3===0?uv:i%3===1?ir:warm).push([x,0]);
+ }
+ diodeRow(g,THREE,M.diode,warm,Math.min(10,w/n*.42),2.2,d*.5,-h*.42);
+ diodeRow(g,THREE,M.diodeUV,uv,Math.min(10,w/n*.42),2.2,d*.5,-h*.42);
+ diodeRow(g,THREE,M.diodeIR,ir,Math.min(10,w/n*.42),2.2,d*.5,-h*.42);
+ /* драйвер и заглушки */
+ add(g,THREE,boxG(THREE,w*.24,h*.42,d*.6),M.aluDark,0,h*.42,0);
+ add(g,THREE,boxG(THREE,w*.1,1.6,d*.3),M.gold,0,h*.66,0);
+ for(const side of [-1,1])add(g,THREE,boxG(THREE,10,h*.8,d),M.aluDark,side*(w/2-5),h*.04,0);
+ for(const xx of [-w*.28,w*.28])wire(g,THREE,M.steel,xx,h*.62,0,30);
+}
+
+/* ================= AC10: умная колодка ================= */
+function buildPower(THREE,g,M,s){
+ const w=s.w,d=s.d,h=s.h;
+ add(g,THREE,boxG(THREE,w*.82,h,d*.82),M.dark,0,0,0);
+ add(g,THREE,boxG(THREE,w*.88,h*.06,d*.88),M.black,0,h*.42,0);
+ /* розетки: две колонки по 5 */
+ for(let c=0;c<2;c++)for(let i=0;i<5;i++){
+  const x=(c-.5)*w*.36, y=-h*.38+i*h*.185;
+  add(g,THREE,cylG(THREE,11,11,3.2,16),M.black,x,y,d*.42,Math.PI/2);
+  add(g,THREE,cylG(THREE,6.5,6.5,2,12),M.rubber,x,y,d*.45,Math.PI/2);
+ }
+ /* индикатор и выключатель */
+ add(g,THREE,boxG(THREE,w*.2,7,3),M.glass,-w*.16,h*.44,d*.42);
+ add(g,THREE,boxG(THREE,w*.24,12,5),M.black,w*.18,h*.44,d*.42);
+ wire(g,THREE,M.black,0,-h*.56,0,46,0,0);
+}
+
+/* ================= Увлажнитель 5 л ================= */
+function buildHumidifier(THREE,g,M,s){
+ const w=s.w,d=s.d,h=s.h,r=w/2-16;
+ const tankH=h*.6;
+ add(g,THREE,cylG(THREE,r,r,tankH,28),M.tank,0,-h/2+22+tankH/2,0);
+ add(g,THREE,cylG(THREE,r+8,r+8,22,28),M.dark,0,-h/2+11,0);
+ add(g,THREE,cylG(THREE,r+6,r+6,26,28),M.white,0,-h/2+22+tankH+13,0);
+ /* сопло тумана */
+ add(g,THREE,cylG(THREE,17,17,26,18),M.white,0,-h/2+22+tankH+38,0);
+ add(g,THREE,cylG(THREE,12,15,30,18),M.white,0,-h/2+22+tankH+52,0,0,0,.5);
+ /* ручка */
+ add(g,THREE,torG(THREE,r*.62,5,Math.PI),M.dark,0,-h/2+22+tankH+22,0,0,0,0);
+ /* панель управления */
+ add(g,THREE,boxG(THREE,w*.44,h*.14,6),M.dark,0,-h/2+22+tankH*.34,r+2);
+ add(g,THREE,boxG(THREE,w*.22,h*.06,2.4),M.glass,-w*.08,-h/2+22+tankH*.34,r+6);
+ add(g,THREE,cylG(THREE,8,8,6,14),M.black,w*.13,-h/2+22+tankH*.34,r+6,Math.PI/2);
+ /* уровень воды */
+ add(g,THREE,boxG(THREE,6,tankH*.7,2),M.white,r*.86,-h/2+22+tankH*.5,r*.5);
+}
+
+/* ================= API ================= */
+function build(THREE,id,over){
+ const s0=SPECS[id]||SPECS.SE3000;
+ const s=over?Object.assign({},s0,over):s0;
+ const M=getMats(THREE);
+ const g=new THREE.Group();
+ g.name='SPIDER FARMER · '+s0.label;
+ switch(s.kind){
+  case 'light':buildLight(THREE,g,M,s);break;
+  case 'fan':buildFan(THREE,g,M,s);break;
+  case 'filter':buildFilter(THREE,g,M,s);break;
+  case 'controller':buildController(THREE,g,M,s);break;
+  case 'uvbar':buildUvBar(THREE,g,M,s);break;
+  case 'power':buildPower(THREE,g,M,s);break;
+  case 'humidifier':buildHumidifier(THREE,g,M,s);break;
+ }
+ g.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true}});
+ return g;
+}
+global.SPIDERFARMER3D={
+ version:'1.0',
+ ids:Object.keys(SPECS),
+ spec:function(id){return SPECS[id]||null},
+ label:function(id){return (SPECS[id]||{}).label||id},
+ build:build
+};
+})(typeof window!=='undefined'?window:this);
+</script>
+<script>
+(function(){
+'use strict';
+const cv=document.getElementById('cv');
+if(typeof THREE==='undefined'){document.body.innerHTML='<div style="padding:28px;font-family:sans-serif;max-width:520px">Не удалось загрузить библиотеку three.js с CDN.<br><br>Нужен доступ в интернет при первом открытии.<br>Если интернет есть — обновите страницу (F5).</div>';return}
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x101316);
+const camera=new THREE.PerspectiveCamera(36,innerWidth/innerHeight,.01,60);
+const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+/* студийный свет */
+scene.add(new THREE.HemisphereLight(0xe8f0f2,0x1a1f22,1.25));
+const key=new THREE.DirectionalLight(0xfff3e0,2.4);key.position.set(1.8,2.6,2.2);key.castShadow=true;
+key.shadow.mapSize.set(1024,1024);key.shadow.camera.left=-1.2;key.shadow.camera.right=1.2;
+key.shadow.camera.top=1.2;key.shadow.camera.bottom=-1.2;scene.add(key);
+const fill=new THREE.DirectionalLight(0xbcd2dc,1.05);fill.position.set(-2.2,1.4,-1.8);scene.add(fill);
+const rim=new THREE.DirectionalLight(0xc9f27f,.5);rim.position.set(.4,.8,-2.6);scene.add(rim);
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(30,30),new THREE.MeshStandardMaterial({color:0x171c20,roughness:.96}));
+ground.rotation.x=-Math.PI/2;ground.position.y=-.12;ground.receiveShadow=true;scene.add(ground);
+/* модель */
+const model=SPIDERFARMER3D.build(THREE,'SE3000');
+model.scale.setScalar(.001);
+const bb=new THREE.Box3().setFromObject(model),size=new THREE.Vector3(),center=new THREE.Vector3();
+bb.getSize(size);bb.getCenter(center);
+model.position.sub(center);
+const pivot=new THREE.Group();pivot.add(model);scene.add(pivot);
+/* камера */
+const target=new THREE.Vector3(0,0,0);
+const sph={r:1.35,theta:.72,phi:1.12};const goal=Object.assign({},sph);
+function applyCamera(){
+ sph.r+=(goal.r-sph.r)*.14;sph.theta+=(goal.theta-sph.theta)*.14;sph.phi+=(goal.phi-sph.phi)*.14;
+ camera.position.set(
+  target.x+sph.r*Math.sin(sph.phi)*Math.cos(sph.theta),
+  target.y+sph.r*Math.cos(sph.phi),
+  target.z+sph.r*Math.sin(sph.phi)*Math.sin(sph.theta));
+ camera.lookAt(target);
+}
+const VIEWS={iso:{theta:.72,phi:1.12},bottom:{theta:.7,phi:2.25},front:{theta:0,phi:1.5},side:{theta:Math.PI/2,phi:1.5},rear:{theta:Math.PI,phi:1.5}};
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{
+ Object.assign(goal,VIEWS[b.dataset.view]||VIEWS.iso);
+ document.querySelectorAll('[data-view]').forEach(x=>x.classList.toggle('on',x===b));
+});
+let spin=true;
+const spinBtn=document.getElementById('spinBtn');
+spinBtn.onclick=()=>{spin=!spin;spinBtn.classList.toggle('on',spin);spinBtn.textContent='Вращение: '+(spin?'вкл':'выкл')};
+/* управление */
+let drag=null;
+cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY};cv.setPointerCapture(e.pointerId)});
+cv.addEventListener('pointermove',e=>{
+ if(!drag)return;
+ goal.theta-=(e.clientX-drag.x)*.008;
+ goal.phi=Math.max(.2,Math.min(2.85,goal.phi-(e.clientY-drag.y)*.006));
+ drag={x:e.clientX,y:e.clientY};
+});
+cv.addEventListener('pointerup',()=>{drag=null});
+cv.addEventListener('wheel',e=>{goal.r=Math.max(.55,Math.min(4.5,goal.r*(e.deltaY>0?1.08:.92)));e.preventDefault()},{passive:false});
+let pinch=null;
+cv.addEventListener('touchstart',e=>{if(e.touches.length===2){pinch=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY)}},{passive:true});
+cv.addEventListener('touchmove',e=>{
+ if(e.touches.length===2&&pinch){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+ goal.r=Math.max(.55,Math.min(4.5,goal.r*(pinch/d)));pinch=d}
+},{passive:true});
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight,false)});
+renderer.setSize(innerWidth,innerHeight,false);
+function tick(){
+ requestAnimationFrame(tick);
+ if(spin&&!drag)goal.theta+=.0026;
+ applyCamera();
+ renderer.render(scene,camera);
+}
+tick();
+window.__SE3000={
+ renderer,scene,camera,pivot,
+ stats:function(){
+  renderer.render(scene,camera);
+  const c2=document.createElement('canvas');c2.width=240;c2.height=150;
+  const ctx=c2.getContext('2d');ctx.drawImage(renderer.domElement,0,0,240,150);
+  const d=ctx.getImageData(0,0,240,150).data;let lit=0;
+  for(let i=0;i<d.length;i+=4){if(d[i]>40||d[i+1]>48||d[i+2]>52)lit++}
+  return {litPixels:lit,total:240*150};
+ }
+};
+})();
+</script>
+</body>
+</html>
