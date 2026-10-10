@@ -412,19 +412,7 @@ function buildFan(THREE,g,M,s){
    add(g,THREE,cyl(2.4,2.4,2,12),screwMat,sx*bodyR*.31,-h/2+6.5,z,Math.PI/2);
   }
  }
- /* Компактный проводной регулятор — отдельный аксессуар, без чрезмерного выноса за габарит. */
- const ctrlX=bodyR+5,ctrlY=-h*.31,ctrlZ=bodyLen*.05,ctrlW=24,ctrlH=54,ctrlD=12;
- add(g,THREE,boxG(THREE,ctrlW,ctrlH,ctrlD),black,ctrlX,ctrlY,ctrlZ);
- add(g,THREE,boxG(THREE,ctrlW-3,ctrlH-5,1.3),shell,ctrlX,ctrlY,ctrlZ+ctrlD/2+.5);
- add(g,THREE,cyl(9,9,4,28),black,ctrlX,ctrlY-7,ctrlZ+ctrlD/2+3,Math.PI/2);
- add(g,THREE,cyl(2.8,2.8,1.8,18),orange,ctrlX+.5,ctrlY-7,ctrlZ+ctrlD/2+5.6,Math.PI/2);
- const cablePts=[
-  new THREE.Vector3(coverX+4,-bodyR*.38,bodyLen*.12),
-  new THREE.Vector3(coverX+10,-bodyR*.58,bodyLen*.15),
-  new THREE.Vector3(ctrlX-7,ctrlY+13,ctrlZ),
-  new THREE.Vector3(ctrlX,ctrlY+12,ctrlZ)
- ];
- add(g,THREE,new THREE.TubeGeometry(new THREE.CatmullRomCurve3(cablePts),22,1.6,8,false),black);
+ /* Регулятор скорости не включён в вентилятор: это отдельное оборудование. */
  /* Кабель питания выходит из корпуса отдельным коротким вводом. */
  add(g,THREE,cyl(4,4,5,12),dark,-bodyR*.45,-bodyR*.24,-bodyLen*.23,0,0,Math.PI/2);
  const powerPts=[
