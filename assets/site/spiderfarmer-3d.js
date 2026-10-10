@@ -163,93 +163,71 @@ function displayTex(THREE){
 /* ================= LIGHT: SE3000 / SE5000 / G8600 (шаблон v4 по фото) ================= */
 function buildLight(THREE,g,M,s){
  const w=s.w,d=s.d,h=s.h,bars=s.bars||4;
- const y0=-h/2;
- const railW=Math.min(52,Math.max(32,d*.078)), railH=h*.42;
+ const y0=-h/2, railW=Math.max(20,Math.min(30,d*.05)), railH=Math.max(10,h*.23);
  const railZ=d/2-railW/2, railY=y0+railH/2;
- /* чёрные продольные балки рамы (по длинной стороне X) */
+ /* Две боковые несущие рейки: тонкий чёрный профиль, не массивные балки. */
  for(const side of [-1,1]){
   add(g,THREE,boxG(THREE,w*.985,railH,railW),M.rail,0,railY,side*railZ);
-  add(g,THREE,boxG(THREE,w*.97,5,railW*.8),M.black,0,railY+railH/2+2,side*railZ);
+  add(g,THREE,boxG(THREE,w*.97,2.4,railW*.72),M.black,0,railY+railH/2+1.2,side*railZ);
   for(const sx of [-1,1]){
-   add(g,THREE,boxG(THREE,26,railH+10,railW+8),M.black,sx*(w/2-13),railY+4,side*railZ);
-   for(let i=0;i<6;i++)add(g,THREE,boxG(THREE,24,3.5,5),M.dark,sx*(w/2-13),railY+railH/2+9.6,side*railZ-railW*.34+i*railW*.136);
+   add(g,THREE,boxG(THREE,12,railH+2,railW+2),M.black,sx*(w/2-6),railY,side*railZ);
   }
  }
- /* LED-бары: тонкий прямоугольный алюминиевый профиль вдоль Z */
- const barW=Math.max(26,Math.min(46,w*.058)), edgeM=42, barLen=d-2*railW-14;
- const step=(w-2*edgeM-barW)/(bars-1||1);
- const led=ledTex(THREE);
+ /* Четыре узких LED-планки идут поперёк рамы и заканчиваются в боковых рейках. */
+ const barW=Math.max(15,Math.min(23,w*.036)), edge=34, barLen=d-2*railW-4;
+ const step=(w-2*edge-barW)/(bars-1||1), led=ledTex(THREE);
+ const boardMat=new THREE.MeshStandardMaterial({map:led,roughness:.46,metalness:.1});
  for(let i=0;i<bars;i++){
-  const x=bars===1?0:-(w/2-edgeM-barW/2)+i*step;
-  const barTopY=y0+h*.03+h*.30;
-  add(g,THREE,boxG(THREE,barW,h*.3,barLen),M.alu,x,y0+h*.03+h*.15,0);
-  add(g,THREE,boxG(THREE,barW+7,h*.2,barLen*.99),M.aluDark,x,y0+h*.03+h*.11,0);
-  /* продольные рёбра-прорези сверху */
-  for(const rx of [-.3,-.1,.1,.3])
-   add(g,THREE,boxG(THREE,barW*.14,h*.12,barLen*.985),M.alu,x+rx*barW,barTopY+h*.05,0);
-  /* белая плата снизу с LED-матрицей */
-  const boardMat=new THREE.MeshStandardMaterial({map:led,roughness:.42,metalness:.14,emissive:0x665f44,emissiveIntensity:.22});
-  add(g,THREE,boxG(THREE,barW*.86,2.6,barLen*.985),boardMat,x,y0+2.2,0);
-  /* кронштейны и болты крепления к раме */
+  const x=bars===1?0:-(w/2-edge-barW/2)+i*step;
+  add(g,THREE,boxG(THREE,barW,Math.max(4,h*.12),barLen),M.alu,x,y0+h*.15,0);
+  add(g,THREE,boxG(THREE,barW*.82,1.6,barLen*.985),boardMat,x,y0+1.2,0);
+  /* Небольшие фиксаторы концов планок. */
   for(const sz of [-1,1]){
-   add(g,THREE,boxG(THREE,barW+10,15,18),M.aluDark,x,y0+h*.03+h*.15,sz*(barLen/2+7));
-   add(g,THREE,cylG(THREE,3.2,3.2,3,10),M.steel,x,y0+h*.03+h*.28,sz*(barLen/2+7));
+   add(g,THREE,boxG(THREE,barW+5,5,8),M.aluDark,x,y0+h*.15,sz*(barLen/2+2));
+   add(g,THREE,cylG(THREE,1.7,1.7,2,8),M.steel,x,y0+h*.15+3,sz*(barLen/2+3));
   }
  }
- /* Центральный съёмный драйвер/радиатор: отдельный узел над рамой */
- const heatW=Math.min(142,Math.max(112,w*.22)), heatL=Math.min(d*.58,barLen*.72);
- const heatY=y0+h*.03+h*.34;
- add(g,THREE,boxG(THREE,heatW,h*.31,heatL),M.alu,0,heatY,0);
- add(g,THREE,boxG(THREE,heatW+4,h*.08,heatL+5),M.aluDark,0,heatY+h*.19,0);
- /* Частые продольные рёбра охлаждения на верхней крышке */
- for(let i=0;i<25;i++){
-  const x=-heatW*.46+i*(heatW*.92/24);
-  add(g,THREE,boxG(THREE,2.1,h*.20,heatL*.94),M.aluDark,x,heatY+h*.27,0);
+ /* Драйвер — один компактный прямоугольный блок на верхней стороне,
+    закреплённый четырьмя опорами; не отдельная коробка на передней рейке. */
+ const drvW=Math.min(205,w*.35), drvL=Math.min(126,d*.24), drvH=Math.max(22,h*.38);
+ const drvY=y0+railH+drvH/2+4;
+ add(g,THREE,boxG(THREE,drvW,drvH,drvL),M.alu,0,drvY,0);
+ add(g,THREE,boxG(THREE,drvW*.96,3,drvL*.96),M.aluDark,0,drvY+drvH/2+1.5,0);
+ /* Низкий профиль рёбер охлаждения на крышке драйвера. */
+ for(let i=0;i<13;i++){
+  const x=-drvW*.43+i*(drvW*.86/12);
+  add(g,THREE,boxG(THREE,2,3.2,drvL*.82),M.steel,x,drvY+drvH/2+3.1,0);
  }
- /* Торцевые заглушки, крепёжные винты и вентиляционные щели */
- for(const z of [-1,1]){
-  add(g,THREE,boxG(THREE,heatW*.94,h*.24,4),M.black,0,heatY,z*(heatL/2+2));
-  for(let i=0;i<7;i++)add(g,THREE,boxG(THREE,heatW*.62/7,1.4,1.2),M.dark,-heatW*.31+i*heatW*.62/6,heatY-h*.015,z*(heatL/2+4.2));
+ /* Четыре короткие монтажные лапы от драйвера к раме. */
+ for(const sx of [-1,1])for(const sz of [-1,1]){
+  add(g,THREE,boxG(THREE,9,7,9),M.aluDark,sx*(drvW*.42),y0+railH+3,sz*(drvL*.42));
+  add(g,THREE,boxG(THREE,7,Math.max(5,drvY-(y0+railH+7)),7),M.steel,sx*(drvW*.42),((y0+railH+7)+drvY)/2,sz*(drvL*.42));
  }
- for(let i=0;i<8;i++)for(const z of [-1,1]){
-  const x=-heatW*.39+i*(heatW*.78/7);
-  add(g,THREE,cylG(THREE,1.8,1.8,1.2,8),M.black,x,heatY+h*.16,z*(heatL*.42));
- }
- /* Драйвер соединён с четырьмя планками короткими крепёжными мостами */
- for(const x of [-1,1])for(const z of [-1,1]){
-  add(g,THREE,boxG(THREE,12,5,24),M.aluDark,x*(heatW*.5+7),heatY-h*.02,z*(heatL*.28));
- }
- /* чёрный блок управления — на ВЕРТИКАЛЬНОЙ боковой грани передней балки */
- const ctlW=Math.min(200,w*.33), ctlH=railH*.82, ctlD=Math.min(26,h*.34);
- const ctlY=railY, ctlZ=railZ+railW/2+ctlD/2;
- add(g,THREE,boxG(THREE,ctlW,ctlH,ctlD),M.black,0,ctlY,ctlZ);
- add(g,THREE,boxG(THREE,ctlW+7,4,ctlD+3),M.dark,0,ctlY+ctlH/2+1.4,ctlZ);
- /* экран, диммер и индикатор — на лицевой грани блока (смотрят в +Z) */
- texPlane(THREE,displayTex(THREE),ctlW*.3,ctlW*.155,-ctlW*.21,ctlY+ctlH*.08,ctlZ+ctlD/2+.4,0,g);
- add(g,THREE,cylG(THREE,ctlW*.072,ctlW*.072,9,20),M.dark,ctlW*.2,ctlY-ctlH*.05,ctlZ+ctlD/2+4.5,Math.PI/2);
- add(g,THREE,cylG(THREE,ctlW*.025,ctlW*.025,2.6,12),M.gold,ctlW*.2,ctlY-ctlH*.05,ctlZ+ctlD/2+9.6,Math.PI/2);
- add(g,THREE,cylG(THREE,3.2,3.2,2.4,12),M.green,ctlW*.34,ctlY-ctlH*.05,ctlZ+ctlD/2+1.4,Math.PI/2);
- /* толстый кабель питания */
- wire(g,THREE,M.black,ctlW*.5,ctlY-ctlH*.32,ctlZ,52,0,.55);
- wire(g,THREE,M.black,ctlW*.5+26,ctlY-ctlH*.32-26,ctlZ,46,1.25,.18);
- /* проушины подвеса и тросики */
- for(const side of [-1,1])for(const sx of [-1,1]){
-  add(g,THREE,boxG(THREE,18,8,14),M.dark,sx*w*.3,railY+railH/2+6,side*railZ);
-  add(g,THREE,torG(THREE,6,2),M.steel,sx*w*.3,railY+railH/2+15,side*railZ);
+ /* Экран и регулятор расположены на одной торцевой панели самого драйвера.
+    Ориентация панели в +Z; ничего не навешивается отдельным крупным блоком на раму. */
+ const faceZ=drvL/2+1.7, panelW=Math.min(92,drvW*.48), panelH=Math.min(32,drvH*.55);
+ add(g,THREE,boxG(THREE,panelW,panelH,2.2),M.black,-drvW*.13,drvY,faceZ);
+ texPlane(THREE,displayTex(THREE),panelW*.52,panelH*.62,-drvW*.13,drvY,faceZ+1.3,0,g);
+ add(g,THREE,cylG(THREE,Math.max(5,drvH*.13),Math.max(5,drvH*.13),5,20),M.dark,drvW*.25,drvY,faceZ+2.4,Math.PI/2);
+ add(g,THREE,cylG(THREE,Math.max(2,drvH*.055),Math.max(2,drvH*.055),1.8,12),M.gold,drvW*.25,drvY,faceZ+5.2,Math.PI/2);
+ /* Индикатор и кабель питания выходят с торца драйвера. */
+ add(g,THREE,cylG(THREE,2,2,2,10),M.green,drvW*.42,drvY-panelH*.25,faceZ+1.4,Math.PI/2);
+ wire(g,THREE,M.black,drvW*.35,drvY-drvH*.38,drvL*.18,30,0,.35);
+ wire(g,THREE,M.black,drvW*.35+12,drvY-drvH*.38-14,drvL*.18,28,.9,.15);
+ /* Крепёжные проушины по углам и подвесы. */
+ for(const sx of [-1,1])for(const sz of [-1,1]){
+  const x=sx*w*.34,z=sz*d*.39;
+  add(g,THREE,boxG(THREE,12,4,10),M.dark,x,railY+railH/2+2,z);
+  add(g,THREE,torG(THREE,4.5,1.5),M.steel,x,railY+railH/2+7,z);
  }
  for(const sx of [-1,1]){
-  wire(g,THREE,M.steel,sx*w*.3,railY+railH/2+36,0,42);
-  add(g,THREE,torG(THREE,7,2.2),M.steel,sx*w*.3,railY+railH/2+61,0,0);
+  wire(g,THREE,M.steel,sx*w*.34,railY+railH/2+20,0,24);
+  add(g,THREE,torG(THREE,5.5,1.6),M.steel,sx*w*.34,railY+railH/2+34,0);
  }
- /* Реальные торцевые крышки и фирменные шильдики на раме */
- for(const x of [-1,1]){
-  add(g,THREE,boxG(THREE,8,railH+4,railW+5),M.black,x*(w/2-4),railY,railZ);
-  for(const z of [-1,1])for(let j=0;j<3;j++)
-   add(g,THREE,cylG(THREE,2.1,2.1,1.4,10),M.steel,x*(w/2-4),railY-railH*.25+j*railH*.25,z*(d/2-railW*.26));
- }
- const faceZ=railZ+railW/2+.5;
- texPlane(THREE,logoTex(THREE),Math.min(240,w*.4),Math.min(42,w*.07),-w*.255,railY,faceZ,0,g);
- texPlane(THREE,plateTex(THREE,(s.label||'').split(' ').pop()),Math.min(120,w*.2),Math.min(26,w*.043),w*.28,railY,faceZ,0,g);
+ /* Небольшие фирменные маркировки на наружной стороне передней рейки. */
+ const faceRailZ=railZ+railW/2+.4;
+ texPlane(THREE,logoTex(THREE),Math.min(170,w*.29),Math.min(25,w*.042),-w*.24,railY,faceRailZ,0,g);
+ texPlane(THREE,plateTex(THREE,'SE 3000'),Math.min(82,w*.14),Math.min(19,w*.032),w*.25,railY,faceRailZ,0,g);
 }
 
 /* ================= FAN: SF4 / SF6 / SF8 ================= */
