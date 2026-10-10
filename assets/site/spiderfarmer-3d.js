@@ -215,15 +215,15 @@ function buildLight(THREE,g,M,s){
  }
  /* Control pod sits ON the black side rail near one end. Screen faces upward;
     the dimmer is a separate round knob beside it, not a side-mounted fake display. */
- const podW=Math.min(70,w*.125), podD=Math.min(32,d*.075), podH=Math.max(10,h*.22);
+ const podW=Math.min(railW*.82,w*.04), podD=Math.min(64,d*.11), podH=Math.max(10,h*.22);
  const podX=-sideX, podZ=-d*.34, podY=railY+railH/2+podH/2+1.2;
  add(g,THREE,boxG(THREE,podW,podH,podD),M.black,podX,podY,podZ);
  add(g,THREE,boxG(THREE,podW*.94,1.4,podD*.92),M.dark,podX,podY+podH/2+.7,podZ);
  const screenTex=displayTex(THREE);
- texPlane(THREE,screenTex,podW*.34,podD*.47,podX-podW*.23,podY+podH/2+1.55,podZ,-Math.PI/2,g,0);
- add(g,THREE,cylG(THREE,Math.max(3.4,podD*.19),Math.max(3.4,podD*.19),3.4,18),M.dark,podX+podW*.24,podY+podH/2+2.1,podZ,0,0,0);
- add(g,THREE,cylG(THREE,Math.max(1.6,podD*.085),Math.max(1.6,podD*.085),1.2,12),M.gold,podX+podW*.24,podY+podH/2+4.0,podZ,0,0,0);
- add(g,THREE,boxG(THREE,3,2,4),M.green,podX-podW*.02,podY+podH/2+1.8,podZ+podD*.28);
+ texPlane(THREE,screenTex,podW*.52,podD*.34,podX,podY+podH/2+1.55,podZ-podD*.13,-Math.PI/2,g,0);
+ add(g,THREE,cylG(THREE,Math.max(3.4,podW*.19),Math.max(3.4,podW*.19),3.4,18),M.dark,podX,podY+podH/2+2.1,podZ+podD*.28,0,0,0);
+ add(g,THREE,cylG(THREE,Math.max(1.6,podW*.085),Math.max(1.6,podW*.085),1.2,12),M.gold,podX,podY+podH/2+4.0,podZ+podD*.28,0,0,0);
+ add(g,THREE,boxG(THREE,2,2,3),M.green,podX,podY+podH/2+1.8,podZ+podD*.04);
  /* Power lead leaves the controller and follows the frame instead of floating outward. */
  wire(g,THREE,M.black,podX+podW*.42,podY,podZ+podD*.45,20,0,.2);
  /* Four corner suspension tabs and two tidy hanging links. */
