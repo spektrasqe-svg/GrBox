@@ -89,54 +89,6 @@ function diodeRow(parent,THREE,mat,pts,w,h,d,y){
 function ring(parent,THREE,mat,r,tube,x,y,z){return add(parent,THREE,torG(THREE,r,tube),mat,x,y,z)}
 function wire(parent,THREE,mat,x,y,z,h,rx,rz){return add(parent,THREE,cylG(THREE,1.8,1.8,h,8),mat,x,y,z,rx||0,0,rz||0)}
 
-/* ---------- текстуры (canvas): надписи, шильдики, индикаторы ---------- */
-function canvasTex(THREE,w,h,draw){
- if(typeof document==='undefined')return null;
- const c=document.createElement('canvas');c.width=w;c.height=h;
- const x=c.getContext('2d');draw(x,w,h);
- const t=new THREE.CanvasTexture(c);
- if('colorSpace' in t)t.colorSpace=THREE.SRGBColorSpace;
- return t;
-}
-function texPlane(THREE,tex,w,h,x,y,z,rx,parent){
- if(!tex)return null;
- const mat=new THREE.MeshStandardMaterial({map:tex,transparent:true,roughness:.55,metalness:.08});
- return add(parent,THREE,new THREE.PlaneGeometry(w,h),mat,x,y,z,rx||0);
-}
-function logoTex(THREE){
- return canvasTex(THREE,640,128,(x,w,h)=>{
-  x.clearRect(0,0,w,h);
-  x.fillStyle='#e8722a';
-  x.beginPath();x.ellipse(88,66,15,21,0,0,Math.PI*2);x.fill();
-  x.beginPath();x.arc(88,38,10,0,Math.PI*2);x.fill();
-  x.lineWidth=6.5;x.strokeStyle='#e8722a';x.lineCap='round';
-  for(const s of [-1,1])for(let i=0;i<4;i++){
-   x.beginPath();x.moveTo(88+s*11,46+i*10);
-   x.quadraticCurveTo(88+s*42,32+i*16,88+s*68,42+i*15);x.stroke();
-  }
-  x.font='bold 58px Arial';x.textBaseline='middle';
-  x.fillStyle='#f1f1ec';x.fillText('SPIDER',172,54);
-  x.fillStyle='#e8722a';x.fillText('FARMER',352,54);
-  x.font='24px Arial';x.fillStyle='#b9b9b2';x.fillText('SMART GROW LIGHTING',174,104);
- });
-}
-function plateTex(THREE,text){
- return canvasTex(THREE,512,128,(x,w,h)=>{
-  x.fillStyle='#141416';x.fillRect(0,0,w,h);
-  x.fillStyle='#e8722a';x.fillRect(12,12,w-24,h-24);
-  x.fillStyle='#121212';x.font='bold 72px Arial';x.textAlign='center';x.textBaseline='middle';
-  x.fillText(text,w/2,h/2+3);
- });
-}
-function displayTex(THREE){
- return canvasTex(THREE,256,128,(x,w,h)=>{
-  x.fillStyle='#0a1322';x.fillRect(0,0,w,h);
-  x.fillStyle='#122c46';x.fillRect(10,10,w-20,h-20);
-  x.font='bold 82px "Courier New",monospace';x.textAlign='center';x.textBaseline='middle';
-  x.shadowColor='#57c1ff';x.shadowBlur=24;x.fillStyle='#93d9ff';
-  x.fillText('100',w/2,h/2+4);
- });
-}
 /* ---------- текстуры (canvas): надписи, шильдики, индикаторы, LED-матрица ---------- */
 function canvasTex(THREE,w,h,draw){
  if(typeof document==='undefined')return null;
@@ -153,8 +105,8 @@ function texPlane(THREE,tex,w,h,x,y,z,rx,parent){
 }
 function ledTex(THREE){
  return canvasTex(THREE,256,512,(x,w,h)=>{
-  x.fillStyle='#c8ccc4';x.fillRect(0,0,w,h);
-  const cols=4,rows=13,pad=9;
+  x.fillStyle='#aeb2a8';x.fillRect(0,0,w,h);
+  const cols=3,rows=13,pad=9;
   const cw=(w-pad*(cols+1))/cols, ch=(h-pad*(rows+1))/rows;
   for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
    const gx=pad+c*(cw+pad), gy=pad+r*(ch+pad);
@@ -163,25 +115,25 @@ function ledTex(THREE){
    x.fillRect(gx,gy,cw,ch);
    x.fillStyle=red?'rgba(255,130,95,.5)':'rgba(255,255,255,.8)';
    x.fillRect(gx+cw*.13,gy+ch*.13,cw*.42,ch*.34);
-   x.strokeStyle='rgba(110,112,104,.55)';x.lineWidth=1.4;x.strokeRect(gx,gy,cw,ch);
+   x.strokeStyle='rgba(70,72,66,.8)';x.lineWidth=2.2;x.strokeRect(gx,gy,cw,ch);
   }
  });
 }
 function logoTex(THREE){
- return canvasTex(THREE,640,128,(x,w,h)=>{
+ return canvasTex(THREE,768,128,(x,w,h)=>{
   x.clearRect(0,0,w,h);
   x.fillStyle='#e8722a';
-  x.beginPath();x.ellipse(88,66,15,21,0,0,Math.PI*2);x.fill();
-  x.beginPath();x.arc(88,38,10,0,Math.PI*2);x.fill();
-  x.lineWidth=6.5;x.strokeStyle='#e8722a';x.lineCap='round';
+  x.beginPath();x.ellipse(72,64,14,20,0,0,Math.PI*2);x.fill();
+  x.beginPath();x.arc(72,38,9,0,Math.PI*2);x.fill();
+  x.lineWidth=6;x.strokeStyle='#e8722a';x.lineCap='round';
   for(const s of [-1,1])for(let i=0;i<4;i++){
-   x.beginPath();x.moveTo(88+s*11,46+i*10);
-   x.quadraticCurveTo(88+s*42,32+i*16,88+s*68,42+i*15);x.stroke();
+   x.beginPath();x.moveTo(72+s*10,46+i*10);
+   x.quadraticCurveTo(72+s*40,32+i*15,72+s*64,42+i*14);x.stroke();
   }
-  x.font='bold 58px Arial';x.textBaseline='middle';
-  x.fillStyle='#f1f1ec';x.fillText('SPIDER',172,54);
-  x.fillStyle='#e8722a';x.fillText('FARMER',352,54);
-  x.font='24px Arial';x.fillStyle='#b9b9b2';x.fillText('SMART GROW LIGHTING',174,104);
+  x.font='bold 62px Arial';x.textBaseline='middle';
+  x.fillStyle='#f1f1ec';x.fillText('SPIDER',152,58);
+  x.fillStyle='#e8722a';x.fillText('FARMER',352,58);
+  x.font='24px Arial';x.fillStyle='#b9b9b2';x.fillText('SMART GROW LIGHTING',154,108);
  });
 }
 function plateTex(THREE,text){
@@ -201,7 +153,7 @@ function displayTex(THREE){
   x.fillText('100',w/2,h/2+4);
  });
 }
-/* ================= LIGHT: SE3000 / SE5000 / G8600 (шаблон v3 по фото) ================= */
+/* ================= LIGHT: SE3000 / SE5000 / G8600 (шаблон v4 по фото) ================= */
 function buildLight(THREE,g,M,s){
  const w=s.w,d=s.d,h=s.h,bars=s.bars||4;
  const y0=-h/2;
@@ -212,57 +164,65 @@ function buildLight(THREE,g,M,s){
   add(g,THREE,boxG(THREE,w*.985,railH,railW),M.rail,0,railY,side*railZ);
   add(g,THREE,boxG(THREE,w*.97,5,railW*.8),M.black,0,railY+railH/2+2,side*railZ);
   for(const sx of [-1,1]){
-   /* торцевые заглушки с фрезерованными рёбрами */
    add(g,THREE,boxG(THREE,26,railH+10,railW+8),M.black,sx*(w/2-13),railY+4,side*railZ);
    for(let i=0;i<6;i++)add(g,THREE,boxG(THREE,24,3.5,5),M.dark,sx*(w/2-13),railY+railH/2+9.6,side*railZ-railW*.34+i*railW*.136);
   }
  }
- /* LED-бары: прямоугольный алюминиевый профиль вдоль Z */
- const barW=Math.min(72,w/(bars*1.32)), edgeM=38, barLen=d-2*railW-14;
+ /* LED-бары: тонкий прямоугольный алюминиевый профиль вдоль Z */
+ const barW=Math.max(26,Math.min(46,w*.058)), edgeM=42, barLen=d-2*railW-14;
  const step=(w-2*edgeM-barW)/(bars-1||1);
  const led=ledTex(THREE);
  for(let i=0;i<bars;i++){
   const x=bars===1?0:-(w/2-edgeM-barW/2)+i*step;
   const barTopY=y0+h*.03+h*.30;
-  /* корпус профиля: плоские грани */
   add(g,THREE,boxG(THREE,barW,h*.3,barLen),M.alu,x,y0+h*.03+h*.15,0);
-  add(g,THREE,boxG(THREE,barW+7,h*.22,barLen*.99),M.aluDark,x,y0+h*.03+h*.12,0);
-  /* глубокие продольные прорези-рёбра сверху */
-  for(const rx of [-.32,-.11,.11,.32])
-   add(g,THREE,boxG(THREE,barW*.12,h*.13,barLen*.985),M.alu,x+rx*barW,barTopY+h*.055,0);
-  /* белая плата снизу с LED-матрицей (текстура) */
+  add(g,THREE,boxG(THREE,barW+7,h*.2,barLen*.99),M.aluDark,x,y0+h*.03+h*.11,0);
+  /* продольные рёбра-прорези сверху */
+  for(const rx of [-.3,-.1,.1,.3])
+   add(g,THREE,boxG(THREE,barW*.14,h*.12,barLen*.985),M.alu,x+rx*barW,barTopY+h*.05,0);
+  /* белая плата снизу с LED-матрицей */
   const boardMat=new THREE.MeshStandardMaterial({map:led,roughness:.42,metalness:.14,emissive:0x665f44,emissiveIntensity:.22});
-  add(g,THREE,boxG(THREE,barW*.84,2.6,barLen*.985),boardMat,x,y0+2.2,0);
-  /* крепёжные кронштейны и болты к раме */
+  add(g,THREE,boxG(THREE,barW*.86,2.6,barLen*.985),boardMat,x,y0+2.2,0);
+  /* кронштейны и болты крепления к раме */
   for(const sz of [-1,1]){
-   add(g,THREE,boxG(THREE,barW+8,16,20),M.aluDark,x,y0+h*.03+h*.15,sz*(barLen/2+8));
-   add(g,THREE,cylG(THREE,3.2,3.2,3,10),M.steel,x,y0+h*.03+h*.28,sz*(barLen/2+8));
+   add(g,THREE,boxG(THREE,barW+10,15,18),M.aluDark,x,y0+h*.03+h*.15,sz*(barLen/2+7));
+   add(g,THREE,cylG(THREE,3.2,3.2,3,10),M.steel,x,y0+h*.03+h*.28,sz*(barLen/2+7));
   }
  }
- /* крупный серебристый радиатор (блок питания) в центре между средними барами */
- const heatW=Math.min(120,Math.max(72,step-barW-4)), heatL=Math.min(d*.62,barLen*.8);
+ /* серебристый радиатор (блок питания) в центре */
+ const heatW=Math.min(150,Math.max(80,step-barW-6)), heatL=Math.min(d*.72,barLen*.86);
  add(g,THREE,boxG(THREE,heatW*.98,h*.34,heatL),M.alu,0,y0+h*.03+h*.17,0);
- for(let i=0;i<15;i++)
-  add(g,THREE,boxG(THREE,3.6,h*.52,heatL*.985),M.alu,-heatW*.45+i*heatW*.9/14,y0+h*.03+h*.4,0);
- /* вентиляционные прорези по торцам радиатора */
+ for(let i=0;i<17;i++)
+  add(g,THREE,boxG(THREE,3.6,h*.52,heatL*.985),M.alu,-heatW*.45+i*heatW*.9/16,y0+h*.03+h*.4,0);
  for(const sz of [-1,1])for(let i=0;i<5;i++)
   add(g,THREE,boxG(THREE,heatW*.12,h*.12,3),M.dark,-heatW*.32+i*heatW*.16,y0+h*.03+h*.2,sz*(heatL/2+1));
- add(g,THREE,boxG(THREE,heatW+6,6,heatL+6),M.aluDark,0,y0+h*.03+h*.68,0);
- /* чёрный блок управления с синим экраном — на передней балке */
- const ctlW=Math.min(210,w*.35), ctlH=h*.4, ctlD=railW*.96;
- const ctlY=railY+railH/2+ctlH/2-1, ctlZ=railZ;
+ add(g,THREE,boxG(THREE,heatW*.32,5,heatL+6),M.aluDark,0,y0+h*.03+h*.74,0);
+ /* чёрный блок управления — на ВЕРТИКАЛЬНОЙ боковой грани передней балки */
+ const ctlW=Math.min(200,w*.33), ctlH=railH*.82, ctlD=Math.min(26,h*.34);
+ const ctlY=railY, ctlZ=railZ+railW/2+ctlD/2;
  add(g,THREE,boxG(THREE,ctlW,ctlH,ctlD),M.black,0,ctlY,ctlZ);
- add(g,THREE,boxG(THREE,ctlW+9,5,ctlD+5),M.dark,0,ctlY+ctlH/2+1.8,ctlZ);
- texPlane(THREE,displayTex(THREE),ctlW*.3,ctlW*.15,-ctlW*.22,ctlY+ctlH/2+4.6,ctlZ,-Math.PI/2,g);
- add(g,THREE,cylG(THREE,ctlW*.075,ctlW*.075,10,20),M.dark,ctlW*.22,ctlY+ctlH/2+7,ctlZ);
- add(g,THREE,cylG(THREE,ctlW*.026,ctlW*.026,2.6,12),M.gold,ctlW*.22,ctlY+ctlH/2+13.2,ctlZ);
- add(g,THREE,cylG(THREE,3.6,3.6,2.6,12),M.green,ctlW*.36,ctlY+ctlH/2+4.8,ctlZ);
- /* толстый кабель питания из блока */
- wire(g,THREE,M.black,-ctlW*.52,ctlY-ctlH*.28,ctlZ+ctlD*.42,58,0,.55);
- wire(g,THREE,M.black,-ctlW*.62,ctlY-ctlH*.28-30,ctlZ+ctlD*.62,52,1.25,.2);
- /* надписи: оранжевый логотип и модельная табличка */
- texPlane(THREE,logoTex(THREE),Math.min(250,w*.4),Math.min(50,w*.08),-w*.26,railY+railH/2+5,ctlZ,-Math.PI/2,g);
- texPlane(THREE,plateTex(THREE,(s.label||'').split(' ').pop()),Math.min(160,w*.26),Math.min(40,w*.065),w*.26,railY+railH/2+5,ctlZ,-Math.PI/2,g);
+ add(g,THREE,boxG(THREE,ctlW+7,4,ctlD+3),M.dark,0,ctlY+ctlH/2+1.4,ctlZ);
+ /* экран, диммер и индикатор — на лицевой грани блока (смотрят в +Z) */
+ texPlane(THREE,displayTex(THREE),ctlW*.3,ctlW*.155,-ctlW*.21,ctlY+ctlH*.08,ctlZ+ctlD/2+.4,0,g);
+ add(g,THREE,cylG(THREE,ctlW*.072,ctlW*.072,9,20),M.dark,ctlW*.2,ctlY-ctlH*.05,ctlZ+ctlD/2+4.5,Math.PI/2);
+ add(g,THREE,cylG(THREE,ctlW*.025,ctlW*.025,2.6,12),M.gold,ctlW*.2,ctlY-ctlH*.05,ctlZ+ctlD/2+9.6,Math.PI/2);
+ add(g,THREE,cylG(THREE,3.2,3.2,2.4,12),M.green,ctlW*.34,ctlY-ctlH*.05,ctlZ+ctlD/2+1.4,Math.PI/2);
+ /* толстый кабель питания */
+ wire(g,THREE,M.black,ctlW*.5,ctlY-ctlH*.32,ctlZ,52,0,.55);
+ wire(g,THREE,M.black,ctlW*.5+26,ctlY-ctlH*.32-26,ctlZ,46,1.25,.18);
+ /* проушины подвеса и тросики */
+ for(const side of [-1,1])for(const sx of [-1,1]){
+  add(g,THREE,boxG(THREE,18,8,14),M.dark,sx*w*.3,railY+railH/2+6,side*railZ);
+  add(g,THREE,torG(THREE,6,2),M.steel,sx*w*.3,railY+railH/2+15,side*railZ);
+ }
+ for(const sx of [-1,1]){
+  wire(g,THREE,M.steel,sx*w*.3,railY+railH/2+36,0,42);
+  add(g,THREE,torG(THREE,7,2.2),M.steel,sx*w*.3,railY+railH/2+61,0,0);
+ }
+ /* надписи — на вертикальной внешней грани рамы */
+ const faceZ=railZ+railW/2+.5;
+ texPlane(THREE,logoTex(THREE),Math.min(240,w*.4),Math.min(42,w*.07),-w*.255,railY,faceZ,0,g);
+ texPlane(THREE,plateTex(THREE,(s.label||'').split(' ').pop()),Math.min(120,w*.2),Math.min(26,w*.043),w*.28,railY,faceZ,0,g);
 }
 
 /* ================= FAN: SF4 / SF6 / SF8 ================= */
