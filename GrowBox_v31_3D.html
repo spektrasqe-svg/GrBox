@@ -10,8 +10,8 @@
 <meta property="og:description" content="85 деталей, разрезы, взрыв-схема, тракт воздуха и подсветка — в живой 3D-модели.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' rx='6' fill='none' stroke='%23E8DCC8' stroke-width='2'/%3E%3Cpath d='M9 21V11h5a3 3 0 0 1 0 6H9m5 0 4 4' stroke='%23B69A6B' stroke-width='2' fill='none'/%3E%3C/svg%3E">
 <style>
-:root{--bg:#0a0e10;--panel:rgba(14,20,23,.92);--panel2:#141d21;--line:#22323a;
-  --txt:#e6eef0;--dim:#8fa4ab;--acc:#c9f27f;--acc2:#7fd0ff}
+:root{--bg:#111215;--panel:rgba(17,18,21,.92);--panel2:#191a1d;--line:#3a352c;
+  --txt:#eee6d8;--dim:#aaa69e;--acc:#c5a46c;--acc2:#e3d7c2}
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--txt);
   font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
@@ -31,11 +31,11 @@ canvas:active{cursor:grabbing}
 .leftbar button,.bar button{font:inherit;font-size:12px;color:var(--txt);background:var(--panel);
   border:1px solid var(--line);border-radius:11px;padding:10px 13px;cursor:pointer;
   min-height:42px;text-align:left;backdrop-filter:blur(8px);white-space:nowrap}
-.leftbar button.on,.bar button.on{background:var(--acc);border-color:var(--acc);color:#12200b;font-weight:650}
+.leftbar button.on,.bar button.on{background:var(--acc);border-color:var(--acc);color:#1c160c;font-weight:650}
 
 .bar{position:absolute;left:0;right:0;bottom:0;z-index:6;padding:10px 12px calc(12px + env(safe-area-inset-bottom));
   display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
-  background:linear-gradient(to top,rgba(10,14,16,.97),rgba(10,14,16,0))}
+  background:linear-gradient(to top,rgba(17,18,21,.97),rgba(17,18,21,0))}
 .bar button{text-align:center}
 
 #info{position:absolute;left:12px;right:12px;bottom:calc(120px + env(safe-area-inset-bottom));z-index:7;
@@ -43,11 +43,11 @@ canvas:active{cursor:grabbing}
   max-width:520px}
 #info .n{font-size:13.5px;font-weight:650;line-height:1.35}
 #info .tags{display:flex;gap:6px;flex-wrap:wrap;margin:7px 0}
-#info .tag{font-size:10.5px;padding:3px 9px;border-radius:999px;background:#0e1518;
+#info .tag{font-size:10.5px;padding:3px 9px;border-radius:999px;background:#191a1d;
   border:1px solid var(--line);color:var(--dim)}
 #info .tag.mA{color:#ffb454;border-color:#4a3a1c}
-#info .tag.mB{color:#7fd0ff;border-color:#1c3a4a}
-#info .tag.mC{color:#c9f27f;border-color:#2c421c}
+#info .tag.mB{color:#e3d7c2;border-color:#1c3a4a}
+#info .tag.mC{color:#c5a46c;border-color:#2c421c}
 #info .d{font-size:12px;color:#b9c9cf;line-height:1.5}
 #info .dm{font-size:11px;color:var(--dim);margin-top:7px;font-variant-numeric:tabular-nums}
 
@@ -146,8 +146,8 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 var scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0a0e10);
-scene.fog = new THREE.Fog(0x0a0e10, 7, 18);
+scene.background = new THREE.Color(0x111215);
+scene.fog = new THREE.Fog(0x111215, 7, 18);
 
 var camera = new THREE.PerspectiveCamera(42, 1, 0.05, 60);
 var target = new THREE.Vector3(0, 1.02, 0);
@@ -163,9 +163,9 @@ var fill = new THREE.DirectionalLight(0x86b6ff, 0.32); fill.position.set(-3.4,2.
 var rim  = new THREE.DirectionalLight(0xbfe6ff, 0.28); rim.position.set(0,2.8,-4.2); scene.add(rim);
 
 var floor = new THREE.Mesh(new THREE.PlaneGeometry(40,40),
-  new THREE.MeshStandardMaterial({color:0x12181b, roughness:0.95, metalness:0}));
+  new THREE.MeshStandardMaterial({color:0x17181c, roughness:0.95, metalness:0}));
 floor.rotation.x = -Math.PI/2; floor.receiveShadow = true; scene.add(floor);
-var grid = new THREE.GridHelper(12, 24, 0x1d2a2e, 0x161f22); grid.position.y = 0.002; scene.add(grid);
+var grid = new THREE.GridHelper(12, 24, 0x242119, 0x1b1915); grid.position.y = 0.002; scene.add(grid);
 
 /* ---------- координаты: CAD (мм) -> three (м) ---------- */
 var CX = 625, CY = 350;
@@ -293,7 +293,7 @@ PARTS.forEach(function(p){
   mesh.castShadow = true; mesh.receiveShadow = true;
   mesh.userData = {part:p, base:mesh.position.clone(), mod:(p.m||'').split('+')[0]};
   var edges = new THREE.LineSegments(new THREE.EdgesGeometry(geom),
-    new THREE.LineBasicMaterial({color:0x0a0e10, transparent:true, opacity:0.3}));
+    new THREE.LineBasicMaterial({color:0x111215, transparent:true, opacity:0.3}));
   mesh.add(edges);
 
   var g = groupOf(p.n);
@@ -318,8 +318,8 @@ function drawLabel(sp, text){
   var w = Math.max(256, Math.ceil(ctx.measureText(text).width) + 48);
   if (c.width !== w) c.width = w;
   ctx.clearRect(0, 0, c.width, 128);
-  ctx.fillStyle = 'rgba(10,16,18,.88)'; ctx.fillRect(0, 0, c.width, 128);
-  ctx.strokeStyle = '#c9f27f'; ctx.lineWidth = 3; ctx.strokeRect(3, 3, c.width-6, 122);
+  ctx.fillStyle = 'rgba(17,18,21,.88)'; ctx.fillRect(0, 0, c.width, 128);
+  ctx.strokeStyle = '#c5a46c'; ctx.lineWidth = 3; ctx.strokeRect(3, 3, c.width-6, 122);
   ctx.fillStyle = '#dce7e8'; ctx.font = 'bold 42px system-ui, sans-serif';
   ctx.textAlign = 'center'; ctx.fillText(text, c.width/2, 82);
   if (sp.material.map) sp.material.map.needsUpdate = true;
@@ -457,7 +457,7 @@ function pickAt(cx,cy){
   info.style.display = 'block';
   if (selected && selected.material.emissive) selected.material.emissive.setHex(0x000000);
   selected = hits[0].object;
-  if (selected.material.emissive) selected.material.emissive.setHex(0x2c4a14);
+  if (selected.material.emissive) selected.material.emissive.setHex(0x3a2c14);
   saveState();
 }
 
