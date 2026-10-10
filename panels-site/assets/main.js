@@ -96,6 +96,7 @@
           '<div class="thumb ph ' + esc(cat.finish || 'ph-stone') + '" role="img" aria-label="Пример фактуры: ' + label + '"></div>' +
           '<div class="k">' + ({wood:'дерево и ламели',stone:'камень и бетон',soft:'мягкие панели',other:'другие панели'}[group(cat)]) + '</div>' +
           '<h3>' + label + '</h3><p>' + esc(cat.note) + '</p>' +
+          '<div class="spec-chips">' + (cat.specs || []).map(function (s) { return '<span>' + esc(s) + '</span>'; }).join('') + '</div>' +
           '<div class="price">от ' + cat.price.toLocaleString('ru-RU') + ' ₽<small>/ м² · материал</small></div>' +
           '<span class="go">Выбрать и рассчитать <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>';
       }).join('') +
@@ -189,7 +190,50 @@
     });
   }
 
+  /* ---------- появление блоков при скролле ----------
+     Надёжный вариант без IntersectionObserver: разовый проход по элементам
+     на scroll/resize. Всё, что уже выше линии «появления», остаётся видимым —
+     быстрый скролл и якорные переходы ничего не теряют. */
+  function reveal() {
+    var els = Array.prototype.slice.call(
+      document.querySelectorAll('.card, .metric, .step, .work, .spec-list .row, .faq details, .tbl')
+    );
+    if (!els.length) return;
+    els.forEach(function (el, i) {
+      el.classList.add('reveal');
+      el.style.transitionDelay = (Math.min(i % 5, 4) * 70) + 'ms';
+    });
+    var ticking = false;
+    function sweep() {
+      ticking = false;
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      for (var i = 0; i < els.length; i++) {
+        var el = els[i];
+        if (el.classList.contains('in')) continue;
+        if (el.getBoundingClientRect().top < vh * 0.96) el.classList.add('in');
+      }
+    }
+    function onScroll() {
+      if (!ticking) { ticking = true; window.requestAnimationFrame(sweep); }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    sweep();
+  }
+
+  /* ---------- мобильная панель быстрых действий ---------- */
+  function mobileCta() {
+    if (document.querySelector('.mcta')) return;
+    var c = C.contacts || {};
+    var bar = document.createElement('div');
+    bar.className = 'mcta';
+    bar.innerHTML =
+      (c.phoneHref ? '<a class="btn btn-ghost" href="tel:' + c.phoneHref + '">Позвонить</a>' : '') +
+      '<a class="btn btn-solid" href="order.html">Заявка</a>';
+    document.body.appendChild(bar);
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
-    fill(); nav(); catalog(); consumables(); worksList(); miniCalc(); forms();
+    fill(); nav(); catalog(); consumables(); worksList(); miniCalc(); forms(); reveal(); mobileCta();
   });
 })();
