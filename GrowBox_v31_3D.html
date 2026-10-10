@@ -107,7 +107,7 @@ function show3DError(message){
 try{
  if(typeof THREE==='undefined') throw new Error('THREE_NOT_LOADED');
  scene=new THREE.Scene();
- scene.background=new THREE.Color(0xe7e3da);
+ scene.background=new THREE.Color(0xd9dcde);
  camera=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,.01,100);
  renderer=new THREE.WebGLRenderer({canvas:cv,antialias:!mobile,alpha:false,preserveDrawingBuffer:false});
  renderer.setPixelRatio(Math.min(devicePixelRatio,mobile?1.15:1.8));renderer.outputColorSpace=THREE.SRGBColorSpace;
@@ -138,17 +138,17 @@ function consumeHandoff(){
   return false;
 }
 const M={
- shell:new THREE.MeshStandardMaterial({color:0x77766f,roughness:.66,metalness:.12}),
- edge:new THREE.MeshStandardMaterial({color:0xb3a88f,roughness:.42,metalness:.38}),
- inner:new THREE.MeshStandardMaterial({color:0xc5c0b5,roughness:.78,metalness:.04}),
- dark:new THREE.MeshStandardMaterial({color:0x4a4c47,roughness:.7,metalness:.1}),
- steel:new THREE.MeshStandardMaterial({color:0x89918f,roughness:.38,metalness:.58}),
- brass:new THREE.MeshStandardMaterial({color:0xb69a6b,roughness:.4,metalness:.34}),
- cream:new THREE.MeshStandardMaterial({color:0xe5ddcb,roughness:.52,metalness:.05}),
+ shell:new THREE.MeshStandardMaterial({color:0x62666a,roughness:.62,metalness:.16}),
+ edge:new THREE.MeshStandardMaterial({color:0x92979a,roughness:.38,metalness:.42}),
+ inner:new THREE.MeshStandardMaterial({color:0xaeb3b5,roughness:.76,metalness:.06}),
+ dark:new THREE.MeshStandardMaterial({color:0x393d40,roughness:.7,metalness:.12}),
+ steel:new THREE.MeshStandardMaterial({color:0x929a9e,roughness:.34,metalness:.6}),
+ brass:new THREE.MeshStandardMaterial({color:0x999b98,roughness:.4,metalness:.38}),
+ cream:new THREE.MeshStandardMaterial({color:0xd6dadd,roughness:.5,metalness:.06}),
  glass:new THREE.MeshStandardMaterial({color:0x9baaa5,roughness:.25,metalness:.12,transparent:true,opacity:.24,depthWrite:false}),
  water:new THREE.MeshStandardMaterial({color:0x64878b,roughness:.3,metalness:.12,transparent:true,opacity:.7}),
  red:new THREE.MeshStandardMaterial({color:0xc87c6b,roughness:.42,metalness:.08,transparent:true,opacity:.25}),
- acoustic:new THREE.MeshStandardMaterial({color:0x9c8f7a,roughness:.86,metalness:.02})
+ acoustic:new THREE.MeshStandardMaterial({color:0x777d80,roughness:.86,metalness:.02})
 
 };
 const mm=v=>v*U;
@@ -294,7 +294,7 @@ function build(){
  applyMode();
  updatePanel(s);
 }
-function updateStage(){if(stageGrid){scene.remove(stageGrid);stageGrid.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material&&!Array.isArray(o.material))o.material.dispose()})}stageGrid=new THREE.Group();stageGrid.name='Рабочая сетка';const span=Math.max(P.outer.W,P.outer.H,P.outer.D)*U*3.2,y=-P.outer.H*U/2-.012;const floor=new THREE.Mesh(new THREE.PlaneGeometry(span,span),new THREE.MeshStandardMaterial({color:0xd0ccc2,roughness:.96,metalness:.01}));floor.rotation.x=-Math.PI/2;floor.position.y=y-.004;floor.receiveShadow=true;stageGrid.add(floor);const grid=new THREE.GridHelper(span,Math.max(20,Math.min(60,Math.round(span/.1))),0x8c806a,0xb5b0a6);grid.position.y=y;grid.material.transparent=true;grid.material.opacity=.62;stageGrid.add(grid);stageGrid.visible=gridVisible;scene.add(stageGrid)}
+function updateStage(){if(stageGrid){scene.remove(stageGrid);stageGrid.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material&&!Array.isArray(o.material))o.material.dispose()})}stageGrid=new THREE.Group();stageGrid.name='Рабочая сетка';const span=Math.max(P.outer.W,P.outer.H,P.outer.D)*U*3.2,y=-P.outer.H*U/2-.012;const floor=new THREE.Mesh(new THREE.PlaneGeometry(span,span),new THREE.MeshStandardMaterial({color:0xb9bec0,roughness:.96,metalness:.01}));floor.rotation.x=-Math.PI/2;floor.position.y=y-.004;floor.receiveShadow=true;stageGrid.add(floor);const grid=new THREE.GridHelper(span,Math.max(20,Math.min(60,Math.round(span/.1))),0x858b8e,0xaab0b2);grid.position.y=y;grid.material.transparent=true;grid.material.opacity=.62;stageGrid.add(grid);stageGrid.visible=gridVisible;scene.add(stageGrid)}
 function detailBox(name,w,h,d,x,y,z,mat,parent,module){return box(name,w,h,d,x,y,z,mat,{parent:parent||root,module:module||'Конструкция'})}
 /* Legacy helpers intentionally unused: the canonical parametric build creates these modules once. */
 function addRail(x,z,h){
