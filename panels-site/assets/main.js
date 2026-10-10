@@ -82,9 +82,9 @@
     }).join('');
 
     host.innerHTML = html +
-      '<div class="card card-cta"><h3>Не нашли нужную панель?</h3>' +
-      '<p>Работаем с 40+ поставщиками: подберём фактуру, толщину и формат под ваш проект.</p>' +
-      '<span class="go">Оставить заявку <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>';
+      '<a class="card card-cta" href="order.html"><div class="k">индивидуальный подбор</div><h3>Не нашли нужную панель?</h3>' +
+      '<p>Опишите задачу — поможем сузить выбор по фактуре, формату, условиям эксплуатации и бюджету.</p>' +
+      '<span class="go">Обсудить проект <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>';
   }
 
   /* ---------- рендер расходников ---------- */
