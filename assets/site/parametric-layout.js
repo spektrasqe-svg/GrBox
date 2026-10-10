@@ -4,7 +4,7 @@
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const КАТАЛОГ={
  light:{
-  SE3000:{label:'Spider Farmer SE3000',w:610,d:410,h:55,mass:4.8,power:300},
+  SE3000:{label:'Spider Farmer SE3000',w:603,d:585,h:71,mass:5.3,power:300},
   SE5000:{label:'Spider Farmer SE5000',w:1090,d:590,h:55,mass:8.2,power:480},
   G8600:{label:'Spider Farmer G8600',w:1100,d:660,h:58,mass:11.2,power:860}
  },
