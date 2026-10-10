@@ -415,10 +415,29 @@ function applyDimensions(w,d,h){
   target.set(0,Math.max(0.8,Math.min(1.45,1.02*sy)),0);
   setCam(Math.max(2.8,3.7*Math.max(sx,sy,sz)),camT.th,camT.ph,target.y);
   boxSize={w:w,d:d,h:h};
-  var warning=(w<1250||d<700||h<2000);
-  document.getElementById('dimensionStatus').textContent=warning
-    ? 'Размер изменён: '+w+' × '+d+' × '+h+' мм. Внимание: исходная расстановка оборудования не проверена на коллизии для этого размера.'
-    : 'Применено: '+w+' × '+d+' × '+h+' мм · габариты оборудования сохранены';
+  var outside=checkEquipmentFit(w,d,h);
+  var compact=(w<1250||d<700||h<2000);
+  document.getElementById('dimensionStatus').textContent=outside.length
+    ? 'Проверка: '+outside.length+' элемент(ов) оборудования за пределами корпуса. Нужна корректировка компоновки.'
+    : (compact
+      ? 'Оборудование помещается в габаритный контур по первичной проверке; внутренние пересечения ещё нужно проверить.'
+      : 'Габариты применены. Контур оборудования внутри шкафа; проверьте внутренние зазоры.');
+}
+function checkEquipmentFit(w,d,h){
+  scene.updateMatrixWorld(true);
+  var halfW=(w/2-18)/1000, halfD=(d/2-18)/1000, maxY=h/1000;
+  var outside=[];
+  meshes.forEach(function(m){
+    var p=m.userData.part;
+    if(p.k!=='оборудование') return;
+    var b=new THREE.Box3().setFromObject(m);
+    if(b.min.x < -halfW-0.002 || b.max.x > halfW+0.002 ||
+       b.min.z < -halfD-0.002 || b.max.z > halfD+0.002 ||
+       b.min.y < -0.002 || b.max.y > maxY+0.002){
+      outside.push(p.n);
+    }
+  });
+  return outside;
 }
 function setupDimensionControls(){
   captureParametricBase();
