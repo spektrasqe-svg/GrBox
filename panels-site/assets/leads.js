@@ -62,9 +62,8 @@
     var endpoint = cfg().endpoint || '';
     if (!endpoint && mode !== 'links') mode = 'links';
 
-    var done = function () {
+    var done = function (sentAutomatically) {
       if (okEl) {
-        var sentAutomatically = (mode === 'formspree' || mode === 'webhook') && !!endpoint;
         okEl.textContent = sentAutomatically
           ? 'Заявка отправлена. Спасибо! Свяжемся с вами в рабочее время.'
           : 'Текст заявки подготовлен, но автоматически не отправлен. Ниже выберите доступный способ связи или скопируйте текст.';
@@ -79,10 +78,10 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(payload),
-      }).then(done).catch(function () { fallbackLinks(text, done); });
+      }).then(function () { done(true); }).catch(function () { fallbackLinks(text, function () { done(false); }); });
     }
 
-    fallbackLinks(text, done);
+    fallbackLinks(text, function () { done(false); });
     return Promise.resolve();
   }
 
