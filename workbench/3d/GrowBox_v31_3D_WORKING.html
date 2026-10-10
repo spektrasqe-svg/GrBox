@@ -89,6 +89,27 @@ canvas:active{cursor:grabbing}
   .leftbar button{font-size:9px;padding:6px 8px}
   .bar button{font-size:9px;padding:6px 8px}
 }
+
+/* Параметры габаритов */
+.dims{position:absolute;right:12px;top:calc(58px + env(safe-area-inset-top));z-index:6;
+  display:flex;align-items:end;gap:7px;flex-wrap:wrap;max-width:440px;padding:9px;
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;backdrop-filter:blur(8px)}
+.dims label{display:flex;flex-direction:column;gap:4px;font-size:10px;color:var(--dim)}
+.dims input{width:86px;min-height:34px;border:1px solid var(--line);border-radius:8px;
+  background:#101619;color:var(--txt);padding:6px;font:inherit;font-size:12px}
+.dims button{min-height:34px;padding:7px 10px;border-radius:8px;border:1px solid var(--acc);
+  background:var(--acc);color:#12200b;font:inherit;font-size:11px;font-weight:650}
+#dimensionStatus{width:100%;font-size:10px;color:var(--dim)}
+@media(max-width:899px){
+  .dims{left:7px;right:7px;top:calc(89px + env(safe-area-inset-top));max-width:none;
+    padding:6px;gap:5px;justify-content:space-between;border-radius:10px}
+  .dims label{flex:1;min-width:0;font-size:9px}
+  .dims input{width:100%;min-width:0;min-height:31px;font-size:11px;padding:5px}
+  .dims button{min-height:31px;font-size:10px;padding:5px 7px}
+  #dimensionStatus{font-size:9px}
+  .leftbar{top:calc(166px + env(safe-area-inset-top))}
+}
+@media(max-width:380px){.dims{gap:4px}.dims button{font-size:9px;padding:5px}}
 </style>
 </head>
 <body>
@@ -99,6 +120,13 @@ canvas:active{cursor:grabbing}
   <div class="top">
     <div class="pill"><b>SECRET BOX · v3.1</b> · 1250×700×2000 мм · 85 деталей</div>
     <div class="pill">Режим: <span id="modeName">Внешний вид</span></div>
+  <div class="dims" id="dimensionPanel" aria-label="Размеры шкафа">
+    <label>Ширина, мм<input id="dimW" type="number" min="700" max="2000" step="10" value="1250"></label>
+    <label>Глубина, мм<input id="dimD" type="number" min="450" max="1200" step="10" value="700"></label>
+    <label>Высота, мм<input id="dimH" type="number" min="1400" max="2600" step="10" value="2000"></label>
+    <button id="applyDimensions" type="button">Применить</button>
+    <span id="dimensionStatus" role="status">Исходный размер · 1250 × 700 × 2000 мм</span>
+  </div>
   </div>
 
   <div class="leftbar" id="modes">
@@ -331,6 +359,79 @@ PARTS.forEach(function(p){
   meshes.push(mesh); clickable.push(mesh);
 });
 
+
+/* ---------- параметризация корпуса: оборудование не растягивается ---------- */
+var boxSize = {w:1250,d:700,h:2000};
+var paramBase = null;
+function captureParametricBase(){
+  scene.updateMatrixWorld(true);
+  var groupBase = {};
+  Object.keys(groups).forEach(function(k){
+    var g=groups[k];
+    groupBase[k]={x:g.position.x,y:g.position.y,z:g.position.z};
+  });
+  var meshBase = meshes.map(function(m){
+    var world=m.getWorldPosition(new THREE.Vector3());
+    var p=m.userData.part, b=p.b||[0,0,0,1,1,1];
+    var isStructure=(p.k==='деталь'||p.k==='фурнитура'||p.k==='фурнит');
+    var minDim=Math.min(b[3]||1,b[4]||1,b[5]||1);
+    var thinAxis=minDim===(b[3]||1)?'x':(minDim===(b[5]||1)?'y':'z');
+    return {mesh:m,x:world.x,y:world.y,z:world.z,sx:m.scale.x,sy:m.scale.y,sz:m.scale.z,
+      structure:isStructure,thinAxis:thinAxis,baseScaleX:m.scale.x,baseScaleY:m.scale.y,baseScaleZ:m.scale.z};
+  });
+  paramBase={groups:groupBase,meshes:meshBase};
+}
+function applyDimensions(w,d,h){
+  if(!paramBase) captureParametricBase();
+  var sx=w/1250, sy=h/2000, sz=d/700, floorY=0;
+  Object.keys(groups).forEach(function(k){
+    var g=groups[k], b=paramBase.groups[k];
+    g.position.set(b.x*sx, floorY+(b.y-floorY)*sy, b.z*sz);
+    g.rotation.set(0,0,0);
+  });
+  paramBase.meshes.forEach(function(b){
+    var m=b.mesh, p=m.userData.part;
+    var wx=b.x*sx, wy=floorY+(b.y-floorY)*sy, wz=b.z*sz;
+    if(m.parent && m.parent!==root){
+      var gb=groups[m.parent===undefined?'':Object.keys(groups).find(function(k){return groups[k]===m.parent;})];
+      if(gb) m.position.set(wx-gb.position.x,wy-gb.position.y,wz-gb.position.z);
+      else m.position.set(wx,wy,wz);
+    } else m.position.set(wx,wy,wz);
+    m.scale.set(b.baseScaleX,b.baseScaleY,b.baseScaleZ);
+    if(b.structure && p.s!=='cyl'){
+      var dims=p.b||[0,0,0,0,0,0];
+      var dx=dims[3]||0, dy=dims[5]||0, dz=dims[4]||0;
+      // Тонкие плиты сохраняют толщину, растут только по двум плоскостным осям.
+      if(dx>Math.min(dy,dz)*1.25 && dy>Math.min(dx,dz)*1.25){m.scale.x=b.baseScaleX*sx;m.scale.y=b.baseScaleY*sy;m.scale.z=b.baseScaleZ*sz;}
+      else if(dx<=dy && dx<=dz){m.scale.y=b.baseScaleY*sy;m.scale.z=b.baseScaleZ*sz;}
+      else if(dy<=dx && dy<=dz){m.scale.x=b.baseScaleX*sx;m.scale.z=b.baseScaleZ*sz;}
+      else {m.scale.x=b.baseScaleX*sx;m.scale.y=b.baseScaleY*sy;}
+    }
+  });
+  labels.forEach(function(l){
+    l.position.x*=sx;l.position.y=floorY+(l.position.y-floorY)*sy;l.position.z*=sz;
+  });
+  chamberLight.position.set(chamberLight.position.x*sx,floorY+(chamberLight.position.y-floorY)*sy,chamberLight.position.z*sz);
+  target.set(0,Math.max(0.8,Math.min(1.45,1.02*sy)),0);
+  setCam(Math.max(2.8,3.7*Math.max(sx,sy,sz)),camT.th,camT.ph,target.y);
+  boxSize={w:w,d:d,h:h};
+  document.getElementById('dimensionStatus').textContent='Применено: '+w+' × '+d+' × '+h+' мм · габариты оборудования сохранены';
+}
+function setupDimensionControls(){
+  captureParametricBase();
+  document.getElementById('applyDimensions').addEventListener('click',function(){
+    var w=Math.round(Number(document.getElementById('dimW').value)/10)*10;
+    var d=Math.round(Number(document.getElementById('dimD').value)/10)*10;
+    var h=Math.round(Number(document.getElementById('dimH').value)/10)*10;
+    if(!Number.isFinite(w)||!Number.isFinite(d)||!Number.isFinite(h)||
+       w<700||w>2000||d<450||d>1200||h<1400||h>2600){
+      document.getElementById('dimensionStatus').textContent='Допустимо: ширина 700–2000, глубина 450–1200, высота 1400–2600 мм.';
+      return;
+    }
+    applyDimensions(w,d,h);
+  });
+}
+
 /* ---------- метки модулей ---------- */
 var labels = [];
 function makeLabel(text, x, y, z){
@@ -375,6 +476,8 @@ airGroup.visible = false;
 var airTube = new THREE.Mesh(new THREE.TubeGeometry(airCurve, 80, 0.012, 6, false),
   new THREE.MeshBasicMaterial({color:0x2e6b8f, transparent:true, opacity:0.35}));
 airTube.visible = false; root.add(airTube);
+
+setupDimensionControls();
 
 /* ---------- камера ---------- */
 var cam  = {r:3.7, th:0.72, ph:1.16};
@@ -565,13 +668,13 @@ document.getElementById('bReset').addEventListener('click', resetAll);
 /* ---------- экспорт конфигурации ---------- */
 document.getElementById('bExport').addEventListener('click', function(){
   var cfg = {
-    project: 'GrowBox v3.1 rev.2',
+    project: 'SECRET BOX · GrowBox v3.1 rev.2',
     date: new Date().toISOString(),
     mode: mode,
     state: state,
     camera: {r:camT.r, th:+camT.th.toFixed(3), ph:+camT.ph.toFixed(3), targetY:+target.y.toFixed(3)},
     selected: selected ? selected.userData.part.n : null,
-    box: {w:1250, d:700, h:2000, assembly:[1250,741,2060], mass_kg:358, floor_kgm2:386},
+    box: {w:boxSize.w, d:boxSize.d, h:boxSize.h, assembly:[boxSize.w,boxSize.d+41,boxSize.h+60], mass_kg:null, floor_kgm2:null},
     parts: PARTS.length
   };
   var blob = new Blob([JSON.stringify(cfg, null, 2)], {type:'application/json'});
