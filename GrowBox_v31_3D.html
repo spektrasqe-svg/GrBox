@@ -192,6 +192,19 @@ function build(){
  box('ВОЗДУШНАЯ КАМЕРА',Math.max(160,z.top.w-130),Math.max(100,z.top.h-100),Math.max(120,z.top.d-90),0,z.top.y,20,M.dark,{module:'Воздухообмен'});
  const silW=Math.min(300,z.top.w-120),silH=Math.min(150,z.top.h-80),silD=Math.min(300,z.top.d-120);
  box('ГЛУШИТЕЛЬ',silW,silH,silD,Math.min(z.top.w*.22,z.top.w/2-70),z.top.y,0,M.steel,{module:'Акустика'});
+ // Внутренняя отделка: мягкие акустические панели, сервисные профили и аккуратный свет
+ const linerH=Math.max(80,z.grow.h-28),linerD=Math.max(80,z.grow.d-32);
+ const linerY=z.grow.y,linerZ=z.grow.z||0;
+ box('ВНУТРЕННЯЯ ЛИНИНГ-ПАНЕЛЬ ЛЕВАЯ',8,linerH,linerD,z.grow.x-z.grow.w/2+8,linerY,linerZ,M.acoustic,{module:'Акустическая отделка'});
+ box('ВНУТРЕННЯЯ ЛИНИНГ-ПАНЕЛЬ ПРАВАЯ',8,linerH,linerD,z.grow.x+z.grow.w/2-8,linerY,linerZ,M.acoustic,{module:'Акустическая отделка'});
+ line('ВЕРТИКАЛЬНЫЙ СВЕТОВОЙ ПРОФИЛЬ ЛЕВЫЙ',8,linerH,12,z.grow.x-z.grow.w/2+22,linerY,z.grow.d/2-22,M.cream,{module:'Внутреннее освещение'});
+ line('ВЕРТИКАЛЬНЫЙ СВЕТОВОЙ ПРОФИЛЬ ПРАВЫЙ',8,linerH,12,z.grow.x+z.grow.w/2-22,linerY,z.grow.d/2-22,M.cream,{module:'Внутреннее освещение'});
+ // Технологические вентиляционные прорези на фасадной кромке верхнего модуля
+ const ventCount=Math.max(4,Math.min(12,Math.floor((o.W-100)/42)));
+ for(let i=0;i<ventCount;i++){
+   const vx=-Math.min(o.W*.38,(ventCount-1)*18)/2+i*Math.min(36,o.W*.76/(ventCount-1||1));
+   line('ВЕНТИЛЯЦИОННАЯ ПРОРЕЗЬ '+(i+1),Math.min(22,o.W/ventCount*.38),3,4,vx,o.H/2-o.panel-28,o.D/2-10,M.steel,{module:'Вентиляция'});
+ }
  // Рабочая камера
  box('ЗАДНИЙ ЭКРАН РАБОЧЕЙ КАМЕРЫ',z.grow.w,z.grow.h,18,z.grow.x,z.grow.y,-z.grow.d/2+9,M.inner,{module:'Камера'});
  line('ВЫДВИЖНОЙ ПОДДОН',z.поддон.w,z.поддон.h,z.поддон.d,z.поддон.x,z.поддон.y,0,M.edge,{module:'Сервис'});
