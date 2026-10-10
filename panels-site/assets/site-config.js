@@ -10,11 +10,11 @@ window.SITE_CONFIG = {
   },
 
   contacts: {
-    phone: '+7 (000) 000-00-00',          // пустое поле → блок скрывается
-    phoneHref: '+70000000000',
+    phone: '',                              // заполнить перед запуском продаж
+    phoneHref: '',
     telegram: '',                          // https://t.me/…
     whatsapp: '',                          // https://wa.me/…
-    email: 'info@example.ru',
+    email: '',
     hours: 'Пн–Сб 09:00–20:00 · выезд замерщика ежедневно',
     address: '',                           // адрес шоурума / склада
   },
