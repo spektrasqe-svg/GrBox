@@ -1,523 +1,147 @@
-/* WALLFORM® design system — v1.0 (стиль «техпаспорт»: ink / cream / brass) */
-:root{
-  --ink:#2C2E33;
-  --ink-2:#36383D;
-  --ink-3:#414348;
-  --cream:#E8DCC8;
-  --cream-2:#c9c3b8;
-  --paper:#E8DCC8;
-  --brass:#B69A6B;
-  --clay:#7A4E35;
-  --sage:#9fb58b;
-  --line:rgba(232,220,200,.14);
-  --line-strong:rgba(232,220,200,.32);
-  --disp:'Unbounded',sans-serif;
-  --body:'Manrope',sans-serif;
-  --mono:'Roboto Mono',monospace;
-}
-*{margin:0;padding:0;box-sizing:border-box}
-::selection{background:var(--brass);color:var(--ink)}
-html{scroll-behavior:smooth}
-body{
-  background:var(--ink);color:var(--cream);font-family:var(--body);
-  font-size:16px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;
-}
-img,svg{display:block;max-width:100%}
-a{color:inherit;text-decoration:none}
-button,input,select,textarea{font-family:inherit;color:inherit}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Каталог стеновых панелей — WALLFORM®</title>
+<meta name="description" content="Каталог стеновых панелей: 3D-гипс, ламели, бамбук, гибкий камень, SPC, мягкие, фасадные панели. Цены за м², подбор фактуры, монтаж и расходники.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;500;700&family=Unbounded:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
 
-/* зерно поверх всей страницы */
-body::after{
-  content:"";position:fixed;inset:0;pointer-events:none;z-index:97;opacity:.07;
-  background:repeating-linear-gradient(135deg,transparent 0 22px,rgba(232,220,200,.035) 22px 24px);
-}
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark">W</span><b data-brand>WALLFORM<sup>®</sup></b></a>
+    <nav class="nav">
+      <a href="catalog.html" class="active">Каталог</a>
+      <a href="calculator.html">Расчёт</a>
+      <a href="montazh.html">Монтаж</a>
+      <a href="wall-builder.html">3D-сборка стены</a>
+      <a href="index.html#cons">Расходники</a>
+      <a href="index.html#contact">Контакты</a>
+      <a href="order.html">Заявка</a>
+    </nav>
+    <div class="top-cta">
+      <a class="top-phone" data-phone-link href="#"><span data-phone>+7 (000) 000-00-00</span></a>
+      <a class="btn btn-solid btn-sm" href="order.html">Оставить заявку</a>
+      <button class="burger" aria-label="Меню"><span></span></button>
+    </div>
+  </div>
+</div>
 
-.wrap{width:min(1280px,92vw);margin:0 auto;position:relative;z-index:2}
+<header class="page-head">
+  <div class="hero-bg"></div>
+  <div class="wrap">
+    <div class="crumbs"><a href="index.html">Главная</a> / Каталог</div>
+    <h1>КАТАЛОГ<br>ПАНЕЛЕЙ</h1>
+    <p class="lead">Восемь категорий под разные задачи: от рельефного гипса до фасадных панелей. Цены на сайте — ориентир за материал; монтаж, расходники и доставка считаются в <a class="hl" href="calculator.html">калькуляторе</a>. Способ монтажа и итоговую стоимость уточняем по параметрам проекта.</p>
+  </div>
+</header>
 
-/* ============ ТИПОГРАФИКА / МЕТКИ ============ */
-.tag{
-  display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:500;
-  letter-spacing:.28em;text-transform:uppercase;color:var(--brass);
-}
-.tag::before{content:"";width:36px;height:1px;background:var(--brass)}
-.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex-wrap:wrap;margin-bottom:56px}
-.sec-head h2{
-  font-family:var(--disp);font-weight:800;font-size:clamp(28px,4.4vw,54px);
-  line-height:1.04;letter-spacing:-.01em;margin-top:18px;max-width:18ch;
-}
-.sec-head p{max-width:430px;color:var(--cream-2);font-size:15.5px;line-height:1.8}
-.num-mark{
-  font-family:var(--disp);font-size:11px;font-weight:600;letter-spacing:.3em;color:var(--cream-2);
-  border:1px solid var(--line-strong);padding:7px 12px;border-radius:100px;white-space:nowrap;
-}
-.mono{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--brass)}
-.hl{color:var(--cream);border-bottom:1px solid var(--brass);padding-bottom:1px}
-h3{font-family:var(--disp);font-weight:700;letter-spacing:-.005em}
+<section class="tight">
+  <div class="wrap">
+    <div class="catalog-tools">
+      <label class="catalog-search"><span class="sr-only">Поиск по каталогу</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 4 4"></path></svg>
+        <input id="catalogSearch" type="search" placeholder="Найти панель по названию или фактуре…" autocomplete="off">
+      </label>
+      <div class="catalog-filters" role="group" aria-label="Фильтр каталога">
+        <button type="button" class="catalog-filter active" data-catalog-filter="all" aria-pressed="true">Все панели</button>
+        <button type="button" class="catalog-filter" data-catalog-filter="wood" aria-pressed="false">Дерево и ламели</button>
+        <button type="button" class="catalog-filter" data-catalog-filter="stone" aria-pressed="false">Камень и бетон</button>
+        <button type="button" class="catalog-filter" data-catalog-filter="soft" aria-pressed="false">Мягкие</button>
+        <button type="button" class="catalog-filter" data-catalog-filter="other" aria-pressed="false">Другие</button>
+      </div>
+      <div class="catalog-meta"><span id="catalogCount">8 категорий</span><span>Цены предварительные · ₽/м² за материал</span></div>
+    </div>
+    <div class="grid-3" id="catalogGrid" aria-live="polite"></div>
+    <p id="catalogEmpty" class="catalog-empty" hidden>По вашему запросу ничего не найдено. Попробуйте изменить поиск или фильтр.</p>
+  </div>
+</section>
 
-section{padding:110px 0;position:relative}
-section.tight{padding:72px 0}
-.sec-line{border-top:1px solid var(--line)}
+<section class="sec-line">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="tag">как выбрать</span>
+        <h2>Четыре вопроса до покупки</h2>
+      </div>
+      <p>Если сомневаетесь — ответьте на эти вопросы, и круг вариантов сузится до 2–3 категорий. Остальное подберём на замере.</p>
+    </div>
+    <div class="grid-4">
+      <div class="card"><div class="k">01</div><h3>Где стена?</h3><p>Сухое помещение, влажная зона или фасад — от этого зависит материал и способ монтажа.</p></div>
+      <div class="card"><div class="k">02</div><h3>Какая нагрузка?</h3><p>Декоративная стена или проходная зона: от этого зависит износостойкость и класс покрытия.</p></div>
+      <div class="card"><div class="k">03</div><h3>Нужна акустика?</h3><p>Для спален и переговорных подойдут мягкие панели и ламели с подложкой.</p></div>
+      <div class="card"><div class="k">04</div><h3>Какой бюджет?</h3><p>Сравните стартовые цены в каталоге и заложите запас на подрезку. Стоимость зависит от выбранной коллекции и производителя.</p></div>
+    </div>
+  </div>
+</section>
 
-/* ============ ШАПКА ============ */
-.topbar{
-  position:sticky;top:0;z-index:90;background:rgba(44,46,51,.88);backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--line);
-}
-.topbar .wrap{display:flex;align-items:center;gap:28px;height:74px}
-.brand{display:flex;align-items:center;gap:12px}
-.brand .mark{
-  width:34px;height:34px;border:1.5px solid var(--cream);border-radius:8px;
-  display:grid;place-items:center;font-family:var(--disp);font-weight:900;font-size:15px;
-  transition:transform .4s;
-}
-.brand:hover .mark{transform:rotate(-8deg)}
-.brand b{font-family:var(--disp);font-weight:800;font-size:15px;letter-spacing:.22em}
-.brand sup{font-size:8px;letter-spacing:0;opacity:.7}
-.nav{display:flex;gap:26px;margin-left:auto}
-.nav a{
-  font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--cream-2);
-  padding:6px 0;border-bottom:1px solid transparent;transition:all .25s;
-}
-.nav a:hover,.nav a.active{color:var(--cream);border-color:var(--brass)}
-.top-cta{display:flex;align-items:center;gap:18px}
-.top-phone{font-family:var(--mono);font-size:13px;letter-spacing:.04em;color:var(--cream)}
-.burger{display:none;width:42px;height:42px;border:1px solid var(--line-strong);border-radius:10px;background:none;cursor:pointer;position:relative}
-.burger span,.burger::before,.burger::after{content:"";position:absolute;left:11px;width:20px;height:1.5px;background:var(--cream);transition:.3s}
-.burger::before{top:14px}.burger span{top:20px}.burger::after{top:26px}
+<section class="sec-line">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="tag">комплектующие</span>
+        <h2>Расходники и фурнитура</h2>
+      </div>
+      <p>Каждая категория панелей требует свои профили и крепёж. Полный список со ценами — на главной; в смету подбираем автоматически.</p>
+    </div>
+    <div class="spec-list" id="consList"></div>
+    <div class="btn-row" style="margin-top:34px">
+      <a class="btn btn-solid" href="calculator.html">Собрать смету
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn btn-ghost" href="order.html">Заказать замер с образцами</a>
+    </div>
+  </div>
+</section>
 
-/* ============ КНОПКИ ============ */
-.btn-row{display:flex;gap:16px;flex-wrap:wrap}
-.btn{
-  display:inline-flex;align-items:center;gap:12px;padding:17px 30px;border-radius:100px;
-  font-size:11.5px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;
-  transition:all .32s cubic-bezier(.2,.7,.3,1);cursor:pointer;border:1px solid var(--cream);
-  background:transparent;
-}
-.btn svg{width:14px;height:14px;transition:transform .3s;flex:none}
-.btn:hover svg{transform:translateX(4px)}
-.btn-solid{background:var(--cream);color:var(--ink)}
-.btn-solid:hover{background:var(--brass);border-color:var(--brass);transform:translateY(-2px)}
-.btn-ghost{color:var(--cream);border-color:var(--line-strong)}
-.btn-ghost:hover{border-color:var(--cream);transform:translateY(-2px)}
-.btn-sm{padding:12px 22px;font-size:10px;letter-spacing:.2em}
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="index.html"><span class="mark">W</span><b data-brand>WALLFORM<sup>®</sup></b></a>
+        <p style="margin-top:16px" data-tagline>Стеновые панели · продажа и монтаж</p>
+        <p data-city>Москва и Московская область</p>
+      </div>
+      <div>
+        <h4>Разделы</h4>
+        <a href="catalog.html">Каталог панелей</a>
+        <a href="calculator.html">Калькулятор сметы</a>
+        <a href="montazh.html">Монтаж под ключ</a>
+        <a href="index.html#cons">Расходники</a>
+      </div>
+      <div>
+        <h4>Клиентам</h4>
+        <a href="order.html">Оставить заявку</a>
+        <a href="index.html#calc">Предварительный расчёт</a>
+        <a href="index.html#contact">Контакты</a>
+      </div>
+      <div data-hide-if-empty>
+        <h4>Связь</h4>
+        <a data-phone-link href="#"><span data-phone>+7 (000) 000-00-00</span></a>
+        <a data-email href="#">info@example.ru</a>
+        <p data-hours>Пн–Сб 09:00–20:00</p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span data-year>2026</span> WALLFORM®. Все права защищены.</span>
+      <span>Цены указаны за материал и уточняются после замера.</span>
+    </div>
+  </div>
+</footer>
 
-/* ============ HERO ============ */
-.hero{position:relative;padding:130px 0 90px;overflow:hidden}
-.hero-bg{
-  position:absolute;inset:0;pointer-events:none;
-  background:
-    radial-gradient(1100px 520px at 84% 10%, rgba(182,154,107,.14), transparent 65%),
-    radial-gradient(700px 480px at 6% 88%, rgba(122,78,53,.20), transparent 70%);
-}
-.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
-h1.hero-title{
-  font-family:var(--disp);font-weight:900;letter-spacing:-.015em;
-  font-size:clamp(40px,6.4vw,92px);line-height:.96;margin:26px 0 0;
-}
-h1.hero-title .line2{display:block;color:transparent;-webkit-text-stroke:1.5px var(--cream);opacity:.9}
-.hero-sub{margin:30px 0 38px;font-size:17px;line-height:1.75;color:var(--cream-2);max-width:520px}
-.hero-sub em{font-style:normal;color:var(--cream);border-bottom:1px solid var(--brass);padding-bottom:1px}
-.hero-stats{display:flex;flex-wrap:wrap;gap:0;margin-top:56px;border-top:1px solid var(--line)}
-.hero-stats .st{padding:20px 32px 6px 0;margin-right:32px;border-right:1px solid var(--line)}
-.hero-stats .st:last-child{border-right:none}
-.hero-stats b{font-family:var(--disp);font-weight:800;font-size:26px;display:block;letter-spacing:-.01em}
-.hero-stats span{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--cream-2)}
+<script src="assets/site-config.js"></script>
+<script src="assets/calc-engine.js"></script>
+<script src="assets/leads.js"></script>
+<script src="assets/main.js"></script>
+</body>
+</html>
 
-/* фото в тех-рамке с «+» по углам */
-.photo-frame{position:relative}
-.photo-frame .corners::before,.photo-frame .corners::after,
-.photo-frame .c2::before,.photo-frame .c2::after{
-  content:"+";position:absolute;font-size:17px;color:var(--brass);opacity:.85;line-height:1;
-}
-.photo-frame .corners::before{top:-8px;left:-8px}
-.photo-frame .corners::after{top:-8px;right:-8px}
-.photo-frame .c2::before{bottom:-8px;left:-8px}
-.photo-frame .c2::after{bottom:-8px;right:-8px}
-.photo-frame .shot{
-  position:relative;overflow:hidden;border-radius:4px;
-  box-shadow:0 50px 110px rgba(0,0,0,.5);
-}
-.photo-frame .shot .ph{width:100%;height:520px;transition:transform 1.1s cubic-bezier(.2,.7,.3,1)}
-.photo-frame:hover .shot .ph{transform:scale(1.045)}
-.photo-frame .plate{
-  position:absolute;left:18px;bottom:18px;z-index:3;
-  background:rgba(17,18,21,.9);border:1px solid var(--line-strong);
-  border-radius:100px;padding:10px 18px;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--cream);
-}
-
-/* абстрактные «текстуры» вместо фото (заглушки под реальные снимки) */
-.ph{background:var(--ink-2);position:relative;overflow:hidden}
-.ph::after{
-  content:attr(data-label);position:absolute;inset:0;display:grid;place-items:center;
-  font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;
-  color:rgba(232,220,200,.35);text-align:center;padding:20px;
-}
-.ph-wood{background:
-  repeating-linear-gradient(90deg,rgba(122,78,53,.55) 0 26px,rgba(90,58,46,.5) 26px 30px,rgba(160,110,70,.35) 30px 58px),
-  linear-gradient(160deg,#5A3A2E,#3a2c26)}
-.ph-stone{background:
-  radial-gradient(60px 30px at 20% 30%,rgba(232,220,200,.16),transparent 70%),
-  radial-gradient(90px 50px at 70% 60%,rgba(232,220,200,.12),transparent 70%),
-  repeating-linear-gradient(115deg,#4a4a48 0 34px,#3d3d3b 34px 38px)}
-.ph-slat{background:repeating-linear-gradient(90deg,#3a3c41 0 18px,#26282c 18px 24px)}
-.ph-fabric{background:
-  repeating-linear-gradient(45deg,rgba(232,220,200,.06) 0 3px,transparent 3px 6px),
-  linear-gradient(150deg,#4d4438,#332e28)}
-.ph-marble{background:
-  repeating-linear-gradient(65deg,transparent 0 46px,rgba(232,220,200,.12) 46px 48px),
-  repeating-linear-gradient(-30deg,transparent 0 70px,rgba(232,220,200,.08) 70px 72px),
-  linear-gradient(140deg,#57534b,#39362f)}
-.ph-site{background:
-  linear-gradient(rgba(44,46,51,.55),rgba(44,46,51,.85)),
-  repeating-linear-gradient(0deg,rgba(232,220,200,.10) 0 2px,transparent 2px 42px),
-  repeating-linear-gradient(90deg,rgba(232,220,200,.10) 0 2px,transparent 2px 42px),
-  linear-gradient(150deg,#4a4d55,#2f3238)}
-
-/* ============ МАРИЗА / БЕГУЩАЯ СТРОКА ============ */
-.marquee{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;background:rgba(0,0,0,.12)}
-.marquee .track{display:flex;gap:0;white-space:nowrap;animation:mq 36s linear infinite;width:max-content}
-.marquee b{
-  font-family:var(--disp);font-weight:700;font-size:14px;letter-spacing:.26em;text-transform:uppercase;
-  padding:0 18px;color:var(--cream-2);
-}
-.marquee i{font-style:normal;color:var(--brass);font-size:12px}
-@keyframes mq{to{transform:translateX(-50%)}}
-
-/* ============ КАРТОЧКИ / СЕТКИ ============ */
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
-.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
-.card{
-  background:var(--ink-2);border:1px solid var(--line);border-radius:14px;padding:30px;
-  transition:all .35s cubic-bezier(.2,.7,.3,1);position:relative;overflow:hidden;
-}
-.card:hover{transform:translateY(-5px);border-color:var(--line-strong);box-shadow:0 30px 60px rgba(0,0,0,.35)}
-.card .k{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--brass);text-transform:uppercase}
-.card h3{font-size:19px;margin:14px 0 10px;line-height:1.3}
-.card p{color:var(--cream-2);font-size:14.5px;line-height:1.75}
-.card .price{margin-top:18px;font-family:var(--disp);font-weight:700;font-size:17px}
-.card .price small{font-family:var(--body);font-weight:500;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--cream-2);margin-left:8px}
-.card .go{margin-top:18px;display:inline-flex;align-items:center;gap:10px;font-size:10.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--brass)}
-.card .go svg{width:13px;height:13px;transition:transform .3s}
-.card:hover .go svg{transform:translateX(5px)}
-.card .thumb{height:190px;border-radius:10px;margin:-6px -6px 22px;position:relative;overflow:hidden}
-.card-cta{
-  display:flex;flex-direction:column;justify-content:center;gap:16px;
-  border:1.5px dashed var(--line-strong);background:transparent;
-}
-.card-cta h3{font-size:22px}
-
-/* список-спецификация */
-.spec-list{border-top:1px solid var(--line)}
-.spec-list .row{
-  display:grid;grid-template-columns:1.5fr 1fr auto;gap:18px;align-items:center;
-  padding:18px 0;border-bottom:1px solid var(--line);
-}
-.spec-list .row b{font-weight:600;font-size:15px}
-.spec-list .row span{color:var(--cream-2);font-size:13.5px}
-.spec-list .row .p{font-family:var(--mono);font-size:13.5px;color:var(--brass);white-space:nowrap}
-
-/* ============ ЭТАПЫ ============ */
-.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-.step{background:var(--ink-2);padding:30px 24px;transition:background .3s}
-.step:hover{background:var(--ink-3)}
-.step .n{font-family:var(--disp);font-weight:800;font-size:13px;letter-spacing:.24em;color:var(--brass)}
-.step h3{font-size:16px;margin:14px 0 10px}
-.step p{font-size:13.5px;color:var(--cream-2);line-height:1.7}
-
-/* ============ ЦИФРЫ / ИНЖЕНЕРИЯ ============ */
-.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
-.metric{border-top:1px solid var(--line-strong);padding-top:22px}
-.metric b{font-family:var(--disp);font-weight:800;font-size:clamp(30px,3.6vw,46px);display:block;letter-spacing:-.02em}
-.metric b i{font-style:normal;color:var(--brass);font-size:.55em}
-.metric h3{font-size:15px;margin:12px 0 8px;letter-spacing:.02em}
-.metric p{font-size:13.5px;color:var(--cream-2);line-height:1.7}
-
-/* ============ КАЛЬКУЛЯТОР ============ */
-.calc{display:grid;grid-template-columns:1.08fr .92fr;gap:26px;align-items:start}
-.calc-panel{background:var(--ink-2);border:1px solid var(--line);border-radius:16px;padding:34px}
-.calc-panel h3{font-size:18px;margin-bottom:6px}
-.calc-panel .hint{font-size:13px;color:var(--cream-2);margin-bottom:24px}
-.field{margin-bottom:22px}
-.field label{display:block;font-size:10.5px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--cream-2);margin-bottom:10px}
-.field input[type=number],.field input[type=text],.field input[type=tel],.field select,.field textarea{
-  width:100%;background:rgba(0,0,0,.18);border:1px solid var(--line-strong);border-radius:10px;
-  padding:14px 16px;font-size:15px;outline:none;transition:border-color .25s;
-}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--brass)}
-.field .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.chips{display:flex;flex-wrap:wrap;gap:10px}
-.chip{
-  border:1px solid var(--line-strong);border-radius:100px;padding:11px 18px;cursor:pointer;
-  font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--cream-2);
-  transition:all .25s;background:none;
-}
-.chip:hover{border-color:var(--cream);color:var(--cream)}
-.chip.on{background:var(--cream);color:var(--ink);border-color:var(--cream)}
-.switch{display:flex;align-items:center;gap:14px;cursor:pointer;user-select:none}
-.switch input{display:none}
-.switch .track-sw{width:48px;height:26px;border-radius:100px;border:1px solid var(--line-strong);position:relative;transition:.25s;flex:none}
-.switch .track-sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--cream-2);transition:.25s}
-.switch input:checked + .track-sw{background:var(--brass);border-color:var(--brass)}
-.switch input:checked + .track-sw::after{left:25px;background:var(--ink)}
-.switch span.lbl{font-size:13.5px;color:var(--cream-2)}
-
-.calc-out{background:rgba(0,0,0,.16);border:1px solid var(--line-strong);border-radius:16px;padding:34px;position:sticky;top:100px}
-.calc-out .big{font-family:var(--disp);font-weight:800;font-size:clamp(32px,4vw,52px);letter-spacing:-.02em;line-height:1.05}
-.calc-out .big small{display:block;font-family:var(--body);font-weight:500;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--cream-2);margin-top:10px}
-.calc-out .brk{margin:26px 0;border-top:1px solid var(--line)}
-.calc-out .brk .r{display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-bottom:1px solid var(--line);font-size:13.5px}
-.calc-out .brk .r span{color:var(--cream-2)}
-.calc-out .brk .r b{font-family:var(--mono);font-weight:500;font-size:13px;color:var(--cream)}
-.calc-out .note{font-size:12px;color:var(--cream-2);line-height:1.7;margin:16px 0 22px}
-
-/* ============ ТАБЛИЦА СРАВНЕНИЯ ============ */
-.tbl{width:100%;border-collapse:collapse;border:1px solid var(--line);border-radius:14px;overflow:hidden}
-.tbl th,.tbl td{padding:16px 18px;text-align:left;border-bottom:1px solid var(--line);font-size:14px}
-.tbl th{font-family:var(--body);font-size:10.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);background:rgba(0,0,0,.16)}
-.tbl tr:last-child td{border-bottom:none}
-.tbl td:first-child{color:var(--cream-2)}
-.tbl .yes{color:var(--sage)}
-.tbl .no{color:#b06a5a}
-
-/* ============ ФОРМА ============ */
-.form-card{background:var(--ink-2);border:1px solid var(--line);border-radius:18px;padding:42px}
-.form-card h3{font-size:24px;margin-bottom:8px}
-.form-card .hint{color:var(--cream-2);font-size:14px;margin-bottom:28px}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.form-grid .full{grid-column:1/-1}
-.consent{display:flex;gap:12px;align-items:flex-start;font-size:12px;color:var(--cream-2);line-height:1.6}
-.consent input{margin-top:3px;accent-color:var(--brass)}
-.form-ok{
-  display:none;border:1px solid var(--sage);background:rgba(159,181,139,.12);border-radius:12px;
-  padding:22px 26px;margin-top:22px;font-size:14.5px;color:var(--cream);
-}
-.form-ok.show{display:block}
-
-/* ============ ПОРТФОЛИО ============ */
-.works{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.work{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
-.work .ph{height:280px}
-.work .meta{position:absolute;left:0;right:0;bottom:0;padding:18px 20px;background:linear-gradient(transparent,rgba(17,18,21,.92))}
-.work .meta b{display:block;font-family:var(--disp);font-size:14px;font-weight:700}
-.work .meta span{font-family:var(--mono);font-size:11px;color:var(--brass);letter-spacing:.12em}
-
-/* ============ ФУТЕР ============ */
-footer{border-top:1px solid var(--line);padding:80px 0 40px;position:relative}
-.foot-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1.1fr;gap:36px}
-.foot-grid h4{font-size:10.5px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--brass);margin-bottom:18px}
-.foot-grid a,.foot-grid p{display:block;color:var(--cream-2);font-size:14px;line-height:2;transition:color .25s}
-.foot-grid a:hover{color:var(--cream)}
-.foot-bottom{margin-top:56px;padding-top:26px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:12px;color:var(--cream-2)}
-
-/* ============ ХЛЕБНЫЕ КРОШКИ / ЗАГОЛОВКИ СТРАНИЦ ============ */
-.page-head{padding:80px 0 60px;position:relative;overflow:hidden}
-.page-head h1{font-family:var(--disp);font-weight:900;font-size:clamp(34px,5vw,72px);line-height:1;letter-spacing:-.015em;margin:22px 0 20px}
-.page-head .lead{max-width:640px;color:var(--cream-2);font-size:16.5px;line-height:1.8}
-.crumbs{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;color:var(--cream-2);text-transform:uppercase}
-.crumbs a:hover{color:var(--brass)}
-
-/* ============ АККОРДЕОН ============ */
-.faq{border-top:1px solid var(--line)}
-.faq details{border-bottom:1px solid var(--line)}
-.faq summary{
-  list-style:none;cursor:pointer;padding:22px 0;display:flex;justify-content:space-between;gap:20px;
-  font-family:var(--disp);font-weight:600;font-size:16px;
-}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";color:var(--brass);font-family:var(--body);font-size:22px;line-height:1;transition:transform .3s}
-.faq details[open] summary::after{transform:rotate(45deg)}
-.faq .ans{padding:0 0 22px;color:var(--cream-2);font-size:14.5px;line-height:1.8;max-width:75ch}
-
-/* ============ АДАПТИВ ============ */
-@media (max-width:1080px){
-  .hero-grid{grid-template-columns:1fr;gap:44px}
-  .photo-frame .shot .ph{height:400px}
-  .steps{grid-template-columns:repeat(2,1fr)}
-  .metrics{grid-template-columns:repeat(2,1fr)}
-  .grid-4{grid-template-columns:repeat(2,1fr)}
-  .calc{grid-template-columns:1fr}
-  .calc-out{position:static}
-  .foot-grid{grid-template-columns:1fr 1fr}
-}
-@media (max-width:760px){
-  section{padding:76px 0}
-  .topbar .wrap{gap:12px}
-  .brand .mark{width:30px;height:30px;font-size:13px}
-  .brand b{font-size:12px;letter-spacing:.12em}
-  .top-cta{gap:10px;margin-left:auto}
-  .top-cta .btn{display:none}
-  .top-phone{display:inline;font-size:11px;letter-spacing:.02em}
-  .nav{
-    display:none;position:absolute;top:74px;left:0;right:0;flex-direction:column;gap:0;
-    background:var(--ink-2);border-bottom:1px solid var(--line);padding:12px 6vw 22px;
-  }
-  .nav.open{display:flex}
-  .nav a{padding:14px 0;border-bottom:1px solid var(--line)}
-  .burger{display:block}
-  .grid-3,.grid-2,.works,.form-grid{grid-template-columns:1fr}
-  .steps,.metrics,.grid-4{grid-template-columns:1fr}
-  .spec-list .row{grid-template-columns:1fr;gap:6px}
-  .hero-stats .st{border-right:none;width:50%;padding-right:12px;margin-right:0}
-  .foot-grid{grid-template-columns:1fr}
-  .form-card{padding:26px}
-  .tbl{table-layout:fixed}
-  .tbl th,.tbl td{padding:11px 9px;font-size:12.5px;word-break:break-word}
-}
-
-
-/* WALLFORM® visual refinement — photography, calm rhythm, responsive polish */
-.ph{
-  background-size:cover!important;
-  background-position:center!important;
-  isolation:isolate;
-}
-.ph::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  display:block;
-  padding:0;
-  background:linear-gradient(180deg,rgba(17,18,21,.02) 8%,rgba(17,18,21,.10) 48%,rgba(17,18,21,.48) 100%);
-  color:transparent;
-  pointer-events:none;
-}
-.ph-wood{
-  background-image:linear-gradient(180deg,rgba(17,18,21,.02),rgba(17,18,21,.24)),url("https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1600&q=85")!important;
-}
-.ph-stone{
-  background-image:linear-gradient(180deg,rgba(17,18,21,.03),rgba(17,18,21,.28)),url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=85")!important;
-}
-.ph-slat{
-  background-image:linear-gradient(180deg,rgba(17,18,21,.02),rgba(17,18,21,.30)),url("https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1600&q=85")!important;
-}
-.ph-fabric{
-  background-image:linear-gradient(180deg,rgba(17,18,21,.04),rgba(17,18,21,.34)),url("https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&w=1600&q=85")!important;
-}
-.ph-marble{
-  background-image:linear-gradient(180deg,rgba(17,18,21,.02),rgba(17,18,21,.30)),url("https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=85")!important;
-}
-.ph-site{
-  background-image:linear-gradient(180deg,rgba(17,18,21,.10),rgba(17,18,21,.44)),url("https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1600&q=85")!important;
-}
-.card{
-  transition:transform .28s ease,border-color .28s ease,background .28s ease;
-}
-a.card:hover{
-  transform:translateY(-5px);
-  border-color:rgba(182,154,107,.55);
-}
-.card .thumb{
-  height:210px;
-  border-radius:10px;
-}
-.photo-frame .shot{
-  border-radius:12px;
-  border:1px solid rgba(232,220,200,.16);
-}
-.photo-frame .plate{
-  letter-spacing:.12em;
-  backdrop-filter:blur(12px);
-}
-.btn{transition:transform .22s ease,background .22s ease,border-color .22s ease,box-shadow .22s ease}
-.btn-solid:hover{box-shadow:0 10px 32px rgba(182,154,107,.16)}
-::selection{background:var(--brass);color:#1e2024}
-@media(max-width:760px){
-  .hero{padding:72px 0 58px}
-  .hero-grid{gap:30px}
-  h1.hero-title{font-size:clamp(34px,10.5vw,58px);line-height:1.02}
-  .hero-sub{font-size:15px;margin:22px 0 26px}
-  .photo-frame .shot .ph{height:clamp(270px,78vw,410px)}
-  .hero-stats{margin-top:32px}
-  .hero-stats .st{width:50%;padding:16px 10px 8px 0}
-  .hero-stats b{font-size:21px}
-  .hero-stats span{font-size:9px;letter-spacing:.12em}
-  .card .thumb{height:220px}
-  .photo-frame .plate{left:12px;bottom:12px;padding:8px 12px;font-size:9px;max-width:calc(100% - 24px)}
-  .sec-head{gap:18px;margin-bottom:30px}
-}
-@media(prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
-}
-
-
-/* Catalog discovery and calculator UX */
-.catalog-tools{margin:0 0 28px;padding:22px;border:1px solid var(--line);border-radius:16px;background:rgba(0,0,0,.12)}
-.catalog-search{display:flex;align-items:center;gap:12px;max-width:620px;margin-bottom:18px}
-.catalog-search svg{width:20px;height:20px;flex:none;color:var(--brass)}
-.catalog-search input{width:100%;min-width:0;background:rgba(0,0,0,.18);border:1px solid var(--line-strong);border-radius:10px;padding:15px 16px;color:var(--cream);font:inherit;outline:none}
-.catalog-search input:focus{border-color:var(--brass);box-shadow:0 0 0 3px rgba(182,154,107,.10)}
-.catalog-search input::placeholder{color:rgba(232,220,200,.5)}
-.catalog-filters{display:flex;flex-wrap:wrap;gap:8px}
-.catalog-filter,.calc-quick button{border:1px solid var(--line-strong);border-radius:999px;background:transparent;color:var(--cream-2);padding:10px 15px;font:600 11px var(--body);cursor:pointer;transition:all .2s}
-.catalog-filter:hover,.catalog-filter.active,.calc-quick button:hover{background:var(--cream);border-color:var(--cream);color:var(--ink)}
-.catalog-meta{display:flex;justify-content:space-between;gap:12px;margin-top:18px;padding-top:14px;border-top:1px solid var(--line);font:11px var(--mono);color:var(--cream-2)}
-.catalog-meta span:first-child{color:var(--brass)}
-.catalog-card .thumb{height:230px}
-.catalog-card .price{font-size:21px}
-.catalog-card .go{letter-spacing:.12em}
-.catalog-empty{padding:36px 0;color:var(--cream-2)}
-.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.calc-quick{display:flex;flex-wrap:wrap;gap:8px;margin:-2px 0 12px}
-.calc-invalid{margin-top:20px;padding:18px;border:1px solid rgba(176,106,90,.65);border-radius:10px;color:var(--cream-2);line-height:1.6}
-.calc-out .note{padding:14px 16px;border-left:2px solid var(--brass);background:rgba(182,154,107,.06);border-radius:0 8px 8px 0}
-@media(max-width:760px){
- .catalog-tools{padding:15px;margin-bottom:20px}
- .catalog-search{max-width:none}
- .catalog-filters{gap:7px}
- .catalog-filter{padding:10px 12px;font-size:10px}
- .catalog-meta{flex-direction:column;gap:6px;font-size:10px}
- .catalog-card .thumb{height:clamp(190px,58vw,280px)}
- .calc{grid-template-columns:1fr}
- .calc-panel,.calc-out{padding:22px;border-radius:14px}
- .calc-out{position:static;top:auto}
- .field .two{grid-template-columns:1fr}
- .calc-quick button{min-height:40px}
-}
-
-
-/* WALLFORM — 3D wall assembly builder */
-.builder-intro{max-width:780px}
-.wall-builder{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);gap:26px;align-items:start}
-.wall-stage{position:relative;min-height:500px;overflow:hidden;border:1px solid var(--line);border-radius:18px;background:radial-gradient(ellipse at 50% 44%,rgba(182,154,107,.11),transparent 54%),linear-gradient(145deg,#292b30,#17181b);perspective:1100px}
-.wall-stage:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(232,220,200,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(232,220,200,.035) 1px,transparent 1px);background-size:28px 28px;mask-image:linear-gradient(transparent,black 25%,black 80%,transparent)}
-.wall-scene{position:absolute;inset:0;display:grid;place-items:center;transform-style:preserve-3d;touch-action:pan-y}
-.wall-stack{position:relative;width:min(54%,280px);height:300px;transform-style:preserve-3d;transform:rotateX(-8deg) rotateY(-28deg);transition:transform .25s ease}
-.wall-layer{position:absolute;inset:0;border:1px solid rgba(255,255,255,.24);box-shadow:8px 12px 18px rgba(0,0,0,.24);transform-style:preserve-3d;backface-visibility:visible;transition:transform .45s cubic-bezier(.2,.7,.3,1),opacity .25s}
-.wall-layer:before{content:"";position:absolute;left:100%;top:0;width:22px;height:100%;transform-origin:left;transform:rotateY(90deg);background:linear-gradient(90deg,rgba(0,0,0,.22),rgba(255,255,255,.08))}
-.wall-layer:after{content:"";position:absolute;left:0;top:100%;width:100%;height:22px;transform-origin:top;transform:rotateX(-90deg);background:rgba(0,0,0,.24)}
-.wall-layer.base{background:repeating-linear-gradient(0deg,#8d8b84 0 24px,#7b7972 24px 26px);border-color:#aaa79e}
-.wall-layer.primer{background:linear-gradient(135deg,#c5ad6b,#89764a)}
-.wall-layer.adhesive{background:repeating-linear-gradient(0deg,#9a9b9b 0 16px,#777a7a 16px 19px)}
-.wall-layer.frame{background:repeating-linear-gradient(90deg,transparent 0 36px,#b9bec2 36px 44px,transparent 44px 68px),linear-gradient(135deg,#3d454d,#20262c)}
-.wall-layer.wool{background:repeating-linear-gradient(45deg,#c9b987 0 5px,#a89b6e 5px 8px,#d3c69b 8px 12px)}
-.wall-layer.drywall{background:linear-gradient(135deg,#a5a7a8,#777a7d)}
-.wall-layer.panel{background:repeating-linear-gradient(90deg,#7a5239 0 22px,#4e3528 22px 26px,#9b6d4c 26px 48px);border:2px solid #bb9270}
-.wall-layer.panel.stone{background:radial-gradient(ellipse at 25% 30%,#96938a,transparent 35%),linear-gradient(135deg,#77756d,#3c3d3e)}
-.wall-layer.panel.soft{background:repeating-linear-gradient(0deg,#565a60 0 42px,#36393f 42px 46px);border-color:#888b91}
-.wall-label{position:absolute;left:16px;right:16px;bottom:16px;display:flex;justify-content:space-between;gap:12px;color:var(--cream-2);font:10px var(--mono);letter-spacing:.08em;text-transform:uppercase}
-.wall-label b{color:var(--brass);font-weight:500}
-.wall-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.wall-legend span{display:inline-flex;align-items:center;gap:7px;padding:7px 9px;border:1px solid var(--line);border-radius:999px;font-size:11px;color:var(--cream-2)}
-.wall-legend i{display:block;width:9px;height:9px;border-radius:2px;background:var(--brass)}
-.builder-panel{padding:24px;background:var(--ink-2);border:1px solid var(--line);border-radius:16px}
-.builder-panel .field{margin-bottom:18px}
-.builder-panel select,.builder-panel input[type=number]{width:100%;background:rgba(0,0,0,.18);border:1px solid var(--line-strong);border-radius:9px;padding:12px;color:var(--cream);font:inherit}
-.builder-steps{display:grid;gap:9px;margin:18px 0}
-.builder-step{display:grid;grid-template-columns:32px 1fr auto;gap:10px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:10px;background:rgba(0,0,0,.12)}
-.builder-step .num{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:rgba(182,154,107,.12);color:var(--brass);font:11px var(--mono)}
-.builder-step b{display:block;font-size:12px}
-.builder-step small{display:block;margin-top:3px;color:var(--cream-2);font-size:11px;line-height:1.4}
-.builder-step .layer-price{font:11px var(--mono);color:var(--brass);white-space:nowrap}
-.builder-result{margin-top:20px;padding:18px;border-radius:12px;background:rgba(182,154,107,.08);border:1px solid rgba(182,154,107,.22)}
-.builder-result .total{font:800 26px var(--disp);color:var(--cream)}
-.builder-result small{display:block;margin-top:5px;color:var(--cream-2);line-height:1.5}
-.builder-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
-.builder-actions .btn{flex:1;justify-content:center}
-.builder-disclaimer{margin-top:18px;color:var(--cream-2);font-size:12px;line-height:1.7}
-.builder-controls{display:flex;flex-wrap:wrap;gap:8px;position:absolute;left:16px;top:16px;z-index:2}
-.builder-controls button{border:1px solid var(--line-strong);border-radius:999px;padding:9px 12px;background:rgba(20,21,23,.84);color:var(--cream);font-size:11px;cursor:pointer}
-.builder-controls button.active{background:var(--cream);color:var(--ink)}
-@media(max-width:900px){.wall-builder{grid-template-columns:1fr}.wall-stage{min-height:420px}.wall-stack{height:260px;width:min(50%,250px)}}
-@media(max-width:560px){.wall-stage{min-height:350px}.wall-stack{height:220px;width:48%}.wall-label{font-size:8px}.builder-panel{padding:18px}.builder-step{grid-template-columns:30px 1fr}.builder-step .layer-price{grid-column:2}.builder-actions{flex-direction:column}}
+/* Conversion links for consumables */
+#consList .row{grid-template-columns:minmax(150px,1fr) minmax(180px,1.4fr) auto auto;align-items:center;gap:14px}
+.cons-buy{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;border:1px solid var(--line-strong);border-radius:999px;color:var(--cream);font-size:11px;white-space:nowrap;transition:background .2s,color .2s}
+.cons-buy:hover{background:var(--cream);color:var(--ink)}
+@media(max-width:700px){#consList .row{grid-template-columns:1fr auto;gap:8px}#consList .row>span:nth-child(2){grid-column:1/-1;grid-row:2}#consList .row .p{grid-column:1;grid-row:3}#consList .row .cons-buy{grid-column:2;grid-row:3}}
