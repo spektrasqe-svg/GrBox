@@ -868,104 +868,86 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
         <div class="tag">Чертёж · устройство шкафа</div>
         <h2>Видно, что находится внутри — без тяжёлой 3D-сцены.</h2>
       </div>
-      <p>Теперь в центре — мебельный шкаф с прямыми стенками, рамой проёма, цоколем и дверью с внутренней филёнкой. Узлы расположены внутри ограниченного корпуса; схема пока поясняющая, не размерная модель заказа.</p>
+      <p>Плоский инженерный вид шкафа: выберите слой, чтобы отдельно рассмотреть корпус, дверь, рабочую камеру и оборудование. Дверь показана одной створкой, открытой в одну сторону; это схема устройства, не размерная модель заказа.</p>
     </div>
     <div class="drawing-board cutaway-board">
       <div class="drawing-topline"><span>SECRET BOX® / УСТРОЙСТВО КОРПУСА</span><span>АКСОНОМЕТРИЧЕСКАЯ СХЕМА</span></div>
+      <div class="sb-plan-controls" role="group" aria-label="Переключение слоёв чертежа">
+        <button type="button" data-plan-view="all" aria-pressed="true">Общий вид</button>
+        <button type="button" data-plan-view="cabinet" aria-pressed="false">Корпус</button>
+        <button type="button" data-plan-view="door" aria-pressed="false">Дверь</button>
+        <button type="button" data-plan-view="work" aria-pressed="false">Рабочая зона</button>
+        <button type="button" data-plan-view="technical" aria-pressed="false">Техзона</button>
+        <button type="button" data-plan-view="light" aria-pressed="false">Свет</button>
+        <button type="button" data-plan-view="labels" aria-pressed="false">Подписи</button>
+      </div>
+      <p class="sb-plan-status" aria-live="polite">Показаны все узлы шкафа.</p>
       <div class="cutaway-layout">
         <div class="cutaway-visual">
-          <svg viewBox="0 0 760 570" role="img" aria-label="Чертёж мебельного шкафа SECRET BOX: прямой корпус с рамой, открытой дверью и внутренними отсеками">
+          <svg class="sb-flat-plan" viewBox="0 0 760 570" role="img" aria-label="Интерактивный плоский чертёж шкафа SECRET BOX с переключением корпуса, рабочих и технических зон">
   <defs>
-    <pattern id="blueprint-grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#c7beaf" stroke-opacity=".34" stroke-width=".6"/></pattern>
-    <marker id="air-arrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#7e9272"/></marker>
+    <pattern id="sb-grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#c7beaf" stroke-opacity=".34" stroke-width=".6"/></pattern>
+    <marker id="sb-arrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#8b7042"/></marker>
   </defs>
-  <rect width="760" height="570" fill="url(#blueprint-grid)"/>
-  <!-- Clear furniture-cabinet silhouette: top, carcass, right side, plinth -->
-  <polygon points="250,102 463,102 515,128 302,128" fill="#e3d9c9" stroke="#343733" stroke-width="2.6"/>
-  <polygon points="463,102 515,128 515,414 463,390" fill="#bcb2a2" stroke="#343733" stroke-width="2.6"/>
-  <rect x="250" y="102" width="213" height="288" fill="#e7dfd2" stroke="#343733" stroke-width="3"/>
-  <!-- Outer carcass thickness and inner opening -->
-  <rect x="267" y="119" width="179" height="252" fill="#f0e9de" stroke="#5d5e57" stroke-width="2"/>
-  <rect x="276" y="128" width="161" height="234" fill="#ded6c9" stroke="#969083" stroke-width="1.2"/>
-  <!-- Back wall, distinctly inside the cabinet -->
-  <rect x="286" y="138" width="141" height="214" fill="#e9e1d4" stroke="#b1a797" stroke-width="1"/>
-  <!-- Top acoustic compartment, boxed within carcass -->
-  <rect x="286" y="138" width="141" height="49" fill="#c5ac7e" stroke="#80683f" stroke-width="1.7"/>
-  <path d="M296 149H417M296 160H417M296 171H417" stroke="#8b7042" stroke-width="1" stroke-dasharray="4 3"/>
-  <rect x="302" y="145" width="60" height="31" rx="2" fill="#e7d8bb" stroke="#9c8050" stroke-width="1.2"/>
-  <circle cx="393" cy="160" r="12" fill="#e6ddce" stroke="#766b5d" stroke-width="1.5"/>
-  <circle cx="393" cy="160" r="3" fill="#766b5d"/>
-  <path d="M393 156C384 147 382 161 390 162C383 171 398 174 398 163C407 170 409 157 397 156" fill="none" stroke="#766b5d" stroke-width="1.2"/>
-  <!-- Interior light fixed to cabinet roof -->
-  <rect x="303" y="198" width="109" height="13" rx="2" fill="#f6edca" stroke="#a38d58" stroke-width="1.5"/>
-  <path d="M310 203H405M310 207H405" stroke="#d2b66a" stroke-width="1.5"/>
-  <!-- Rear vertical adjustment rails -->
-  <path d="M299 218V328M415 218V328" stroke="#65765e" stroke-width="3"/>
-  <path d="M296 232H418M296 252H418M296 272H418M296 292H418M296 312H418" stroke="#829777" stroke-width="1.5"/>
-  <!-- SCROG grid, constrained to the work chamber -->
-  <rect x="307" y="229" width="94" height="44" fill="#a8b59c" fill-opacity=".18" stroke="#6e8665" stroke-width="1.5"/>
-  <path d="M326 229V273M345 229V273M364 229V273M383 229V273M307 244H401M307 258H401" stroke="#7e9272" stroke-width="1"/>
-  <!-- Right-side service column, contained inside the cabinet -->
-  <rect x="385" y="218" width="33" height="107" fill="#aeb4ad" stroke="#60665f" stroke-width="1.5"/>
-  <rect x="391" y="228" width="21" height="21" rx="2" fill="#4c554e" stroke="#d7d7cf" stroke-width="1"/>
-  <circle cx="397" cy="235" r="2" fill="#d5c17b"/><circle cx="405" cy="235" r="2" fill="#8ca783"/>
-  <rect x="391" y="256" width="21" height="26" rx="1" fill="#e3dacb" stroke="#737971" stroke-width="1"/>
-  <path d="M395 263H408M395 269H408M395 275H408" stroke="#858a82" stroke-width="1.2"/>
-  <!-- Tray / base inside the lower edge -->
-  <polygon points="291,329 416,329 425,337 300,337" fill="#a6b49a" stroke="#607657" stroke-width="1.5"/>
-  <path d="M300 337V345H425V337" fill="#849878" stroke="#607657" stroke-width="1.2"/>
-  <!-- Small reservoir in the lower service bay -->
-  <path d="M392 291Q392 287 401 287L412 292V315Q402 321 392 315Z" fill="#b5cecb" stroke="#6b8984" stroke-width="1.2"/>
-  <ellipse cx="402" cy="292" rx="10" ry="4" fill="#dbe9e7" stroke="#6b8984" stroke-width="1.2"/>
-  <!-- Furniture door opened to the left, with clear inset panel and hinges -->
-  <polygon points="250,102 112,65 112,352 250,390" fill="#d4c4ad" stroke="#343733" stroke-width="3"/>
-  <polygon points="235,124 129,96 129,331 235,361" fill="none" stroke="#9b8b75" stroke-width="2"/>
-  <polygon points="224,141 143,119 143,316 224,339" fill="#ded2bf" fill-opacity=".38" stroke="#b2a28c" stroke-width="1"/>
-  <path d="M226 231L238 234" stroke="#625b50" stroke-width="4" stroke-linecap="round"/>
-  <rect x="243" y="126" width="8" height="17" rx="1" fill="#686a62"/>
-  <rect x="243" y="349" width="8" height="17" rx="1" fill="#686a62"/>
-  <!-- Plinth and feet make it read as a piece of furniture -->
-  <rect x="250" y="390" width="213" height="20" fill="#b6aa98" stroke="#343733" stroke-width="2.4"/>
-  <polygon points="463,390 515,414 515,432 463,410" fill="#9f9585" stroke="#343733" stroke-width="2"/>
-  <path d="M268 410V422M441 410V422M495 425V436" stroke="#343733" stroke-width="5" stroke-linecap="round"/>
-  <!-- Callouts -->
-  <g fill="none" stroke="#8b6b3e" stroke-width="1.4">
-    <path d="M342 154L220 69L25 69"/>
-    <path d="M357 204L225 190L25 190"/>
-    <path d="M347 249L221 286L25 286"/>
-    <path d="M393 160L530 90L735 90"/>
-    <path d="M404 266L528 282L735 282"/>
-    <path d="M355 400L531 433L735 433"/>
-    <path d="M164 217L96 244L25 244"/>
+  <rect width="760" height="570" fill="url(#sb-grid)"/>
+  <g data-layer="cabinet">
+    <rect x="206" y="68" width="352" height="414" rx="1" fill="#c8bda9" stroke="#343733" stroke-width="4"/>
+    <rect x="224" y="86" width="316" height="378" fill="#eee7dc" stroke="#55574f" stroke-width="2.5"/>
+    <rect x="238" y="100" width="288" height="348" fill="#ded6c9" stroke="#aaa08f" stroke-width="1.5"/>
+    <rect x="206" y="482" width="352" height="25" fill="#aaa08f" stroke="#343733" stroke-width="3"/>
+    <path d="M224 507V520M540 507V520" stroke="#343733" stroke-width="6" stroke-linecap="round"/>
+    <path d="M558 68L601 91V482L558 482Z" fill="#aaa08f" stroke="#343733" stroke-width="3"/>
+    <path d="M206 68L558 68L601 91L249 91Z" fill="#e0d5c4" stroke="#343733" stroke-width="3"/>
   </g>
-  <g fill="#563b2e" font-family="Arial,sans-serif" font-size="10.5" font-weight="700">
-    <text x="14" y="50">01 · ВЕРХНИЙ ТЕХОТСЕК</text>
-    <text x="14" y="174">02 · СВЕТОВОЙ МОДУЛЬ</text>
-    <text x="14" y="270">03 · РАБОЧАЯ КАМЕРА</text>
-    <text x="548" y="72">04 · ВЕНТИЛЯЦИЯ</text>
-    <text x="548" y="265">05 · ТЕХНИЧЕСКАЯ КОЛОННА</text>
-    <text x="548" y="416">06 · ЦОКОЛЬ / ПОДДОН</text>
-    <text x="14" y="228">07 · МЕБЕЛЬНАЯ ДВЕРЬ</text>
+  <g data-layer="technical">
+    <rect x="239" y="101" width="286" height="67" fill="#c5ac7e" stroke="#80683f" stroke-width="2"/>
+    <path d="M251 114H513M251 126H513M251 138H513M251 150H513" stroke="#8b7042" stroke-width="1" stroke-dasharray="5 4"/>
+    <rect x="261" y="110" width="89" height="46" rx="2" fill="#e7d8bb" stroke="#9c8050" stroke-width="1.5"/>
+    <circle cx="472" cy="134" r="19" fill="#e6ddce" stroke="#766b5d" stroke-width="2"/>
+    <circle cx="472" cy="134" r="4" fill="#766b5d"/>
+    <path d="M472 129C458 115 455 137 467 138C456 153 480 156 480 139C494 151 497 130 478 129" fill="none" stroke="#766b5d" stroke-width="1.5"/>
+    <rect x="444" y="187" width="69" height="248" fill="#b8bdb5" stroke="#60665f" stroke-width="2"/>
+    <rect x="454" y="199" width="49" height="39" rx="2" fill="#4c554e" stroke="#d7d7cf" stroke-width="1.5"/>
+    <circle cx="466" cy="211" r="3" fill="#d5c17b"/><circle cx="490" cy="211" r="3" fill="#8ca783"/>
+    <rect x="454" y="248" width="49" height="51" rx="1" fill="#e3dacb" stroke="#737971" stroke-width="1.5"/>
+    <path d="M461 260H496M461 270H496M461 280H496" stroke="#858a82" stroke-width="2"/>
+    <path d="M456 311Q456 305 469 305L499 313V373Q477 387 456 373Z" fill="#b5cecb" stroke="#6b8984" stroke-width="2"/>
+    <ellipse cx="478" cy="313" rx="22" ry="7" fill="#dbe9e7" stroke="#6b8984" stroke-width="2"/>
   </g>
-  <g fill="#756b5d" font-family="Arial,sans-serif" font-size="9">
-    <text x="14" y="62">отдельный закрытый отсек</text>
-    <text x="14" y="186">закреплён под верхним отсеком</text>
-    <text x="14" y="299">направляющие и сетка внутри</text>
-    <text x="548" y="85">узел находится вверху корпуса</text>
-    <text x="548" y="294">сервис и коммуникации</text>
-    <text x="548" y="445">нижняя опорная часть</text>
-    <text x="14" y="241">панель с внутренней рамкой</text>
+  <g data-layer="light">
+    <rect x="269" y="181" width="150" height="19" rx="3" fill="#f6edca" stroke="#a38d58" stroke-width="2"/>
+    <path d="M278 187H410M278 193H410" stroke="#d2b66a" stroke-width="2"/>
+    <path d="M285 204L265 264M403 204L423 264" stroke="#d8bd72" stroke-opacity=".45" stroke-width="2" stroke-dasharray="5 5"/>
   </g>
-  <!-- Drawing dimensions: intentionally schematic until linked to the configurator -->
-  <g fill="none" stroke="#a27e45" stroke-width="1">
-    <path d="M250 458H515M250 451V465M515 451V465"/>
-    <path d="M551 128V414M544 128H558M544 414H558"/>
-    <path d="M520 116L570 91M516 109L524 123M566 84L574 98"/>
+  <g data-layer="work">
+    <path d="M258 211V419M429 211V419" stroke="#65765e" stroke-width="4"/>
+    <path d="M253 232H435M253 265H435M253 298H435M253 331H435M253 364H435M253 397H435" stroke="#829777" stroke-width="2"/>
+    <rect x="276" y="222" width="132" height="61" fill="#a8b59c" fill-opacity=".2" stroke="#6e8665" stroke-width="2"/>
+    <path d="M302 222V283M328 222V283M354 222V283M380 222V283M276 242H408M276 263H408" stroke="#7e9272" stroke-width="1.5"/>
+    <rect x="256" y="411" width="178" height="17" fill="#a6b49a" stroke="#607657" stroke-width="2"/>
+    <path d="M265 428V439H435V428" fill="#849878" stroke="#607657" stroke-width="1.5"/>
   </g>
-  <g fill="#a27e45" font-family="Arial,sans-serif" font-size="9.5" letter-spacing=".7">
-    <text x="382" y="477" text-anchor="middle">ШИРИНА КОРПУСА</text>
-    <text x="572" y="270" transform="rotate(90 572 270)" text-anchor="middle">ВЫСОТА</text>
-    <text x="390" y="526" text-anchor="middle" font-size="9">МЕБЕЛЬНЫЙ ШКАФ · ПЕРЕДНИЙ РАКУРС С ОТКРЫТОЙ ДВЕРЬЮ · НЕ В МАСШТАБЕ</text>
+  <g data-layer="door">
+    <path d="M206 68L100 103V449L206 482Z" fill="#d4c4ad" stroke="#343733" stroke-width="4"/>
+    <path d="M191 94L116 119V430L191 454Z" fill="none" stroke="#9b8b75" stroke-width="2.5"/>
+    <path d="M179 119L130 136V412L179 429Z" fill="#ded2bf" fill-opacity=".55" stroke="#b2a28c" stroke-width="1.5"/>
+    <path d="M173 275L187 279" stroke="#625b50" stroke-width="5" stroke-linecap="round"/>
+    <rect x="198" y="110" width="9" height="23" rx="1" fill="#686a62"/><rect x="198" y="420" width="9" height="23" rx="1" fill="#686a62"/>
+  </g>
+  <g data-layer="labels" fill="none" stroke="#8b6b3e" stroke-width="1.4">
+    <path d="M374 133L130 49H18"/><path d="M344 190L124 183H18"/><path d="M332 253L127 300H18"/>
+    <path d="M479 134L620 82H743"/><path d="M477 267L625 281H743"/><path d="M348 420L626 451H743"/><path d="M147 276L91 253H18"/>
+  </g>
+  <g data-layer="labels" fill="#563b2e" font-family="Arial,sans-serif" font-size="10.5" font-weight="700">
+    <text x="16" y="33">01 · ВЕРХНИЙ ТЕХОТСЕК</text><text x="16" y="168">02 · СВЕТ</text><text x="16" y="286">03 · РАБОЧАЯ ЗОНА</text>
+    <text x="620" y="64">04 · ВЕНТИЛЯЦИЯ</text><text x="620" y="263">05 · СЕРВИСНАЯ КОЛОННА</text><text x="620" y="438">06 · ПОДДОН</text><text x="16" y="237">07 · ДВЕРЬ</text>
+  </g>
+  <g data-layer="dimensions" fill="none" stroke="#a27e45" stroke-width="1.2">
+    <path d="M206 531H558M206 523V539M558 523V539"/><path d="M632 68V482M624 68H640M624 482H640"/>
+  </g>
+  <g data-layer="dimensions" fill="#a27e45" font-family="Arial,sans-serif" font-size="10" letter-spacing=".6">
+    <text x="382" y="550" text-anchor="middle">ШИРИНА КОРПУСА</text><text x="654" y="275" transform="rotate(90 654 275)" text-anchor="middle">ВЫСОТА</text>
+    <text x="382" y="567" text-anchor="middle" font-size="9">ПЛОСКИЙ ИНЖЕНЕРНЫЙ ВИД · СХЕМА НЕ В МАСШТАБЕ</text>
   </g>
 </svg>
         </div>
@@ -984,7 +966,26 @@ footer{padding:60px 0 30px}.foot-top{gap:28px}.foot-brand{font-size:54px}.foot-c
       <div class="drawing-foot"><span>Схема показывает принцип устройства, не размеры конкретного заказа</span><a href="builder.html">Настроить свой шкаф →</a></div>
     </div>    <div class="stage3d-hint"><span>Нужна объёмная проверка? 3D-просмотр остаётся доступен отдельно.</span><a href="GrowBox_v31_3D.html" target="_blank" rel="noopener">Открыть 3D-просмотр →</a></div>
   </div>
-</section>
+<style>
+.sb-plan-controls{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.sb-plan-controls button{appearance:none;border:1px solid #b9ad99;background:#f2ece2;color:#353630;border-radius:3px;padding:9px 13px;font:600 12px/1.2 inherit;cursor:pointer;transition:background .18s,color .18s,border-color .18s}
+.sb-plan-controls button[aria-pressed="true"]{background:#30332f;color:#f1e7d7;border-color:#30332f}
+.sb-plan-controls button:focus-visible{outline:2px solid #9a7848;outline-offset:2px}
+.sb-plan-status{font-size:12px;color:#766b5d;margin:-4px 0 12px}
+.sb-flat-plan [data-layer]{transition:opacity .18s ease}
+.sb-flat-plan[data-active-view]:not([data-active-view="all"]) [data-layer]{opacity:.12}
+.sb-flat-plan[data-active-view="cabinet"] [data-layer="cabinet"],
+.sb-flat-plan[data-active-view="door"] [data-layer="door"],
+.sb-flat-plan[data-active-view="work"] [data-layer="work"],
+.sb-flat-plan[data-active-view="technical"] [data-layer="technical"],
+.sb-flat-plan[data-active-view="technical"] [data-layer="labels"],
+.sb-flat-plan[data-active-view="light"] [data-layer="light"],
+.sb-flat-plan[data-active-view="labels"] [data-layer="labels"],
+.sb-flat-plan[data-active-view="cabinet"] [data-layer="dimensions"]{opacity:1}
+@media(max-width:640px){.sb-plan-controls{gap:6px}.sb-plan-controls button{padding:8px 10px;font-size:11px}.sb-plan-status{font-size:11px}}
+</style><script>
+(()=>{const root=document.querySelector('#drawing');if(!root||root.dataset.planControlsReady)return;root.dataset.planControlsReady='1';const svg=root.querySelector('.sb-flat-plan');const buttons=[...root.querySelectorAll('[data-plan-view]')];const status=root.querySelector('.sb-plan-status');const names={all:'Показаны все узлы шкафа.',cabinet:'Выделен корпус, боковая стенка и основание.',door:'Выделена мебельная дверь и её рамка.',work:'Выделены рабочая камера, направляющие, сетка и поддон.',technical:'Выделены верхний техотсек и сервисная колонна.',light:'Выделен световой модуль и его зона освещения.',labels:'Выделены подписи узлов и размерные ориентиры.'};buttons.forEach(btn=>btn.addEventListener('click',()=>{const view=btn.dataset.planView;svg.dataset.activeView=view;buttons.forEach(b=>b.setAttribute('aria-pressed',String(b===btn)));status.textContent=names[view]||names.all;}));})();
+</script></section>
 
 
 <section id="eng">
