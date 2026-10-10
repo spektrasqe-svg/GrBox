@@ -9,7 +9,7 @@ const КАТАЛОГ={
   G8600:{label:'Spider Farmer G8600',w:1100,d:660,h:58,mass:11.2,power:860}
  },
  fan:{
-  SF4:{label:'Spider Farmer SF4',w:200,d:200,h:280,mass:3.1,power:35},
+  SF4:{label:'Spider Farmer SF4',w:202,d:303,h:190,mass:3.1,power:27},
   SF6:{label:'Spider Farmer SF6',w:220,d:320,h:320,mass:4.4,power:45},
   SF8:{label:'Spider Farmer SF8',w:260,d:260,h:370,mass:6.2,power:60}
  }
