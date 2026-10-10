@@ -31,7 +31,7 @@
       mode: 'telegram',
       endpoint: null,    // URL релея, например 'https://secretbox-relay.workers.dev'
       manager: null,     // telegram-ник менеджера (без @); null → берём contacts.telegram
-      privacyUrl: null,  // ссылка на политику обработки данных; null → текст без ссылки
+      privacyUrl: 'privacy.html',  // политика обработки персональных данных
     },
 
     /* ─────────────────────────── ЦЕНЫ ─────────────────────────── */

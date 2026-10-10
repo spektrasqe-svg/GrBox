@@ -133,7 +133,7 @@ body{margin:0}
     e.preventDefault();
     var url=(window.SB_CONFIG&&SB_CONFIG.leads&&SB_CONFIG.leads.privacyUrl)||null;
     if(url)window.open(url,'_blank','noopener');
-    else alert('Политика обработки персональных данных публикуется отдельно. Данные заявки используются только для связи с вами.');
+    else window.open('privacy.html','_blank','noopener');
   });
 })();
 </script>

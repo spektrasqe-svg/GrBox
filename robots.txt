@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /chats/
+Disallow: /archive/
+
+Sitemap: https://spektrasqe-svg.github.io/GrBox/sitemap.xml

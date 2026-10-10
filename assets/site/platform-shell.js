@@ -40,6 +40,21 @@
 
  shell.querySelectorAll('[data-key]').forEach(a=>{if(a.dataset.key===fileKey)a.classList.add('sb-active')});
 
+ // ссылка на политику ПД — в футер каждой страницы (в последнюю колонку)
+ function addPrivacyLink(){
+  document.querySelectorAll('footer').forEach(f=>{
+   if(f.querySelector('a[href="privacy.html"]'))return;
+   const cols=f.querySelectorAll('.foot-col');
+   const col=cols[cols.length-1];
+   if(!col)return;
+   const a=document.createElement('a');
+   a.href='privacy.html'; a.textContent='Политика данных';
+   col.appendChild(a);
+  });
+ }
+ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', addPrivacyLink);
+ else addPrivacyLink();
+
  const btn=shell.querySelector('.sb-menu'), links=shell.querySelector('.sb-links');
  btn.addEventListener('click',()=>links.classList.toggle('sb-open'));
 })();
