@@ -415,7 +415,10 @@ function applyDimensions(w,d,h){
   target.set(0,Math.max(0.8,Math.min(1.45,1.02*sy)),0);
   setCam(Math.max(2.8,3.7*Math.max(sx,sy,sz)),camT.th,camT.ph,target.y);
   boxSize={w:w,d:d,h:h};
-  document.getElementById('dimensionStatus').textContent='Применено: '+w+' × '+d+' × '+h+' мм · габариты оборудования сохранены';
+  var warning=(w<1250||d<700||h<2000);
+  document.getElementById('dimensionStatus').textContent=warning
+    ? 'Размер изменён: '+w+' × '+d+' × '+h+' мм. Внимание: исходная расстановка оборудования не проверена на коллизии для этого размера.'
+    : 'Применено: '+w+' × '+d+' × '+h+' мм · габариты оборудования сохранены';
 }
 function setupDimensionControls(){
   captureParametricBase();
