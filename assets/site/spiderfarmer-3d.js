@@ -325,7 +325,7 @@ function buildFan(THREE,g,M,s){
  const duct=s.duct||100;
  const R=w/2;
  const L=d;
- const bodyR=R*.96;
+ const bodyR=Math.min(R*.91,h*.46);
  const bodyLen=L*.49;
  const bellLen=(L-bodyLen)*.48;
  const zBody=bodyLen/2;
@@ -396,9 +396,9 @@ function buildFan(THREE,g,M,s){
  for(const z of [-bodyLen*.34,bodyLen*.34]){
   add(g,THREE,boxG(THREE,bodyR*.34,8,18),orange,0,-bodyR*.91,z);
   for(const sx of [-1,1]){
-   add(g,THREE,boxG(THREE,8,Math.max(26,h*.22),18),orange,sx*bodyR*.64,-bodyR*.91-Math.max(26,h*.22)/2,z);
-   add(g,THREE,boxG(THREE,bodyR*.52,5,25),orange,sx*bodyR*.50,-h*.46,z);
-   add(g,THREE,cyl(3.2,3.2,2,12),screwMat,sx*bodyR*.50,-h*.46+2.6,z,Math.PI/2);
+   add(g,THREE,boxG(THREE,8,14,18),orange,sx*bodyR*.64,-bodyR*.91-7,z);
+   add(g,THREE,boxG(THREE,bodyR*.52,5,25),orange,sx*bodyR*.50,-h/2+4,z);
+   add(g,THREE,cyl(3.2,3.2,2,12),screwMat,sx*bodyR*.50,-h/2+6.6,z,Math.PI/2);
   }
  }
  /* Hanging strap eyelets above each orange band */
