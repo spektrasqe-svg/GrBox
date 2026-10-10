@@ -379,7 +379,7 @@ function buildFan(THREE,g,M,s){
  const coverX=bodyR*.965;
  add(g,THREE,cyl(46,46,5,48),black,coverX,0,0,0,0,Math.PI/2);
  add(g,THREE,cyl(40,40,1.6,48),shell,coverX+3,0,0,0,0,Math.PI/2);
- ring(g,THREE,screwMat,36,1.1,coverX+4,0,0,0,Math.PI/2);
+ add(g,THREE,torG(THREE,36,1.1),screwMat,coverX+4,0,0,0,Math.PI/2,0);
  for(let i=0;i<6;i++){
   const a=i*Math.PI/3;
   add(g,THREE,cyl(2.8,2.8,2,12),screwMat,coverX+4,Math.cos(a)*34,Math.sin(a)*34,0,0,Math.PI/2);
