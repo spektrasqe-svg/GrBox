@@ -320,80 +320,77 @@ function buildLight(THREE,g,M,s){
  * Axis Z. All dimensions in mm. Model is procedural, not manufacturer CAD.
  */
 function buildFan(THREE,g,M,s){
- const w=s.w,d=s.d,h=s.h,duct=s.duct||100;
- const L=d,neckR=duct/2;
- const black=new THREE.MeshStandardMaterial({color:0x151719,roughness:.43,metalness:.14});
- const shell=new THREE.MeshStandardMaterial({color:0x24272a,roughness:.5,metalness:.16});
- const dark=new THREE.MeshStandardMaterial({color:0x0b0d0f,roughness:.72,metalness:.03});
+ const w=s.w,d=s.d,h=s.h,duct=s.duct||101,L=d,neckR=duct/2;
+ const black=new THREE.MeshStandardMaterial({color:0x111315,roughness:.48,metalness:.16});
+ const shell=new THREE.MeshStandardMaterial({color:0x25292c,roughness:.53,metalness:.18});
+ const edge=new THREE.MeshStandardMaterial({color:0x3a3f42,roughness:.44,metalness:.3});
+ const inner=new THREE.MeshStandardMaterial({color:0x080a0b,roughness:.78,metalness:.02,side:THREE.DoubleSide});
  const orange=new THREE.MeshStandardMaterial({color:0xf36b21,roughness:.4,metalness:.08});
  const bladeMat=new THREE.MeshStandardMaterial({color:0x303438,roughness:.48,metalness:.04,side:THREE.DoubleSide});
- const screwMat=new THREE.MeshStandardMaterial({color:0x969c9f,roughness:.34,metalness:.7});
+ const screwMat=new THREE.MeshStandardMaterial({color:0x9ba1a4,roughness:.34,metalness:.7});
  const cyl=(a,b,len,n=48,open=false)=>cylG(THREE,a,b,len,n,open);
  const addZ=(r1,r2,len,mat,z,n=48,open=false)=>add(g,THREE,cyl(r1,r2,len,n,open),mat,0,0,z,Math.PI/2);
  const ringZ=(z,r,t,mat)=>ring(g,THREE,mat,r,t,0,0,z);
- const outerR=Math.min(w/2-3,h/2-3);
- const bodyR=Math.min(outerR*.94,h*.455);
+ const outerR=Math.min(w/2-3,h/2-2), bodyR=Math.min(outerR*.99,h*.485);
  const bodyLen=L*.49, bellLen=(L-bodyLen)*.49;
- /* Центральный цилиндрический корпус электродвигателя. */
- addZ(bodyR,bodyR,bodyLen,black,0,64);
- addZ(bodyR*.985,bodyR*.985,bodyLen*.88,shell,0,64);
- /* Формованные швы корпуса и неглубокие рёбра охлаждения. */
- for(const z of [-bodyLen*.39,-bodyLen*.32,bodyLen*.32,bodyLen*.39]) ringZ(z,bodyR+1.1,1.1,black);
- for(let i=0;i<18;i++){
-  const a=i*Math.PI*2/18;
-  const x=Math.cos(a)*(bodyR+.3),y=Math.sin(a)*(bodyR+.3);
+ /* Литой корпус смешанного потока, стыки половин и рёбра охлаждения. */
+ addZ(bodyR,bodyR,bodyLen,black,0,72);
+ addZ(bodyR*.985,bodyR*.985,bodyLen*.84,shell,0,72);
+ for(const z of [-bodyLen*.47,-bodyLen*.43,bodyLen*.43,bodyLen*.47]) ringZ(z,bodyR*.994,1.15,edge);
+ for(const z of [-bodyLen*.34,bodyLen*.34]){
+  ringZ(z,bodyR+1.3,3.3,orange);
+  ringZ(z+(z<0?-3.9:3.9),bodyR+.9,.8,black);
+ }
+ for(let i=0;i<24;i++){
+  const a=i*Math.PI*2/24,x=Math.cos(a)*(bodyR*.986),y=Math.sin(a)*(bodyR*.986);
   for(const z of [-bodyLen*.22,bodyLen*.22]){
-   const rib=add(g,THREE,boxG(THREE,1.4,3.2,bodyLen*.13),dark,x,y,z);
-   rib.rotation.z=a;
+   const rib=add(g,THREE,boxG(THREE,1.15,2.6,bodyLen*.12),edge,x,y,z);rib.rotation.z=a;
   }
  }
- /* Оранжевые стопорные обоймы корпуса и тонкие чёрные разделительные швы. */
- for(const z of [-bodyLen*.34,bodyLen*.34]){
-  ringZ(z,bodyR+1.8,3.1,orange);
-  ringZ(z+(z<0?-3.7:3.7),bodyR+1.2,.9,black);
- }
- /* Два раструба. Важно: радиус сужается от корпуса к кромке патрубка,
-    а не расширяется наружу; для отрицательной оси радиусы развёрнуты. */
+ /* Два конических раструба с открытым проходом Ø101 мм. */
  for(const side of [-1,1]){
   const z=side*(bodyLen/2+bellLen/2-1);
-  const rTop=side>0?neckR:bodyR*.99;
-  const rBottom=side>0?bodyR*.99:neckR;
-  add(g,THREE,cyl(rTop,rBottom,bellLen,64,true),black,0,0,z,Math.PI/2);
-  /* Внутренняя ступенька и толщина края раструба. */
-  ringZ(side*(L/2-3),neckR+2.0,2.7,black);
-  ringZ(side*(L/2-bellLen*.1),neckR+2.4,1.2,shell);
-  ringZ(side*(L/2-8),neckR-1.1,1.2,black);
-  addZ(neckR*.97,neckR*.97,1.6,dark,side*(L/2-5),48,true);
+  const r1=side>0?neckR:bodyR*.99,r2=side>0?bodyR*.99:neckR;
+  add(g,THREE,cyl(r1,r2,bellLen,72,true),shell,0,0,z,Math.PI/2);
+  add(g,THREE,cyl(neckR-3,bodyR*.91,bellLen*.93,64,true),inner,0,0,z,Math.PI/2);
+  ringZ(side*(L/2-2.8),neckR+2.5,3.1,black);
+  ringZ(side*(L/2-5.2),neckR+1.1,1.15,edge);
+  ringZ(side*(L/2-bellLen*.12),neckR+2,1.2,black);
+  ringZ(side*(L/2-8),neckR-1.8,1.1,inner);
+  addZ(neckR*.94,neckR*.94,1.2,inner,side*(L/2-6),56,true);
  }
- /* Крыльчатка с изогнутыми лопастями на обоих торцах: сзади не остаётся пустой трубы. */
+ /* Крыльчатка: ступица, оранжевая маркировка и семь объёмных лопастей. */
  for(const side of [-1,1]){
-  const rotorZ=side*(L/2-bellLen*.48);
-  addZ(neckR*.29,neckR*.29,6,black,rotorZ-side*3,32);
-  addZ(neckR*.22,neckR*.22,2.2,orange,rotorZ,32);
+  const rotorZ=side*(L/2-bellLen*.47);
+  addZ(neckR*.34,neckR*.34,8,black,rotorZ-side*3.2,40);
+  addZ(neckR*.25,neckR*.25,2.6,orange,rotorZ,40);
+  addZ(neckR*.17,neckR*.17,1.2,edge,rotorZ+side*1.8,32);
   for(let i=0;i<7;i++){
-   const a=i*Math.PI*2/7, r0=neckR*.18, r1=neckR*.84;
-   const shape=new THREE.Shape();
+   const a=i*Math.PI*2/7,r0=neckR*.19,r1=neckR*.82,shape=new THREE.Shape();
    shape.moveTo(Math.cos(a)*r0,Math.sin(a)*r0);
-   shape.quadraticCurveTo(Math.cos(a+.13)*r1*.42,Math.sin(a+.13)*r1*.42,Math.cos(a+.4)*r1,Math.sin(a+.4)*r1);
-   shape.quadraticCurveTo(Math.cos(a+.63)*r1*.72,Math.sin(a+.63)*r1*.72,Math.cos(a+.28)*r0,Math.sin(a+.28)*r0);
+   shape.quadraticCurveTo(Math.cos(a+.12)*r1*.38,Math.sin(a+.12)*r1*.38,Math.cos(a+.39)*r1,Math.sin(a+.39)*r1);
+   shape.quadraticCurveTo(Math.cos(a+.57)*r1*.74,Math.sin(a+.57)*r1*.74,Math.cos(a+.27)*r0,Math.sin(a+.27)*r0);
    shape.closePath();
-   const bladeGeo=new THREE.ExtrudeGeometry(shape,{depth:2.1,bevelEnabled:true,bevelSegments:1,steps:1,bevelSize:.35,bevelThickness:.35,curveSegments:10});
-   const blade=new THREE.Mesh(bladeGeo,bladeMat);
-   blade.position.z=rotorZ+side*1.4;
-   if(side<0)blade.rotation.y=Math.PI;
-   g.add(blade);
+   const geo=new THREE.ExtrudeGeometry(shape,{depth:2.4,bevelEnabled:true,bevelSegments:2,steps:1,bevelSize:.35,bevelThickness:.35,curveSegments:12});
+   const blade=new THREE.Mesh(geo,bladeMat);blade.position.z=rotorZ+side*1.2;
+   if(side<0)blade.rotation.y=Math.PI;g.add(blade);
+  }
+  for(let i=0;i<3;i++){
+   const a=i*Math.PI*2/3,strut=add(g,THREE,boxG(THREE,neckR*.76,2.1,2.8),edge,
+    Math.cos(a)*neckR*.43,Math.sin(a)*neckR*.43,side*(L/2-bellLen*.17));
+   strut.rotation.z=a;
   }
  }
- /* Круглая боковая крышка двигателя, стопорное кольцо и шесть крепёжных винтов. */
+ /* Боковая сервисная крышка двигателя с кольцом и шестью винтами. */
  const coverX=bodyR*.965;
- add(g,THREE,cyl(43,43,5,48),black,coverX,0,0,0,0,Math.PI/2);
- add(g,THREE,cyl(37.5,37.5,1.6,48),shell,coverX+3,0,0,0,0,Math.PI/2);
- add(g,THREE,torG(THREE,34.5,1.15),screwMat,coverX+4,0,0,0,Math.PI/2,0);
+ add(g,THREE,cyl(43,43,5,56),black,coverX,0,0,0,0,Math.PI/2);
+ add(g,THREE,cyl(37.5,37.5,1.6,56),shell,coverX+3,0,0,0,0,Math.PI/2);
+ add(g,THREE,cyl(30,30,1.1,48),black,coverX+4,0,0,0,0,Math.PI/2);
+ add(g,THREE,torG(THREE,34.5,1.15),screwMat,coverX+4.2,0,0,0,Math.PI/2,0);
  for(let i=0;i<6;i++){
   const a=i*Math.PI/3;
-  add(g,THREE,cyl(2.6,2.6,2,12),screwMat,coverX+4,Math.cos(a)*32.5,Math.sin(a)*32.5,0,0,Math.PI/2);
+  add(g,THREE,cyl(2.6,2.6,2.2,12),screwMat,coverX+4.5,Math.cos(a)*32.5,Math.sin(a)*32.5,0,0,Math.PI/2);
  }
- /* Оранжевая маркировка на боковой сервисной крышке. */
  const mark=canvasTex(THREE,512,128,(ctx,W,H)=>{
   ctx.clearRect(0,0,W,H);ctx.fillStyle='#f36b21';ctx.font='bold 45px Arial,sans-serif';
   ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('Spider Farmer',W/2,H/2);
@@ -401,26 +398,27 @@ function buildFan(THREE,g,M,s){
  if(mark){
   const mat=new THREE.MeshBasicMaterial({map:mark,transparent:true,side:THREE.DoubleSide,depthWrite:false});
   const plane=new THREE.Mesh(new THREE.PlaneGeometry(61,15),mat);
-  plane.position.set(coverX+5,0,0);plane.rotation.y=Math.PI/2;g.add(plane);
+  plane.position.set(coverX+5.1,0,0);plane.rotation.y=Math.PI/2;g.add(plane);
  }
- /* Нижние монтажные опоры и продолговатые крепёжные лапы. */
+ /* Нижние крепёжные лапы, усилители и головки винтов. */
  for(const z of [-bodyLen*.34,bodyLen*.34]){
-  add(g,THREE,boxG(THREE,bodyR*.78,7,16),black,0,-bodyR*.91,z);
-  add(g,THREE,boxG(THREE,bodyR*.52,4.5,24),black,0,-h/2+4.5,z);
+  add(g,THREE,boxG(THREE,bodyR*.8,7,18),black,0,-bodyR*.91,z);
+  add(g,THREE,boxG(THREE,bodyR*.56,4.5,24),black,0,-h/2+4.5,z);
   for(const sx of [-1,1]){
    add(g,THREE,boxG(THREE,6,9,15),black,sx*bodyR*.31,-bodyR*.91-4,z);
-   add(g,THREE,cyl(2.4,2.4,2,12),screwMat,sx*bodyR*.31,-h/2+6.5,z,Math.PI/2);
+   add(g,THREE,cyl(2.5,2.5,2.2,12),screwMat,sx*bodyR*.31,-h/2+6.5,z,Math.PI/2);
+   const slot=add(g,THREE,boxG(THREE,4.5,1.1,9),inner,sx*bodyR*.18,-h/2+6.8,z);slot.rotation.y=.08;
   }
  }
- /* Регулятор скорости не включён в вентилятор: это отдельное оборудование. */
- /* Кабель питания выходит из корпуса отдельным коротким вводом. */
- add(g,THREE,cyl(4,4,5,12),dark,-bodyR*.45,-bodyR*.24,-bodyLen*.23,0,0,Math.PI/2);
+ /* Ввод питания и кабель с изгибом; внешний регулятор не является частью корпуса. */
+ add(g,THREE,cyl(4.6,4.6,6,16),inner,-bodyR*.45,-bodyR*.24,-bodyLen*.23,0,0,Math.PI/2);
  const powerPts=[
   new THREE.Vector3(-bodyR*.48,-bodyR*.25,-bodyLen*.23),
-  new THREE.Vector3(-bodyR*.61,-bodyR*.43,-bodyLen*.27),
-  new THREE.Vector3(-bodyR*.56,-h*.43,-bodyLen*.3)
+  new THREE.Vector3(-bodyR*.62,-bodyR*.42,-bodyLen*.27),
+  new THREE.Vector3(-bodyR*.66,-h*.43,-bodyLen*.31),
+  new THREE.Vector3(-bodyR*.57,-h*.48,-bodyLen*.36)
  ];
- add(g,THREE,new THREE.TubeGeometry(new THREE.CatmullRomCurve3(powerPts),18,1.9,8,false),black);
+ add(g,THREE,new THREE.TubeGeometry(new THREE.CatmullRomCurve3(powerPts),22,1.9,8,false),black);
 }
 
 function buildFilter(THREE,g,M,s){
