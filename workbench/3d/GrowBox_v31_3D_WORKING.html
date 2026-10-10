@@ -664,6 +664,10 @@ function setMode(name){
   saveState();
 }
 function resetAll(){
+  document.getElementById('dimW').value=1250;
+  document.getElementById('dimD').value=700;
+  document.getElementById('dimH').value=2000;
+  applyDimensions(1250,700,2000);
   setMode('product');
   setCam(3.7, 0.72, 1.16, 1.02);
   target.set(0, 1.02, 0);
