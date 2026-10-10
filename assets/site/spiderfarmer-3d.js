@@ -352,7 +352,8 @@ function buildFan(THREE,g,M,s){
   const z=side*(bodyLen/2+bellLen/2-1);
   const r1=side>0?neckR:bodyR*.99,r2=side>0?bodyR*.99:neckR;
   add(g,THREE,cyl(r1,r2,bellLen,72,true),shell,0,0,z,Math.PI/2);
-  add(g,THREE,cyl(neckR-3,bodyR*.91,bellLen*.93,64,true),inner,0,0,z,Math.PI/2);
+  const innerTop=side>0?neckR-3:bodyR*.91,innerBottom=side>0?bodyR*.91:neckR-3;
+  add(g,THREE,cyl(innerTop,innerBottom,bellLen*.93,64,true),inner,0,0,z,Math.PI/2);
   ringZ(side*(L/2-2.8),neckR+2.5,3.1,black);
   ringZ(side*(L/2-5.2),neckR+1.1,1.15,edge);
   ringZ(side*(L/2-bellLen*.12),neckR+2,1.2,black);
@@ -372,7 +373,7 @@ function buildFan(THREE,g,M,s){
    shape.quadraticCurveTo(Math.cos(a+.57)*r1*.74,Math.sin(a+.57)*r1*.74,Math.cos(a+.27)*r0,Math.sin(a+.27)*r0);
    shape.closePath();
    const geo=new THREE.ExtrudeGeometry(shape,{depth:2.4,bevelEnabled:true,bevelSegments:2,steps:1,bevelSize:.35,bevelThickness:.35,curveSegments:12});
-   const blade=new THREE.Mesh(geo,bladeMat);blade.position.z=rotorZ+side*1.2;
+   const blade=new THREE.Mesh(geo,bladeMat);blade.position.z=rotorZ-side*1.2;
    if(side<0)blade.rotation.y=Math.PI;g.add(blade);
   }
   for(let i=0;i<3;i++){
