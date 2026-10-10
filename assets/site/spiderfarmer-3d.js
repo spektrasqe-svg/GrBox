@@ -20,7 +20,7 @@ const SPECS={
    desc:'Светодиодный светильник Spider Farmer SE5000, 480 Вт: 6 алюминиевых LED-баров, диодные платы, драйвер с диммером и тросовый подвес'},
  G8600:{kind:'light',label:'Spider Farmer G8600',w:1100,d:660,h:58,bars:8,power:860,
    desc:'Светодиодный светильник Spider Farmer G8600, 860 Вт: 8 алюминиевых LED-баров, диодные платы, драйвер с диммером и тросовый подвес'},
- SF4:{kind:'fan',label:'Spider Farmer SF4',w:200,d:200,h:280,power:35,duct:100,
+ SF4:{kind:'fan',label:'Spider Farmer SF4',w:202,d:303,h:190,power:27,duct:101,
    desc:'Канальный вентилятор Spider Farmer SF4 4" (100 мм): цилиндрический корпус, крыльчатка, крепёжная площадка, пульт с диммером'},
  SF6:{kind:'fan',label:'Spider Farmer SF6',w:220,d:320,h:320,power:45,duct:150,
    desc:'Канальный вентилятор Spider Farmer SF6 6" (150 мм): цилиндрический корпус, крыльчатка, крепёжная площадка, пульт с диммером'},
@@ -314,60 +314,125 @@ function buildLight(THREE,g,M,s){
  }
 }
 
-/* ================= FAN: SF4 / SF6 / SF8 ================= */
+/* ================= INLINE FAN: SF4 / SF6 / SF8 =================
+ * SF4 reference geometry based on official Spider Farmer 4-inch inline fan:
+ * overall body envelope approx. 303 × 202 × 190 mm; 101 mm duct opening.
+ * Axis Z. All dimensions in mm. Model is procedural, not manufacturer CAD.
+ */
 function buildFan(THREE,g,M,s){
  const w=s.w,d=s.d,h=s.h;
- const r=w/2, bodyY=-h/2+42+r, flange=20, bodyLen=d-2*flange-14;
- /* корпус */
- add(g,THREE,cylG(THREE,r,r,bodyLen,32),M.black,0,bodyY,0,Math.PI/2);
- /* центральная лента мотора */
- add(g,THREE,cylG(THREE,r+10,r+10,Math.max(40,d*.26),32),M.dark,0,bodyY,0,Math.PI/2);
- /* рёбра-кольца */
- ring(g,THREE,M.dark,r+5,5,0,bodyY,-d*.27);
- ring(g,THREE,M.dark,r+5,5,0,bodyY,d*.27);
- /* фланцы + внутренняя гильза */
+ const isSF4=s.label&&/SF4/.test(s.label);
+ const duct=s.duct||100;
+ const R=w/2;
+ const L=d;
+ const bodyR=Math.min(R*.91,h*.46);
+ const bodyLen=L*.49;
+ const bellLen=(L-bodyLen)*.48;
+ const zBody=bodyLen/2;
+ const black=new THREE.MeshStandardMaterial({color:0x17191b,roughness:.42,metalness:.12});
+ const shell=new THREE.MeshStandardMaterial({color:0x242629,roughness:.48,metalness:.12});
+ const orange=new THREE.MeshStandardMaterial({color:0xf36b21,roughness:.38,metalness:.08});
+ const inside=new THREE.MeshStandardMaterial({color:0x0b0d0e,roughness:.75,metalness:.02});
+ const bladeMat=new THREE.MeshStandardMaterial({color:isSF4?0xe85e1c:0x34383b,roughness:.42,metalness:.04,side:THREE.DoubleSide});
+ const screwMat=new THREE.MeshStandardMaterial({color:0xb7b9b8,roughness:.32,metalness:.65});
+ const cyl=(r1,r2,len,seg=48,open=false)=>cylG(THREE,r1,r2,len,seg,open);
+ const ringAt=(z,r,t,mat)=>ring(g,THREE,mat,r,t,0,0,z);
+ const addCylZ=(r1,r2,len,mat,z,seg=48,open=false)=>add(g,THREE,cyl(r1,r2,len,seg,open),mat,0,0,z,Math.PI/2);
+ /* Main motor can: short, broad cylindrical housing */
+ addCylZ(bodyR,bodyR,bodyLen,black,0,64);
+ addCylZ(bodyR*.985,bodyR*.985,bodyLen*.88,shell,0,64);
+ /* Subtle molded seams and the two distinctive orange retaining bands */
+ for(const z of [-bodyLen*.34,bodyLen*.34]){
+  ringAt(z,bodyR+2.8,3.2,orange);
+  ringAt(z+(z<0?-3:3),bodyR+1.5,1.1,black);
+ }
+ /* Tapered inlet/outlet bells; neck opening is the actual 4-inch duct size */
+ const neckR=duct/2;
  for(const side of [-1,1]){
-  add(g,THREE,cylG(THREE,r+17,r+17,flange,32),M.dark,0,bodyY,side*(d/2-flange/2),Math.PI/2);
-  add(g,THREE,cylG(THREE,r-2,r-2,26,32,true),M.steel,0,bodyY,side*(d/2-flange-6),Math.PI/2);
-  ring(g,THREE,M.steel,r+17,3.5,0,bodyY,side*(d/2-flange));
+  const z=side*(bodyLen/2+bellLen/2-1);
+  add(g,THREE,cyl(bodyR*.99,neckR,bellLen,64,true),black,0,0,z,Math.PI/2);
+  /* outer molded lip at the duct mouth */
+  const endZ=side*(L/2-2.5);
+  ringAt(endZ,neckR+1.5,3.2,black);
+  ringAt(side*(L/2-bellLen*.08),neckR+3,1.5,shell);
+  /* recessed dark throat makes the mouth read as hollow */
+  addCylZ(neckR*.985,neckR*.985,2,inside,side*(L/2-5),48,true);
  }
- /* решётка на входе */
- const gz=d/2-flange-2;
- ring(g,THREE,M.steel,r-3,5,0,bodyY,gz+8);
- add(g,THREE,cylG(THREE,r*.17,r*.17,14,20),M.dark,0,bodyY,gz+6,Math.PI/2);
- for(let i=0;i<8;i++){
-  const a=i*Math.PI/8;
-  const sp=add(g,THREE,boxG(THREE,(r-4)*2,6,4),M.steel,0,bodyY,gz+6,0,0,a);
- }
- /* крыльчатка за решёткой */
+ /* Front impeller visible down the inlet throat (+Z face) */
+ const rotorZ=L/2-bellLen*.40;
+ addCylZ(neckR*.29,neckR*.29,8,black,rotorZ-5,32);
+ addCylZ(neckR*.21,neckR*.21,2.4,orange,rotorZ,32);
  for(let i=0;i<7;i++){
-  const a=i*Math.PI*2/7, br=r*.34;
-  const bx=Math.cos(a)*br, by=bodyY+Math.sin(a)*br;
-  add(g,THREE,boxG(THREE,r*.34,r*.24,3),M.aluDark,bx,by,gz-24,0,.55,a);
+  const a=i*Math.PI*2/7;
+  const shape=new THREE.Shape();
+  const r0=neckR*.20,r1=neckR*.88;
+  shape.moveTo(Math.cos(a)*r0,Math.sin(a)*r0);
+  shape.quadraticCurveTo(Math.cos(a+.22)*r1*.48,Math.sin(a+.22)*r1*.48,Math.cos(a+.48)*r1,Math.sin(a+.48)*r1);
+  shape.quadraticCurveTo(Math.cos(a+.70)*r1*.72,Math.sin(a+.70)*r1*.72,Math.cos(a+.28)*r0,Math.sin(a+.28)*r0);
+  shape.closePath();
+  const blade=new THREE.Mesh(new THREE.ShapeGeometry(shape,12),bladeMat);
+  blade.position.z=rotorZ+1.5;
+  g.add(blade);
  }
- add(g,THREE,cylG(THREE,r*.2,r*.2,Math.max(30,bodyLen*.42),20),M.dark,0,bodyY,-d*.12,Math.PI/2);
- /* крепёжная площадка и лапки */
- add(g,THREE,boxG(THREE,w*1.2,14,d*.55),M.dark,0,-h/2+8,0);
- for(const sx of [-1,1])for(const sz of [-1,1]){
-  add(g,THREE,cylG(THREE,15,16,12,14),M.rubber,sx*w*.42,-h/2+6,sz*d*.2);
-  add(g,THREE,boxG(THREE,w*.62,14,30),M.aluDark,0,-h/2+42+6,sz*d*.21);
+ /* Side motor/service cover on the visible flank, with four real fasteners */
+ const coverX=bodyR*.97;
+ add(g,THREE,cyl(48,48,5,48),black,coverX,0,0,0,0,Math.PI/2);
+ add(g,THREE,cyl(43,43,1.6,48),shell,coverX+3,0,0,0,0,Math.PI/2);
+ for(let i=0;i<4;i++){
+  const a=Math.PI/4+i*Math.PI/2;
+  add(g,THREE,cyl(3.1,3.1,2.1,12),screwMat,coverX+4,Math.cos(a)*35,Math.sin(a)*35,0,0,Math.PI/2);
  }
- /* подвесные скобы */
- for(const sx of [-1,1]){
-  add(g,THREE,boxG(THREE,10,Math.max(30,h*.22),22),M.aluDark,sx*w*.3,(bodyY+r+h/2-12)/2,0);
-  ring(g,THREE,M.steel,8,2.6,sx*w*.3,h/2-8,0);
+ /* Orange Spider Farmer wordmark on circular side plate */
+ const mark=canvasTex(THREE,512,128,(ctx,W,H)=>{
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#f36b21';ctx.font='bold 48px Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('Spider Farmer',W/2,H/2);
+ });
+ if(mark){
+  const mat=new THREE.MeshBasicMaterial({map:mark,transparent:true,side:THREE.DoubleSide,depthWrite:false});
+  const plane=new THREE.Mesh(new THREE.PlaneGeometry(67,17),mat);
+  plane.position.set(coverX+5,0,0);plane.rotation.y=Math.PI/2;g.add(plane);
  }
- /* пульт с диммером на корпусе */
- const cx=r+13,cy=bodyY+6,cz=-d*.14;
- add(g,THREE,boxG(THREE,26,92,52),M.dark,cx,cy,cz);
- add(g,THREE,boxG(THREE,3,26,30),M.glass,cx+14,cy+22,cz);
- add(g,THREE,cylG(THREE,9,9,9,16),M.black,cx+16,cy-16,cz,0,0,Math.PI/2);
- add(g,THREE,cylG(THREE,3,3,2,10),M.gold,cx+21,cy-16,cz,0,0,Math.PI/2);
- wire(g,THREE,M.black,cx-2,cy-58,cz,56,0,0);
- /* шильдик */
- add(g,THREE,boxG(THREE,2,22,34),M.gold,cx+14,cy-16,cz+0.1);
+ /* Orange support straps / cradles and two orange mounting feet */
+ for(const z of [-bodyLen*.34,bodyLen*.34]){
+  add(g,THREE,boxG(THREE,bodyR*.34,8,18),orange,0,-bodyR*.91,z);
+  for(const sx of [-1,1]){
+   add(g,THREE,boxG(THREE,8,Math.max(26,h*.22),18),orange,sx*bodyR*.64,-bodyR*.91-Math.max(26,h*.22)/2,z);
+   add(g,THREE,boxG(THREE,bodyR*.52,5,25),orange,sx*bodyR*.50,-h*.46,z);
+   add(g,THREE,cyl(3.2,3.2,2,12),screwMat,sx*bodyR*.50,-h*.46+2.6,z,Math.PI/2);
+  }
+ }
+ /* Hanging strap eyelets above each orange band */
+ for(const z of [-bodyLen*.34,bodyLen*.34]){
+  for(const sx of [-1,1]){
+   add(g,THREE,boxG(THREE,7,17,13),orange,sx*bodyR*.48,bodyR*.88,z);
+   ring(g,THREE,screwMat,6.3,1.6,sx*bodyR*.48,bodyR*.88+10,z);
+  }
+ }
+ /* Wired speed controller: separate compact remote with rotary dial */
+ const ctrlX=bodyR+43,ctrlY=-h*.38,ctrlZ=bodyLen*.08;
+ add(g,THREE,boxG(THREE,52,68,17),black,ctrlX,ctrlY,ctrlZ,0,0,0);
+ add(g,THREE,boxG(THREE,48,64,2),shell,ctrlX,ctrlY,ctrlZ+9.2);
+ add(g,THREE,cyl(13,13,7,32),black,ctrlX,ctrlY-7,ctrlZ+14,Math.PI/2);
+ add(g,THREE,cyl(4,4,2,20),orange,ctrlX+1,ctrlY-7,ctrlZ+18.5,Math.PI/2);
+ /* cable from motor to remote: restrained segmented curve, not a dangling straight rod */
+ const cableMat=black;
+ const pts=[
+  new THREE.Vector3(coverX+4,-bodyR*.48,bodyLen*.15),
+  new THREE.Vector3(coverX+20,-bodyR*.70,bodyLen*.18),
+  new THREE.Vector3(ctrlX-12,ctrlY+18,ctrlZ),
+  new THREE.Vector3(ctrlX,ctrlY+15,ctrlZ)
+ ];
+ const curve=new THREE.CatmullRomCurve3(pts);
+ add(g,THREE,new THREE.TubeGeometry(curve,24,2.2,8,false),cableMat);
+ /* Power lead exits rear motor section; visible cable remains neatly routed */
+ const powerPts=[
+  new THREE.Vector3(-bodyR*.55,-bodyR*.28,-bodyLen*.22),
+  new THREE.Vector3(-bodyR*.72,-bodyR*.58,-bodyLen*.28),
+  new THREE.Vector3(-bodyR*.65,-h*.44,-bodyLen*.30),
+  new THREE.Vector3(-bodyR*.50,-h*.47,-bodyLen*.30)
+ ];
+ add(g,THREE,new THREE.TubeGeometry(new THREE.CatmullRomCurve3(powerPts),18,2.5,8,false),black);
 }
-
 /* ================= FILTER: угольный фильтр 4" ================= */
 /* ================= FILTER: угольный фильтр Spider Farmer 4" =================
  * По фото-оригиналу (spider-farmer.com, Carbon Filter 4", Australian Charcoal 1200+):
