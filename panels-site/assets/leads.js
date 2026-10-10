@@ -63,7 +63,14 @@
     if (!endpoint && mode !== 'links') mode = 'links';
 
     var done = function () {
-      if (okEl) { okEl.classList.add('show'); okEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+      if (okEl) {
+        var sentAutomatically = (mode === 'formspree' || mode === 'webhook') && !!endpoint;
+        okEl.textContent = sentAutomatically
+          ? 'Заявка отправлена. Спасибо! Свяжемся с вами в рабочее время.'
+          : 'Текст заявки подготовлен, но автоматически не отправлен. Ниже выберите доступный способ связи или скопируйте текст.';
+        okEl.classList.add('show');
+        okEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
       formEl.reset();
     };
 
