@@ -172,6 +172,14 @@ function build(){
  line('НИЖНЯЯ РАМА',o.W,o.panel,o.D,0,-o.H/2+o.plinth+o.panel/2,0,M.shell,{module:'Несущий корпус'});
  line('ЗАДНЯЯ ПАНЕЛЬ',o.W-2*o.panel,o.H-2*o.panel,o.panel,0,0,back,M.shell,{module:'Корпус'});
  line('ЦОКОЛЬ',o.W+18,o.plinth,o.D+18,0,-o.H/2+o.plinth/2,0,M.edge,{module:'Корпус'});
+ // Наружные мебельные боковины: ровные плоскости и тонкая кромка вместо «голого» каркаса
+ const sideH=Math.max(80,o.H-o.plinth-o.panel*2),sideY=-o.H/2+o.plinth+sideH/2+o.panel;
+ box('ЛЕВАЯ НАРУЖНАЯ БОКОВИНА',12,sideH,Math.max(80,o.D-o.panel),-o.W/2+6,sideY,0,M.shell,{module:'Мебельный корпус',description:'Наружная мебельная панель с матовой фактурой'});
+ box('ПРАВАЯ НАРУЖНАЯ БОКОВИНА',12,sideH,Math.max(80,o.D-o.panel),o.W/2-6,sideY,0,M.shell,{module:'Мебельный корпус',description:'Наружная мебельная панель с матовой фактурой'});
+ line('КРОМКА ЛЕВОЙ БОКОВИНЫ',3,sideH,Math.max(80,o.D-o.panel),-o.W/2+13,sideY,0,M.edge,{module:'Мебельная отделка'});
+ line('КРОМКА ПРАВОЙ БОКОВИНЫ',3,sideH,Math.max(80,o.D-o.panel),o.W/2-13,sideY,0,M.edge,{module:'Мебельная отделка'});
+ // Тонкий фасадный пояс визуально собирает верхний шумозащитный блок с корпусом
+ line('ФАСАДНЫЙ ПОЯС ВЕРХНЕГО МОДУЛЯ',Math.max(80,o.W-o.panel*2),18,10,0,o.H/2-o.panel-12,o.D/2-4,M.edge,{module:'Мебельная отделка'});
  // Техническая колонна
  box('ТЕХНИЧЕСКАЯ КОЛОННА',z.tech.w,z.tech.h,Math.max(18,z.tech.d),z.tech.x,z.tech.y,-o.D/2+Math.max(9,o.panel/2),M.dark,{module:'Техническая колонна',description:'Несущая сервисная зона для DIN, насосов, автоматики и коммуникаций'});
  [0.18,.38,.58,.78].forEach((q,i)=>line('СЕРВИСНАЯ ПОЛКА '+(i+1),z.tech.w-36,8,z.tech.d-28,z.tech.x,-o.H/2+o.plinth+z.tech.h*q,0,M.edge,{module:'Техническая колонна'}));
@@ -195,7 +203,7 @@ function build(){
  const L=P.equipment.light;
  const growLeft=P.zones.grow.x-P.zones.grow.w/2+24, growRight=P.zones.grow.x+P.zones.grow.w/2-24;
  const growFront=-P.zones.grow.d/2+24, growBack=P.zones.grow.d/2-24;
- const lightScale=Math.max(.18,Math.min(1,(growRight-growLeft)/Math.max(1,L.w),(growBack-growFront)/Math.max(1,L.d),(P.zones.grow.h-90)/Math.max(1,L.h+90)));
+ const lightScale=Math.max(.05,Math.min(1,(growRight-growLeft)/Math.max(1,L.w),(growBack-growFront)/Math.max(1,L.d),(P.zones.grow.h-90)/Math.max(1,L.h+90)));
  for(const side of [-1,1]){
    const rx=z.grow.x+side*(z.grow.w/2-24);
    line('РЕГУЛИРУЕМАЯ ВЕРТИКАЛЬНАЯ РЕЙКА',24,z.grow.h-80,24,rx,z.grow.y,0,M.steel,{module:'Регулируемое крепление'});
@@ -214,13 +222,21 @@ function build(){
  // Оборудование никогда не выходит за внутренний габарит: при малом корпусе 3D ужимает только визуальное представление и сохраняет предупреждение в конфигураторе.
  const lx=Math.max(growLeft+L.w*lightScale/2,Math.min(growRight-L.w*lightScale/2,P.anchors.light.x));
  const lz=Math.max(growFront+L.d*lightScale/2,Math.min(growBack-L.d*lightScale/2,0));
- box('СВЕТИЛЬНИК '+(s.equipment.light||''),L.w,L.h,L.d,lx,P.anchors.light.y,lz,M.cream,{module:'Оборудование',description:'Выбранный светильник Spider Farmer',scale:lightScale});
- line('ПЛАТФОРМА СВЕТИЛЬНИКА',L.w*lightScale+90,12,L.d*lightScale+90,lx,P.anchors.light.y+L.h/2+30,lz,M.edge,{module:'Крепление'});
- box('ВЕНТИЛЯТОР '+(s.equipment.fan||''),F.w,F.h,F.d,P.anchors.fan.x,P.anchors.fan.y,P.anchors.fan.z,M.dark,{module:'Оборудование',description:'Выбранный вентилятор Spider Farmer'});
- box('СЕРДЦЕВИНА ВЕНТИЛЯТОРА',F.w*.5,F.h*.5,F.d*.5,P.anchors.fan.x,P.anchors.fan.y,P.anchors.fan.z+F.d*.28,M.brass,{module:'Оборудование',click:false});
- line('ВИБРОИЗОЛИРОВАННАЯ ПЛАТФОРМА',F.w+120,22,F.d+100,P.anchors.fan.x,P.anchors.fan.y-F.h/2-22,P.anchors.fan.z,M.edge,{module:'Виброизоляция'});
+ const lightW=L.w*lightScale,lightH=L.h*lightScale,lightD=L.d*lightScale;
+ box('СВЕТИЛЬНИК '+(s.equipment.light||''),lightW,lightH,lightD,lx,P.anchors.light.y,lz,M.cream,{module:'Оборудование',description:'Выбранный светильник Spider Farmer'});
+ line('ПЛАТФОРМА СВЕТИЛЬНИКА',lightW+Math.min(90,o.W*.08),12,lightD+Math.min(90,o.D*.08),lx,P.anchors.light.y+lightH/2+Math.min(30,o.H*.025),lz,M.edge,{module:'Крепление'});
+ // Вентилятор масштабируется и удерживается в зоне верхнего техотсека при компактных размерах
+ const fanScale=Math.max(.05,Math.min(1,(z.top.w-36)/Math.max(1,F.w),(z.top.h-28)/Math.max(1,F.h),(z.top.d-36)/Math.max(1,F.d)));
+ const fanW=F.w*fanScale,fanH=F.h*fanScale,fanD=F.d*fanScale;
+ const fanX=Math.max(-z.top.w/2+fanW/2+12,Math.min(z.top.w/2-fanW/2-12,P.anchors.fan.x));
+ const fanY=Math.max(z.top.y-z.top.h/2+fanH/2+10,Math.min(z.top.y+z.top.h/2-fanH/2-10,P.anchors.fan.y));
+ const fanZ=Math.max(-z.top.d/2+fanD/2+12,Math.min(z.top.d/2-fanD/2-12,P.anchors.fan.z));
+ box('ВЕНТИЛЯТОР '+(s.equipment.fan||''),fanW,fanH,fanD,fanX,fanY,fanZ,M.dark,{module:'Оборудование',description:'Выбранный вентилятор Spider Farmer'});
+ box('СЕРДЦЕВИНА ВЕНТИЛЯТОРА',fanW*.5,fanH*.5,fanD*.5,fanX,fanY,fanZ+fanD*.28,M.brass,{module:'Оборудование',click:false});
+ line('ВИБРОИЗОЛИРОВАННАЯ ПЛАТФОРМА',fanW+Math.min(120,o.W*.1),18,fanD+Math.min(100,o.D*.1),fanX,fanY-fanH/2-12,fanZ,M.edge,{module:'Виброизоляция'});
  if(s.equipment.reservoir){
-   const rw=300,rh=430,rd=300;
+   const reservoirScale=Math.max(.05,Math.min(1,(o.W-2*o.panel-40)/300,(o.D-2*o.panel-40)/300,(o.H-o.plinth-2*o.panel-40)/430));
+   const rw=300*reservoirScale,rh=430*reservoirScale,rd=300*reservoirScale;
    const rx=Math.max(-o.W/2+o.panel+rw/2+8,Math.min(o.W/2-o.panel-rw/2-8,P.anchors.reservoir.x));
    const rz=Math.max(-o.D/2+o.panel+rd/2+8,Math.min(o.D/2-o.panel-rd/2-8,P.anchors.reservoir.z));
    const floorY=-o.H/2+o.plinth+rh/2+8;
@@ -228,7 +244,7 @@ function build(){
    const trayTop=P.zones.поддон.y+P.zones.поддон.h/2;
    const desiredY=Math.max(P.anchors.reservoir.y,trayTop+rh/2+8);
    const reservoirY=Math.max(floorY,Math.min(ceilingY,desiredY));
-   box('ОПОРНАЯ ПЛАТФОРМА РЕЗЕРВУАРА',rw+70,18,rd+70,rx,reservoirY-rh/2-10,rz,M.edge,{module:'Несущий крепёж'});
+   box('ОПОРНАЯ ПЛАТФОРМА РЕЗЕРВУАРА',rw+Math.min(70,o.W*.06),18,rd+Math.min(70,o.D*.06),rx,reservoirY-rh/2-10,rz,M.edge,{module:'Несущий крепёж'});
    box('РЕЗЕРВУАР 20 Л',rw,rh,rd,rx,reservoirY,rz,M.water,{module:'Водный контур'});
  }
  // Двери рассчитываются от реального чистого проёма: одинаковые зазоры, точные петли, без перекрытий.
