@@ -199,6 +199,9 @@
   sel.innerHTML = C.categories.map(function (c) {
     return '<option value="' + c.id + '">' + c.name + ' — от ' + c.price.toLocaleString('ru-RU') + ' ₽/м²</option>';
   }).join('');
+  /* предвыбор категории из ?cat= */
+  var pcat = new URLSearchParams(location.search).get('cat');
+  if (pcat && C.categories.some(function (c) { return c.id === pcat; })) sel.value = pcat;
 
   var last = null;
 

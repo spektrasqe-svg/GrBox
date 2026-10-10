@@ -92,13 +92,13 @@
       });
       host.innerHTML = visible.map(function (cat) {
         var label = esc(cat.name);
-        return '<a class="card catalog-card" href="order.html?cat=' + encodeURIComponent(cat.id) + '">' +
+        return '<a class="card catalog-card" href="product.html?cat=' + encodeURIComponent(cat.id) + '">' +
           '<div class="thumb ph ' + esc(cat.finish || 'ph-stone') + '" role="img" aria-label="Пример фактуры: ' + label + '"></div>' +
           '<div class="k">' + ({wood:'дерево и ламели',stone:'камень и бетон',soft:'мягкие панели',other:'другие панели'}[group(cat)]) + '</div>' +
           '<h3>' + label + '</h3><p>' + esc(cat.note) + '</p>' +
           '<div class="spec-chips">' + (cat.specs || []).map(function (s) { return '<span>' + esc(s) + '</span>'; }).join('') + '</div>' +
           '<div class="price">от ' + cat.price.toLocaleString('ru-RU') + ' ₽<small>/ м² · материал</small></div>' +
-          '<span class="go">Выбрать и рассчитать <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>';
+          '<span class="go">Подробнее и расчёт <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>';
       }).join('') +
       '<a class="card card-cta catalog-custom" href="order.html"><div class="k">индивидуальный подбор</div><h3>Не нашли нужную панель?</h3>' +
       '<p>Опишите задачу — поможем сузить выбор по фактуре, формату, условиям эксплуатации и бюджету.</p>' +

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Карточка товара — WALLFORM®</title>
+<meta name="description" content="Стеновые панели WALLFORM®: характеристики, форматы, способы монтажа, расходники и расчёт стоимости.">
+<meta name="theme-color" content="#2C2E33">
+<meta property="og:type" content="website"><meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="Стеновые панели — WALLFORM®">
+<meta property="og:description" content="Характеристики, форматы, монтаж и расчёт стоимости стеновых панелей.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' rx='6' fill='none' stroke='%23E8DCC8' stroke-width='2'/%3E%3Cpath d='M9 21V11h5a3 3 0 0 1 0 6H9m5 0 4 4' stroke='%23B69A6B' stroke-width='2' fill='none'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;500;700&family=Unbounded:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .product-hero{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:start}
+  .product-thumb{height:520px;border-radius:14px;position:relative;overflow:hidden;border:1px solid var(--line)}
+  .product-thumb .badge{
+    position:absolute;top:18px;left:18px;background:rgba(17,18,21,.86);border:1px solid var(--line-strong);
+    border-radius:100px;padding:9px 16px;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass)
+  }
+  .product-info .k{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--brass)}
+  .product-info h1{font-family:var(--disp);font-weight:800;font-size:clamp(28px,3.6vw,48px);line-height:1.05;margin:14px 0 18px}
+  .product-info .lead{color:var(--cream-2);font-size:16px;line-height:1.8;max-width:52ch}
+  .product-price{
+    margin:26px 0;padding:22px 26px;border:1px solid var(--line-strong);border-radius:14px;
+    background:rgba(0,0,0,.16);display:flex;align-items:baseline;gap:16px;flex-wrap:wrap
+  }
+  .product-price b{font-family:var(--disp);font-weight:800;font-size:clamp(28px,3vw,40px);letter-spacing:-.01em}
+  .product-price span{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--cream-2)}
+  .details-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 32px;margin-top:8px}
+  .details-grid .d{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
+  .details-grid .d i{flex:none;width:22px;height:22px;border-radius:50%;border:1px solid var(--brass);color:var(--brass);
+    display:grid;place-items:center;font-style:normal;font-size:11px;margin-top:2px}
+  .details-grid .d p{font-size:14.5px;line-height:1.7;color:var(--cream-2)}
+  .cross-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .cross{border:1px solid var(--line);border-radius:12px;padding:20px;background:var(--ink-2);transition:all .3s}
+  .cross:hover{transform:translateY(-4px);border-color:var(--line-strong)}
+  .cross b{display:block;font-size:14px;margin-bottom:6px}
+  .cross span{font-family:var(--mono);font-size:11.5px;color:var(--brass)}
+  .cross small{display:block;color:var(--cream-2);font-size:12px;line-height:1.6;margin-top:8px}
+  .other-cats{display:flex;flex-wrap:wrap;gap:10px}
+  .other-cats a{border:1px solid var(--line-strong);border-radius:100px;padding:11px 18px;font-size:11px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--cream-2);transition:all .25s}
+  .other-cats a:hover{border-color:var(--brass);color:var(--cream);transform:translateY(-2px)}
+  .other-cats a.cur{background:var(--cream);color:var(--ink);border-color:var(--cream)}
+  @media(max-width:1080px){.product-hero{grid-template-columns:1fr}.product-thumb{height:400px}.cross-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:760px){.details-grid{grid-template-columns:1fr}.cross-grid{grid-template-columns:1fr}.product-thumb{height:320px}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark">W</span><b data-brand>WALLFORM<sup>®</sup></b></a>
+    <nav class="nav">
+      <a href="catalog.html" class="active">Каталог</a>
+      <a href="calculator.html">Расчёт</a>
+      <a href="montazh.html">Монтаж</a>
+      <a href="room-planner.html">Планировщик комнат</a>
+      <a href="wall-builder.html">3D-сборка стены</a>
+      <a href="index.html#cons">Расходники</a>
+      <a href="index.html#contact">Контакты</a>
+      <a href="order.html">Заявка</a>
+    </nav>
+    <div class="top-cta">
+      <a class="top-phone" data-phone-link href="#"><span data-phone>Телефон</span></a>
+      <a class="btn btn-solid btn-sm" href="order.html">Оставить заявку</a>
+      <button class="burger" aria-label="Меню"><span></span></button>
+    </div>
+  </div>
+</div>
+
+<header class="page-head">
+  <div class="hero-bg"></div>
+  <div class="wrap">
+    <div class="crumbs"><a href="index.html">Главная</a> / <a href="catalog.html">Каталог</a> / <span id="crumbName">Товар</span></div>
+  </div>
+</header>
+
+<section class="tight" style="padding-top:0">
+  <div class="wrap">
+    <div class="product-hero">
+      <div class="photo-frame">
+        <div class="corners"></div><div class="c2"></div>
+        <div class="shot">
+          <div class="product-thumb ph" id="pThumb" data-label="Фактура панели">
+            <div class="badge" id="pBadge">арт. —</div>
+          </div>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="k" id="pGroup">стеновые панели</div>
+        <h1 id="pTitle">Загрузка…</h1>
+        <p class="lead" id="pNote"></p>
+        <div class="spec-chips" id="pSpecs"></div>
+        <div class="product-price">
+          <b id="pPrice">—</b>
+          <span>за м² · материал<br>монтаж и расходники считаются отдельно</span>
+        </div>
+        <div class="btn-row">
+          <a class="btn btn-solid" id="pCalc" href="calculator.html">Рассчитать смету
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-ghost" id="pOrder" href="order.html">Заказать</a>
+          <a class="btn btn-ghost" href="room-planner.html">Примерить в 3D</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ХАРАКТЕРИСТИКИ ================= -->
+<section class="sec-line">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="tag">о материале</span>
+        <h2>Что важно знать</h2>
+      </div>
+      <p>Ключевые свойства категории. Точные параметры конкретной коллекции — в спецификации производителя.</p>
+    </div>
+    <div class="details-grid" id="pDetails"></div>
+    <div class="spec-list" id="pSpecList" style="margin-top:34px"></div>
+  </div>
+</section>
+
+<!-- ================= С ЭТИМ БЕРУТ ================= -->
+<section class="sec-line">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="tag">комплект</span>
+        <h2>С этим берут</h2>
+      </div>
+      <p>Расходники и комплектующие, которые обычно нужны для монтажа. Всё считается в смете калькулятора автоматически.</p>
+    </div>
+    <div class="cross-grid" id="pCross"></div>
+  </div>
+</section>
+
+<!-- ================= МОНТАЖ ================= -->
+<section class="sec-line">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="tag">монтаж</span>
+        <h2>Два способа поставить</h2>
+      </div>
+      <p>Способ зависит от основания и массы панели. Посмотрите конструкцию стены послойно в 3D.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="k">01 / клей</div>
+        <h3>Без каркаса — на подготовленное основание</h3>
+        <p>Минимально съедает толщину стены, быстрый монтаж без пыли. Требует прочного и ровного основания.</p>
+        <a class="go" href="wall-builder.html">Посмотреть слои в 3D <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="card">
+        <div class="k">02 / каркас</div>
+        <h3>Каркас + лист — с утеплением и коммуникациями</h3>
+        <p>Выравнивает кривые стены, прячет кабель и трубы, добавляет звукоизоляцию. Чуть дольше и толще.</p>
+        <a class="go" href="wall-builder.html">Посмотреть слои в 3D <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+    <div class="other-cats" id="pOthers" style="margin-top:30px"></div>
+  </div>
+</section>
+
+<!-- ================= ЗАЯВКА ================= -->
+<section class="sec-line" id="pLead">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="tag">заявка</span>
+        <h2>Запросить образцы и расчёт</h2>
+      </div>
+      <p>Привезём образцы этой фактуры на бесплатный замер и посчитаем точную смету по вашим стенам.</p>
+    </div>
+    <div class="form-card">
+      <form data-lead>
+        <div class="form-grid">
+          <div class="field"><label>Как вас зовут</label><input type="text" name="name" placeholder="Имя"></div>
+          <div class="field"><label>Телефон *</label><input type="tel" name="phone" placeholder="+7 (___) ___-__-__" required></div>
+          <div class="field full"><label>Город / адрес объекта</label><input type="text" name="city" placeholder="Например: Москва, Хамовники"></div>
+          <div class="field full"><label>Комментарий</label><textarea name="comment" rows="3" placeholder="Площадь стен, сроки, пожелания…"></textarea></div>
+          <div class="full consent">
+            <input type="checkbox" id="c1" required>
+            <label for="c1" style="text-transform:none;letter-spacing:0;font-size:12px;font-weight:400;color:var(--cream-2)">Согласен на обработку персональных данных и получение звонка от специалиста WALLFORM®.</label>
+          </div>
+          <div class="full btn-row">
+            <button class="btn btn-solid" type="submit">Отправить заявку
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          </div>
+        </div>
+        <div class="form-ok">Заявка принята. Спасибо! Свяжемся в ближайшее рабочее время.</div>
+      </form>
+      <div id="sendPanel" style="display:none;margin-top:26px;border-top:1px solid var(--line);padding-top:26px">
+        <div class="mono" style="margin-bottom:12px">Заявка собрана — отправьте её удобным способом:</div>
+        <textarea id="sendText" rows="8" readonly style="width:100%;background:rgba(0,0,0,.18);border:1px solid var(--line-strong);border-radius:10px;padding:14px;font-family:var(--mono);font-size:12.5px"></textarea>
+        <div class="btn-row" style="margin-top:16px">
+          <a class="btn btn-solid" data-send="telegram" target="_blank" rel="noopener">Telegram</a>
+          <a class="btn btn-ghost" data-send="whatsapp" target="_blank" rel="noopener">WhatsApp</a>
+          <button class="btn btn-ghost" data-copy type="button">Скопировать текст</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="index.html"><span class="mark">W</span><b data-brand>WALLFORM<sup>®</sup></b></a>
+        <p style="margin-top:16px" data-tagline>Стеновые панели · продажа и монтаж</p>
+        <p data-city>Москва и Московская область</p>
+      </div>
+      <div>
+        <h4>Разделы</h4>
+        <a href="catalog.html">Каталог панелей</a>
+        <a href="calculator.html">Калькулятор сметы</a>
+        <a href="montazh.html">Монтаж под ключ</a>
+        <a href="room-planner.html">Планировщик комнат</a>
+        <a href="wall-builder.html">3D-сборка стены</a>
+      </div>
+      <div>
+        <h4>Клиентам</h4>
+        <a href="order.html">Оставить заявку</a>
+        <a href="index.html#calc">Предварительный расчёт</a>
+        <a href="index.html#contact">Контакты</a>
+      </div>
+      <div data-hide-if-empty>
+        <h4>Связь</h4>
+        <a data-phone-link href="#"><span data-phone>Телефон</span></a>
+        <a data-email href="#">Email</a>
+        <p data-hours></p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span data-year>2026</span> WALLFORM®. Все права защищены.</span>
+      <span>Цены на материал указаны как ориентир и уточняются по коллекции.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/site-config.js"></script>
+<script src="assets/calc-engine.js"></script>
+<script src="assets/leads.js"></script>
+<script src="assets/main.js"></script>
+<script>
+(function () {
+  'use strict';
+  var C = window.SITE_CONFIG || {};
+  var params = new URLSearchParams(location.search);
+  var id = params.get('cat');
+  var cats = C.categories || [];
+  var cat = cats.find(function (c) { return c.id === id; }) || cats[0];
+  if (!cat) return;
+
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function money(n) { return Number(n || 0).toLocaleString('ru-RU') + ' ₽'; }
+
+  var groupMap = { gypsum3d: 'гипсовые 3D-панели', lamella: 'реечные и ламелевые панели', bamboo: 'натуральный бамбук', flexstone: 'гибкий камень', spc: 'каменно-полимерные панели', soft: 'акустические панели', pvc: 'панели под покраску', facade: 'фасадные панели' };
+
+  /* наполнение карточки */
+  document.title = cat.name + ' — купить с монтажом · WALLFORM®';
+  var ogT = document.querySelector('meta[property="og:title"]'); if (ogT) ogT.setAttribute('content', cat.name + ' — WALLFORM®');
+  var ogD = document.querySelector('meta[property="og:description"]'); if (ogD) ogD.setAttribute('content', cat.note);
+  document.getElementById('crumbName').textContent = cat.name;
+  document.getElementById('pGroup').textContent = groupMap[cat.id] || 'стеновые панели';
+  document.getElementById('pTitle').textContent = cat.name;
+  document.getElementById('pNote').textContent = cat.note;
+  document.getElementById('pPrice').textContent = 'от ' + money(cat.price);
+  document.getElementById('pBadge').textContent = 'арт. ' + cat.id.toUpperCase();
+  document.getElementById('pThumb').className = 'product-thumb ph ' + (cat.finish || 'ph-stone');
+  document.getElementById('pThumb').setAttribute('data-label', cat.name + ' · фактура');
+
+  document.getElementById('pSpecs').innerHTML = (cat.specs || []).map(function (s) {
+    return '<span>' + esc(s) + '</span>';
+  }).join('');
+
+  document.getElementById('pDetails').innerHTML = (cat.details || [cat.note]).map(function (d, i) {
+    return '<div class="d"><i>' + (i + 1) + '</i><p>' + esc(d) + '</p></div>';
+  }).join('');
+
+  document.getElementById('pSpecList').innerHTML =
+    (cat.specs || []).map(function (s) {
+      return '<div class="row"><b>' + esc(s.split(' ')[0]) + '</b><span>' + esc(s) + '</span><span class="p">спецификация</span></div>';
+    }).join('') +
+    '<div class="row"><b>Монтаж</b><span>клей или каркас — зависит от основания</span><span class="p">от ' + money((C.works && C.works.glue && C.works.glue.price) || 1100) + ' / м²</span></div>' +
+    '<div class="row"><b>Гарантия</b><span>на материал — по паспорту производителя; на работы — 2 года</span><span class="p">2 года</span></div>';
+
+  /* «с этим берут» — базовые расходники */
+  var crossIds = ['glue', 'grunt', 'profSt', 'skirt', 'fasten', 'sealant', 'molding', 'profFin'];
+  var cons = (C.consumables || []).filter(function (x) { return crossIds.indexOf(x.id) !== -1; }).slice(0, 4);
+  document.getElementById('pCross').innerHTML = cons.map(function (x) {
+    return '<a class="cross" href="order.html?consumable=' + encodeURIComponent(x.id) + '">' +
+      '<b>' + esc(x.name) + '</b><span>' + money(x.price) + ' · ' + esc(x.unit) + '</span>' +
+      '<small>' + esc(x.note || '') + '</small></a>';
+  }).join('');
+
+  /* другие категории */
+  document.getElementById('pOthers').innerHTML = cats.map(function (c) {
+    return '<a class="' + (c.id === cat.id ? 'cur' : '') + '" href="product.html?cat=' + encodeURIComponent(c.id) + '">' + esc(c.name) + '</a>';
+  }).join('');
+
+  /* ссылки на расчёт и заказ с выбранной категорией */
+  document.getElementById('pCalc').href = 'calculator.html?cat=' + encodeURIComponent(cat.id);
+  document.getElementById('pOrder').href = 'order.html?cat=' + encodeURIComponent(cat.id);
+
+  /* заявка с товаром в тексте */
+  var form = document.querySelector('form[data-lead]');
+  if (form) {
+    form.__extraText = function () {
+      return ['ЗАЯВКА WALLFORM®', 'Товар: ' + cat.name + ' (арт. ' + cat.id + ')',
+        'Цена материала: от ' + money(cat.price) + ' / м²',
+        'Характеристики: ' + (cat.specs || []).join('; '),
+        'Интересует: образцы, расчёт сметы, монтаж'].join('\n');
+    };
+  }
+})();
+</script>
+</body>
+</html>
