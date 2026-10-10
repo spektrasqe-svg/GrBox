@@ -20,6 +20,7 @@
 .hint{left:12px;bottom:78px;color:var(--dim);font:10px Roboto Mono,monospace;background:rgba(11,12,14,.8);border:1px solid var(--line);padding:7px 9px;border-radius:4px}
 .loader{position:absolute;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:var(--bg);font:12px Roboto Mono,monospace;color:var(--dim)}
 .loader:after{content:"";width:28px;height:28px;margin-left:12px;border:2px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.stage-tools{position:absolute;z-index:24;right:12px;bottom:82px;display:flex;gap:6px;pointer-events:auto}.stage-tools button,.part-menu button{background:rgba(25,26,29,.96);border:1px solid #45464b;color:var(--txt);border-radius:5px;padding:9px 11px;font:10px Roboto Mono,monospace;cursor:pointer}.stage-tools button.on{background:var(--gold);color:#111215;border-color:var(--gold)}.part-menu{position:fixed;z-index:80;display:none;min-width:190px;padding:7px;background:rgba(21,22,25,.98);border:1px solid #5a5142;border-radius:8px;box-shadow:0 16px 48px #0009}.part-menu.show{display:grid;gap:5px}.part-menu .menu-title{padding:6px 8px;font:10px Roboto Mono,monospace;color:var(--gold);max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.part-menu button{text-align:left;padding:10px 9px}#toast{position:absolute;z-index:30;left:50%;top:50%;transform:translate(-50%,-50%);padding:9px 12px;background:#17181bdc;border:1px solid #4b4b4d;border-radius:6px;color:var(--txt);font:10px Roboto Mono,monospace;pointer-events:none;opacity:0}#toast.show{opacity:1}@media(max-width:760px){.stage-tools{right:8px;bottom:49px;gap:4px}.stage-tools button{padding:7px 8px;font-size:9px}.part-menu{min-width:175px}}
 @media(max-width:760px){
   .top{top:68px;left:8px;right:8px;gap:6px;flex-direction:row;align-items:center}  .pill{padding:6px 8px;font-size:9px;border-radius:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .pill b{font-size:9px}
@@ -83,7 +84,7 @@
     <div id="infoMeta" class="meta"></div>
     <div id="checks" class="checks"></div>
   </div>
-  <div class="ui hint">свайп — вращение · щипок/колесо — масштаб · двойной тап — сброс · тап по детали — информация</div>
+  <div class="ui hint">ЛКМ / свайп — вращение · колесо / щипок — масштаб · тап по детали — паспорт · ПКМ — меню детали</div><div class="ui stage-tools"><button id="gridToggle" class="on">СЕТКА</button><button id="doorsToggle">ДВЕРИ</button><button id="homeView">В РАКУРС</button></div><div id="partMenu" class="part-menu"><div id="partMenuTitle" class="menu-title">ДЕТАЛЬ</div><button data-part-action="hide">Скрыть деталь</button><button data-part-action="transparent">Сделать прозрачной</button><button data-part-action="open">Открыть / закрыть</button><button data-part-action="restore">Вернуть скрытые детали</button></div><div id="toast"></div>
   <div id="cams" class="ui cams">
     <button data-cam="iso" class="on">Изометрия</button><button data-cam="front">Фронт</button><button data-cam="side">Сбоку</button><button data-cam="rear">Сзади</button><button data-cam="top">Сверху</button><button id="reset">Сброс</button><button id="export">Экспорт JSON</button>
   </div>
@@ -119,7 +120,7 @@ hemi=new THREE.HemisphereLight(0xfff5df,0x16191b,mobile?1.7:2.2);scene.add(hemi)
 key=new THREE.DirectionalLight(0xffedc9,mobile?2.1:3.2);key.position.set(4,6,5);key.castShadow=!mobile;scene.add(key);
 fill=new THREE.DirectionalLight(0xbfc8d4,mobile?1.0:1.4);fill.position.set(-5,3,-4);scene.add(fill);
 root=new THREE.Group();scene.add(root);
-const pickables=[];const doorGroups=[];let P=null,mode='product',selected=null,liveConfig=null;
+const pickables=[];const doorGroups=[];let P=null,mode='product',selected=null,liveConfig=null,stageGrid=null,gridVisible=true,contextTarget=null;const hiddenParts=new Set(),transparentParts=new Set();
 function getState(){return liveConfig||SECRETBOX.load()}
 function consumeHandoff(){
   if(new URLSearchParams(location.search).get('config')!=='live')return false;
@@ -160,7 +161,7 @@ function box(name,w,h,d,x,y,z,mat,opts={}){
 function line(name,w,h,d,x,y,z,mat,opts){return box(name,w,h,d,x,y,z,mat,opts)}
 function clear(){while(root.children.length)root.remove(root.children[root.children.length-1]);pickables.length=0;doorGroups.length=0;selected=null}
 function build(){
- const s=getState();P=SECRETBOX_LAYOUT.derive(s);clear();
+ const s=getState();P=SECRETBOX_LAYOUT.derive(s);clear();updateStage();
  const o=P.outer,z=P.zones;
  // Корпус и несущий каркас
  const x=o.W/2-o.panel/2,y=o.H/2-o.panel/2,back=-o.D/2+o.panel/2;
@@ -262,6 +263,7 @@ function build(){
  applyMode();
  updatePanel(s);
 }
+function updateStage(){if(stageGrid){scene.remove(stageGrid);stageGrid.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material&&!Array.isArray(o.material))o.material.dispose()})}stageGrid=new THREE.Group();stageGrid.name='Рабочая сетка';const span=Math.max(P.outer.W,P.outer.H,P.outer.D)*U*3.2,y=-P.outer.H*U/2-.012;const floor=new THREE.Mesh(new THREE.PlaneGeometry(span,span),new THREE.MeshStandardMaterial({color:0x17191b,roughness:.94,metalness:.05}));floor.rotation.x=-Math.PI/2;floor.position.y=y-.004;floor.receiveShadow=true;stageGrid.add(floor);const grid=new THREE.GridHelper(span,Math.max(20,Math.min(60,Math.round(span/.1))),0x77705d,0x34363a);grid.position.y=y;grid.material.transparent=true;grid.material.opacity=.48;stageGrid.add(grid);stageGrid.visible=gridVisible;scene.add(stageGrid)}
 function detailBox(name,w,h,d,x,y,z,mat,parent,module){return box(name,w,h,d,x,y,z,mat,{parent:parent||root,module:module||'Конструкция'})}
 /* Legacy helpers intentionally unused: the canonical parametric build creates these modules once. */
 function addRail(x,z,h){
@@ -332,20 +334,30 @@ function cameraTick(){
 }
 let active=new Map(),drag=null,lastTap=0,lastTapX=0,lastTapY=0,basePinch=0;
 function fitView(){frameCamera('iso');goal.r=Math.max(goal.r,Math.max(P.outer.W,P.outer.H,P.outer.D)*U*2.15)}
-cv.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&e.button!==0)return;cv.setPointerCapture(e.pointerId);active.set(e.pointerId,{x:e.clientX,y:e.clientY});if(active.size===1)drag={x:e.clientX,y:e.clientY,ox:e.clientX,oy:e.clientY,moved:0};else drag=null;e.preventDefault()},{passive:false});
+cv.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&e.button!==0)return;hidePartMenu();cv.setPointerCapture(e.pointerId);active.set(e.pointerId,{x:e.clientX,y:e.clientY});if(active.size===1)drag={x:e.clientX,y:e.clientY,ox:e.clientX,oy:e.clientY,moved:0};else drag=null;e.preventDefault()},{passive:false});
 cv.addEventListener('pointermove',e=>{if(!active.has(e.pointerId))return;active.set(e.pointerId,{x:e.clientX,y:e.clientY});if(active.size===1&&drag){const dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.x=e.clientX;drag.y=e.clientY;drag.moved+=Math.hypot(dx,dy);goal.theta-=dx*(mobile?.0065:.0085);goal.phi=Math.max(.18,Math.min(2.72,goal.phi-dy*(mobile?.0052:.007)) )}else if(active.size===2){const a=[...active.values()];if(!basePinch)basePinch=Math.max(1,Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y));const d=Math.max(1,Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y));goal.r=Math.max(.1,goal.r*(basePinch/d));}e.preventDefault()},{passive:false});
 cv.addEventListener('pointerup',e=>{active.delete(e.pointerId);if(active.size===0){basePinch=0;if(drag&&drag.moved<8){const now=Date.now();if(now-lastTap<320&&Math.hypot(e.clientX-lastTapX,e.clientY-lastTapY)<18){frameCamera('iso')}else pick(e.clientX,e.clientY);lastTap=now;lastTapX=e.clientX;lastTapY=e.clientY}drag=null}e.preventDefault()},{passive:false});
 cv.addEventListener('pointercancel',e=>{active.delete(e.pointerId);if(active.size===0){basePinch=0;drag=null}},{passive:false});
 cv.addEventListener('wheel',e=>{goal.r=Math.max(.1,goal.r*(e.deltaY>0?1.08:.92));e.preventDefault()},{passive:false});
+function pickHit(x,y){const rect=cv.getBoundingClientRect(),mouse=new THREE.Vector2((x-rect.left)/rect.width*2-1,-(y-rect.top)/rect.height*2+1),ray=new THREE.Raycaster();ray.setFromCamera(mouse,camera);return ray.intersectObjects(pickables,true).find(h=>h.object.visible)}
 function pick(x,y){
  const rect=cv.getBoundingClientRect(),mouse=new THREE.Vector2((x-rect.left)/rect.width*2-1,-(y-rect.top)/rect.height*2+1),ray=new THREE.Raycaster();ray.setFromCamera(mouse,camera);
- const hit=ray.intersectObjects(pickables,true)[0];if(!hit)return;
+ const hit=pickHit(x,y);if(!hit)return;
  let o=hit.object;while(o&&!o.userData.part)o=o.parent;
  if(!o)return;
  let dg=o;while(dg&&!(dg.name||'').startsWith('ДВЕРЬ '))dg=dg.parent;
  if(dg){toggleDoor(dg);document.getElementById('infoName').textContent=dg.name;document.getElementById('infoMeta').innerHTML='Нажмите ещё раз, чтобы закрыть дверь<br>Угол открытия: до 94°';return}
  selected=o;document.getElementById('infoName').textContent=o.userData.part.name;document.getElementById('infoMeta').innerHTML=o.userData.part.description+'<br>Модуль: '+o.userData.part.module+'<br>Габарит: '+o.userData.part.dimensions.join(' × ')+' мм';
 }
+function hidePartMenu(){document.getElementById('partMenu').classList.remove('show');contextTarget=null}
+function showPartMenu(x,y){const hit=pickHit(x,y);if(!hit){hidePartMenu();return}let o=hit.object;while(o&&!o.userData.part)o=o.parent;if(!o){hidePartMenu();return}contextTarget=o;const m=document.getElementById('partMenu');document.getElementById('partMenuTitle').textContent=o.userData.part.name||o.name||'ДЕТАЛЬ';m.classList.add('show');m.style.left=Math.max(8,Math.min(innerWidth-205,x))+'px';m.style.top=Math.max(8,Math.min(innerHeight-220,y))+'px'}
+function notify(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('show');clearTimeout(notify.timer);notify.timer=setTimeout(()=>e.classList.remove('show'),1300)}
+cv.addEventListener('contextmenu',e=>{e.preventDefault();showPartMenu(e.clientX,e.clientY)});
+document.addEventListener('pointerdown',e=>{if(!e.target.closest('#partMenu'))hidePartMenu()});
+document.querySelectorAll('[data-part-action]').forEach(b=>b.onclick=()=>{const o=contextTarget;if(!o)return;const a=b.dataset.partAction;if(a==='hide'){o.visible=false;hiddenParts.add(o);notify('Деталь скрыта')}if(a==='transparent'){if(!transparentParts.has(o)){o.userData.originalMaterial=o.material;o.material=Array.isArray(o.material)?o.material.map(m=>m.clone()):o.material.clone();(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{m.transparent=true;m.opacity=.18;m.depthWrite=false});transparentParts.add(o);notify('Прозрачность включена')}else{o.material=o.userData.originalMaterial||o.material;transparentParts.delete(o);notify('Прозрачность снята')}}if(a==='open'){let g=o;while(g&&!(g.name||'').startsWith('ДВЕРЬ '))g=g.parent;if(g){toggleDoor(g);notify('Дверь переключена')}else notify('Эта деталь не открывается')}if(a==='restore'){hiddenParts.forEach(p=>p.visible=true);hiddenParts.clear();notify('Скрытые детали возвращены')}hidePartMenu()});
+document.getElementById('gridToggle').onclick=()=>{gridVisible=!gridVisible;if(stageGrid)stageGrid.visible=gridVisible;document.getElementById('gridToggle').classList.toggle('on',gridVisible)};
+document.getElementById('doorsToggle').onclick=()=>{const open=doorGroups.some(g=>g.userData.target<.5);doorGroups.forEach(g=>g.userData.target=open?1:0);document.getElementById('doorsToggle').classList.toggle('on',open)};
+document.getElementById('homeView').onclick=()=>{frameCamera('iso');document.querySelectorAll('[data-cam]').forEach(x=>x.classList.toggle('on',x.dataset.cam==='iso'))};
 document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
 document.querySelectorAll('[data-cam]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-cam]').forEach(x=>x.classList.remove('on'));b.classList.add('on');frameCamera(b.dataset.cam)});
 document.getElementById('reset').onclick=()=>{setMode('product');frameCamera('iso')};
