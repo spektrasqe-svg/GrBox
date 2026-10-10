@@ -94,7 +94,7 @@
         var label = esc(cat.name);
         return '<a class="card catalog-card" href="order.html?cat=' + encodeURIComponent(cat.id) + '">' +
           '<div class="thumb ph ' + esc(cat.finish || 'ph-stone') + '" role="img" aria-label="Пример фактуры: ' + label + '"></div>' +
-          '<div class="k">категория · ' + group(cat) + '</div>' +
+          '<div class="k">' + ({wood:'дерево и ламели',stone:'камень и бетон',soft:'мягкие панели',other:'другие панели'}[group(cat)]) + '</div>' +
           '<h3>' + label + '</h3><p>' + esc(cat.note) + '</p>' +
           '<div class="price">от ' + cat.price.toLocaleString('ru-RU') + ' ₽<small>/ м² · материал</small></div>' +
           '<span class="go">Выбрать и рассчитать <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>';
@@ -102,7 +102,7 @@
       '<a class="card card-cta catalog-custom" href="order.html"><div class="k">индивидуальный подбор</div><h3>Не нашли нужную панель?</h3>' +
       '<p>Опишите задачу — поможем сузить выбор по фактуре, формату, условиям эксплуатации и бюджету.</p>' +
       '<span class="go">Обсудить проект <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>';
-      if (count) count.textContent = visible.length + ' категорий';
+      if (count) count.textContent = visible.length + (visible.length === 1 ? ' категория' : (visible.length > 1 && visible.length < 5 ? ' категории' : ' категорий'));
       if (empty) empty.hidden = visible.length !== 0;
       host.style.display = visible.length ? '' : 'none';
     }
