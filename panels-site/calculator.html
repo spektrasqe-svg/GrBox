@@ -108,7 +108,7 @@
     <div class="sec-head">
       <div>
         <span class="tag">смета → объект</span>
-        <h2>Зафиксировать расчёт и заказать замер</h2>
+        <h2>Сохранить расчёт и запросить смету</h2>
       </div>
       <p>Расчёт из калькулятора прикладывается к заявке автоматически — <span data-manager>менеджер</span> проверит его и свяжется с вами.</p>
     </div>
@@ -124,7 +124,7 @@
             <label for="c1" style="text-transform:none;letter-spacing:0;font-size:12px;font-weight:400;color:var(--cream-2)">Согласен на обработку персональных данных и получение звонка от специалиста WALLFORM®.</label>
           </div>
           <div class="full btn-row">
-            <button class="btn btn-solid" type="submit">Отправить заявку с расчётом
+            <button class="btn btn-solid" type="submit">Подготовить заявку с расчётом
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
           </div>
         </div>
@@ -234,7 +234,7 @@
       rows(last.consumables.items, 'расходники по позициям') +
       rows(last.works.items, 'работы по позициям') +
       '<div class="note">Ориентировочная оценка по стартовым ценам и расчётным нормам. Проверьте стоимость выбранной коллекции и условия монтажа перед заказом.</div>' +
-      '<div class="btn-row"><a class="btn btn-solid" href="#lead">Заказать замер</a></div>';
+      '<div class="btn-row"><a class="btn btn-solid" href="#lead">Оставить заявку</a></div>';
 
     try { localStorage.setItem('wf_last_calc', JSON.stringify({ area: area, category: sel.value, method: method, opts: opts, total: last.total })); } catch (e) {}
   }
