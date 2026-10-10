@@ -59,6 +59,36 @@ canvas:active{cursor:grabbing}
   #info{bottom:auto;top:calc(58px + env(safe-area-inset-top));left:auto;right:12px;width:330px}
   #hint{left:auto;right:12px;top:auto;bottom:14px}
 }
+
+/* SECRET BOX: адаптивная панель управления */
+@media(max-width:899px){
+  .top{top:calc(6px + env(safe-area-inset-top));left:7px;right:7px;gap:5px;align-items:center}
+  .pill{font-size:10px;padding:6px 8px;border-radius:9px;letter-spacing:0}
+  .top .pill:first-child{max-width:72%;overflow:hidden;text-overflow:ellipsis}
+  .top .pill:last-child{max-width:36%;overflow:hidden;text-overflow:ellipsis}
+  .leftbar{left:7px;right:7px;top:calc(48px + env(safe-area-inset-top));max-width:none;
+    flex-direction:row;flex-wrap:nowrap;gap:5px;overflow-x:auto;overflow-y:hidden;
+    padding:3px 1px 6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .leftbar::-webkit-scrollbar{display:none}
+  .leftbar button{font-size:10px;min-height:33px;padding:7px 9px;border-radius:9px;flex:0 0 auto}
+  .bar{padding:7px 7px calc(7px + env(safe-area-inset-bottom));gap:5px;flex-wrap:nowrap;
+    justify-content:flex-start;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;
+    -webkit-overflow-scrolling:touch}
+  .bar::-webkit-scrollbar{display:none}
+  .bar button{font-size:10px;min-height:34px;padding:7px 9px;border-radius:9px;flex:0 0 auto}
+  #info{left:7px;right:7px;bottom:calc(55px + env(safe-area-inset-bottom));max-width:none;
+    padding:9px 10px;border-radius:10px;max-height:30vh;overflow:auto}
+  #info .n{font-size:12px} #info .d{font-size:11px} #info .dm{font-size:10px}
+  #hint{left:7px;right:7px;top:auto;bottom:calc(52px + env(safe-area-inset-bottom));
+    width:max-content;max-width:calc(100vw - 14px);font-size:10px;padding:5px 7px}
+}
+@media(max-width:380px){
+  .top .pill:first-child{max-width:65%}
+  .top .pill:last-child{max-width:39%}
+  .pill{font-size:9px;padding:5px 6px}
+  .leftbar button{font-size:9px;padding:6px 8px}
+  .bar button{font-size:9px;padding:6px 8px}
+}
 </style>
 </head>
 <body>
@@ -67,18 +97,18 @@ canvas:active{cursor:grabbing}
   <canvas id="cv"></canvas>
 
   <div class="top">
-    <div class="pill"><b>GrowBox v3.1 rev.2</b> · 1250×700×2000 мм · 85 деталей</div>
-    <div class="pill">режим: <span id="modeName">PRODUCT</span></div>
+    <div class="pill"><b>SECRET BOX · v3.1</b> · 1250×700×2000 мм · 85 деталей</div>
+    <div class="pill">Режим: <span id="modeName">Внешний вид</span></div>
   </div>
 
   <div class="leftbar" id="modes">
-    <button data-mode="isometric">ISOMETRIC</button>
-    <button data-mode="product" class="on">PRODUCT</button>
-    <button data-mode="engineering">ENGINEERING</button>
-    <button data-mode="cutaway">CUTAWAY</button>
-    <button data-mode="exploded">EXPLODED</button>
-    <button data-mode="airflow">AIRFLOW</button>
-    <button data-mode="light">LIGHT</button>
+    <button data-mode="isometric">Изометрия</button>
+    <button data-mode="product" class="on">Внешний вид</button>
+    <button data-mode="engineering">Инженерный</button>
+    <button data-mode="cutaway">Разрез</button>
+    <button data-mode="exploded">Разборка</button>
+    <button data-mode="airflow">Воздух</button>
+    <button data-mode="light">Освещение</button>
   </div>
 
   <div id="hint">тап — деталь · свайп — вращение · щипок — масштаб · двойной тап — сброс</div>
@@ -96,7 +126,7 @@ canvas:active{cursor:grabbing}
     <button data-cam="side">Сбоку</button>
     <button data-cam="top">Сверху</button>
     <button data-cam="rear">Сзади</button>
-    <button id="bExport">Экспорт JSON</button>
+    <button id="bExport">Экспорт проекта</button>
     <button id="bReset">Сброс</button>
   </div>
 </div>
@@ -500,7 +530,7 @@ function setMode(name){
   applyCut(m.cut); applyLight(m.light); applyExplode(name === 'exploded');
   airGroup.visible = m.air; airTube.visible = m.air;
   setCam(m.cam[0], m.cam[1], m.cam[2], m.cam[3]);
-  document.getElementById('modeName').textContent = name.toUpperCase();
+  document.getElementById('modeName').textContent = ({isometric:'Изометрия',product:'Внешний вид',engineering:'Инженерный',cutaway:'Разрез',exploded:'Разборка',airflow:'Воздух',light:'Освещение'})[name] || name;
   document.querySelectorAll('[data-mode]').forEach(function(b){
     b.classList.toggle('on', b.dataset.mode === name);
   });
