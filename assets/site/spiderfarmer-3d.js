@@ -98,10 +98,10 @@ function canvasTex(THREE,w,h,draw){
  if('colorSpace' in t)t.colorSpace=THREE.SRGBColorSpace;
  return t;
 }
-function texPlane(THREE,tex,w,h,x,y,z,rx,parent){
+function texPlane(THREE,tex,w,h,x,y,z,rx,parent,ry){
  if(!tex)return null;
  const mat=new THREE.MeshStandardMaterial({map:tex,transparent:true,roughness:.55,metalness:.08});
- return add(parent,THREE,new THREE.PlaneGeometry(w,h),mat,x,y,z,rx||0);
+ return add(parent,THREE,new THREE.PlaneGeometry(w,h),mat,x,y,z,rx||0,ry||0);
 }
 function ledTex(THREE){
  /* Матовая алюминиевая PCB с плотной матрицей SMD-светодиодов.
@@ -227,7 +227,7 @@ function buildLight(THREE,g,M,s){
  add(g,THREE,boxG(THREE,ctlD,ctlH,ctlW),M.black,ctlX,ctlY,ctlZ);
  add(g,THREE,boxG(THREE,2,ctlH+3,ctlW+3),M.dark,ctlX-ctlD/2-1,ctlY,ctlZ);
  /* PlaneGeometry lies in XY; rotate around Y so its face points toward -X. */
- texPlane(THREE,displayTex(THREE),ctlW*.31,ctlH*.56,ctlX-ctlD/2-2.2,ctlY,ctlZ-ctlW*.13,-Math.PI/2,g);
+ texPlane(THREE,displayTex(THREE),ctlW*.31,ctlH*.56,ctlX-ctlD/2-2.2,ctlY,ctlZ-ctlW*.13,0,g,-Math.PI/2);
  add(g,THREE,cylG(THREE,Math.max(4,ctlH*.26),Math.max(4,ctlH*.26),4,18),M.dark,ctlX-ctlD/2-2.4,ctlY,ctlZ+ctlW*.27,Math.PI/2);
  add(g,THREE,cylG(THREE,Math.max(1.8,ctlH*.09),Math.max(1.8,ctlH*.09),1.5,12),M.gold,ctlX-ctlD/2-4.6,ctlY,ctlZ+ctlW*.27,Math.PI/2);
  add(g,THREE,cylG(THREE,1.7,1.7,1.6,10),M.green,ctlX-ctlD/2-2.4,ctlY-ctlH*.25,ctlZ+ctlW*.42,Math.PI/2);
@@ -246,8 +246,8 @@ function buildLight(THREE,g,M,s){
  /* Оранжевый фирменный логотип и табличка SE3000 на внешней боковой рейке.
     Они обращены наружу, как в фото-исходнике. */
  const markX=-(w/2+railW*.5+.7);
- texPlane(THREE,logoTex(THREE),Math.min(175,d*.31),Math.min(25,railH*.82),markX,railY,-d*.03,-Math.PI/2,g);
- texPlane(THREE,plateTex(THREE,'SE 3000'),Math.min(78,d*.14),Math.min(16,railH*.58),markX,railY,d*.27,-Math.PI/2,g);
+ texPlane(THREE,logoTex(THREE),Math.min(175,d*.31),Math.min(25,railH*.82),markX,railY,-d*.03,0,g,-Math.PI/2);
+ texPlane(THREE,plateTex(THREE,'SE 3000'),Math.min(78,d*.14),Math.min(16,railH*.58),markX,railY,d*.27,0,g,-Math.PI/2);
 }
 /* ================= FAN: SF4 / SF6 / SF8 ================= */
 function buildFan(THREE,g,M,s){
