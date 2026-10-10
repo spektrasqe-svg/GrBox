@@ -14,7 +14,7 @@
 
 /* ---------- паспорта моделей (мм) ---------- */
 const SPECS={
- SE3000:{kind:'light',label:'Spider Farmer SE3000',w:603,d:585,h:71,bars:4,power:300,
+ SE3000:{kind:'light',label:'Spider Farmer SE3000',w:603,d:585,h:71,bars:4,power:300,mass:5.3,
    desc:'Светодиодный светильник Spider Farmer SE3000, 300 Вт: рама с 4 серебристыми LED-барами, белые платы с SMD-диодами (часть IR-красных), серебристый радиатор по центру, блок управления с синим экраном и диммером, оранжевые надписи Spider Farmer / SE 3000'},
  SE5000:{kind:'light',label:'Spider Farmer SE5000',w:1090,d:590,h:55,bars:6,power:480,
    desc:'Светодиодный светильник Spider Farmer SE5000, 480 Вт: 6 алюминиевых LED-баров, диодные платы, драйвер с диммером и тросовый подвес'},
@@ -104,19 +104,26 @@ function texPlane(THREE,tex,w,h,x,y,z,rx,parent){
  return add(parent,THREE,new THREE.PlaneGeometry(w,h),mat,x,y,z,rx||0);
 }
 function ledTex(THREE){
- return canvasTex(THREE,256,512,(x,w,h)=>{
-  x.fillStyle='#aeb2a8';x.fillRect(0,0,w,h);
-  const cols=3,rows=13,pad=9;
-  const cw=(w-pad*(cols+1))/cols, ch=(h-pad*(rows+1))/rows;
+ /* Матовая алюминиевая PCB с плотной матрицей SMD-светодиодов.
+    Рисуем отдельные корпуса диодов, а не крупные цветные плитки. */
+ return canvasTex(THREE,512,1024,(x,w,h)=>{
+  x.fillStyle='#c9cbc5';x.fillRect(0,0,w,h);
+  x.fillStyle='rgba(65,70,68,.20)';
+  for(let yy=7;yy<h;yy+=18)x.fillRect(0,yy,w,1);
+  const cols=5,rows=46,padX=10,padY=8;
+  const sx=(w-padX*2)/(cols*2-1),sy=(h-padY*2)/(rows*2-1);
   for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
-   const gx=pad+c*(cw+pad), gy=pad+r*(ch+pad);
-   const red=((r*cols+c)%7===3);
-   x.fillStyle=red?'#7d2718':'#eee6c6';
-   x.fillRect(gx,gy,cw,ch);
-   x.fillStyle=red?'rgba(255,130,95,.5)':'rgba(255,255,255,.8)';
-   x.fillRect(gx+cw*.13,gy+ch*.13,cw*.42,ch*.34);
-   x.strokeStyle='rgba(70,72,66,.8)';x.lineWidth=2.2;x.strokeRect(gx,gy,cw,ch);
+   const gx=padX+c*sx*2,gy=padY+r*sy*2;
+   const red=((r*cols+c)%19===7)||((r*cols+c)%31===11);
+   const warm=((r+c)%5===0);
+   const bw=Math.max(5,sx*.78),bh=Math.max(5,sy*.78);
+   x.fillStyle='rgba(52,55,52,.55)';x.fillRect(gx-1,gy-1,bw+2,bh+2);
+   x.fillStyle=red?'#9e3d2c':(warm?'#f5e8c6':'#fff7df');x.fillRect(gx,gy,bw,bh);
+   x.fillStyle='rgba(255,255,255,.82)';x.fillRect(gx+1,gy+1,Math.max(1,bw*.36),Math.max(1,bh*.28));
   }
+  /* Небольшие монтажные площадки по торцам платы */
+  x.fillStyle='#858b88';
+  for(const yy of [4,h-8])for(let c=0;c<cols;c++)x.fillRect(padX+c*sx*2,yy,Math.max(4,sx*.8),4);
  });
 }
 function logoTex(THREE){
@@ -189,14 +196,29 @@ function buildLight(THREE,g,M,s){
    add(g,THREE,cylG(THREE,3.2,3.2,3,10),M.steel,x,y0+h*.03+h*.28,sz*(barLen/2+7));
   }
  }
- /* серебристый радиатор (блок питания) в центре */
- const heatW=Math.min(150,Math.max(80,step-barW-6)), heatL=Math.min(d*.72,barLen*.86);
- add(g,THREE,boxG(THREE,heatW*.98,h*.34,heatL),M.alu,0,y0+h*.03+h*.17,0);
- for(let i=0;i<17;i++)
-  add(g,THREE,boxG(THREE,3.6,h*.52,heatL*.985),M.alu,-heatW*.45+i*heatW*.9/16,y0+h*.03+h*.4,0);
- for(const sz of [-1,1])for(let i=0;i<5;i++)
-  add(g,THREE,boxG(THREE,heatW*.12,h*.12,3),M.dark,-heatW*.32+i*heatW*.16,y0+h*.03+h*.2,sz*(heatL/2+1));
- add(g,THREE,boxG(THREE,heatW*.32,5,heatL+6),M.aluDark,0,y0+h*.03+h*.74,0);
+ /* Центральный съёмный драйвер/радиатор: отдельный узел над рамой */
+ const heatW=Math.min(142,Math.max(112,w*.22)), heatL=Math.min(d*.58,barLen*.72);
+ const heatY=y0+h*.03+h*.34;
+ add(g,THREE,boxG(THREE,heatW,h*.31,heatL),M.alu,0,heatY,0);
+ add(g,THREE,boxG(THREE,heatW+4,h*.08,heatL+5),M.aluDark,0,heatY+h*.19,0);
+ /* Частые продольные рёбра охлаждения на верхней крышке */
+ for(let i=0;i<25;i++){
+  const x=-heatW*.46+i*(heatW*.92/24);
+  add(g,THREE,boxG(THREE,2.1,h*.20,heatL*.94),M.aluDark,x,heatY+h*.27,0);
+ }
+ /* Торцевые заглушки, крепёжные винты и вентиляционные щели */
+ for(const z of [-1,1]){
+  add(g,THREE,boxG(THREE,heatW*.94,h*.24,4),M.black,0,heatY,z*(heatL/2+2));
+  for(let i=0;i<7;i++)add(g,THREE,boxG(THREE,heatW*.62/7,1.4,1.2),M.dark,-heatW*.31+i*heatW*.62/6,heatY-h*.015,z*(heatL/2+4.2));
+ }
+ for(let i=0;i<8;i++)for(const z of [-1,1]){
+  const x=-heatW*.39+i*(heatW*.78/7);
+  add(g,THREE,cylG(THREE,1.8,1.8,1.2,8),M.black,x,heatY+h*.16,z*(heatL*.42));
+ }
+ /* Драйвер соединён с четырьмя планками короткими крепёжными мостами */
+ for(const x of [-1,1])for(const z of [-1,1]){
+  add(g,THREE,boxG(THREE,12,5,24),M.aluDark,x*(heatW*.5+7),heatY-h*.02,z*(heatL*.28));
+ }
  /* чёрный блок управления — на ВЕРТИКАЛЬНОЙ боковой грани передней балки */
  const ctlW=Math.min(200,w*.33), ctlH=railH*.82, ctlD=Math.min(26,h*.34);
  const ctlY=railY, ctlZ=railZ+railW/2+ctlD/2;
@@ -219,7 +241,12 @@ function buildLight(THREE,g,M,s){
   wire(g,THREE,M.steel,sx*w*.3,railY+railH/2+36,0,42);
   add(g,THREE,torG(THREE,7,2.2),M.steel,sx*w*.3,railY+railH/2+61,0,0);
  }
- /* надписи — на вертикальной внешней грани рамы */
+ /* Реальные торцевые крышки и фирменные шильдики на раме */
+ for(const x of [-1,1]){
+  add(g,THREE,boxG(THREE,8,railH+4,railW+5),M.black,x*(w/2-4),railY,railZ);
+  for(const z of [-1,1])for(let j=0;j<3;j++)
+   add(g,THREE,cylG(THREE,2.1,2.1,1.4,10),M.steel,x*(w/2-4),railY-railH*.25+j*railH*.25,z*(d/2-railW*.26));
+ }
  const faceZ=railZ+railW/2+.5;
  texPlane(THREE,logoTex(THREE),Math.min(240,w*.4),Math.min(42,w*.07),-w*.255,railY,faceZ,0,g);
  texPlane(THREE,plateTex(THREE,(s.label||'').split(' ').pop()),Math.min(120,w*.2),Math.min(26,w*.043),w*.28,railY,faceZ,0,g);
@@ -399,7 +426,7 @@ function build(THREE,id,over){
  return g;
 }
 global.SPIDERFARMER3D={
- version:'1.0',
+ version:'1.1',
  ids:Object.keys(SPECS),
  spec:function(id){return SPECS[id]||null},
  label:function(id){return (SPECS[id]||{}).label||id},
